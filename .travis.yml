@@ -1,4 +1,7 @@
 language: minimal
+
+# Only build tags
+if: tag IS present
  
 addons:
   apt:
