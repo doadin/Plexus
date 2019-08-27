@@ -91,6 +91,8 @@ Statuses\ReadyCheck.lua
 Statuses\Resurrect.lua
 Statuses\Role.lua
 Statuses\Stagger.lua
+#@retail@
 Statuses\Summon.lua
+#@end-retail@
 Statuses\Target.lua
 Statuses\Vehicle.lua

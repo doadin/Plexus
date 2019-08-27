@@ -91,7 +91,8 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
 	local guid = UnitGUID(unit)
 	if not PlexusRoster:IsGUIDInRaid(guid) then return end
     if Plexus:IsClassicWow() then
-	    local mount = 0
+        return
+	    local amount = 0
     else
         local amount = UnitIsVisible(unit) and UnitGetTotalAbsorbs(unit) or 0
     end
