@@ -90,7 +90,9 @@ Statuses\Range.lua
 Statuses\ReadyCheck.lua
 Statuses\Resurrect.lua
 Statuses\Role.lua
+#@retail@
 Statuses\Stagger.lua
+#@end-retail@
 #@retail@
 Statuses\Summon.lua
 #@end-retail@

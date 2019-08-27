@@ -330,6 +330,7 @@ function PlexusStatus:FillColorOptions(options)
 
 	local classcolor = {}
 	for class, color in pairs(CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS) do
+        if Plexus:IsClassicWow() and class == "MONK" then return end
 		classcolor[class] = { r = color.r, g = color.g, b = color.b }
 	end
 
