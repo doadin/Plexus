@@ -4,9 +4,6 @@
 	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
 	Copyright (c) 2009-2018 Phanx <addons@phanx.net>
 	All rights reserved. See the accompanying LICENSE file for details.
-	https://github.com/Phanx/Plexus
-	https://www.curseforge.com/wow/addons/plexus
-	https://www.wowinterface.com/downloads/info5747-Plexus.html
 ------------------------------------------------------------------------
 	PlexusLocale-zhTW.lua
 	Traditional Chinese localization
