@@ -107,6 +107,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 
 	if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
         if Plexus:IsClassicWow() then
+            return
 		    local incoming = 0
         else
             local incoming = UnitGetIncomingHeals(unit) or 0
