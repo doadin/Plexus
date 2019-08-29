@@ -197,7 +197,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Druid
 	---------------------
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
 	    	-- 33763
 	    	desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
@@ -237,7 +237,7 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
 		mine = true,
 	},
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Rejuvenation (Germination)", true)] = {
 	    	-- 155777
 	    	desc = format(L["Buff: %s"], spell_names["Rejuvenation (Germination)"]),
@@ -265,7 +265,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Monk
 	---------------------
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Enveloping Mist", true)] = {
 	    	-- 124682
 	    	buff = spell_names["Enveloping Mist"],
@@ -310,7 +310,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Paladin
 	---------------------
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Beacon of Faith", true)] = {
 	    	-- 156910
 	    	desc = format(L["Buff: %s"], spell_names["Beacon of Faith"]),
@@ -383,7 +383,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Priest
 	---------------------
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Atonement", true)] = {
 	    	-- 214206
 	    	buff = spell_names["Atonement"],
@@ -443,7 +443,7 @@ PlexusStatusAuras.defaultDB = {
 		durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
 		durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
 	},
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
 	    	-- 33076, 41635
 	    	buff = spell_names["Prayer of Mending"],
@@ -468,7 +468,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Shaman
 	---------------------
-    --[===[@@retail
+    --[===[@retail
 	    [PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
 	    	-- 204288
 	    	desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
