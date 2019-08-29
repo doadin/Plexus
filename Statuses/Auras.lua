@@ -129,6 +129,8 @@ function PlexusStatusAuras:CopyDefaults(settings, defaults)
 	return settings
 end
 
+
+if not Plexus:IsClassicWow() then
 PlexusStatusAuras.defaultDB = {
 	advancedOptions = false,
 --[[
@@ -197,24 +199,23 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Druid
 	---------------------
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
-	    	-- 33763
-	    	desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
-	    	buff = spell_names["Lifebloom"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Lifebloom"]),
-	    	color = { r = 0.3, g = 0.7, b = 0, a = 1 },
-	    	durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-	    	durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
-	    	durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
-	    	countColorLow = { r = 1, g = 0, b = 0, a = 1 },
-	    	countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
-	    	countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
-	    	countLow = 1,
-	    	countHigh = 2,
-	    	mine = true,
-	    },
-    --@end-retail]===]
+	[PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
+		-- 33763
+		desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
+		buff = spell_names["Lifebloom"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Lifebloom"]),
+		color = { r = 0.3, g = 0.7, b = 0, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
+		durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
+		countColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
+		countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
+		countLow = 1,
+		countHigh = 2,
+		mine = true,
+	},
+
 	[PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
 		-- 8936
 		desc = format(L["Buff: %s"], spell_names["Regrowth"]),
@@ -237,138 +238,132 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
 		mine = true,
 	},
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Rejuvenation (Germination)", true)] = {
-	    	-- 155777
-	    	desc = format(L["Buff: %s"], spell_names["Rejuvenation (Germination)"]),
-	    	buff = spell_names["Rejuvenation (Germination)"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Rejuvenation (Germination)"]),
-	    	color = { r = 0.66, g = 0.55, b = 1, a = 1 },
-	    	durationColorLow = { r = 0.66, g = 0.55, b = 1, a = 1 },
-	    	durationColorMiddle = { r = 0.46, g = 0.38, b = 0.7, a = 1 },
-	    	durationColorHigh = { r = 0.33, g = 0.27, b = 0.5, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Wild Growth", true)] = {
-	    	-- 48438
-	    	desc = format(L["Buff: %s"], spell_names["Wild Growth"]),
-	    	buff = spell_names["Wild Growth"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Wild Growth"]),
-	    	color = { r = 0.56, g = 0.85, b = 0.62, a = 1 },
-	    	durationColorLow = { r = 0.56, g = 0.85, b = 0.62, a = 1 },
-	    	durationColorMiddle = { r = 0.39, g = 0.55, b = 0.42, a = 1 },
-	    	durationColorHigh = { r = 0.27, g = 0.37, b = 0.29, a = 1 },
-	    	mine = true,
-	    },
-    --@end-retail]===]
+    [PlexusStatusAuras:StatusForSpell("Rejuvenation (Germination)", true)] = {
+    	-- 155777
+    	desc = format(L["Buff: %s"], spell_names["Rejuvenation (Germination)"]),
+    	buff = spell_names["Rejuvenation (Germination)"],
+    	text = PlexusStatusAuras:TextForSpell(spell_names["Rejuvenation (Germination)"]),
+    	color = { r = 0.66, g = 0.55, b = 1, a = 1 },
+    	durationColorLow = { r = 0.66, g = 0.55, b = 1, a = 1 },
+    	durationColorMiddle = { r = 0.46, g = 0.38, b = 0.7, a = 1 },
+    	durationColorHigh = { r = 0.33, g = 0.27, b = 0.5, a = 1 },
+    	mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Wild Growth", true)] = {
+    	-- 48438
+    	desc = format(L["Buff: %s"], spell_names["Wild Growth"]),
+    	buff = spell_names["Wild Growth"],
+    	text = PlexusStatusAuras:TextForSpell(spell_names["Wild Growth"]),
+    	color = { r = 0.56, g = 0.85, b = 0.62, a = 1 },
+    	durationColorLow = { r = 0.56, g = 0.85, b = 0.62, a = 1 },
+    	durationColorMiddle = { r = 0.39, g = 0.55, b = 0.42, a = 1 },
+    	durationColorHigh = { r = 0.27, g = 0.37, b = 0.29, a = 1 },
+    	mine = true,
+    },
 
 	---------------------
 	-- Monk
 	---------------------
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Enveloping Mist", true)] = {
-	    	-- 124682
-	    	buff = spell_names["Enveloping Mist"],
-	    	desc = format(L["Buff: %s"], spell_names["Enveloping Mist"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Enveloping Mist"]),
-	    	color = { r = 0.2, g = 1, b = 0.2, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Essence Font", true)] = {
-	    	-- 191837
-	    	buff = spell_names["Essence Font"],
-	    	desc = format(L["Buff: %s"], spell_names["Essence Font"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Essence Font"]),
-	    	color = { r = 0, g = 0.7, b = 0.7, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Life Cocoon", true)] = {
-	    	-- 116849
-	    	buff = spell_names["Life Cocoon"],
-	    	desc = format(L["Buff: %s"], spell_names["Life Cocoon"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Life Cocoon"]),
-	    	color = { r = 0.8, g = 0.8, b = 0.4, a = 1 },
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Renewing Mist", true)] = {
-	    	-- 115151
-	    	buff = spell_names["Renewing Mist"],
-	    	desc = format(L["Buff: %s"], spell_names["Renewing Mist"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Renewing Mist"]),
-	    	color = { r = 0.4, g = 0, b = 0.8, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Soothing Mist", true)] = {
-	    	-- 115175
-	    	buff = spell_names["Soothing Mist"],
-	    	desc = format(L["Buff: %s"], spell_names["Soothing Mist"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Soothing Mist"]),
-	    	color = { r = 0.8, g = 1, b = 0.3, a = 1 },
-	    	mine = true,
-	    },
-    --@end-retail]===]
+	[PlexusStatusAuras:StatusForSpell("Enveloping Mist", true)] = {
+		-- 124682
+		buff = spell_names["Enveloping Mist"],
+		desc = format(L["Buff: %s"], spell_names["Enveloping Mist"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Enveloping Mist"]),
+		color = { r = 0.2, g = 1, b = 0.2, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Essence Font", true)] = {
+		-- 191837
+		buff = spell_names["Essence Font"],
+		desc = format(L["Buff: %s"], spell_names["Essence Font"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Essence Font"]),
+		color = { r = 0, g = 0.7, b = 0.7, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Life Cocoon", true)] = {
+		-- 116849
+		buff = spell_names["Life Cocoon"],
+		desc = format(L["Buff: %s"], spell_names["Life Cocoon"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Life Cocoon"]),
+		color = { r = 0.8, g = 0.8, b = 0.4, a = 1 },
+	},
+	[PlexusStatusAuras:StatusForSpell("Renewing Mist", true)] = {
+		-- 115151
+		buff = spell_names["Renewing Mist"],
+		desc = format(L["Buff: %s"], spell_names["Renewing Mist"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Renewing Mist"]),
+		color = { r = 0.4, g = 0, b = 0.8, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Soothing Mist", true)] = {
+		-- 115175
+		buff = spell_names["Soothing Mist"],
+		desc = format(L["Buff: %s"], spell_names["Soothing Mist"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Soothing Mist"]),
+		color = { r = 0.8, g = 1, b = 0.3, a = 1 },
+		mine = true,
+	},
 
 	---------------------
 	-- Paladin
 	---------------------
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Beacon of Faith", true)] = {
-	    	-- 156910
-	    	desc = format(L["Buff: %s"], spell_names["Beacon of Faith"]),
-	    	buff = spell_names["Beacon of Faith"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Faith"]),
-	    	color = { r = 0.5, g = 0.7, b = 0.3, a = 1 },
-	    	durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-	    	durationColorMiddle = { r = 0.49, g = 0.49, b = 0, a = 1 },
-	    	durationColorHigh = { r = 0.7, g = 0.7, b = 0, a = 1 },
-	    	durationLow = 5,
-	    	durationHigh = 10,
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Beacon of Light", true)] = {
-	    	-- 53563
-	    	desc = format(L["Buff: %s"], spell_names["Beacon of Light"]),
-	    	buff = spell_names["Beacon of Light"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Light"]),
-	    	color = { r = 0.5, g = 0.7, b = 0.3, a = 1 },
-	    	durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-	    	durationColorMiddle = { r = 0.49, g = 0.49, b = 0, a = 1 },
-	    	durationColorHigh = { r = 0.7, g = 0.7, b = 0, a = 1 },
-	    	durationLow = 5,
-	    	durationHigh = 10,
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Beacon of Virtue", true)] = {
-	    	-- 200025
-	    	desc = format(L["Buff: %s"], spell_names["Beacon of Virtue"]),
-	    	buff = spell_names["Beacon of Virtue"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Virtue"]),
-	    	color = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
-	    	durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
-	    	durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
-	    	durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Sacred Dawn")] = {
-	    	-- 243174
-	    	desc = format(L["Debuff: %s"], spell_names["Sacred Dawn"]),
-	    	debuff = spell_names["Sacred Dawn"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Sacred Dawn"]),
-	    	color = { r = 0.95, g = 1, b = 0.7, a = 1 },
-	    	durationColorLow = { r = 0.95, g = 1, b = 0.7, a = 1 },
-	    	durationColorMiddle = { r = 0.66, g = 0.7, b = 0.49, a = 1 },
-	    	durationColorHigh = { r = 0.43, g = 0.45, b = 0.32, a = 1 },
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
-	    	-- 200654
-	    	desc = format(L["Debuff: %s"], spell_names["Tyr's Deliverance"]),
-	    	debuff = spell_names["Tyr's Deliverance"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
-	    	color = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
-	    	durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
-	    	durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
-	    	durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
-	    },
-    --@end-retail]===]
+	[PlexusStatusAuras:StatusForSpell("Beacon of Faith", true)] = {
+		-- 156910
+		desc = format(L["Buff: %s"], spell_names["Beacon of Faith"]),
+		buff = spell_names["Beacon of Faith"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Faith"]),
+		color = { r = 0.5, g = 0.7, b = 0.3, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.49, g = 0.49, b = 0, a = 1 },
+		durationColorHigh = { r = 0.7, g = 0.7, b = 0, a = 1 },
+		durationLow = 5,
+		durationHigh = 10,
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Beacon of Light", true)] = {
+		-- 53563
+		desc = format(L["Buff: %s"], spell_names["Beacon of Light"]),
+		buff = spell_names["Beacon of Light"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Light"]),
+		color = { r = 0.5, g = 0.7, b = 0.3, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.49, g = 0.49, b = 0, a = 1 },
+		durationColorHigh = { r = 0.7, g = 0.7, b = 0, a = 1 },
+		durationLow = 5,
+		durationHigh = 10,
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Beacon of Virtue", true)] = {
+		-- 200025
+		desc = format(L["Buff: %s"], spell_names["Beacon of Virtue"]),
+		buff = spell_names["Beacon of Virtue"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Virtue"]),
+		color = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+		durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+		durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+		durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Sacred Dawn")] = {
+		-- 243174
+		desc = format(L["Debuff: %s"], spell_names["Sacred Dawn"]),
+		debuff = spell_names["Sacred Dawn"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Sacred Dawn"]),
+		color = { r = 0.95, g = 1, b = 0.7, a = 1 },
+		durationColorLow = { r = 0.95, g = 1, b = 0.7, a = 1 },
+		durationColorMiddle = { r = 0.66, g = 0.7, b = 0.49, a = 1 },
+		durationColorHigh = { r = 0.43, g = 0.45, b = 0.32, a = 1 },
+	},
+	[PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
+		-- 200654
+		desc = format(L["Debuff: %s"], spell_names["Tyr's Deliverance"]),
+		debuff = spell_names["Tyr's Deliverance"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
+		color = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
+		durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
+		durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
+		durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
+	},
 	[PlexusStatusAuras:StatusForSpell("Forbearance")] = {
 		-- 25771
 		desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
@@ -383,48 +378,46 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Priest
 	---------------------
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Atonement", true)] = {
-	    	-- 214206
-	    	buff = spell_names["Atonement"],
-	    	desc = format(L["Buff: %s"], spell_names["Atonement"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Atonement"]),
-	    	color = { r = 0.2, g = 0.8, b = 1, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Clarity of Will", true)] = {
-	    	-- 152118
-	    	desc = format(L["Buff: %s"], spell_names["Clarity of Will"]),
-	    	buff = spell_names["Clarity of Will"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Clarity of Will"]),
-	    	color = { r = 0.8, g = 0.8, b = 0, a = 1 },
-	    	durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-	    	durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
-	    	durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
-	    	-- 47788
-	    	desc = format(L["Buff: %s"], spell_names["Guardian Spirit"]),
-	    	buff = spell_names["Guardian Spirit"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Guardian Spirit"]),
-	    	color = { r = 0.4, g = 0.73, b = 1, a = 1 },
-	    	durationColorLow = { r = 0.4, g = 0.73, b = 1, a = 1 },
-	    	durationColorMiddle = { r = 0.24, g = 0.54, b = 0.8, a = 1 },
-	    	durationColorHigh = { r = 0.13, g = 0.41, b = 0.65, a = 1 },
-	    	mine = true,
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Light of T'uure", true)] = {
-	    	-- 208065
-	    	desc = format(L["Buff: %s"], spell_names["Light of T'uure"]),
-	    	buff = spell_names["Light of T'uure"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Light of T'uure"]),
-	    	color = { r = 0.33, g = 0.46, b = 1, a = 1 },
-	    	durationColorLow = { r = 0.33, g = 0.46, b = 1, a = 1 },
-	    	durationColorMiddle = { r = 0.24, g = 0.33, b = 0.7, a = 1 },
-	    	durationColorHigh = { r = 0.17, g = 0.23, b = 0.5, a = 1 },
-	    	mine = true,
-	    },
-    --@end-retail]===]
+	[PlexusStatusAuras:StatusForSpell("Atonement", true)] = {
+		-- 214206
+		buff = spell_names["Atonement"],
+		desc = format(L["Buff: %s"], spell_names["Atonement"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Atonement"]),
+		color = { r = 0.2, g = 0.8, b = 1, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Clarity of Will", true)] = {
+		-- 152118
+		desc = format(L["Buff: %s"], spell_names["Clarity of Will"]),
+		buff = spell_names["Clarity of Will"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Clarity of Will"]),
+		color = { r = 0.8, g = 0.8, b = 0, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
+		durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+	},
+	[PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
+		-- 47788
+		desc = format(L["Buff: %s"], spell_names["Guardian Spirit"]),
+		buff = spell_names["Guardian Spirit"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Guardian Spirit"]),
+		color = { r = 0.4, g = 0.73, b = 1, a = 1 },
+		durationColorLow = { r = 0.4, g = 0.73, b = 1, a = 1 },
+		durationColorMiddle = { r = 0.24, g = 0.54, b = 0.8, a = 1 },
+		durationColorHigh = { r = 0.13, g = 0.41, b = 0.65, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Light of T'uure", true)] = {
+		-- 208065
+		desc = format(L["Buff: %s"], spell_names["Light of T'uure"]),
+		buff = spell_names["Light of T'uure"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Light of T'uure"]),
+		color = { r = 0.33, g = 0.46, b = 1, a = 1 },
+		durationColorLow = { r = 0.33, g = 0.46, b = 1, a = 1 },
+		durationColorMiddle = { r = 0.24, g = 0.33, b = 0.7, a = 1 },
+		durationColorHigh = { r = 0.17, g = 0.23, b = 0.5, a = 1 },
+		mine = true,
+	},
 	[PlexusStatusAuras:StatusForSpell("Power Word: Fortitude", true)] = {
 		-- 21562
 		desc = format(L["Buff: %s"], spell_names["Power Word: Fortitude"]),
@@ -443,16 +436,14 @@ PlexusStatusAuras.defaultDB = {
 		durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
 		durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
 	},
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
-	    	-- 33076, 41635
-	    	buff = spell_names["Prayer of Mending"],
-	    	desc = format(L["Buff: %s"], spell_names["Prayer of Mending"]),
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Prayer of Mending"]),
-	    	color = { r = 0.2, g = 0.8, b = 1, a = 1 },
-	    	mine = true,
-	    },
-    --@end-retail]===]
+	[PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
+		-- 33076, 41635
+		buff = spell_names["Prayer of Mending"],
+		desc = format(L["Buff: %s"], spell_names["Prayer of Mending"]),
+		text = PlexusStatusAuras:TextForSpell(spell_names["Prayer of Mending"]),
+		color = { r = 0.2, g = 0.8, b = 1, a = 1 },
+		mine = true,
+	},
 	[PlexusStatusAuras:StatusForSpell("Renew", true)] = {
 		-- 139
 		desc = format(L["Buff: %s"], spell_names["Renew"]),
@@ -468,27 +459,171 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Shaman
 	---------------------
-    --[===[@@retail
-	    [PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
-	    	-- 204288
-	    	desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
-	    	buff = spell_names["Earth Shield"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Earth Shield"]),
-	    	color = { r = 0.2, g = 1, b = 0.2, a = 1 },
-	    },
-	    [PlexusStatusAuras:StatusForSpell("Riptide", true)] = {
-	    	-- 61295
-	    	desc = format(L["Buff: %s"], spell_names["Riptide"]),
-	    	buff = spell_names["Riptide"],
-	    	text = PlexusStatusAuras:TextForSpell(spell_names["Riptide"]),
-	    	color = { r = 0.4, g = 0, b = 0.8, a = 1 },
-	    	durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-	    	durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-	    	durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
-	    	mine = true,
-	    },
-    --@end-retail]===]
+	[PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
+		-- 204288
+		desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
+		buff = spell_names["Earth Shield"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Earth Shield"]),
+		color = { r = 0.2, g = 1, b = 0.2, a = 1 },
+	},
+	[PlexusStatusAuras:StatusForSpell("Riptide", true)] = {
+		-- 61295
+		desc = format(L["Buff: %s"], spell_names["Riptide"]),
+		buff = spell_names["Riptide"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Riptide"]),
+		color = { r = 0.4, g = 0, b = 0.8, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+		durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+		mine = true,
+	},
 }
+end
+
+if Plexus:IsClassicWow() then
+PlexusStatusAuras.defaultDB = {
+	advancedOptions = false,
+--[[
+	["boss_aura"] = {
+		desc = L["Boss Aura"],
+		color = { r = 1, g = 0, b = 0, a = 1 },
+		priority = 90,
+		order = 20,
+	},
+]]
+	---------------------
+	-- Debuff Types
+	---------------------
+	["dispel_curse"] = {
+		desc = format(L["Debuff type: %s"], L["Curse"]),
+		text = DEBUFF_SYMBOL_CURSE,
+		color = { r = 0.6, g = 0, b = 1, a = 1 },
+		durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
+		durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
+		durationColorHigh = { r = 0.6, g = 0, b = 1, a = 1 },
+		dispellable = true,
+		order = 25,
+	},
+	["dispel_disease"] = {
+		desc = format(L["Debuff type: %s"], L["Disease"]),
+		text = DEBUFF_SYMBOL_DISEASE,
+		color = { r = 0.6, g = 0.4, b = 0, a = 1 },
+		durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
+		durationColorHigh = { r = 0.6, g = 0.4, b = 0, a = 1 },
+		dispellable = true,
+		order = 25,
+	},
+	["dispel_magic"] = {
+		desc = format(L["Debuff type: %s"], L["Magic"]),
+		text = DEBUFF_SYMBOL_MAGIC,
+		color = { r = 0.2, g = 0.6, b = 1, a = 1 },
+		durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
+		durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
+		durationColorHigh = { r = 0.2, g = 0.6, b = 1, a = 1 },
+		dispellable = true,
+		order = 25,
+	},
+	["dispel_poison"] = {
+		desc = format(L["Debuff type: %s"], L["Poison"]),
+		text = DEBUFF_SYMBOL_POISON,
+		color = { r = 0, g = 0.6, b = 0, a = 1 },
+		durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
+		durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
+		durationColorHigh = { r = 0, g = 0.6, b = 0, a = 1 },
+		dispellable = true,
+		order = 25,
+	},
+
+	---------------------
+	-- General Debuffs
+	---------------------
+	[PlexusStatusAuras:StatusForSpell("Ghost")] = {
+		-- 8326
+		desc = format(L["Debuff: %s"], spell_names["Ghost"]),
+		debuff = spell_names["Ghost"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Ghost"]),
+		color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+	},
+
+	---------------------
+	-- Druid
+	---------------------
+	[PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
+		-- 8936
+		desc = format(L["Buff: %s"], spell_names["Regrowth"]),
+		buff = spell_names["Regrowth"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Regrowth"]),
+		color = { r = 1, g = 0.7, b = 0.1, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.7, g = 0.49, b = 0.07, a = 1 },
+		durationColorHigh = { r = 1, g = 0.7, b = 0.1, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Rejuvenation", true)] = {
+		-- 774
+		desc = format(L["Buff: %s"], spell_names["Rejuvenation"]),
+		buff = spell_names["Rejuvenation"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Rejuvenation"]),
+		color = { r = 0, g = 0.3, b = 0.7, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
+		durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
+		mine = true,
+	},
+
+	---------------------
+	-- Paladin
+	---------------------
+	[PlexusStatusAuras:StatusForSpell("Forbearance")] = {
+		-- 25771
+		desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
+		debuff = spell_names["Forbearance"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
+		color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+		durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
+		durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
+		durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+	},
+
+	---------------------
+	-- Priest
+	---------------------
+	[PlexusStatusAuras:StatusForSpell("Power Word: Fortitude", true)] = {
+		-- 21562
+		desc = format(L["Buff: %s"], spell_names["Power Word: Fortitude"]),
+		buff = spell_names["Power Word: Fortitude"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Fortitude"]),
+		color = { r = 0, g = 0.7, b = 0.3, a = 1 },
+		missing = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Power Word: Shield", true)] = {
+		-- 17
+		desc = format(L["Buff: %s"], spell_names["Power Word: Shield"]),
+		buff = spell_names["Power Word: Shield"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Shield"]),
+		color = { r = 0.8, g = 0.8, b = 0, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
+		durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+	},
+	[PlexusStatusAuras:StatusForSpell("Renew", true)] = {
+		-- 139
+		desc = format(L["Buff: %s"], spell_names["Renew"]),
+		buff = spell_names["Renew"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Renew"]),
+		color = { r = 0, g = 0.7, b = 0.3, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
+		durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
+		mine = true,
+	},
+
+	---------------------
+	-- Shaman
+	---------------------
+}
+end
 
 local default_auras = {}
 do
@@ -1111,13 +1246,6 @@ function PlexusStatusAuras:UpdateDispellable()
 		PlayerCanDispel.Curse   = IsPlayerSpell(88423) or IsPlayerSpell(2782)
 		PlayerCanDispel.Magic   = IsPlayerSpell(88423)
 		PlayerCanDispel.Poison  = IsPlayerSpell(88423) or IsPlayerSpell(2782)
-
-	elseif PLAYER_CLASS == "MONK" then
-		 -- 115450   Detox             Mistweaver                  Disease, Poison, Magic
-		 -- 218164   Detox             Brewmaster, Windwalker      Disease, Poison
-		PlayerCanDispel.Disease = IsPlayerSpell(115450) or IsPlayerSpell(218164)
-		PlayerCanDispel.Magic   = IsPlayerSpell(115450)
-		PlayerCanDispel.Poison  = IsPlayerSpell(115450) or IsPlayerSpell(218164)
 
 	elseif PLAYER_CLASS == "PALADIN" then
 		--   4987   Cleanse           Holy                        Disease, Poison, Magic
