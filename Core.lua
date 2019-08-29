@@ -11,6 +11,7 @@ local LDBIcon = LibStub("LibDBIcon-1.0")
 local format, print, strfind, strlen, tostring, type = format, print, strfind, strlen, tostring, type
 
 _G.Plexus = LibStub("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+_G.Grid = _G.Plexus
 
 if not Plexus.L then Plexus.L = { } end
 local L = setmetatable( Plexus.L, {
