@@ -197,7 +197,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Druid
 	---------------------
-    --[===[@@retail
+    --@non-retail@
 	    [PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
 	    	-- 33763
 	    	desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
@@ -214,7 +214,7 @@ PlexusStatusAuras.defaultDB = {
 	    	countHigh = 2,
 	    	mine = true,
 	    },
-    --@end-retail]===]
+    --@end-non-retail@
 	[PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
 		-- 8936
 		desc = format(L["Buff: %s"], spell_names["Regrowth"]),
@@ -237,7 +237,7 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
 		mine = true,
 	},
-    --[===[@@retail
+    --@non-retail@
 	    [PlexusStatusAuras:StatusForSpell("Rejuvenation (Germination)", true)] = {
 	    	-- 155777
 	    	desc = format(L["Buff: %s"], spell_names["Rejuvenation (Germination)"]),
@@ -260,12 +260,12 @@ PlexusStatusAuras.defaultDB = {
 	    	durationColorHigh = { r = 0.27, g = 0.37, b = 0.29, a = 1 },
 	    	mine = true,
 	    },
-    --@end-retail]===]
+     --@end-non-retail@
 
 	---------------------
 	-- Monk
 	---------------------
-    --[===[@@retail
+    --@non-retail@
 	    [PlexusStatusAuras:StatusForSpell("Enveloping Mist", true)] = {
 	    	-- 124682
 	    	buff = spell_names["Enveloping Mist"],
@@ -305,12 +305,12 @@ PlexusStatusAuras.defaultDB = {
 	    	color = { r = 0.8, g = 1, b = 0.3, a = 1 },
 	    	mine = true,
 	    },
-    --@end-retail]===]
+    --@end-non-retail@
 
 	---------------------
 	-- Paladin
 	---------------------
-    --[===[@@retail
+    --@non-retail@
 	    [PlexusStatusAuras:StatusForSpell("Beacon of Faith", true)] = {
 	    	-- 156910
 	    	desc = format(L["Buff: %s"], spell_names["Beacon of Faith"]),
@@ -368,7 +368,7 @@ PlexusStatusAuras.defaultDB = {
 	    	durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
 	    	durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
 	    },
-    --@end-retail]===]
+    --@end-non-retail@
 	[PlexusStatusAuras:StatusForSpell("Forbearance")] = {
 		-- 25771
 		desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
@@ -383,7 +383,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Priest
 	---------------------
-    --[===[@@retail
+    --@non-retail@
 	    [PlexusStatusAuras:StatusForSpell("Atonement", true)] = {
 	    	-- 214206
 	    	buff = spell_names["Atonement"],
@@ -424,7 +424,7 @@ PlexusStatusAuras.defaultDB = {
 	    	durationColorHigh = { r = 0.17, g = 0.23, b = 0.5, a = 1 },
 	    	mine = true,
 	    },
-    --@end-retail]===]
+    --@end-non-retail@
 	[PlexusStatusAuras:StatusForSpell("Power Word: Fortitude", true)] = {
 		-- 21562
 		desc = format(L["Buff: %s"], spell_names["Power Word: Fortitude"]),
@@ -443,7 +443,7 @@ PlexusStatusAuras.defaultDB = {
 		durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
 		durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
 	},
-    --[===[@@retail
+    --@non-retail@ 
 	    [PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
 	    	-- 33076, 41635
 	    	buff = spell_names["Prayer of Mending"],
@@ -452,7 +452,7 @@ PlexusStatusAuras.defaultDB = {
 	    	color = { r = 0.2, g = 0.8, b = 1, a = 1 },
 	    	mine = true,
 	    },
-    --@end-retail]===]
+    --@end-non-retail@
 	[PlexusStatusAuras:StatusForSpell("Renew", true)] = {
 		-- 139
 		desc = format(L["Buff: %s"], spell_names["Renew"]),
@@ -468,7 +468,7 @@ PlexusStatusAuras.defaultDB = {
 	---------------------
 	-- Shaman
 	---------------------
-    --[===[@@retail
+    --@non-retail@
 	    [PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
 	    	-- 204288
 	    	desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
@@ -487,7 +487,7 @@ PlexusStatusAuras.defaultDB = {
 	    	durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
 	    	mine = true,
 	    },
-    --@end-retail]===]
+    --@end-non-retail@
 }
 
 local default_auras = {}
