@@ -123,10 +123,18 @@ function PlexusStatusName:UpdateGUID(event, guid)
 
 	-- show player name instead of vehicle name
 	local owner_unitid = PlexusRoster:GetOwnerUnitidByUnitid(unitid)
-	if owner_unitid and UnitHasVehicleUI(owner_unitid) then
-		local owner_guid = UnitGUID(owner_unitid)
-		name = PlexusRoster:GetNameByGUID(owner_guid)
-	end
+    if not Plexus:IsClassicWow() then
+	    if owner_unitid and UnitHasVehicleUI(owner_unitid) then
+	    	local owner_guid = UnitGUID(owner_unitid)
+	    	name = PlexusRoster:GetNameByGUID(owner_guid)
+	    end
+    end
+    if Plexus:IsClassicWow() then
+        if owner_unitid and UnitOnTaxi(owner_unitid) then
+	    	local owner_guid = UnitGUID(owner_unitid)
+	    	name = PlexusRoster:GetNameByGUID(owner_guid)
+	    end
+    end
 
 	self.core:SendStatusGained(guid, "unit_name",
 		settings.priority,
