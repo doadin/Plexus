@@ -323,14 +323,21 @@ PlexusStatus.options = {
 ------------------------------------------------------------------------
 
 local creatureTypes = { L["Beast"], L["Demon"], L["Humanoid"], L["Undead"], L["Dragonkin"], L["Elemental"], L["Not specified"] }
+if not Plexus:IsClassicWow() then
+PlexusClasses = {["HUNTER"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["WARLOCK"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["PRIEST"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["PALADIN"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["MAGE"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["ROGUE"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["DRUID"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["SHAMAN"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["WARRIOR"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["MONK"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}}
+end
+if Plexus:IsClassicWow() then
+PlexusClasses = {["HUNTER"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["WARLOCK"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["PRIEST"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["PALADIN"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["MAGE"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["ROGUE"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["DRUID"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["SHAMAN"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}, ["WARRIOR"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23}}
+end
+
 
 function PlexusStatus:FillColorOptions(options)
 	local classEnglishToLocal = {}
 	FillLocalizedClassList(classEnglishToLocal, false)
 
 	local classcolor = {}
-	for class, color in pairs(CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS) do
-        if Plexus:IsClassicWow() and class == "MONK" then return end
+	for class, color in pairs(PlexusClasses) do
+        --if (class == "MONK") then table.remove(RAID_CLASS_COLORS, MONK) end
 		classcolor[class] = { r = color.r, g = color.g, b = color.b }
 	end
 
