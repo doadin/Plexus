@@ -84,7 +84,6 @@ spell_names = {
 	["Prayer of Mending"] = GetSpellInfo(33076),
 	["Renew"] = GetSpellInfo(139),
     ["Weakened Soul"] = GetSpellInfo(6788),
--- Shaman
 }
 end
 
@@ -479,16 +478,12 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
 		mine = true,
 	},
-	[PlexusStatusAuras:StatusForSpell("Weakened Soul", true)] = {
+	[PlexusStatusAuras:StatusForSpell("Weakened Soul")] = {
 		-- 6788
 		desc = format(L["Debuff: %s"], spell_names["Weakened Soul"]),
 		debuff = spell_names["Weakened Soul"],
 		text = PlexusStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
-		color = { r = 252, g = 0, b = 0, a = 1 },
-		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-		durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
-		durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
-		mine = true,
+		color = { r = 1, g = 0, b = 0, a = 1 },
 	},
 
 	---------------------
@@ -653,21 +648,13 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
 		mine = true,
 	},
-	[PlexusStatusAuras:StatusForSpell("Weakened Soul", true)] = {
+	[PlexusStatusAuras:StatusForSpell("Weakened Soul")] = {
 		-- 6788
 		desc = format(L["Debuff: %s"], spell_names["Weakened Soul"]),
-		debuff = spell_names["Weakend Soul"],
+		debuff = spell_names["Weakened Soul"],
 		text = PlexusStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
-		color = { r = 252, g = 0, b = 0, a = 1 },
-		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-		durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
-		durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
-		mine = true,
+		color = { r = 1, g = 0, b = 0, a = 1 },
 	},
-
-	---------------------
-	-- Shaman
-	---------------------
 }
 end
 
@@ -1889,7 +1876,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 			if IS_WOW_8 then
 				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
 			else
-				name, rank, icon, count, debuffType, duration, caster, isStealable = UnitAura(unit, i, "HELPFUL")
+				name, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spellId, _, _ = UnitAura(unit, i, "HELPFUL")
 			end
 
 			if not name then
@@ -1915,7 +1902,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 			if IS_WOW_8 then
 				name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
 			else
-				name, rank, icon, count, debuffType, duration, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
+				name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellId, _, _  = UnitDebuff(unit, index, "HARMFUL")
 			end
 
 			if not name then
