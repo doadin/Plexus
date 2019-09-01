@@ -72,9 +72,9 @@ local helpText = {
 	{
 		order = -1,
 		"Credits",
-		"Plexus was originally conceived and written by {Maia} and {Pastamancer} in late 2006. {Phanx} has been the primary developer since late 2009.",
+		"Plexus is a Grid fork, Grid was originally conceived and written by {Maia} and {Pastamancer} in late 2006. {Phanx} has been the primary developer since late 2009.",
 		"{Jerry} wrote the original pet support code. {Mikk} designed the icon. {jlam} added some advanced options for auras. {Greltok} has helped a lot with bugfixing.",
-		"Finally, lots of people have contributed translations; see the download page for a full list!",
+		"Finally, lots of people have contributed translations; see the download page for a full list! And has since been continued and improved on for retail and classic by {Doadin}",
 	},
 }
 
