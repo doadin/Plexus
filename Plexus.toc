@@ -76,8 +76,10 @@ Indicators\HealingBar.lua
 Indicators\Icon.lua
 Indicators\Text.lua
 
+#@retail@
 Statuses\Absorbs.lua
 Statuses\Aggro.lua
+#@end-retail@
 Statuses\Auras.lua
 Statuses\Group.lua
 Statuses\Heals.lua
