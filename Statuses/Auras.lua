@@ -61,6 +61,7 @@ spell_names = {
 	["Power Word: Shield"] = GetSpellInfo(17),
 	["Prayer of Mending"] = GetSpellInfo(33076),
 	["Renew"] = GetSpellInfo(139),
+    ["Weakened Soul"] = GetSpellInfo(6788),
 -- Shaman
 	["Earth Shield"] = GetSpellInfo(204288),
 	["Riptide"] = GetSpellInfo(61295),
