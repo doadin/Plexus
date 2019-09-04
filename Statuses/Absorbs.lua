@@ -94,7 +94,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
         return
     end
     if not Plexus:IsClassicWow() then
-        local amount = UnitIsVisible(unit) and UnitGetTotalAbsorbs(unit) or 0
+        amount = UnitIsVisible(unit) and UnitGetTotalAbsorbs(unit) or 0
     end
 	if amount > 0 then
 		local maxHealth = UnitHealthMax(unit)
