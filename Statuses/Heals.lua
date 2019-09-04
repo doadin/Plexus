@@ -108,8 +108,9 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 	if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
         if Plexus:IsClassicWow() then
             return
-        else
-            local incoming = UnitGetIncomingHeals(unit) or 0
+        end
+        if not Plexus:IsClassicWow() then
+            incoming = UnitGetIncomingHeals(unit) or 0
         end
 		if incoming > 0 then
 			self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
