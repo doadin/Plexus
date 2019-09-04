@@ -59,7 +59,7 @@ local Layouts = {
 		[1] = {
 			groupFilter = "1", -- updated dynamically
 		},
-	}
+	},
 	ByName = {
 		name = L["By Name"],
 		defaults = {
