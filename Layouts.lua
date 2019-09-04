@@ -60,6 +60,17 @@ local Layouts = {
 			groupFilter = "1", -- updated dynamically
 		},
 	}
+	ByName = {
+		name = L["By Name"],
+		defaults = {
+			sortMethod = "NAME",
+			unitsPerColumn = 5;NOREPEAT,
+            maxColumns = 20,
+		},
+		[1] = {
+			groupFilter = "1", -- updated dynamically
+		},
+	}
 }
 --@debug@
 PLEXUSLAYOUTS = Layouts
