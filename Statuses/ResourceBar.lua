@@ -85,27 +85,27 @@ function PlexusResourceBar:OnInitialize()
             if side == "Right" then
                 self:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -offset, -offset)
                 self:SetWidth((frame:GetWidth()-2*offset) * barWidth)
-                self:SetHeight((frame:GetHeight()-2*offset))
+                self:SetHeight((frame:GetHeight()-35*offset))
                 self:SetOrientation("VERTICAL")
             elseif side == "Left" then
                 self:SetPoint("TOPLEFT", frame, "TOPLEFT", offset, -offset)
                 self:SetWidth((frame:GetWidth()-2*offset) * barWidth)
-                self:SetHeight((frame:GetHeight()-2*offset))
+                self:SetHeight((frame:GetHeight()-35*offset))
                 self:SetOrientation("VERTICAL")
             elseif side == "Bottom" then
                 self:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", offset, offset)
                 self:SetWidth((frame:GetWidth()-2*offset))
-                self:SetHeight((frame:GetHeight()-2*offset) * barWidth)
+                self:SetHeight((frame:GetHeight()-35*offset) * barWidth)
                 self:SetOrientation("HORIZONTAL")
             elseif side == "Top" then
                 self:SetPoint("TOPLEFT", frame, "TOPLEFT", offset, -offset)
                 self:SetWidth((frame:GetWidth()-2*offset))
-                self:SetHeight((frame:GetHeight()-2*offset) * barWidth)
+                self:SetHeight((frame:GetHeight()-35*offset) * barWidth)
                 self:SetOrientation("HORIZONTAL")
             else
                 self:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", offset, offset)
                 self:SetWidth((frame:GetWidth()-2*offset))
-                self:SetHeight((frame:GetHeight()-2*offset) * barWidth)
+                self:SetHeight((frame:GetHeight()-35*offset) * barWidth)
                 self:SetOrientation("HORIZONTAL")
             end
             if self:IsShown() then
