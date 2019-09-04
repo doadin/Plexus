@@ -90,6 +90,7 @@ Statuses\Name.lua
 Statuses\RaidIcon.lua
 Statuses\Range.lua
 Statuses\ReadyCheck.lua
+Statuses\ResourceBar.lua
 Statuses\Resurrect.lua
 Statuses\Role.lua
 #@retail@
