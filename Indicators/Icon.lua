@@ -8,1063 +8,261 @@
 
 local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
+--local PlexusExtraIcons = Plexus:NewModule("PlexusExtraIcons")
 local Media = LibStub("LibSharedMedia-3.0")
 local L = Plexus.L
+
+--PlexusExtraIcons.defaultDB = {
+--	profile = {
+--		icon = {
+--			iconsMore1 = false,
+--			iconsMore2 = false,
+--		}
+--	}
+--}
+--
+--PlexusExtraIcons.options = {
+--	name = L["Extra Icons"],
+--	desc = L["Options for PlexusFrame."],
+--	order = 6,
+--	type = "group",
+--	childGroups = "tab",
+--	disabled = InCombatLockdown,
+--	get = function(info)
+--		local k = info[#info]
+--		return PlexusExtraIcons.db.profile[k]
+--	end,
+--	set = function(info, v)
+--		local k = info[#info]
+--		PlexusExtraIcons.db.profile[k] = v
+--		PlexusExtraIcons:UpdateAllFrames()
+--	end,
+--	args = {
+--		general = {
+--			name = L["General"],
+--			order = 1,
+--			type = "group",
+--			args = {
+--				iconsMore1 = {
+--					name = format(L["Enable %s"], L["more icons"]),
+--					desc = L["Toggle more icon indicators."],
+--					order = 1, width = "double",
+--					type = "toggle",
+--				},
+--				iconsMore2 = {
+--					name = format(L["Enable %s"], L["even MORE icons"]),
+--					desc = L["Toggle even MORE icon indicators."],
+--					order = 2, width = "double",
+--					type = "toggle",
+--				},
+--			},
+--		},
+--	},
+--}
 
 local BACKDROP = {
 	edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 2,
 	insets = { left = 2, right = 2, top = 2, bottom = 2 },
 }
 
-PlexusFrame:RegisterIndicator("icon", L["Center Icon"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("CENTER")
-		icon:SetBackdrop(BACKDROP)
+--function PlexusExtraIcons:OnInitialize()
+--	self.super.OnInitialize(self)
+--	db = self.db.profile
+--end
 
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
+function Icon_NewIndicator(frame)
+	local icon = CreateFrame("Frame", nil, frame)
+	icon:SetPoint("CENTER")
+	icon:SetBackdrop(BACKDROP)
 
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
+	local texture = icon:CreateTexture(nil, "ARTWORK")
+	texture:SetPoint("BOTTOMLEFT", 2, 2)
+	texture:SetPoint("TOPRIGHT", -2, -2)
+	icon.texture = texture
 
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
+	local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	text:SetPoint("BOTTOMRIGHT", 2, -2)
+	text:SetJustifyH("RIGHT")
+	text:SetJustifyV("BOTTOM")
+	icon.text = text
 
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
+	local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
+	cd:SetAllPoints(true)
+	cd:SetDrawBling(false)
+	cd:SetDrawEdge(false)
+	cd:SetHideCountdownNumbers(true)
+	cd:SetReverse(true)
+	icon.cooldown = cd
 
-		return icon
-	end,
+	cd:SetScript("OnShow", function()
+		text:SetParent(cd)
+	end)
+	cd:SetScript("OnHide", function()
+		text:SetParent(icon)
+	end)
 
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
+	return icon
+end
 
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
+function Icon_ClearStatus(self)
+	self:Hide()
 
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
+	self.texture:SetTexture(1, 1, 1, 0)
+	self.texture:SetTexCoord(0, 1, 0, 1)
 
+	self.text:SetText("")
+	self.text:SetTextColor(1, 1, 1, 1)
+
+	self.cooldown:Hide()
+end
+
+function Icon_SetStatus(self, color, text, value, maxValue, texture, texCoords, stack, start, duration)
+    if not texture then return end
+    
+    local profile = PlexusFrame.db.profile
+    
+    if type(texture) == "table" then
+    	self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
+    else
+    	self.texture:SetTexture(texture)
+    	self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
+    end
+    
+    if type(color) == "table" then
+    	self:SetAlpha(color.a or 1)
+    	self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
+    else
+    	self:SetAlpha(1)
+    	self:SetBackdropBorderColor(0, 0, 0, 0)
+    end
+    
+    if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
+    	self.cooldown:SetCooldown(start, duration)
+    	self.cooldown:Show()
+    else
+    	self.cooldown:Hide()
+    end
+    
+    if profile.enableIconStackText and type(count) == "number" and count > 1 then
+    	self.text:SetText(count)
+    else
+    	self.text:SetText("")
+    end
+    
+    self:Show()
+end
+
+function Icon_ResetIndicator(self, point, idx)
+    local profile = PlexusFrame.db.profile
+	local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
+	local iconSize = profile.iconSize
+	local iconBorderSize = profile.iconBorderSize
+    local totalSize = iconSize + (iconBorderSize * 2)
+	local frame = self.__owner
+	local r, g, b, a = self:GetBackdropBorderColor()
+
+	--self:SetParent(frame.indicators.bar)
+    self:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 1)
+	self:SetWidth(totalSize)
+	self:SetHeight(totalSize)
+
+	-- positioning
+	self:ClearAllPoints()
+
+	local is_side = point == "TOP" or point == "BOTTOM" or point == "LEFT" or point == "RIGHT"
+	local is_left = string.match(point, "LEFT") and 1 or string.match(point, "RIGHT") and -1 or 0
+	local is_top = string.match(point, "TOP") and -1 or string.match(point, "BOTTOM") and 1 or 0
+
+	local m = profile.marginSize
+	local ts = totalSize + profile.spacingSize
+	local mts = profile.marginSize + totalSize + profile.spacingSize
+
+	if idx == 1 then
+		self:SetPoint(point, is_left * m, is_top * m)
+	elseif idx == 2 then
+		if point == "TOP" or point == "BOTTOM" then
+			self:SetPoint(point, 0, is_top * mts)
+		else
+			self:SetPoint(point, is_left * mts, is_top * m)
+		end
+	elseif idx == 3 then
+		if point == "TOP" or point == "BOTTOM" then
+			self:SetPoint(point, -ts, is_top * m)
+		elseif point == "LEFT" or point == "RIGHT" then
+			self:SetPoint(point, is_left * m, ts)
+		else
+			self:SetPoint(point, is_left * m, is_top * mts)
+		end
+	elseif idx == 4 then
+		if point == "TOP" or point == "BOTTOM" then
+			self:SetPoint(point, ts, is_top * m)
+		elseif point == "LEFT" or point == "RIGHT" then
+			self:SetPoint(point, is_left * m, -ts)
+		else
+			self:SetPoint(point, is_left * mts, is_top * mts)
+		end
+    end
+
+	if iconBorderSize == 0 then
+		self:SetBackdrop(nil)
+	else
 		BACKDROP.edgeSize = iconBorderSize
 		BACKDROP.insets.left = iconBorderSize
 		BACKDROP.insets.right = iconBorderSize
 		BACKDROP.insets.top = iconBorderSize
 		BACKDROP.insets.bottom = iconBorderSize
-
+		
 		self:SetBackdrop(BACKDROP)
 		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
 	end
-)
 
-PlexusFrame:RegisterIndicator("ei_topleft", L["Extra Icon: Top Left"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("TOPLEFT")
-		icon:SetBackdrop(BACKDROP)
+	self:SetBackdrop(BACKDROP)
+	self:SetBackdropBorderColor(r, g, b, a)
 
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
+	self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
+	self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
 
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
+    self.text:SetPoint("CENTER", profile.stackOffsetX, profile.stackOffsetY)
+	self.text:SetFont(font, profile.fontSize, "OUTLINE")
+end
 
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
+function Icon_RegisterIndicator_Plus(id, name, point, idx)
+	PlexusFrame:RegisterIndicator(id .. (idx == 1 and "" or tostring(idx)), name .. (idx == 1 and "" or (" " .. tostring(idx))),
+		Icon_NewIndicator,
+		function(self)
+			Icon_ResetIndicator(self, point, idx)
+		end,
+		Icon_SetStatus,
+		Icon_ClearStatus
+	)
+end
 
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
+function Icon_RegisterIndicator(id, name, point, iconsMore1, iconsMore2)
+	Icon_RegisterIndicator_Plus(id, name, point, 1)
 
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
+	if iconsMore1 then
+		Icon_RegisterIndicator_Plus(id, name, point, 2)
 	end
-)
 
-PlexusFrame:RegisterIndicator("ei_botleft", L["Extra Icon: Bottom Left"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("BOTTOMLEFT")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
+	if iconsMore2 then
+		Icon_RegisterIndicator_Plus(id, name, point, 3)
+		Icon_RegisterIndicator_Plus(id, name, point, 4)
 	end
-)
-
-PlexusFrame:RegisterIndicator("ei_topright", L["Extra Icon: Top Right"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("TOPRIGHT")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
-)
-
-PlexusFrame:RegisterIndicator("ei_botright", L["Extra Icon: Bottom Right"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("BOTTOMRIGHT")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
-)
-
-PlexusFrame:RegisterIndicator("ei_top", L["Extra Icon: Top"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("TOP")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
-)
-
-PlexusFrame:RegisterIndicator("ei_bottom", L["Extra Icon: Bottom"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("BOTTOM")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
-)
-
-PlexusFrame:RegisterIndicator("ei_left", L["Extra Icon: Left"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("LEFT")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
-)
-
-PlexusFrame:RegisterIndicator("ei_right", L["Extra Icon: Right"],
-	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("RIGHT")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-
-	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
-	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
-)
+end
+
+--local PlexusExtraIconsOptions = PlexusExtraIcons.db.profile
+--local iconsMore1 = PlexusExtraIconsOptions.icon.iconsMore1
+--local iconsMore2 =  PlexusExtraIconsOptions.icon.iconsMore2
+local iconsMore1 = true
+local iconsMore2 =  true
+local prefix = "Extra Icon: "
+Icon_RegisterIndicator("icon", L["Center Icon"], "CENTER")
+Icon_RegisterIndicator("ei_icon_topleft", prefix .. "Top Left", "TOPLEFT", iconsMore1, iconsMore2)
+Icon_RegisterIndicator("ei_icon_botleft", prefix .. "Bottom Left", "BOTTOMLEFT", iconsMore1, iconsMore2)
+Icon_RegisterIndicator("ei_icon_topright", prefix .. "Top Right", "TOPRIGHT", iconsMore1, iconsMore2)
+Icon_RegisterIndicator("ei_icon_botright", prefix .. "Bottom Right", "BOTTOMRIGHT", iconsMore1, iconsMore2)
+
+Icon_RegisterIndicator("ei_icon_top", prefix .. "Top", "TOP", iconsMore1, iconsMore2)
+Icon_RegisterIndicator("ei_icon_bottom", prefix .. "Bottom", "BOTTOM", iconsMore1, iconsMore2)
+Icon_RegisterIndicator("ei_icon_left", prefix .. "Left", "LEFT", iconsMore1, iconsMore2)
+Icon_RegisterIndicator("ei_icon_right", prefix .. "Right", "RIGHT", iconsMore1, iconsMore2)
