@@ -70,7 +70,7 @@ function PlexusStatusVehicle:UpdateUnit(event, unit, guid)
 
 --	local guid = UnitGUID(pet_unit)
 
-	if UnitHasVehicleUI(unit) then
+	if (UnitHasVehicleUI and UnitHasVehicleUI(unit)) then
 		local settings = self.db.profile.alert_vehicleui
 		self.core:SendStatusGained(guid, "alert_vehicleui",
 			settings.priority,
