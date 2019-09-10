@@ -33,11 +33,9 @@ local helpText = {
 	{
 		order = 2,
 		"Missing features?",
-		"Plexus tries to avoid bundling every feature everyone might want. Instead, the core addon tries to include the basic features everyone needs, and offer a simple plugin system so developers can easily add more features. Here is a short list of some popular plugins and companion addons you can find on Curse.com and/or WoWInterface.com.",
+		"Plexus tries to avoid bundling every feature everyone might want. Instead, the core addon tries to include the basic features everyone needs, and offer a simple plugin system so developers can easily add more features. Here is a short list of some popular plugins and companion addons you can find on Curse.com . Note: Compatible with Grid plugins NOT Grid2",
 		"{Click casting} allows you to bind clicks to spells. For example, you could bind Shift-Click to cast Flash Heal. If you're interested in this functionality, we suggest {Clique} by Cladhaire as a great standalone addon that adds click-casting to all unit frames, including Plexus.",
-		"{Spell IDs} for telling apart different buffs or debuffs with the same name are not currently supported by the Plexus core. We do plan to add this functionality in the future, but in the meantime, we recommend using the {PlexusStatusAurasExt} plugin by Julith.",
-		"{Mana bars} are not included in Plexus, as the developers feel they are not really useful for anyone, and a simple {Low Mana Alert} status meets the needs of raid leaders and the few classes who actually care about other players' mana, but without all the clutter of 40 extra bars on your screen!",
-		"{More indicators} can be added by several plugins, including {PlexusIndicatorsDynamic} by Emyst.",
+        "{Debuffs} allows you to see important debuffs I recommend also checking out the expantion debbuff lists that go with it. If you're interested in this functionality, we suggest {GridStatusDungeonDebuff} by Me(Doadin) and bstassart as a great plugin.",
 		"For a (nearly) complete list of Plexus plugins, see the link on the download page!",
 	},
 	{
@@ -47,8 +45,6 @@ local helpText = {
 		"{Bug Reports & Feature Requests}",
 		"Please use the links at the top of Plexus's download page to report bugs and request features in the ticket tracker. This keeps all reports and requests in one place, so the developers can easily keep track of what needs to be done.",
 		"{Questions & Comments}",
-		"We have a forum thread on WowAce for questions and comments:\n|cff00d1ff http://forums.wowace.com/showthread.php?t=18716 |r",
-		"You can also post a comment on WoWInterface:\n|cff00d1ff https://www.wowinterface.com/downloads/info5747 |r",
 	},
 	{
 		"Adding new buffs & debuffs",
