@@ -49,6 +49,7 @@ spell_names = {
 	["Beacon of Faith"] = GetSpellInfo(156910),
 	["Beacon of Light"] = GetSpellInfo(53563),
 	["Beacon of Virtue"] = GetSpellInfo(200025),
+    ["Bestow Faith"] = GetSpellInfo(223306),
 	["Forbearance"] = GetSpellInfo(25771),
 	["Sacred Dawn"] = GetSpellInfo(243174),
 	["Tyr's Deliverance"] = GetSpellInfo(200654),
@@ -368,25 +369,38 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
 		mine = true,
 	},
+	[PlexusStatusAuras:StatusForSpell("Bestow Faith", true)] = {
+		-- 223306
+		desc = format(L["Buff: %s"], spell_names["Bestow Faith"]),
+		buff = spell_names["Bestow Faith"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Bestow Faith"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+		durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+		durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+		mine = true,
+	},
 	[PlexusStatusAuras:StatusForSpell("Sacred Dawn")] = {
 		-- 243174
 		desc = format(L["Debuff: %s"], spell_names["Sacred Dawn"]),
-		debuff = spell_names["Sacred Dawn"],
+		buff = spell_names["Sacred Dawn"],
 		text = PlexusStatusAuras:TextForSpell(spell_names["Sacred Dawn"]),
 		color = { r = 0, g = 252, b = 0, a = 1 },
 		durationColorLow = { r = 0.95, g = 1, b = 0.7, a = 1 },
 		durationColorMiddle = { r = 0.66, g = 0.7, b = 0.49, a = 1 },
 		durationColorHigh = { r = 0.43, g = 0.45, b = 0.32, a = 1 },
+        mine = true,
 	},
 	[PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
 		-- 200654
 		desc = format(L["Debuff: %s"], spell_names["Tyr's Deliverance"]),
-		debuff = spell_names["Tyr's Deliverance"],
+		buff = spell_names["Tyr's Deliverance"],
 		text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
 		color = { r = 0, g = 252, b = 0, a = 1 },
 		durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
 		durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
 		durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
+        mine = true,
 	},
 	[PlexusStatusAuras:StatusForSpell("Forbearance")] = {
 		-- 25771
