@@ -145,7 +145,11 @@ function PlexusStatusRole:OnStatusEnable(status)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
 
+    self:RegisterMessage("Plexus_PartyTransition", "UpdateAllUnits")
 	self:RegisterMessage("Plexus_RosterUpdate", "UpdateAllUnits")
+    self:RegisterMessage("Plexus_UnitJoined", "UpdateAllUnits")
+	self:RegisterMessage("Plexus_UnitChanged", "UpdateAllUnits")
+	self:RegisterMessage("Plexus_UnitLeft", "UpdateAllUnits")
 end
 
 function PlexusStatusRole:OnStatusDisable(status)
@@ -158,6 +162,10 @@ function PlexusStatusRole:OnStatusDisable(status)
 	self:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
 	self:UnregisterMessage("Plexus_PartyTransition")
+    self:UnregisterMessage("Plexus_RosterUpdate")
+    self:UnregisterMessage("Plexus_UnitJoined")
+	self:UnregisterMessage("Plexus_UnitChanged")
+	self:UnregisterMessage("Plexus_UnitLeft")
 
 	self.core:SendStatusLostAllUnits("role")
 end
