@@ -53,6 +53,7 @@ spell_names = {
 	["Forbearance"] = GetSpellInfo(25771),
 	["Sacred Dawn"] = GetSpellInfo(243174),
 	["Tyr's Deliverance"] = GetSpellInfo(200654),
+    ["Glimmer of Light"] = GetSpellInfo(287286),
 -- Priest
 	["Atonement"] = GetSpellInfo(214206),
 	["Clarity of Will"] = GetSpellInfo(152118),
@@ -374,6 +375,17 @@ PlexusStatusAuras.defaultDB = {
 		desc = format(L["Buff: %s"], spell_names["Bestow Faith"]),
 		buff = spell_names["Bestow Faith"],
 		text = PlexusStatusAuras:TextForSpell(spell_names["Bestow Faith"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+		durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+		durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+		mine = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
+		-- 287286
+		desc = format(L["Buff: %s"], spell_names["Glimmer of Light"]),
+		buff = spell_names["Glimmer of Light"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Glimmer of Light"]),
 		color = { r = 0, g = 252, b = 0, a = 1 },
 		durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
 		durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
