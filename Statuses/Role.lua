@@ -179,9 +179,9 @@ end
 
 function PlexusStatusRole:UpdateUnit(event, unit, guid)
     if Plexus.IsClassicWow() then
-	    local role = "None"
+	    role = "None"
     else
-        local role = UnitGroupRolesAssigned(unit) or "NONE"
+        role = UnitGroupRolesAssigned(unit) or "NONE"
     end
 	self:Debug("UpdateUnit", event, unit, role)
     
