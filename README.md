@@ -1,6 +1,6 @@
-**Plexus is the original compact unit frame addon.**
+**Plexus**
 
-The compact plexus of units lets you select a group member quickly, while keeping a good overview of the whole group. Plexus is designed to show you only what you need to know, and not overload you with irrelevant information. It is highly configurable, letting you choose exactly what is shown, and how it's shown. There are also many [plugins](https://wow.curseforge.com/addons/plexus/pages/list-of-plexus-plugins/) that add even more features!
+The compact plexus of units lets you select a group member quickly, while keeping a good overview of the whole group. Plexus is designed to show you only what you need to know, and not overload you with irrelevant information. It is highly configurable, letting you choose exactly what is shown, and how it's shown. There are also many plugins that add even more features!
 
 For options, type `/plexus`, right-click the tab on the Plexus layout frame, or right-click the Plexus icon on your minimap or DataBroker display.
 
