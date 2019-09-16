@@ -106,9 +106,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 	if not PlexusRoster:IsGUIDInRaid(guid) then return end
 
 	if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
-        if Plexus:IsClassicWow() then
-            return
-        end
+        local incoming = 0
         if not Plexus:IsClassicWow() then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
