@@ -70,7 +70,7 @@ local BACKDROP = {
 --	db = self.db.profile
 --end
 
-function Icon_NewIndicator(frame)
+local function Icon_NewIndicator(frame)
 	local icon = CreateFrame("Frame", nil, frame)
 	icon:SetPoint("CENTER")
 	icon:SetBackdrop(BACKDROP)
@@ -104,7 +104,7 @@ function Icon_NewIndicator(frame)
 	return icon
 end
 
-function Icon_ClearStatus(self)
+local function Icon_ClearStatus(self)
 	self:Hide()
 
 	self.texture:SetTexture(1, 1, 1, 0)
@@ -116,7 +116,7 @@ function Icon_ClearStatus(self)
 	self.cooldown:Hide()
 end
 
-function Icon_SetStatus(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+local function Icon_SetStatus(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
     if not texture then return end
     
     local profile = PlexusFrame.db.profile
@@ -152,7 +152,7 @@ function Icon_SetStatus(self, color, text, value, maxValue, texture, texCoords, 
     self:Show()
 end
 
-function Icon_ResetIndicator(self, point, idx)
+local function Icon_ResetIndicator(self, point, idx)
     local profile = PlexusFrame.db.profile
 	local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
 	local iconSize = profile.iconSize
@@ -226,7 +226,7 @@ function Icon_ResetIndicator(self, point, idx)
 	self.text:SetFont(font, profile.fontSize, "OUTLINE")
 end
 
-function Icon_RegisterIndicator_Plus(id, name, point, idx)
+local function Icon_RegisterIndicator_Plus(id, name, point, idx)
 	PlexusFrame:RegisterIndicator(id .. (idx == 1 and "" or tostring(idx)), name .. (idx == 1 and "" or (" " .. tostring(idx))),
 		Icon_NewIndicator,
 		function(self)
@@ -237,7 +237,7 @@ function Icon_RegisterIndicator_Plus(id, name, point, idx)
 	)
 end
 
-function Icon_RegisterIndicator(id, name, point, iconsMore1, iconsMore2)
+local function Icon_RegisterIndicator(id, name, point, iconsMore1, iconsMore2)
 	Icon_RegisterIndicator_Plus(id, name, point, 1)
 
 	if iconsMore1 then
