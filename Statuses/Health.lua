@@ -157,6 +157,7 @@ function PlexusStatusHealth:PostEnable()
 	self:RegisterEvent("UNIT_AURA", "UpdateUnit")
 	self:RegisterEvent("UNIT_CONNECTION", "UpdateUnit")
 	self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
+    self:RegisterEvent("UNIT_HEALTH_FREQUENT", "UpdateUnit")
 	self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")
 	self:RegisterEvent("UNIT_NAME_UPDATE", "UpdateUnit")
 
