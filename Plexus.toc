@@ -82,7 +82,9 @@ Statuses\Aggro.lua
 #@end-retail@
 Statuses\Auras.lua
 Statuses\Group.lua
+#@retail@
 Statuses\Heals.lua
+#@end-retail@
 Statuses\Health.lua
 Statuses\Mana.lua
 Statuses\Mouseover.lua
