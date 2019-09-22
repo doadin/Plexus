@@ -47,7 +47,7 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
 #@non-retail@
 Libs\LibClassicHealComm-1.0\ChatThrottleLib.lua
-Libs\LibClassicHealComm-1.0\HealComm.lua
+Libs\LibClassicHealComm-1.0\LibClassicHealComm-1.0.lua
 #@end-non-retail@
 Libs\LibResInfo-1.0\LibResInfo-1.0.lua
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
