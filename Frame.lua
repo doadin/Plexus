@@ -257,6 +257,7 @@ PlexusFrame.defaultDB = {
 	texture = "Gradient",
 	enableBarColor = false,
 	invertBarColor = false,
+    invertResourceBarColor = false,
 	invertTextColor = false,
 	healingBar_intensity = 0.5,
 	healingBar_useStatusColor = false,
@@ -501,15 +502,21 @@ PlexusFrame.options = {
 					end,
 				},
 				invertBarColor = {
-					name = L["Invert Bar Color"],
+					name = L["Invert Health Bar Color"],
 					desc = L["Swap foreground/background colors on bars."],
 					order = 3, width = "double",
+					type = "toggle",
+				},
+				invertResourceBarColor = {
+					name = L["Invert Resource Bar Color"],
+					desc = L["Swap foreground/background colors on bars."],
+					order = 4, width = "double",
 					type = "toggle",
 				},
 				invertTextColor = {
 					name = L["Invert Text Color"],
 					desc = L["Darken the text color to match the inverted bar."],
-					order = 4, width = "double",
+					order = 5, width = "double",
 					type = "toggle",
 					disabled = function()
 						return not PlexusFrame.db.profile.invertBarColor

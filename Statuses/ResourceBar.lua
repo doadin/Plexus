@@ -127,7 +127,7 @@ function PlexusResourceBar:OnInitialize()
             self:SetValue(value)            
 
             if color then
-                if PlexusFrame.db.profile.invertBarColor then
+                if PlexusFrame.db.profile.invertResourceBarColor then
                     self:SetStatusBarColor(color.r,color.g,color.b,color.a)
                     self.bg:SetVertexColor(0,0,0,0.8)
                 else
