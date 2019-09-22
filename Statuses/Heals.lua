@@ -15,8 +15,8 @@ local L = Plexus.L
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
-
 local PlexusStatusHeals = Plexus:NewStatusModule("PlexusStatusHeals")
+
 PlexusStatusHeals.menuName = L["Heals"]
 PlexusStatusHeals.options = false
 
@@ -71,6 +71,23 @@ function PlexusStatusHeals:OnStatusEnable(status)
         if not Plexus:IsClassicWow() then
 		    self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
         end
+        if Plexus:IsClassicWow() then
+            HealComm = LibStub("LibClassicHealComm-1.0")
+            local function HealComm_Heal_Update(event, casterGUID, spellID, healType, _, ...)
+		    	self:UpdateAllUnits()
+		    end
+            
+		    local function HealComm_Modified(event, guid)
+		    	self:UpdateAllUnits()
+		    end
+            
+            HealComm.RegisterCallback(self, 'HealComm_HealStarted', HealComm_Heal_Update)
+	        HealComm.RegisterCallback(self, 'HealComm_HealUpdated', HealComm_Heal_Update)
+	        HealComm.RegisterCallback(self, 'HealComm_HealDelayed', HealComm_Heal_Update)
+	        HealComm.RegisterCallback(self, 'HealComm_HealStopped', HealComm_Heal_Update)
+	        HealComm.RegisterCallback(self, 'HealComm_ModifierChanged', HealComm_Modified)
+	        HealComm.RegisterCallback(self, 'HealComm_GUIDDisappeared', HealComm_Modified)
+        end
 		self:UpdateAllUnits()
 	end
 end
@@ -110,11 +127,22 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         if not Plexus:IsClassicWow() then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
+        if Plexus:IsClassicWow() then
+            local myGUID = UnitGUID('player')
+            local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
+            local otherIncomingHeal = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
+            incoming = myIncomingHeal or otherIncomingHeal or 0
+        end
 		if incoming > 0 then
-			self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
+			--self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
 		end
 		if settings.ignore_self then
-			incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
+            if Plexus:IsClassicWow() then
+                incoming = otherIncomingHeal or 0
+            end
+            if not Plexus:IsClassicWow() then
+			    incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
+            end
 		end
 		if incoming > 0 then
 			local maxHealth = UnitHealthMax(unit)
