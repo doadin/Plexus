@@ -13,8 +13,8 @@ install: luarocks install --local luacheck
 script: uname -a
 
 after_success:
-    - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
-    - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -g 1.13.2
+    - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -m .pkgmeta
+    - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -g 1.13.2 -m .pkgmeta-classic
  
 notifications:
  email:
