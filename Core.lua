@@ -41,7 +41,6 @@ StaticPopupDialogs["GRID_ENABLED"] = {
   _G.PlexusDB.namespaces.PlexusStatusStagger = _G.GridDB.namespaces.GridStatusStagger
   _G.PlexusDB.namespaces.PlexusStatusTarget = _G.GridDB.namespaces.GridStatusTarget
   _G.PlexusDB.namespaces.PlexusStatusVehicle = _G.GridDB.namespaces.GridStatusVehicle
-  _G.PlexusDB.namespaces.PlexusStatusVoiceComm = _G.GridDB.namespaces.GridStatusVoiceComm
   end,
   timeout = 0,
   whileDead = true,
