@@ -11,7 +11,45 @@ local LDBIcon = LibStub("LibDBIcon-1.0")
 local format, print, strfind, strlen, tostring, type = format, print, strfind, strlen, tostring, type
 
 _G.Plexus = LibStub("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+if not (IsAddOnLoaded("Grid")) then
 _G.Grid = _G.Plexus
+end
+if (IsAddOnLoaded("Grid")) then
+StaticPopupDialogs["GRID_ENABLED"] = {
+  text = "Grid and Plexus should never be enabled at the same time, unless you are copying settings! Do you want to copy Grid settings to Plexus?(Please Have Backups and Note: Restart is Required After Copy)",
+  button1 = "Yes",
+  button2 = "No",
+  OnAccept = function()
+  _G.PlexusDB.namespaces.PlexusFrame = _G.GridDB.namespaces.GridFrame
+  _G.PlexusDB.namespaces.PlexusLayout = _G.GridDB.namespaces.GridLayout
+  _G.PlexusDB.namespaces.PlexusRoster = _G.GridDB.namespaces.GridRoster
+  _G.PlexusDB.namespaces.PlexusStatus = _G.GridDB.namespaces.GridStatus
+  _G.PlexusDB.namespaces.PlexusStatusAbsorbs = _G.GridDB.namespaces.GridStatusAbsorbs
+  _G.PlexusDB.namespaces.PlexusStatusAggro = _G.GridDB.namespaces.GridStatusAggro
+  _G.PlexusDB.namespaces.PlexusStatusAuras = _G.GridDB.namespaces.GridStatusAuras
+  _G.PlexusDB.namespaces.PlexusStatusGroup = _G.GridDB.namespaces.GridStatusGroup
+  _G.PlexusDB.namespaces.PlexusStatusHeals = _G.GridDB.namespaces.GridStatusHeals
+  _G.PlexusDB.namespaces.PlexusStatusHealth = _G.GridDB.namespaces.GridStatusHealth
+  _G.PlexusDB.namespaces.PlexusStatusMana = _G.GridDB.namespaces.GridStatusMana
+  _G.PlexusDB.namespaces.PlexusStatusMouseover = _G.GridDB.namespaces.GridStatusMouseover
+  _G.PlexusDB.namespaces.PlexusStatusName = _G.GridDB.namespaces.GridStatusName
+  _G.PlexusDB.namespaces.PlexusStatusRaidIcon = _G.GridDB.namespaces.GridStatusRaidIcon
+  _G.PlexusDB.namespaces.PlexusStatusRange = _G.GridDB.namespaces.GridStatusRange
+  _G.PlexusDB.namespaces.PlexusStatusReadyCheck = _G.GridDB.namespaces.GridStatusReadyCheck
+  _G.PlexusDB.namespaces.PlexusStatusResurrect = _G.GridDB.namespaces.GridStatusResurrect
+  _G.PlexusDB.namespaces.PlexusStatusRole = _G.GridDB.namespaces.GridStatusRole
+  _G.PlexusDB.namespaces.PlexusStatusStagger = _G.GridDB.namespaces.GridStatusStagger
+  _G.PlexusDB.namespaces.PlexusStatusTarget = _G.GridDB.namespaces.GridStatusTarget
+  _G.PlexusDB.namespaces.PlexusStatusVehicle = _G.GridDB.namespaces.GridStatusVehicle
+  _G.PlexusDB.namespaces.PlexusStatusVoiceComm = _G.GridDB.namespaces.GridStatusVoiceComm
+  end,
+  timeout = 0,
+  whileDead = true,
+  hideOnEscape = true,
+  preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+}
+StaticPopup_Show ("GRID_ENABLED")
+end
 
 if not Plexus.L then Plexus.L = { } end
 local L = setmetatable( Plexus.L, {
