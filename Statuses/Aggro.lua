@@ -180,10 +180,11 @@ function PlexusStatusAggro:UpdateUnit(event, unit, guid)
 	local guid = guid or unit and UnitGUID(unit)
 	if not guid or not PlexusRoster:IsGUIDInRaid(guid) then return end -- sometimes unit can be nil or invalid, wtf?
     
+    local status = 0
     if not Plexus.IsClassicWow() then
-	    local status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
+	    status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
     else 
-        local status = UnitIsVisible(unit) or 0
+        status = UnitIsVisible(unit) or 0
     end
     
 
