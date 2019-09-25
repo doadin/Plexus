@@ -53,6 +53,74 @@ local resourcebar_options = {
         end,
         values={["Left"] = "Left", ["Top"] = "Top", ["Right"] = "Right", ["Bottom"] = "Bottom" },
     },
+	["Mana Bar Color"] = {
+		name = "Mana Color",
+		order = 40,
+		type = "color", hasAlpha = true,
+		get = function()
+			local color = PlexusResourceBar.db.profile.manacolor
+			return color.r, color.g, color.b, color.a
+		end,
+		set = function(_, r, g, b, a)
+			local color = PlexusResourceBar.db.profile.manacolor
+			color.r = r
+			color.g = g
+			color.b = b
+			color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+		end,
+	},
+	["Energy Bar Color"] = {
+		name = "Energy Color",
+		order = 50,
+		type = "color", hasAlpha = true,
+		get = function()
+			local color = PlexusResourceBar.db.profile.energycolor
+			return color.r, color.g, color.b, color.a
+		end,
+		set = function(_, r, g, b, a)
+			local color = PlexusResourceBar.db.profile.energycolor
+			color.r = r
+			color.g = g
+			color.b = b
+			color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+		end,
+	},
+	["Rage Bar Color"] = {
+		name = "Rage Color",
+		order = 60,
+		type = "color", hasAlpha = true,
+		get = function()
+			local color = PlexusResourceBar.db.profile.ragecolor
+			return color.r, color.g, color.b, color.a
+		end,
+		set = function(_, r, g, b, a)
+			local color = PlexusResourceBar.db.profile.ragecolor
+			color.r = r
+			color.g = g
+			color.b = b
+			color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+		end,
+	},
+	["Runic Bar Color"] = {
+		name = "Runic Color",
+		order = 70,
+		type = "color", hasAlpha = true,
+		get = function()
+			local color = PlexusResourceBar.db.profile.runiccolor
+			return color.r, color.g, color.b, color.a
+		end,
+		set = function(_, r, g, b, a)
+			local color = PlexusResourceBar.db.profile.runiccolor
+			color.r = r
+			color.g = g
+			color.b = b
+			color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+		end,
+	},
 }
 
 function PlexusResourceBar:OnInitialize()
