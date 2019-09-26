@@ -91,6 +91,9 @@ Statuses\Health.lua
 Statuses\Mana.lua
 Statuses\Mouseover.lua
 Statuses\Name.lua
+#@retail@
+Statuses\Phase.lua
+#@end-retail@
 Statuses\RaidIcon.lua
 Statuses\Range.lua
 Statuses\ReadyCheck.lua
