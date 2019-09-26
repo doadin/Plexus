@@ -81,7 +81,7 @@ end
 function PlexusStatusPhase:OnStatusEnable(status)
     if status ~= "phase_status" then return end
 
-    self:RegisterEvent("UNIT_PHASE", "UpdateAllUnits")
+    self:RegisterEvent("UNIT_PHASE")
     self:RegisterEvent("PARTY_LEADER_CHANGED", "GroupChanged")
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "GroupChanged")
     self:RegisterMessage("Plexus_PartyTransition", "GroupChanged")
