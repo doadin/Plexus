@@ -28,6 +28,7 @@ local resourcebar_options = {
     ["Resource Bar Size"] = {
         type = "range",
         name = "Size",
+        order = 30,
         desc = "Percentage of frame for resource bar",
         max = 50,
         min = 10,
@@ -43,6 +44,7 @@ local resourcebar_options = {
     ["Resource Bar Side"] = {
         type = "select",
         name = "Location",
+        order = 40,
         desc = "Where resource bar attaches to",
         get = function ()
             return PlexusResourceBar.db.profile.side
@@ -53,75 +55,98 @@ local resourcebar_options = {
         end,
         values={["Left"] = "Left", ["Top"] = "Top", ["Right"] = "Right", ["Bottom"] = "Bottom" },
     },
-	["Mana Bar Color"] = {
-		name = "Mana Color",
-		order = 40,
-		type = "color", hasAlpha = true,
-		get = function()
-			local color = PlexusResourceBar.db.profile.manacolor
-			return color.r, color.g, color.b, color.a
-		end,
-		set = function(_, r, g, b, a)
-			local color = PlexusResourceBar.db.profile.manacolor
-			color.r = r
-			color.g = g
-			color.b = b
-			color.a = a or 1
-            PlexusFrame:UpdateAllFrames()
-		end,
-	},
-	["Energy Bar Color"] = {
-		name = "Energy Color",
-		order = 50,
-		type = "color", hasAlpha = true,
-		get = function()
-			local color = PlexusResourceBar.db.profile.energycolor
-			return color.r, color.g, color.b, color.a
-		end,
-		set = function(_, r, g, b, a)
-			local color = PlexusResourceBar.db.profile.energycolor
-			color.r = r
-			color.g = g
-			color.b = b
-			color.a = a or 1
-            PlexusFrame:UpdateAllFrames()
-		end,
-	},
-	["Rage Bar Color"] = {
-		name = "Rage Color",
-		order = 60,
-		type = "color", hasAlpha = true,
-		get = function()
-			local color = PlexusResourceBar.db.profile.ragecolor
-			return color.r, color.g, color.b, color.a
-		end,
-		set = function(_, r, g, b, a)
-			local color = PlexusResourceBar.db.profile.ragecolor
-			color.r = r
-			color.g = g
-			color.b = b
-			color.a = a or 1
-            PlexusFrame:UpdateAllFrames()
-		end,
-	},
-	["Runic Bar Color"] = {
-		name = "Runic Color",
-		order = 70,
-		type = "color", hasAlpha = true,
-		get = function()
-			local color = PlexusResourceBar.db.profile.runiccolor
-			return color.r, color.g, color.b, color.a
-		end,
-		set = function(_, r, g, b, a)
-			local color = PlexusResourceBar.db.profile.runiccolor
-			color.r = r
-			color.g = g
-			color.b = b
-			color.a = a or 1
-            PlexusFrame:UpdateAllFrames()
-		end,
-	},
+    ["Resource Bar Colors"] = {
+        name = "Colors",
+	    order = 200,
+	    type = "group",
+        dialogInline = true,
+	    --childGroups = "tab",
+	    args = {
+	        ["Mana Bar Color"] = {
+	        	name = "Mana Color",
+	        	order = 40,
+	        	type = "color", hasAlpha = true,
+	        	get = function()
+	        		local color = PlexusResourceBar.db.profile.manacolor
+	        		return color.r, color.g, color.b, color.a
+	        	end,
+	        	set = function(_, r, g, b, a)
+	        		local color = PlexusResourceBar.db.profile.manacolor
+	        		color.r = r
+	        		color.g = g
+	        		color.b = b
+	        		color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+	        	end,
+	        },
+	        ["Energy Bar Color"] = {
+	        	name = "Energy Color",
+	        	order = 50,
+	        	type = "color", hasAlpha = true,
+	        	get = function()
+	        		local color = PlexusResourceBar.db.profile.energycolor
+	        		return color.r, color.g, color.b, color.a
+	        	end,
+	        	set = function(_, r, g, b, a)
+	        		local color = PlexusResourceBar.db.profile.energycolor
+	        		color.r = r
+	        		color.g = g
+	        		color.b = b
+	        		color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+	        	end,
+	        },
+	        ["Rage Bar Color"] = {
+	        	name = "Rage Color",
+	        	order = 60,
+	        	type = "color", hasAlpha = true,
+	        	get = function()
+	        		local color = PlexusResourceBar.db.profile.ragecolor
+	        		return color.r, color.g, color.b, color.a
+	        	end,
+	        	set = function(_, r, g, b, a)
+	        		local color = PlexusResourceBar.db.profile.ragecolor
+	        		color.r = r
+	        		color.g = g
+	        		color.b = b
+	        		color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+	        	end,
+	        },
+	        ["Runic Bar Color"] = {
+	        	name = "Runic Color",
+	        	order = 70,
+	        	type = "color", hasAlpha = true,
+	        	get = function()
+	        		local color = PlexusResourceBar.db.profile.runiccolor
+	        		return color.r, color.g, color.b, color.a
+	        	end,
+	        	set = function(_, r, g, b, a)
+	        		local color = PlexusResourceBar.db.profile.runiccolor
+	        		color.r = r
+	        		color.g = g
+	        		color.b = b
+	        		color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+	        	end,
+	        },
+            ["Reset"] = {
+	            order = 80,
+	            name = "Reset Resource colors (Require Reload)",
+	            type = "execute", width = "double",
+	            func = function() PlexusResourceBar:ResetResourceColors() end,
+            },
+        },
+    },
 }
+
+function PlexusResourceBar:ResetResourceColors()
+    PlexusResourceBar.db.profile.manacolor = PlexusResourceBar.defaultDB.manacolor
+    PlexusResourceBar.db.profile.energycolor = PlexusResourceBar.defaultDB.energycolor
+    PlexusResourceBar.db.profile.ragecolor = PlexusResourceBar.defaultDB.ragecolor
+    PlexusResourceBar.db.profile.runiccolor = PlexusResourceBar.defaultDB.runiccolor 
+	PlexusFrame:UpdateAllFrames()
+end
 
 function PlexusResourceBar:OnInitialize()
 	self.super.OnInitialize(self)
