@@ -22,7 +22,7 @@ PlexusStatusPhase.defaultDB = {
         text = L["Phase Status"],
         enable = true,
         color = { r = 1, g = 1, b = 1, a = 1 },
-        priority = 95,
+        priority = 99,
         delay = 0,
         range = false,
         colors = {
