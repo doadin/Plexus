@@ -155,7 +155,7 @@ function PlexusStatus.modulePrototype:RegisterStatus(status, desc, options, inMa
 				priority = {
 					name = L["Priority"],
 					order = 30,
-					type = "range", max = 99, min = 0, step = 1,
+					type = "range", max = 100, min = 0, step = 1,
 					get = function()
 						return module.db.profile[status].priority
 					end,

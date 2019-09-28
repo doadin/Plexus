@@ -881,7 +881,7 @@ function PlexusFrame:StatusForIndicator(unitid, guid, indicator)
 		-- #DELETE
 		--		local inRange = not status.range or self:UnitInRange(unitid)
 		--		if inRange and ((status.priority or 99) > topPriority) then
-				if (status.priority or 99) > topPriority then
+				if (status.priority or 100) > topPriority then
 					topStatus = status
 					topPriority = topStatus.priority
 				end
