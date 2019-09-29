@@ -27,5 +27,5 @@ externals:
       tag: 1.0
    Libs/UTF8: https://repos.wowace.com/wow/utf8/trunk
    Libs/LibClassicHealComm-1.0:
-     url: https://github.com/Aviana/LibClassicHealComm-1.0.git
+     url: https://github.com/doadin/LibClassicHealComm-1.0.git
      tag: master
