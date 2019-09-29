@@ -131,7 +131,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             local myGUID = UnitGUID('player')
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
             local otherIncomingHeal = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
-            incoming = myIncomingHeal or otherIncomingHeal or 0
+            incoming = myIncomingHeal or 0
         end
 		if incoming > 0 then
 			--self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
