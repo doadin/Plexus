@@ -208,15 +208,15 @@ PlexusFrame:RegisterIndicator("icon", L["Center Icon"],
 	function(self)
 		local profile = PlexusFrame.db.profile
 		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local iconSize = profile.iconSize
+		local centerIconSize = profile.centerIconSize
 		local iconBorderSize = profile.iconBorderSize
 
 		local frame = self.__owner
 		local r, g, b, a = self:GetBackdropBorderColor()
 
 		self:SetParent(frame.indicators.bar)
-		self:SetWidth(iconSize + (iconBorderSize * 2))
-		self:SetHeight(iconSize + (iconBorderSize * 2))
+		self:SetWidth(centerIconSize + (iconBorderSize * 2))
+		self:SetHeight(centerIconSize + (iconBorderSize * 2))
 
 		BACKDROP.edgeSize = iconBorderSize
 		BACKDROP.insets.left = iconBorderSize
