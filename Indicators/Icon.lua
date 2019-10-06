@@ -101,7 +101,12 @@ end
 local function Icon_ResetIndicator(self, point, idx)
     local profile = PlexusFrame.db.profile
 	local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-	local iconSize = profile.iconSize
+    local iconSize = 0
+    if point == "CENTER" then
+	    iconSize = profile.centerIconSize
+    else
+        iconSize = profile.iconSize
+    end
 	local iconBorderSize = profile.iconBorderSize
     local totalSize = iconSize + (iconBorderSize * 2)
 	local frame = self.__owner
@@ -197,47 +202,9 @@ local function Icon_RegisterIndicator(id, name, point, iconsMore1, iconsMore2)
 end
 
 local iconsMore1 = true
-local iconsMore2 =  true
+local iconsMore2 = true
 local prefix = "Extra Icon: "
---Icon_RegisterIndicator("icon", L["Center Icon"], "CENTER")
-
-PlexusFrame:RegisterIndicator("icon", L["Center Icon"],
-	-- New
-	Icon_NewIndicator,
-	-- Reset
-	function(self)
-		local profile = PlexusFrame.db.profile
-		local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-		local centerIconSize = profile.centerIconSize
-		local iconBorderSize = profile.iconBorderSize
-
-		local frame = self.__owner
-		local r, g, b, a = self:GetBackdropBorderColor()
-
-		self:SetParent(frame.indicators.bar)
-		self:SetWidth(centerIconSize + (iconBorderSize * 2))
-		self:SetHeight(centerIconSize + (iconBorderSize * 2))
-
-		BACKDROP.edgeSize = iconBorderSize
-		BACKDROP.insets.left = iconBorderSize
-		BACKDROP.insets.right = iconBorderSize
-		BACKDROP.insets.top = iconBorderSize
-		BACKDROP.insets.bottom = iconBorderSize
-
-		self:SetBackdrop(BACKDROP)
-		self:SetBackdropBorderColor(r, g, b, a)
-
-		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)
-		self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
-
-		self.text:SetFont(font, profile.fontSize, "OUTLINE")
-	end,
-	-- SetStatus
-	Icon_SetStatus,
-	-- ClearStatus
-	Icon_ClearStatus
-)
-
+Icon_RegisterIndicator("icon", L["Center Icon"], "CENTER")
 Icon_RegisterIndicator("ei_icon_topleft", prefix .. "Top Left", "TOPLEFT", iconsMore1, iconsMore2)
 Icon_RegisterIndicator("ei_icon_botleft", prefix .. "Bottom Left", "BOTTOMLEFT", iconsMore1, iconsMore2)
 Icon_RegisterIndicator("ei_icon_topright", prefix .. "Top Right", "TOPRIGHT", iconsMore1, iconsMore2)
