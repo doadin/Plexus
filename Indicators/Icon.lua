@@ -8,67 +8,13 @@
 
 local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
---local PlexusExtraIcons = Plexus:NewModule("PlexusExtraIcons")
 local Media = LibStub("LibSharedMedia-3.0")
 local L = Plexus.L
-
---PlexusExtraIcons.defaultDB = {
---	profile = {
---		icon = {
---			iconsMore1 = false,
---			iconsMore2 = false,
---		}
---	}
---}
---
---PlexusExtraIcons.options = {
---	name = L["Extra Icons"],
---	desc = L["Options for PlexusFrame."],
---	order = 6,
---	type = "group",
---	childGroups = "tab",
---	disabled = InCombatLockdown,
---	get = function(info)
---		local k = info[#info]
---		return PlexusExtraIcons.db.profile[k]
---	end,
---	set = function(info, v)
---		local k = info[#info]
---		PlexusExtraIcons.db.profile[k] = v
---		PlexusExtraIcons:UpdateAllFrames()
---	end,
---	args = {
---		general = {
---			name = L["General"],
---			order = 1,
---			type = "group",
---			args = {
---				iconsMore1 = {
---					name = format(L["Enable %s"], L["more icons"]),
---					desc = L["Toggle more icon indicators."],
---					order = 1, width = "double",
---					type = "toggle",
---				},
---				iconsMore2 = {
---					name = format(L["Enable %s"], L["even MORE icons"]),
---					desc = L["Toggle even MORE icon indicators."],
---					order = 2, width = "double",
---					type = "toggle",
---				},
---			},
---		},
---	},
---}
 
 local BACKDROP = {
 	edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 2,
 	insets = { left = 2, right = 2, top = 2, bottom = 2 },
 }
-
---function PlexusExtraIcons:OnInitialize()
---	self.super.OnInitialize(self)
---	db = self.db.profile
---end
 
 local function Icon_NewIndicator(frame)
 	local icon = CreateFrame("Frame", nil, frame)
@@ -250,51 +196,14 @@ local function Icon_RegisterIndicator(id, name, point, iconsMore1, iconsMore2)
 	end
 end
 
---local PlexusExtraIconsOptions = PlexusExtraIcons.db.profile
---local iconsMore1 = PlexusExtraIconsOptions.icon.iconsMore1
---local iconsMore2 =  PlexusExtraIconsOptions.icon.iconsMore2
 local iconsMore1 = true
 local iconsMore2 =  true
 local prefix = "Extra Icon: "
 --Icon_RegisterIndicator("icon", L["Center Icon"], "CENTER")
---Icon_RegisterIndicator("icon", L["Center Icon"], "CENTER", iconsMore1, iconsMore2)
 
 PlexusFrame:RegisterIndicator("icon", L["Center Icon"],
 	-- New
-	function(frame)
-		local icon = CreateFrame("Frame", nil, frame)
-		icon:SetPoint("CENTER")
-		icon:SetBackdrop(BACKDROP)
-
-		local texture = icon:CreateTexture(nil, "ARTWORK")
-		texture:SetPoint("BOTTOMLEFT", 2, 2)
-		texture:SetPoint("TOPRIGHT", -2, -2)
-		icon.texture = texture
-
-		local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		text:SetPoint("BOTTOMRIGHT", 2, -2)
-		text:SetJustifyH("RIGHT")
-		text:SetJustifyV("BOTTOM")
-		icon.text = text
-
-		local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
-		cd:SetDrawBling(false)
-		cd:SetDrawEdge(false)
-		cd:SetHideCountdownNumbers(true)
-		cd:SetReverse(true)
-		icon.cooldown = cd
-
-		cd:SetScript("OnShow", function()
-			text:SetParent(cd)
-		end)
-		cd:SetScript("OnHide", function()
-			text:SetParent(icon)
-		end)
-
-		return icon
-	end,
-
+	Icon_NewIndicator,
 	-- Reset
 	function(self)
 		local profile = PlexusFrame.db.profile
@@ -323,57 +232,10 @@ PlexusFrame:RegisterIndicator("icon", L["Center Icon"],
 
 		self.text:SetFont(font, profile.fontSize, "OUTLINE")
 	end,
-
 	-- SetStatus
-	function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
-		if not texture then return end
-		--ChatFrame3:AddMessage(strjoin(" ", tostringall("SetStatus", self.__id, text, texture)))
-
-		local profile = PlexusFrame.db.profile
-
-		if type(texture) == "table" then
-			self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
-		else
-			self.texture:SetTexture(texture)
-			self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
-		end
-
-		if type(color) == "table" then
-			self:SetAlpha(color.a or 1)
-			self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
-		else
-			self:SetAlpha(1)
-			self:SetBackdropBorderColor(0, 0, 0, 0)
-		end
-
-		if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then
-			self.cooldown:SetCooldown(start, duration)
-			self.cooldown:Show()
-		else
-			self.cooldown:Hide()
-		end
-
-		if profile.enableIconStackText and type(count) == "number" and count > 1 then
-			self.text:SetText(count)
-		else
-			self.text:SetText("")
-		end
-
-		self:Show()
-	end,
-
+	Icon_SetStatus,
 	-- ClearStatus
-	function(self)
-		self:Hide()
-
-		self.texture:SetTexture(1, 1, 1, 0)
-		self.texture:SetTexCoord(0, 1, 0, 1)
-
-		self.text:SetText("")
-		self.text:SetTextColor(1, 1, 1, 1)
-
-		self.cooldown:Hide()
-	end
+	Icon_ClearStatus
 )
 
 Icon_RegisterIndicator("ei_icon_topleft", prefix .. "Top Left", "TOPLEFT", iconsMore1, iconsMore2)
