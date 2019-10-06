@@ -9,8 +9,6 @@
 	Plexus status module for resurrections.
 ----------------------------------------------------------------------]]
 
-local IS_WOW_8 = GetBuildInfo():match("^8")
-
 local _, Plexus = ...
 local L = Plexus.L
 
@@ -171,7 +169,7 @@ function PlexusStatusResurrect:UpdateUnit(unit, guid)
 		startTime = endTime - 360
 		duration = 360
 	else -- CASTING or PENDING
-		if IS_WOW_8 then
+		if not Plexus:IsClassicWow() then
 			_, _, icon, startTime = UnitCastingInfo(casterUnit)
 		else
 			_, _, _, icon, startTime = UnitCastingInfo(casterUnit)
