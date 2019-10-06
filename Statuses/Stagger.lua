@@ -9,8 +9,6 @@
 	Plexus status module for Monk Stagger.
 ----------------------------------------------------------------------]]
 
-local IS_WOW_8 = GetBuildInfo():match("^8")
-
 local _, Plexus = ...
 local L = Plexus.L
 
@@ -162,11 +160,7 @@ function PlexusStatusStagger:UpdateUnit(event, unitid)
 	if monks[guid] then
 		for i = 1, 40 do
 			local name, icon, spellID, _
-			if IS_WOW_8 then
-				name, icon, _, _, _, _, _, _, _, spellID = UnitDebuff(unitid, i)
-			else
-				name, _, icon, _, _, _, _, _, _, _, spellID = UnitDebuff(unitid, i)
-			end
+			name, icon, _, _, _, _, _, _, _, spellID = UnitDebuff(unitid, i)
 
 			if not name then
 				break
