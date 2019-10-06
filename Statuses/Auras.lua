@@ -9,8 +9,6 @@
 	Plexus status module for tracking buffs/debuffs.
 ----------------------------------------------------------------------]]
 
-local IS_WOW_8 = GetBuildInfo():match("^8")
-
 local _, Plexus = ...
 local L = Plexus.L
 
@@ -1950,7 +1948,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 	if UnitIsVisible(unit) then
 		for i = 1, 40 do
 			local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
-			if IS_WOW_8 then
+			if not Plexus:IsClassicWow() then
 				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
 			else
 				name, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spellId, _, _ = UnitAura(unit, i, "HELPFUL")
@@ -1976,7 +1974,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 		-- scan for debuffs
 		for index = 1, 40 do
 			local name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer
-			if IS_WOW_8 then
+			if not Plexus:IsClassicWow() then
 				name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
 			else
 				name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellId, _, _  = UnitDebuff(unit, index, "HARMFUL")
