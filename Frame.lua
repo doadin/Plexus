@@ -545,13 +545,13 @@ PlexusFrame.options = {
 			args = {
 				centerIconSize = {
 					name = L["Center Icon Size"],
-					desc = L["Adjust the size of icons."],
+					desc = L["Adjust the size of the center icons."],
 					order = 1, width = "double",
 					type = "range", min = 5, max = 50, step = 1,
 				},
 				iconSize = {
-					name = L["Etra Icons Size"],
-					desc = L["Adjust the size of icons."],
+					name = L["Extra Icons Size"],
+					desc = L["Adjust the size of the extra icons."],
 					order = 2, width = "double",
 					type = "range", min = 5, max = 50, step = 1,
 				},
@@ -585,7 +585,7 @@ PlexusFrame.options = {
 					order = 7, width = "double",
 					type = "toggle",
 				},
-				iconsMore1 = {
+				iconsMore = {
 					name = format(L["Enable %s"], L["more icons"]),
 					desc = L["Toggle more icon indicators."],
 					order = 8, width = "double",
