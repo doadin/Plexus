@@ -112,8 +112,11 @@ local function Icon_ResetIndicator(self, point, idx)
 	local frame = self.__owner
 	local r, g, b, a = self:GetBackdropBorderColor()
 
-	self:SetParent(frame.indicators.bar)
-    self:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 1)
+    if point == "CENTER" then
+	    self:SetParent(frame.indicators.bar)
+    else
+        self:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 1)
+    end
 	self:SetWidth(totalSize)
 	self:SetHeight(totalSize)
 
