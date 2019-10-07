@@ -27,7 +27,7 @@ PlexusStatusSummon.defaultDB = {
         text = L["Summon Status"],
         enable = true,
         color = { r = 1, g = 1, b = 1, a = 1 },
-        priority = 95,
+        priority = 40,
         delay = 5,
         range = false,
         colors = {
