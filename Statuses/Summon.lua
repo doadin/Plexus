@@ -187,9 +187,11 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     if key == 1 then key = "SUMMON_STATUS_PENDING" end
     if key == 2 then key = "SUMMON_STATUS_ACCEPTED" end
     if key == 3 then key = "SUMMON_STATUS_DECLINED" end
-    if key then
+    if key == "SUMMON_STATUS_PENDING" or "SUMMON_STATUS_ACCEPTED" or "SUMMON_STATUS_DECLINED" then
         local settings = self.db.profile.summon_status
         self:GainStatus(guid, key, settings)
+    elseif key == "SUMMON_STATUS_NONE" then
+        self.core:SendStatusLost(guid, "summon_status")
     else
         self.core:SendStatusLost(guid, "summon_status")
     end
