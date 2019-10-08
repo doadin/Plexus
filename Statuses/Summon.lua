@@ -27,7 +27,7 @@ PlexusStatusSummon.defaultDB = {
         text = L["Summon Status"],
         enable = true,
         color = { r = 1, g = 1, b = 1, a = 1 },
-        priority = 40,
+        priority = 70,
         delay = 5,
         range = false,
         colors = {
@@ -43,8 +43,8 @@ PlexusStatusSummon.options = false
 
 local summonstatus = {
     SUMMON_STATUS_NONE = {
-        text = "",
-        icon = ""
+        text = L["?"],
+        icon = "READY_CHECK_WAITING_TEXTURE"
     },
     SUMMON_STATUS_PENDING = {
         text = L["?"],
