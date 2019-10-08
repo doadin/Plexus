@@ -110,7 +110,12 @@ function PlexusStatusPhase:GainStatus(guid, key, settings)
         status.text,
         nil,
         nil,
-        status.icon)
+        status.icon,
+        nil,
+        nil,
+        nil,
+        {left = 0.15625, right = 0.84375, top = 0.15625, bottom = 0.84375}
+    )
 end
 
 function PlexusStatusPhase:UpdateAllUnits(event)
