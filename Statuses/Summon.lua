@@ -48,15 +48,15 @@ local summonstatus = {
     },
     SUMMON_STATUS_PENDING = {
         text = L["?"],
-        icon = READY_CHECK_WAITING_TEXTURE
+        icon = "Interface\\RaidFrame\\Raid-Icon-SummonPending"
     },
     SUMMON_STATUS_ACCEPTED = {
         text = L["A"],
-        icon = READY_CHECK_READY_TEXTURE
+        icon = "Interface\\RaidFrame\\Raid-Icon-SummonAccepted"
     },
     SUMMON_STATUS_DECLINED = {
         text = L["X"],
-        icon = READY_CHECK_NOT_READY_TEXTURE
+        icon = "Interface\\RaidFrame\\Raid-Icon-SummonDeclined"
     },
 }
 
@@ -166,7 +166,12 @@ function PlexusStatusSummon:GainStatus(guid, key, settings)
         status.text,
         nil,
         nil,
-        status.icon)
+        status.icon,
+        nil,
+        nil,
+        nil,
+        {left = 0.15625, right = 0.84375, top = 0.15625, bottom = 0.84375}
+    )
 end
 
 function PlexusStatusSummon:UpdateAllUnits(event)
