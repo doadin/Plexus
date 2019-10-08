@@ -26,7 +26,7 @@ PlexusStatusStagger.defaultDB = {
 			moderate = { r = 1, g = 1, b = 0, a = 1 },
 			heavy = { r = 1, g = 0, b = 0, a = 1 },
 		},
-		priority = 95,
+		priority = 75,
 		range = false,
 	},
 }

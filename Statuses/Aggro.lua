@@ -30,7 +30,7 @@ PlexusStatusAggro.defaultDB = {
 		text =  L["Aggro"],
 		enable = true,
 		color = { r = 1, g = 0, b = 0, a = 1 },
-		priority = 99,
+		priority = 75,
 		range = false,
 		threat = false,
 		threatcolors = {
