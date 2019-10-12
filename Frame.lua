@@ -15,6 +15,7 @@ local Media = LibStub("LibSharedMedia-3.0")
 Media:Register("statusbar", "Gradient", "Interface\\Addons\\Plexus\\Media\\gradient32x32")
 
 local PlexusFrame = Plexus:NewModule("PlexusFrame", "AceBucket-3.0", "AceTimer-3.0")
+local PlexusLayout = Plexus:GetModule("PlexusLayout")
 PlexusFrame.indicators = {}
 PlexusFrame.prototype = {}
 
@@ -386,6 +387,7 @@ PlexusFrame.options = {
 					set = function(info, v)
 						PlexusFrame.db.profile.frameWidth = v
 						PlexusFrame:ResizeAllFrames()
+                        PlexusLayout:ReloadLayout()
 					end,
 				},
 				frameHeight = {
@@ -396,6 +398,7 @@ PlexusFrame.options = {
 					set = function(info, v)
 						PlexusFrame.db.profile.frameHeight = v
 						PlexusFrame:ResizeAllFrames()
+                        PlexusLayout:ReloadLayout()
 					end,
 				},
 				borderSize = {
