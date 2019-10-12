@@ -82,8 +82,13 @@ function PlexusStatusPhase:OnStatusEnable(status)
     if status ~= "phase_status" then return end
 
     self:RegisterEvent("UNIT_PHASE")
+    self:RegisterEvent("UNIT_FLAGS", "GroupChanged")
     self:RegisterEvent("PARTY_LEADER_CHANGED", "GroupChanged")
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "GroupChanged")
+    self:RegisterEvent("PARTY_MEMBER_ENABLE", "GroupChanged")
+    self:RegisterEvent("PARTY_MEMBER_DISABLE", "GroupChanged")
+    self:RegisterEvent("UNIT_OTHER_PARTY_CHANGED", "GroupChanged")
+    self:RegisterEvent("INCOMING_SUMMON_CHANGED", "GroupChanged")
     self:RegisterMessage("Plexus_PartyTransition", "GroupChanged")
     self:RegisterMessage("Plexus_UnitJoined")
 end
@@ -92,8 +97,13 @@ function PlexusStatusPhase:OnStatusDisable(status)
     if status ~= "phase_status" then return end
 
     self:UnregisterEvent("UNIT_PHASE")
+    self:UnregisterEvent("UNIT_FLAGS")
     self:UnregisterEvent("PARTY_LEADER_CHANGED")
     self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+    self:UnregisterEvent("PARTY_MEMBER_ENABLE")
+    self:UnregisterEvent("PARTY_MEMBER_DISABLE")
+    self:UnregisterEvent("UNIT_OTHER_PARTY_CHANGED")
+    self:UnregisterEvent("INCOMING_SUMMON_CHANGED")
     self:UnregisterMessage("Plexus_PartyTransition")
     self:UnregisterMessage("Plexus_UnitJoined")
 
