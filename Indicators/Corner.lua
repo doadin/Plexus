@@ -22,6 +22,10 @@ local anchor = {
 	corner4 = { "TOPRIGHT", 1, 1 },
 	corner1 = { "BOTTOMLEFT", -1, -1 },
 	corner2 = { "BOTTOMRIGHT", 1, -1 },
+    Top = { "TOP", -1, 1 },
+	Bottom = { "BOTTOM", 1, 1 },
+	Left = { "LEFT", -1, -1 },
+	Right = { "RIGHT", 1, -1 },
 }
 
 local function New(frame)
@@ -54,7 +58,11 @@ local function Clear(self)
 	self:Hide()
 end
 
-PlexusFrame:RegisterIndicator("corner3",  L["Top Left Corner"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner4",  L["Top Right Corner"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner1",  L["Bottom Left Corner"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner2",  L["Bottom Right Corner"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("corner3",  L["Indicator Top Left Corner"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("corner4",  L["Indicator Top Right Corner"],    New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("corner1",  L["Indicator Bottom Left Corner"],  New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("corner2",  L["Indicator Bottom Right Corner"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("Top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("Bottom",  L["Indicator Bottom"],  New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("Left",  L["Indicator Left"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("Right",  L["Indicator Right"],    New, Reset, SetStatus, Clear)
