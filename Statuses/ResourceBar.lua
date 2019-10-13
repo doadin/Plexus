@@ -3,7 +3,7 @@ local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local LibSharedMedia = LibStub("LibSharedMedia-3.0", true)
 
-PlexusResourceBar = PlexusStatus:NewModule("PlexusResourceBar")
+local PlexusResourceBar = PlexusStatus:NewModule("PlexusResourceBar")
 
 PlexusResourceBar.menuName = "ResourceBar"
 
