@@ -18,6 +18,11 @@ local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatusAggro = Plexus:NewStatusModule("PlexusStatusAggro")
 PlexusStatusAggro.menuName = L["Aggro"]
 
+local libCTM
+if Plexus:IsClassicWow() then
+    libCTM = LibStub("ThreatClassic-1.0", true)
+end
+
 local function getthreatcolor(status)
     if not Plexus:IsClassicWow() then
 	    local r, g, b = GetThreatStatusColor(status)
@@ -142,6 +147,21 @@ function PlexusStatusAggro:OnStatusEnable(status)
 		    self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", "UpdateUnit")
         end
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
+        if Plexus:IsClassicWow() then
+            self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
+            self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
+            self:RegisterEvent("UNIT_HEALTH", "UpdateAllUnits")
+            self:RegisterEvent("UNIT_HEALTH_FREQUENT", "UpdateAllUnits")
+            self:RegisterEvent("UNIT_TARGET", "UpdateAllUnits")
+            self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "UpdateAllUnits")
+            libCTM = LibStub("ThreatClassic-1.0")
+	    	local function ThreatUpdated(event, guid)
+	    		self:UpdateAllUnits()
+	    	end       
+            libCTM.RegisterCallback(self, "Activate", ThreatUpdated)
+            libCTM.RegisterCallback(self, "Deactivate", ThreatUpdated)
+            libCTM.RegisterCallback(self, "ThreatUpdated", ThreatUpdated)
+        end
 		self:UpdateAllUnits()
 	end
 end
@@ -152,6 +172,21 @@ function PlexusStatusAggro:OnStatusDisable(status)
 		    self:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
         end
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+        if Plexus:IsClassicWow() then
+            self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+            self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+            self:UnregisterEvent("UNIT_HEALTH")
+            self:UnregisterEvent("UNIT_HEALTH_FREQUENT")
+            self:UnregisterEvent("UNIT_TARGET")
+            self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+            libCTM = LibStub("ThreatClassic-1.0")
+	    	local function ThreatUpdated(event, guid)
+	    		self:UpdateAllUnits()
+	    	end       
+            libCTM.UnregisterCallback(self, "Activate")
+            libCTM.UnregisterCallback(self, "Deactivate")
+            libCTM.UnregisterCallback(self, "ThreatUpdated")
+        end
 		self.core:SendStatusLostAllUnits("alert_aggro")
 	end
 end
@@ -173,8 +208,11 @@ local UnitGUID, UnitIsVisible, UnitThreatSituation
 	 = UnitGUID, UnitIsVisible, UnitThreatSituation
 end
 
-local UnitGUID, UnitIsVisible
-	 = UnitGUID, UnitIsVisible
+if Plexus.IsClassicWow() then
+local UnitGUID, UnitIsVisible, UnitExists, UnitIsEnemy, UnitIsUnit
+	 = UnitGUID, UnitIsVisible, UnitExists, UnitIsEnemy, UnitIsUnit
+local a,b,c,d,e,y,eUnit=0,0,nil
+end
 
 function PlexusStatusAggro:UpdateUnit(event, unit, guid)
 	local guid = guid or unit and UnitGUID(unit)
@@ -183,8 +221,43 @@ function PlexusStatusAggro:UpdateUnit(event, unit, guid)
     local status = 0
     if not Plexus.IsClassicWow() then
 	    status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
-    else 
-        status = UnitIsVisible(unit) or 0
+    else
+        if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then
+            if UnitIsUnit(unit, unit.."targettarget") then
+                a,b,c,d,e=100
+            else
+                eUnit=unit.."target"
+            end
+        elseif UnitExists("target") and UnitIsEnemy("player", "target") then 
+            if UnitIsUnit(unit, "playertargettarget") then
+                a,b,c,d,e=100
+            else
+                eUnit="target"
+            end
+        elseif UnitExists("boss1") and UnitIsEnemy("player", "boss1") then 
+            if UnitIsUnit(unit, "boss1target") then
+                a,b,c,d,e=100
+            else
+                eUnit="boss1"
+            end
+        elseif UnitExists("boss2") and UnitIsEnemy("player", "boss2") then 
+            if UnitIsUnit(unit, "boss2target") then
+                a,b,c,d,e=100
+            else
+                eUnit="boss2"
+            end
+        end
+        if eUnit then
+            a, b, c, d, e = libCTM:UnitDetailedThreatSituation(unit, eUnit)
+            y = libCTM:UnitThreatSituation(unit, eUnit)
+            c=floor(c or 0)
+            d=floor(d or 0)
+            e=floor(e or 0)
+            status = b
+        elseif c == 0 then
+            y = libCTM:UnitThreatSituation(unit, eUnit)
+            status = y
+        end
     end
     
 
