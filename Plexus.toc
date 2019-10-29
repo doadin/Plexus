@@ -48,6 +48,8 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@non-retail@
 Libs\LibClassicHealComm-1.0\ChatThrottleLib.lua
 Libs\LibClassicHealComm-1.0\LibClassicHealComm-1.0.lua
+Libs\LibClassicHealComm-1.0\LibClassicHealComm-1.0.lua
+Libs\ThreatClassic-1.0\lib.xml
 #@end-non-retail@
 Libs\LibResInfo-1.0\LibResInfo-1.0.lua
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua

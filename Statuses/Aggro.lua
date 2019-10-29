@@ -148,19 +148,22 @@ function PlexusStatusAggro:OnStatusEnable(status)
         end
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
         if Plexus:IsClassicWow() then
+            assert(LibStub, "Aggro Status requires LibStub")
+	        assert(LibStub:GetLibrary("ThreatClassic-1.0", true), "Aggro Status requires ThreatClassic-1.0")
             self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
             self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
             self:RegisterEvent("UNIT_HEALTH", "UpdateAllUnits")
             self:RegisterEvent("UNIT_HEALTH_FREQUENT", "UpdateAllUnits")
             self:RegisterEvent("UNIT_TARGET", "UpdateAllUnits")
             self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "UpdateAllUnits")
-            libCTM = LibStub("ThreatClassic-1.0")
+            libCTM = LibStub("ThreatClassic-1.0", true)
 	    	local function ThreatUpdated(event, guid)
 	    		self:UpdateAllUnits()
 	    	end       
             libCTM.RegisterCallback(self, "Activate", ThreatUpdated)
             libCTM.RegisterCallback(self, "Deactivate", ThreatUpdated)
             libCTM.RegisterCallback(self, "ThreatUpdated", ThreatUpdated)
+            libCTM:RequestActiveOnSolo(true)
         end
 		self:UpdateAllUnits()
 	end
