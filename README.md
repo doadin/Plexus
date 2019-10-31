@@ -20,4 +20,4 @@ For options, type `/plexus`, right-click the tab on the Plexus layout frame, or 
 
 ### Credits
 
-Plexus was originally conceived and written by **Maia** and **Pastamancer** in late 2006. **Phanx** has been the primary developer since late 2009. **Jerry** wrote the original pet support code. **Mikk** designed the icon. **jlam** added some advanced options for auras. **Greltok** and **Stassart** have helped a lot with bugfixing. Finally, **[lots of people](https://wow.curseforge.com/addons/plexus/localization/translators/)** have contributed translations!
+Plexus was originally Grid, conceived and written by **Maia** and **Pastamancer** in late 2006. **Phanx** has been the primary developer since late 2009. **Jerry** wrote the original pet support code. **Mikk** designed the icon. **jlam** added some advanced options for auras. **Greltok** and **Stassart** have helped a lot with bugfixing. Finally, **[lots of people](https://wow.curseforge.com/addons/plexus/localization/translators/)** have contributed translations! And has now been forked and updated by Doadin.
