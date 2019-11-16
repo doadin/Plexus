@@ -75,12 +75,17 @@ spell_names = {
 -- Druid
 	["Regrowth"] = GetSpellInfo(8936),
 	["Rejuvenation"] = GetSpellInfo(774),
+    ["Mark of the Wild"] = GetSpellInfo(5231) or GetSpellInfo(21849),
 -- Paladin
 	["Beacon of Light"] = GetSpellInfo(53563),
 	["Forbearance"] = GetSpellInfo(25771),
+    ["Blessing of Kings"] = GetSpellInfo(20217) or GetSpellInfo(25898),
+    ["Blessing of Might"] = GetSpellInfo(19740) or GetSpellInfo(25782),
+    ["Blessing of Sanctuary"] = GetSpellInfo(20911) or GetSpellInfo(25899),
+    ["Blessing of Wisdom"] = GetSpellInfo(19742) or GetSpellInfo(25894),
 -- Priest
 	["Guardian Spirit"] = GetSpellInfo(47788),
-	["Power Word: Fortitude"] = GetSpellInfo(1243),
+	["Power Word: Fortitude"] = GetSpellInfo(1243) or GetSpellInfo(21562),
 	["Power Word: Shield"] = GetSpellInfo(17),
 	["Prayer of Mending"] = GetSpellInfo(33076),
 	["Renew"] = GetSpellInfo(139),
@@ -626,6 +631,17 @@ PlexusStatusAuras.defaultDB = {
 		durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
 		mine = true,
 	},
+	[PlexusStatusAuras:StatusForSpell("Mark of the Wild", true)] = {
+		-- 5231 or 21849
+		desc = format(L["Buff: %s"], spell_names["Mark of the Wild"]),
+		buff = spell_names["Mark of the Wild"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Mark of the Wild"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
+		durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
+		mine = true,
+	},
 
 	---------------------
 	-- Paladin
@@ -640,6 +656,38 @@ PlexusStatusAuras.defaultDB = {
 		durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
 		durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
 	},
+	[PlexusStatusAuras:StatusForSpell("Blessing of Kings", true)] = {
+		-- 20217 or 25898
+		desc = format(L["Buff: %s"], spell_names["Blessing of Kings"]),
+		buff = spell_names["Blessing of Kings"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Kings"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		missing = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Blessing of Might", true)] = {
+		-- 19740 or 25782
+		desc = format(L["Buff: %s"], spell_names["Blessing of Might"]),
+		buff = spell_names["Blessing of Might"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Might"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		missing = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Blessing of Sanctuary", true)] = {
+		-- 20911 or 25899
+		desc = format(L["Buff: %s"], spell_names["Blessing of Sanctuary"]),
+		buff = spell_names["Blessing of Sanctuary"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Sanctuary"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		missing = true,
+	},
+	[PlexusStatusAuras:StatusForSpell("Blessing of Wisdom", true)] = {
+		-- 19742 or 25894
+		desc = format(L["Buff: %s"], spell_names["Blessing of Wisdom"]),
+		buff = spell_names["Blessing of Wisdom"],
+		text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Wisdom"]),
+		color = { r = 0, g = 252, b = 0, a = 1 },
+		missing = true,
+	},    
 
 	---------------------
 	-- Priest
