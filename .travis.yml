@@ -1,18 +1,24 @@
-language: minimal
+language: shell
+os: linux
 
-# Only build tags
-if: tag IS present
- 
-addons:
-  apt:
-    packages:
-    - luarocks
-
-install: luarocks install --local luacheck
-
-script:
-  - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -m .pkgmeta
-  - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -g 1.13.2 -m .pkgmeta-classic
+jobs:
+  include:
+    - stage: Run luacheck
+      if: tag IS NOT present
+      addons:
+        apt:
+         packages:
+           - luarocks
+      install: luarocks install --local luacheck
+      script: /home/travis/.luarocks/bin/luacheck . --no-color -q
+    - stage: Create Retail package
+      if: tag IS present
+      install: skip
+      script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -m .pkgmeta
+    - stage: Create Classic package
+      if: tag IS present
+      install: skip
+      script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -g 1.13.2 -m .pkgmeta-classic
  
 notifications:
  email:
