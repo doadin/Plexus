@@ -139,7 +139,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 	buffGroup_Fortitude = {
 		text = spellNameList["Power Word: Fortitude"],
 		desc = "Buff Group: "..spellNameList["Power Word: Fortitude"],
-		icon = false,
+		icon = spellIconList["Power Word: Fortitude"],
 		buffs = {
 			spellNameList["Power Word: Fortitude"],
 			spellNameList["Prayer of Fortitude"]
@@ -150,9 +150,9 @@ PlexusStatusGroupBuffs.defaultDB = {
         class = "Priest",
 	},
 	buffGroup_Intellect = {
-		text = spellNameList["Power Word: Fortitude"],
-		desc = "Buff Group: "..spellNameList["Power Word: Fortitude"],
-		icon = false,
+		text = spellNameList["Arcane Intellect"],
+		desc = "Buff Group: "..spellNameList["Arcane Intellect"],
+		icon = spellIconList["Arcane Intellect"],
 		buffs = {
 			spellNameList["Arcane Intellect"]
 		},
@@ -164,7 +164,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 	buffGroup_Battle_Shout = {
 		text = spellNameList["Battle Shout"],
 		desc = "Buff Group: "..spellNameList["Battle Shout"],
-		icon = false,
+		icon = spellIconList["Battle Shout"],
 		buffs = {
 			spellNameList["Battle Shout"]
 		},
@@ -176,7 +176,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 	buffGroup_Wild = {
 		text = spellNameList["Mark of the Wild"],
 		desc = "Buff Group: "..spellNameList["Mark of the Wild"],
-		icon = false,
+		icon = spellIconList["Mark of the Wild"],
 		buffs = {
 			spellNameList["Mark of the Wild"],
             spellNameList["Gift of the Wild"]
@@ -188,8 +188,8 @@ PlexusStatusGroupBuffs.defaultDB = {
 	},
 	buffGroup_Blessing = {
 		text = "Paladin Blessings",
-		desc = "Buff Group: "..spellNameList["Mark of the Wild"],
-		icon = false,
+		desc = "Buff Group: Paladin Blessings",
+		icon = spellIconList["Blessing of Kings"],
 		buffs = {
             spellNameList["Blessing of Kings"],
             spellNameList["Greater Blessing of Kings"],
@@ -351,7 +351,9 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
         )   
     end
 
+    --self:Debug("UnitClass", UnitClass)
     if Plexus:IsClassicWow() and BuffClass == UnitClass and UnitIsPlayer(unit) and not UnitIsDead(unit) then
+    self:Debug("status", icon)
 	    self.core:SendStatusGained(
 	    	guid,
 	    	status,
