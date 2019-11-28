@@ -94,6 +94,7 @@ Statuses\Absorbs.lua
 Statuses\Aggro.lua
 Statuses\Auras.lua
 Statuses\Group.lua
+Statuses\GroupBuffs.lua
 Statuses\Heals.lua
 Statuses\Health.lua
 Statuses\Mana.lua
