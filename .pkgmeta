@@ -26,3 +26,6 @@ externals:
       url: https://repos.curseforge.com/wow/libstub/trunk
       tag: 1.0
    Libs/UTF8: https://repos.curseforge.com/wow/utf8/trunk
+   Libs/LibDeflate:
+     url: https://github.com/SafeteeWoW/LibDeflate.git
+     tag: master

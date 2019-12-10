@@ -34,3 +34,6 @@ externals:
    Libs/ThreatClassic-1.0:
      url: https://github.com/doadin/ThreatClassic-1.0.git
      tag: master
+   Libs/LibDeflate:
+     url: https://github.com/SafeteeWoW/LibDeflate.git
+     tag: master

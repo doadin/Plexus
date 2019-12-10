@@ -8,7 +8,10 @@
 
 local PLEXUS, Plexus = ...
 local LDBIcon = LibStub("LibDBIcon-1.0")
-local format, print, strfind, strlen, tostring, type = format, print, strfind, strlen, tostring, type
+local LibDeflate = LibStub:GetLibrary('LibDeflate')
+local AceGUI = LibStub("AceGUI-3.0")
+local AceSerializer = LibStub("AceSerializer-3.0")
+local format, print, strfind, strlen, tostring, type , tcopy, timer = format, print, strfind, strlen, tostring, type, CopyTable, C_Timer
 
 _G.Plexus = LibStub("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
@@ -164,7 +167,21 @@ Plexus.options = {
 					set = function(info, value)
 						Plexus.db.profile.standaloneOptions = value
 					end,
-				}
+				},
+		        import = {
+		        	name = L["Import Profile"],
+		        	order = 3,
+		        	width = "double",
+		        	type = "execute",
+		        	func = function() Plexus:ImportProfile() end,
+		        },
+		        export = {
+		        	name = L["Export Profile"],
+		        	order = 4,
+		        	width = "double",
+		        	type = "execute",
+		        	func = function() Plexus:ExportProfile() end,
+		        }                
 			},
 		},
 		debug = {
@@ -211,6 +228,61 @@ Plexus.options = {
 		}
 	}
 }
+
+function Plexus:ExportProfile()
+	local ExportProfile = tcopy(_G.PlexusDB.namespaces)
+	local SerializedProfile = AceSerializer:Serialize(ExportProfile)
+    local EncodedProfile = LibDeflate:EncodeForPrint(SerializedProfile);
+	local input = AceGUI:Create("MultiLineEditBox");
+    input:SetWidth(400);
+    input:SetNumLines(20);
+    input.button:Hide();
+    input.frame:SetClipsChildren(true);
+    input:SetLabel("Export Plexus Profile");
+    input:SetText(EncodedProfile);
+    input.editBox:HighlightText();
+    input:SetFocus();
+	local f = AceGUI:Create("Frame")
+	f:SetStatusText("Profile Exported Copy Text Above!")
+	f:SetTitle("Export Profile")
+    f:SetWidth(500)
+    f:AddChild(input)
+    f:SetCallback("OnClose", function(input) AceGUI:Release(input) end)
+    input.editBox:SetScript("OnEscapePressed", function() f:Close(); end);
+end
+
+function Plexus:ImportProfile()
+	local input = AceGUI:Create("MultiLineEditBox");
+    input:SetWidth(400);
+    input:SetNumLines(20);
+    input.button:Hide();
+    input.frame:SetClipsChildren(true);
+    input:SetLabel("Import Plexus Profile");
+    input:SetText("");
+    input.editBox:HighlightText();
+    input:SetFocus();
+	local f = AceGUI:Create("Frame")
+	f:SetTitle("Import Profile")
+    f:SetWidth(500)
+	f:AddChild(input)
+    local ImportButton = CreateFrame("Button", nil, f.frame, "UIPanelButtonTemplate");
+	ImportButton:SetScript("OnClick", 
+								function() 
+								local decoded = LibDeflate:DecodeForPrint(input:GetText()); 
+								local DeserializedResult, DeserializedData = AceSerializer:Deserialize(decoded);  
+								if DeserializedResult then 
+									_G.PlexusDB.namespaces = DeserializedData; 
+									f:SetStatusText("Profile imported You can now reload!"); 
+								else 
+									f:SetStatusText("Invalid Profile!") 
+								end; 
+							end);
+    ImportButton:SetPoint("BOTTOMRIGHT", -30, 50);
+    ImportButton:SetFrameLevel(ImportButton:GetFrameLevel() + 1)
+    ImportButton:SetHeight(25);
+    ImportButton:SetWidth(150);
+    ImportButton:SetText("Import and ReloadUI")
+end
 
 ------------------------------------------------------------------------
 
