@@ -2,7 +2,7 @@
 ## Interface: 80205
 #@end-retail@
 #@non-retail@
-# ## Interface: 11302
+# ## Interface: 11303
 #@end-non-retail@
 ## Version: @project-version@
 
@@ -17,8 +17,8 @@
 ## Notes-zhCN: 紧凑方格队伍/团队框架。
 ## Notes-zhTW: 緊湊方格隊伍/團隊框架。
 
-## Author: Doadin, Phanx, Pastamancer, Maia
-## X-Credits: Greltok, Jerry, jlam
+## Author: Doadin
+## X-Credits: Greltok, Jerry, jlam, Phanx, Pastamancer, Maia
 ## X-License: All Rights Reserved
 ## X-Website: https://wow.curseforge.com/projects/plexus/
 ## X-Curse-Project-ID: 338710
@@ -38,17 +38,18 @@ Libs\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua
 Libs\AceConfigDialog-3.0\AceConfigDialog-3.0.lua
 Libs\AceConsole-3.0\AceConsole-3.0.lua
 Libs\AceConfigCmd-3.0\AceConfigCmd-3.0.lua
+#@non-retail@
+Libs\AceComm-3.0\AceComm-3.0.lua
+#@end-retail@
 Libs\AceDB-3.0\AceDB-3.0.lua
 Libs\AceDBOptions-3.0\AceDBOptions-3.0.lua
 Libs\AceEvent-3.0\AceEvent-3.0.lua
 Libs\AceHook-3.0\AceHook-3.0.lua
-#@non-retail@
-Libs\AceComm-3.0\AceComm-3.0.lua
 Libs\AceSerializer-3.0\AceSerializer-3.0.lua
-#@end-retail@
 Libs\AceTimer-3.0\AceTimer-3.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+Libs\LibDeflate\LibDeflate.lua
 #@retail@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
