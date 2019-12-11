@@ -37,3 +37,4 @@ externals:
    Libs/LibDeflate:
      url: https://github.com/SafeteeWoW/LibDeflate.git
      tag: master
+   Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
