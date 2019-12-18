@@ -1,9 +1,9 @@
---local _, Plexus = ...
+local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead
     = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead
 local settings
-local PlexusStatusGroupBuffs = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusGroupBuffs")
+local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 
 local spellNameList = {}
@@ -366,32 +366,4 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
 	    	icon
         )   
     end
-end
-
-
-function PlexusStatusGroupBuffs:OnStatusEnable(status)
-	self:RegisterEvent("PLAYER_ALIVE", "UpdateAllUnits")
-	self:RegisterEvent("PLAYER_DEAD", "UpdateAllUnits")
-	self:RegisterEvent("PLAYER_UNGHOST", "UpdateAllUnits")
-	--self:RegisterEvent("Plexus_UnitJoined")
-
-	self:RegisterEvent("UNIT_AURA", "UpdateAllUnits")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
-
-	self:UpdateAllUnits()
-end
-
-function PlexusStatusGroupBuffs:OnStatusDisable(status)
-	self.core:SendStatusLostAllUnits(status)
-	self:UpdateAllUnits()
-
-	self:UnregisterEvent("PLAYER_ALIVE")
-	self:UnregisterEvent("PLAYER_DEAD")
-	self:UnregisterEvent("PLAYER_UNGHOST")
-	--self:UnregisterEvent("Plexus_UnitJoined")
-
-	self:UnregisterEvent("UNIT_AURA")
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
 end
