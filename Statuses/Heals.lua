@@ -71,8 +71,10 @@ function PlexusStatusHeals:OnStatusEnable(status)
         if not Plexus:IsClassicWow() then
 		    self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
         end
-        if Plexus:IsClassicWow() then
-            HealComm = LibStub("LibClassicHealComm-1.0")
+		if Plexus:IsClassicWow() then
+			assert(LibStub, "Aggro Status requires LibStub")
+	        assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
+            HealComm = LibStub:GetLibrary("LibHealComm-4.0", true)
             local function HealComm_Heal_Update(event, casterGUID, spellID, healType, _, ...)
 		    	self:UpdateAllUnits()
 		    end
