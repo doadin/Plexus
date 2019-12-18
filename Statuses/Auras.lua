@@ -1999,7 +1999,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 			if not Plexus:IsClassicWow() then
 				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
 			else
-				local LibClassicDurations = LibStub("LibClassicDurations", true)
+				local LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
 				if LibClassicDurations then
 					LibClassicDurations:Register("Plexus")
 					UnitAura = LibClassicDurations.UnitAuraWrapper

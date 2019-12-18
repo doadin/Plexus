@@ -1,7 +1,7 @@
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local LibSharedMedia = LibStub("LibSharedMedia-3.0", true)
+local LibSharedMedia = LibStub:GetLibrary("LibSharedMedia-3.0", true)
 
 local PlexusResourceBar = PlexusStatus:NewModule("PlexusResourceBar")
 

@@ -114,7 +114,7 @@ end
 function PlexusStatusResurrect:OnStatusEnable(status)
 	self:Debug("OnStatusEnable", status)
 
-	LibResInfo = LibStub("LibResInfo-1.0")
+	LibResInfo = LibStub:GetLibrary("LibResInfo-1.0")
 	LibResInfo.RegisterAllCallbacks(self, "HandleCallback", true)
 
 	self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")

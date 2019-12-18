@@ -11,7 +11,7 @@ local L = Plexus.L
 local format, gsub, pairs, tonumber, type = format, gsub, pairs, tonumber, type
 local PlexusStatus, PlexusStatusRange
 
-local Media = LibStub("LibSharedMedia-3.0")
+local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 Media:Register("statusbar", "Gradient", "Interface\\Addons\\Plexus\\Media\\gradient32x32")
 
 local PlexusFrame = Plexus:NewModule("PlexusFrame", "AceBucket-3.0", "AceTimer-3.0")

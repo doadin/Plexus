@@ -8,7 +8,7 @@
 
 local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = LibStub("LibSharedMedia-3.0")
+local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 local strsub = string.utf8sub or string.sub

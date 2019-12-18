@@ -7,13 +7,13 @@
 ----------------------------------------------------------------------]]
 
 local PLEXUS, Plexus = ...
-local LDBIcon = LibStub("LibDBIcon-1.0")
+local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0")
 local LibDeflate = LibStub:GetLibrary('LibDeflate')
-local AceGUI = LibStub("AceGUI-3.0")
-local AceSerializer = LibStub("AceSerializer-3.0")
+local AceGUI = LibStub:GetLibrary("AceGUI-3.0")
+local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 local format, print, strfind, strlen, tostring, type , tcopy, timer = format, print, strfind, strlen, tostring, type, CopyTable, C_Timer
 
-_G.Plexus = LibStub("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+_G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
 _G.Grid = _G.Plexus
 end
@@ -472,27 +472,27 @@ Plexus:SetDefaultModuleLibraries("AceEvent-3.0")
 ------------------------------------------------------------------------
 
 function Plexus:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("PlexusDB", self.defaultDB, true)
+	self.db = LibStub:GetLibrary("AceDB-3.0"):New("PlexusDB", self.defaultDB, true)
 
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileEnable")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileEnable")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileEnable")
 
-	self.options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+	self.options.args.profile = LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
 	self.options.args.profile.order = -3
     if not Plexus:IsClassicWow() then
-	  local LibDualSpec = LibStub("LibDualSpec-1.0")
+	  local LibDualSpec = LibStub:GetLibrary("LibDualSpec-1.0")
 	  LibDualSpec:EnhanceDatabase(self.db, PLEXUS)
 	  LibDualSpec:EnhanceOptions(self.options.args.profile, self.db)
     end
 
-	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
+	LibStub:GetLibrary("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
 
 	--
 	--	Broker launcher
 	--
 
-	local DataBroker = LibStub("LibDataBroker-1.1", true)
+	local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1", true)
 	if DataBroker then
 		self.Broker = DataBroker:NewDataObject(PLEXUS, {
 			type = "launcher",
@@ -503,7 +503,7 @@ function Plexus:OnInitialize()
 				elseif not InCombatLockdown() then
 					local PlexusLayout = Plexus:GetModule("PlexusLayout")
 					PlexusLayout.db.profile.lock = not PlexusLayout.db.profile.lock
-					LibStub("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
+					LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
 					PlexusLayout:UpdateTabVisibility()
 				end
 			end,
@@ -566,7 +566,7 @@ end
 function Plexus:OnProfileEnable()
 	self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-	local LDBIcon = LibStub("LibDBIcon-1.0", true)
+	local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0", true)
 	if LDBIcon then
 		LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
 		if self.db.profile.minimap.hide then
@@ -580,8 +580,8 @@ function Plexus:OnProfileEnable()
 end
 
 function Plexus:SetupOptions()
-	local Command = LibStub("AceConfigCmd-3.0")
-	local Dialog = LibStub("AceConfigDialog-3.0")
+	local Command = LibStub:GetLibrary("AceConfigCmd-3.0")
+	local Dialog = LibStub:GetLibrary("AceConfigDialog-3.0")
 
 	---------------------------------------------------------------------
 	--	Standalone options
@@ -668,7 +668,7 @@ end
 
 function Plexus:ToggleOptions()
 	if self.db.profile.standaloneOptions then
-		local Dialog = LibStub("AceConfigDialog-3.0")
+		local Dialog = LibStub:GetLibrary("AceConfigDialog-3.0")
 		if Dialog.OpenFrames[PLEXUS] then
 			Dialog:Close(PLEXUS)
 		else
