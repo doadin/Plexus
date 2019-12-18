@@ -28,8 +28,8 @@ externals:
       url: https://repos.curseforge.com/wow/libstub/trunk
       tag: 1.0
    Libs/UTF8: https://repos.curseforge.com/wow/utf8/trunk
-   Libs/LibClassicHealComm-1.0:
-     url: https://github.com/doadin/LibClassicHealComm-1.0.git
+   Libs/LibHealComm-4.0:
+     url: https://github.com/doadin/LibHealComm-4.0.git
      tag: master
    Libs/ThreatClassic-1.0:
      url: https://github.com/doadin/ThreatClassic-1.0.git

@@ -29,7 +29,7 @@
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 #@non-retail@
-Libs\LibClassicHealComm-1.0\ChatThrottleLib.lua
+Libs\LibHealComm-4.0\ChatThrottleLib.lua
 #@end-retail@
 Libs\AceAddon-3.0\AceAddon-3.0.lua
 Libs\AceBucket-3.0\AceBucket-3.0.lua
@@ -54,8 +54,7 @@ Libs\LibDeflate\LibDeflate.lua
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
 #@non-retail@
-Libs\LibClassicHealComm-1.0\LibClassicHealComm-1.0.lua
-Libs\LibClassicHealComm-1.0\LibClassicHealComm-1.0.lua
+Libs\LibHealComm-4.0\LibHealComm-4.0.lua
 Libs\ThreatClassic-1.0\lib.xml
 #@end-non-retail@
 #@non-retail@
