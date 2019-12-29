@@ -202,13 +202,6 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     end
 end
 
-function PlexusStatusSummon:INCOMING_SUMMON_CHANGED()
-    if self.db.profile.summon_status.enable then
-        self:StopTimer("ClearStatus")
-        self:UpdateAllUnits()
-    end
-end
-
 function PlexusStatusSummon:INCOMING_SUMMON_CHANGED(event, unitid)
     if unitid and self.db.profile.summon_status.enable then
         self:UpdateUnit(unitid)
