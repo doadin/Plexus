@@ -1,7 +1,7 @@
 local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
-local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead
-    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead
+local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
+	= IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
 local settings
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
@@ -51,7 +51,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Priest",
+        class = "PRIEST",
         hidden = true,
 	},
 	buffGroup_Intellect = {
@@ -65,7 +65,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Mage",
+        class = "MAGE",
         hidden = true,
 	},
 	buffGroup_Battle_Shout = {
@@ -79,7 +79,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Warrior",
+        class = "WARRIOR",
         hidden = true,
 	}
 }
@@ -147,7 +147,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Priest",
+        class = "PRIEST",
 	},
 	buffGroup_Intellect = {
 		text = spellNameList["Arcane Intellect"],
@@ -159,7 +159,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Mage",
+        class = "MAGE",
 	},
 	buffGroup_Battle_Shout = {
 		text = spellNameList["Battle Shout"],
@@ -171,7 +171,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Warrior",
+        class = "WARRIOR",
 	},
 	buffGroup_Wild = {
 		text = spellNameList["Mark of the Wild"],
@@ -184,7 +184,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Druid",
+        class = "DRUID",
 	},
 	buffGroup_Blessing = {
 		text = "Paladin Blessings",
@@ -203,7 +203,7 @@ PlexusStatusGroupBuffs.defaultDB = {
 		enable = true,
 		color = { r = 0, g = 0, b = 1, a = 1 },
 		priority = 99,
-        class = "Paladin",
+        class = "PALADIN",
 	}
 }
 end
@@ -317,9 +317,12 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     if not guid then return end
 	local settings = self.db.profile[status]
     local BuffClass = settings.class
-    local UnitClass = UnitClass("player")
 
 	if not settings.enable then
+		return self.core:SendStatusLost(guid, status)
+	end
+
+	if UnitIsDead(unit) or UnitIsGhost(unit) then
 		return self.core:SendStatusLost(guid, status)
 	end
 
@@ -333,11 +336,11 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     		    end
             end
     	end
-    end
+	end
 
     local icon = settings.icon
 
-    if not Plexus:IsClassicWow() and UnitIsPlayer(unit) and not UnitIsDead(unit) then
+    if not Plexus:IsClassicWow() and UnitIsPlayer(unit) then
 	    self.core:SendStatusGained(
 	    	guid,
 	    	status,
@@ -351,8 +354,9 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
         )   
     end
 
-    --self:Debug("UnitClass", UnitClass)
-    if Plexus:IsClassicWow() and BuffClass == UnitClass and UnitIsPlayer(unit) and not UnitIsDead(unit) then
+	--self:Debug("UnitClass", UnitClass)
+	local localizedClass, englishClass, classIndex = UnitClass("player")
+    if Plexus:IsClassicWow() and UnitIsPlayer(unit) and BuffClass == englishClass then
     self:Debug("status", icon)
 	    self.core:SendStatusGained(
 	    	guid,
