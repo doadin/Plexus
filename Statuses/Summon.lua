@@ -138,6 +138,7 @@ function PlexusStatusSummon:OnStatusEnable(status)
     if status ~= "summon_status" then return end
 
     self:RegisterEvent("INCOMING_SUMMON_CHANGED")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "GroupChanged")
     self:RegisterEvent("PARTY_LEADER_CHANGED", "GroupChanged")
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "GroupChanged")
     self:RegisterMessage("Plexus_PartyTransition", "GroupChanged")
@@ -148,6 +149,7 @@ function PlexusStatusSummon:OnStatusDisable(status)
     if status ~= "summon_status" then return end
 
     self:UnregisterEvent("INCOMING_SUMMON_CHANGED")
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
     self:UnregisterEvent("PARTY_LEADER_CHANGED")
     self:UnregisterEvent("GROUP_ROSTER_UPDATE")
     self:UnregisterMessage("Plexus_PartyTransition")
@@ -175,13 +177,8 @@ function PlexusStatusSummon:GainStatus(guid, key, settings)
 end
 
 function PlexusStatusSummon:UpdateAllUnits(event)
-    if event then
-        for guid, unitid in PlexusRoster:IterateRoster() do
-            self:UpdateUnit(unitid)
-        end
-    else
-        self:StopTimer("ClearStatus")
-        self.core:SendStatusLostAllUnits("summon_status")
+    for guid, unitid in PlexusRoster:IterateRoster() do
+        self:UpdateUnit(unitid)
     end
 end
 
@@ -199,6 +196,12 @@ function PlexusStatusSummon:UpdateUnit(unitid)
         self.core:SendStatusLost(guid, "summon_status")
     else
         self.core:SendStatusLost(guid, "summon_status")
+    end
+end
+
+function PlexusStatusSummon:ClearStatus()
+    for guid, unitid in PlexusRoster:IterateRoster() do
+        self:UpdateUnit(unitid)
     end
 end
 
