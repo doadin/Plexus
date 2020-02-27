@@ -55,7 +55,7 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
 #@non-retail@
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
-Libs\ThreatClassic-1.0\lib.xml
+Libs\LibThreatClassic2\lib.xml
 #@end-non-retail@
 #@non-retail@
 Libs\LibClassicDurations\LibClassicDurations.xml
