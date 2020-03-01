@@ -149,16 +149,21 @@ function PlexusStatusAggro:OnStatusEnable(status)
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
         if Plexus:IsClassicWow() then
             assert(LibStub, "Aggro Status requires LibStub")
-	        assert(LibStub:GetLibrary("ThreatClassic-1.0", true), "Aggro Status requires ThreatClassic-1.0(which should be included)")
+			assert(LibStub:GetLibrary("LibThreatClassic2"), "Aggro Status requires LibThreatClassic2(which should be included)")
+			self:RegisterEvent("UNIT_COMBAT", "UNIT_COMBAT_A")
             self:RegisterEvent("UNIT_TARGET", "UpdateAllUnits")
             self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "UpdateAllUnits")
-            libCTM = LibStub:GetLibrary("ThreatClassic-1.0", true)
+            libCTM = LibStub:GetLibrary("LibThreatClassic2")
 			local function ThreatUpdated(event, guid)
-	    		self:UpdateAllUnits()
+				if guid then
+					self:UpdateUnit("UpdateAllUnits", nil, guid)
+			    end
 	    	end       
             libCTM.RegisterCallback(self, "Activate", ThreatUpdated)
             libCTM.RegisterCallback(self, "Deactivate", ThreatUpdated)
-            libCTM.RegisterCallback(self, "ThreatUpdated", ThreatUpdated)
+			libCTM.RegisterCallback(self, "ThreatUpdated", ThreatUpdated)
+			libCTM.RegisterCallback(self, "PartyChanged", ThreatUpdated)
+			libCTM.RegisterCallback(self, "ThreatCleared", ThreatUpdated)
             libCTM:RequestActiveOnSolo(true)
         end
 		self:UpdateAllUnits()
@@ -174,13 +179,12 @@ function PlexusStatusAggro:OnStatusDisable(status)
         if Plexus:IsClassicWow() then
             self:UnregisterEvent("UNIT_TARGET")
             self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-            libCTM = LibStub:GetLibrary("ThreatClassic-1.0")
-	    	local function ThreatUpdated(event, guid)
-	    		self:UpdateAllUnits()
-	    	end       
+            libCTM = LibStub:GetLibrary("ThreatClassic-1.0")   
             libCTM.UnregisterCallback(self, "Activate")
             libCTM.UnregisterCallback(self, "Deactivate")
-            libCTM.UnregisterCallback(self, "ThreatUpdated")
+			libCTM.UnregisterCallback(self, "ThreatUpdated")
+			libCTM.UnregisterCallback(self, "PartyChanged")
+			libCTM.UnregisterCallback(self, "ThreatCleared")
         end
 		self.core:SendStatusLostAllUnits("alert_aggro")
 	end
@@ -194,6 +198,9 @@ function PlexusStatusAggro:UpdateAllUnits()
 	for guid, unit in PlexusRoster:IterateRoster() do
 		self:UpdateUnit("UpdateAllUnits", unit)
 	end
+end
+function PlexusStatusAggro:UNIT_COMBAT_A(event, unitTarget, flagText, amount, schoolMask)
+	self:UpdateUnit(event, unitTarget)
 end
 
 ------------------------------------------------------------------------
@@ -216,7 +223,8 @@ function PlexusStatusAggro:UpdateUnit(event, unit, guid)
     local status = 0
     if not Plexus.IsClassicWow() then
 	    status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
-    else
+	else
+		if not unit then return end
         if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then
             if UnitIsUnit(unit, unit.."targettarget") then
                 a,b,c,d,e=100
