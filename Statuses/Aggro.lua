@@ -27,6 +27,21 @@ local function getthreatcolor(status)
     if not Plexus:IsClassicWow() then
 	    local r, g, b = GetThreatStatusColor(status)
 	    return { r = r, g = g, b = b, a = 1 }
+	end
+	if Plexus:IsClassicWow() then
+		function GetThreatStatusColor(status)
+			if status == 1 then
+				return 0, 0, 0, 0
+			end
+			if status == 2 then
+				return 255, 255, 0, 1
+			end
+			if status == 3 then
+				return 1, 0, 0, 1
+		    end
+		end
+	    local r, g, b, a = GetThreatStatusColor(status)
+	    return { r = r, g = g, b = b, a = a }
     end
 end
 
