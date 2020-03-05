@@ -469,7 +469,7 @@ PlexusFrame.options = {
 						PlexusFrame.db.profile.throttleUpdates = v
 						if v then
 							PlexusFrame:UnregisterMessage("UpdateFrameUnits")
-							PlexusFrame.bucket_UpdateFrameUnits = PlexusFrame:RegisterBucketMessage("UpdateFrameUnits", 0.1)
+							PlexusFrame.bucket_UpdateFrameUnits = PlexusFrame:RegisterBucketMessage("UpdateFrameUnits", 0.3)
 						else
 							PlexusFrame:UnregisterBucket(PlexusFrame.bucket_UpdateFrameUnits, true)
 							PlexusFrame:RegisterMessage("UpdateFrameUnits")
@@ -698,7 +698,7 @@ function PlexusFrame:OnEnable()
 	self:RegisterMessage("Plexus_RosterUpdated", "SendMessage_UpdateFrameUnits")
 
 	if self.db.profile.throttleUpdates then
-		self.bucket_UpdateFrameUnits = self:RegisterBucketMessage("UpdateFrameUnits", 0.1)
+		self.bucket_UpdateFrameUnits = self:RegisterBucketMessage("UpdateFrameUnits", 0.3)
 	else
 		self:RegisterMessage("UpdateFrameUnits")
 	end
