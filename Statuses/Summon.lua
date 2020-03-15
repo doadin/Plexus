@@ -31,7 +31,6 @@ PlexusStatusSummon.defaultDB = {
         delay = 5,
         range = false,
         colors = {
-            SUMMON_STATUS_NONE = { r = 0, g = 0, b = 0, a = 0, ignore = true },
             SUMMON_STATUS_PENDING = { r = 255, g = 255, b = 0, a = 1, ignore = true },
             SUMMON_STATUS_ACCEPTED = { r = 0, g = 255, b = 0, a = 1, ignore = true },
             SUMMON_STATUS_DECLINED = { r = 1, g = 0, b = 0, a = 1, ignore = true }
@@ -42,10 +41,6 @@ PlexusStatusSummon.defaultDB = {
 PlexusStatusSummon.options = false
 
 local summonstatus = {
-    SUMMON_STATUS_NONE = {
-        text = L["?"],
-        icon = "READY_CHECK_WAITING_TEXTURE"
-    },
     SUMMON_STATUS_PENDING = {
         text = L["?"],
         icon = "Interface\\RaidFrame\\Raid-Icon-SummonPending"
@@ -82,14 +77,6 @@ local summonStatusOptions = {
         name = L["Color"],
         order = 86,
         args = {
-            SUMMON_STATUS_NONE = {
-                name = L["No Summon"],
-                order = 100,
-                type = "color",
-                hasAlpha = true,
-                get = function() return getstatuscolor("SUMMON_STATUS_NONE") end,
-                set = function(_, r, g, b, a) setstatuscolor("SUMMON_STATUS_NONE", r, g, b, a) end,
-            },
             SUMMON_STATUS_PENDING = {
                 name = L["Summon Pending"],
                 order = 100,
@@ -189,7 +176,7 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     if key == 1 then key = "SUMMON_STATUS_PENDING" end
     if key == 2 then key = "SUMMON_STATUS_ACCEPTED" end
     if key == 3 then key = "SUMMON_STATUS_DECLINED" end
-    if key == "SUMMON_STATUS_PENDING" or "SUMMON_STATUS_ACCEPTED" or "SUMMON_STATUS_DECLINED" then
+    if key == ("SUMMON_STATUS_PENDING" or "SUMMON_STATUS_ACCEPTED" or "SUMMON_STATUS_DECLINED") then
         local settings = self.db.profile.summon_status
         self:GainStatus(guid, key, settings)
     elseif key == "SUMMON_STATUS_NONE" then
