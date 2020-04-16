@@ -1463,38 +1463,60 @@ end
 --   is preserved for historical interest.
 
 -- durationAuras[status][guid] = { <aura properties> }
-local durationAuras = {}
-local timer = {
-	handle = nil, -- timer handle from :StartTimer()
-	refresh = nil, -- refresh rate for active timer
-	minRefresh = nil, -- minimum refresh setting for active auras
+PlexusStatusAuras.durationAuras = {}
+PlexusStatusAuras.durationTimer = {
+	timer = nil,
+	refresh = nil,
+	minRefresh = nil,
 }
--- For debugging of duration auras.
-GridStatusAuras.durationAuras = durationAuras
-GridStatusAuras.timer = timer
 
 local GetTime = GetTime
 local now = GetTime()
 
 local ICON_TEX_COORDS = { left = 0.06, right = 0.94, top = 0.06, bottom = 0.94 }
 
--- Simple table pool.
-local newTable, remTable
-do
-	local pool = {}
-	function newTable()
-		local t = next(pool)
-        if t then
-            pool[t] = nil
-            return t
-        end
-        return {}
-    end
-    function remTable(t)
-        pool[wipe(t)] = true
-        return nil
-    end
-end
+-- Simple resource pool implemented as a singly-linked list.
+local Pool = {
+	pool = nil,
+	new = function(self, obj) -- create new Pool object
+		obj = obj or {}
+		setmetatable(obj, self)
+		self.__index = self
+		return obj
+	end,
+	get = function(self) -- get a cleaned item from the pool
+		if not self.pool then self.pool = { nextPoolItem = self.pool } end
+		local item = self.pool
+		self.pool = self.pool.nextPoolItem
+		item.nextPoolItem = nil
+		if self.clean then
+			self:clean(item)
+		end
+		return item
+	end,
+	put = function(self, item) -- put an item back into the pool; caller shall remove references to item
+		item.nextPoolItem = self.pool
+		self.pool = item
+	end,
+	clean = nil, -- called in Pool:new() to return a "cleaned" pool item
+	empty = function(self) -- empty the pool
+		while self.pool do
+			local l = self.pool
+			self.pool = self.pool.nextPoolItem
+			l = nil
+		end
+	end,
+}
+
+-- durationAuraPool is a Pool of tables used by durationAuras[status][guid]
+local durationAuraPool = Pool:new(
+	{
+		clean = function(self, item)
+			item.duration = nil
+			item.expirationTime = nil
+		end
+	}
+)
 
 function PlexusStatusAuras:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
 	local timer = self.durationTimer
@@ -1502,13 +1524,13 @@ function PlexusStatusAuras:UnitGainedDurationStatus(status, guid, class, name, r
 	if not settings then return end
 
 	if settings.enable and (settings.statusText == "duration" or settings.statusColor == "duration") then
-		if not durationAuras[status] then
-			durationAuras[status] = newTable()
+		if not self.durationAuras[status] then
+			self.durationAuras[status] = {}
 		end
-		if not durationAuras[status][guid] then
-			durationAuras[status][guid] = newTable()
+		if not self.durationAuras[status][guid] then
+			self.durationAuras[status][guid] = durationAuraPool:get()
 		end
-		durationAuras[status][guid] = {
+		self.durationAuras[status][guid] = {
 			class = class,
 			rank = rank,
 			icon = icon,
@@ -1519,7 +1541,7 @@ function PlexusStatusAuras:UnitGainedDurationStatus(status, guid, class, name, r
 			caster = caster,
 			isStealable = isStealable,
 		}
-		if not timer.minRefresh or timer.minRefresh > settings.refresh
+		if not timer.minRefresh or settings.refresh < timer.minRefresh then
 			timer.minRefresh = settings.refresh
 		end
 	else
@@ -1528,57 +1550,57 @@ function PlexusStatusAuras:UnitGainedDurationStatus(status, guid, class, name, r
 end
 
 function PlexusStatusAuras:UnitLostDurationStatus(status, guid, class, name)
-	local auras = durationAuras[status]
+	local auras = self.durationAuras[status]
 	if auras and auras[guid] then
-		remTable(auras[guid])
+		durationAuraPool:put(auras[guid])
 		auras[guid] = nil
 	end
 end
 
 function PlexusStatusAuras:DeleteDurationStatus(status)
-	local auras = durationAuras[status]
+	local auras = self.durationAuras[status]
 	if not auras then return end
 	for guid in pairs(auras) do
-		remTable(auras[guid])
+		durationAuraPool:put(auras[guid])
 		auras[guid] = nil
 	end
-    remTable(auras)
-	durationAuras[status] = nil
+	self.durationAuras[status] = nil
 end
 
 function PlexusStatusAuras:ResetDurationStatuses()
-	for status in pairs(durationAuras) do
+	for status in pairs(self.durationAuras) do
 		self:DeleteDurationStatus(status)
 	end
-    timer.minRefresh = nil
 	durationAuraPool:empty()
 end
 
 function PlexusStatusAuras:HasActiveDurations()
-	for _, auras in pairs(durationAuras) do
-		if next(auras) then
+	for status, auras in pairs(self.durationAuras) do
+		for guid in pairs(auras) do
 			return true
 		end
 	end
 	return false
 end
 
-function PlexusStatusAuras:UpdateDurationTimer()
-	if self:HasActiveDurations() then
-		if not timer.handle or (timer.refresh and timer.refresh ~= timer.minRefresh) then
-			timer.refresh = timer.minRefresh
-			timer.handle = self:StartTimer("RefreshActiveDurations", timer.refresh, true)
+function PlexusStatusAuras:ResetDurationTimer(hasActiveDurations)
+	local timer = self.durationTimer
+	if hasActiveDurations then
+		if timer.timer and timer.refresh and timer.minRefresh ~= timer.refresh then
+			self:Debug("ResetDurationTimer: cancel timer", timer.minRefresh, timer.refresh)
+			self:CancelTimer(timer.timer, true)
+		end
+		timer.refresh = timer.minRefresh
+		if not timer.timer then
+			self:Debug("ResetDurationTimer: set timer", timer.refresh)
+			timer.timer = self:ScheduleRepeatingTimer("RefreshActiveDurations", timer.refresh)
 		end
 	else
-		timer.minRefresh = nil
-		timer.refresh = nil
-		if timer.handle then
+		if timer.timer then
 			self:Debug("ResetDurationTimer: cancel timer")
-			self:CancelTimer(timer.handle, true)
-			self:StopTimer("RefreshActiveDurations")
-			timer.handle = nil
+			self:CancelTimer(timer.timer, true)
 		end
-		timer.handle = nil
+		timer.timer = nil
 		timer.refresh = nil
 	end
 end
@@ -1627,45 +1649,34 @@ end
 function PlexusStatusAuras:RefreshActiveDurations()
 	now = GetTime()
 
-	--self:Debug("RefreshActiveDurations", now)
+	self:Debug("RefreshActiveDurations", now)
 
-	local refresh
-	for status, guids in pairs(durationAuras) do
+	for status, guids in pairs(self.durationAuras) do
 		local settings = self.db.profile[status]
 		if settings and settings.enable and not settings.missing then -- and settings[class] ~= false then -- ##DELETE
 			for guid, aura in pairs(guids) do
 				local count, duration, expirationTime, icon = aura.count, aura.duration, aura.expirationTime, aura.icon
 				local start = expirationTime and (expirationTime - duration)
 				local timeLeft = expirationTime and expirationTime > now and (expirationTime - now) or 0
-				if timeLeft > 0 then
-					local text, color = self:StatusTextColor(settings, count, timeLeft)
-					self.core:SendStatusGained(guid,
-						status,
-						settings.priority,
-						nil,
-						color,
-						text,
-						count,
-						nil,
-						icon,
-						start,
-						duration,
-						count,
-						ICON_TEX_COORDS)
-				-- else
-				--	-- Aura expired, but this is caught by the UNIT_AURA handler, so no need to
-				--	-- handle this here.
-				--	self.core:SendStatusLost(guid, status)
-				end
+				local text, color = self:StatusTextColor(settings, count, timeLeft)
+				self.core:SendStatusGained(guid,
+					status,
+					settings.priority,
+					nil,
+					color,
+					text,
+					count,
+					nil,
+					icon,
+					start,
+					duration,
+					count,
+					ICON_TEX_COORDS)
 			end
-			-- Set refresh to the minimum refresh setting across active duration auras.
-			if not refresh or refresh > settings.refresh then
-				refresh = settings.refresh
-			end
+	--	else
+	--		self.core:SendStatusLost(guid, status) -- XXX "guid" is undefined=nil here; what is the purpose?!
 		end
 	end
-	timer.minRefresh = refresh
-	self:UpdateDurationTimer()
 end
 
 function PlexusStatusAuras:UnitGainedBuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
@@ -1975,10 +1986,9 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 
 	now = GetTime()
 
-	-- Only remove duration auras that are on the GUID.
-	for _, auras in pairs(durationAuras) do
+	for status, auras in pairs(self.durationAuras) do
 		if auras[guid] then
-			remTable(auras[guid])
+			durationAuraPool:put(auras[guid])
 			auras[guid] = nil
 		end
 	end
@@ -2081,5 +2091,5 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 		self:UnitLostBossDebuff(guid, class)
 	end
 ]]
-	self:UpdateDurationTimer()
+	self:ResetDurationTimer(self:HasActiveDurations())
 end
