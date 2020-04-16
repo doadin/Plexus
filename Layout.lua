@@ -836,16 +836,16 @@ function PlexusLayout:CreateFrames()
 	f:SetScript("OnHide", PlexusLayout_OnMouseUp)
 
 	-- create backdrop
-	f.backdrop = CreateFrame("Frame", "$parentBackdrop", f)
-	f.backdrop:SetPoint("BOTTOMLEFT", -4, -4)
-	f.backdrop:SetPoint("TOPRIGHT", 4, 4)
-	f.backdrop:SetBackdrop({
-		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = false, tileSize = 16,
-		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", edgeSize = 16,
-		insets = {left = 4, right = 4, top = 4, bottom = 4},
-	})
-
-	f:SetFrameLevel(f.backdrop:GetFrameLevel() + 2)
+	--f.backdrop = CreateFrame("Frame", "$parentBackdrop", f)
+	--f.backdrop:SetPoint("BOTTOMLEFT", -4, -4)
+	--f.backdrop:SetPoint("TOPRIGHT", 4, 4)
+	--f.backdrop:SetBackdrop({
+	--	bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = false, tileSize = 16,
+	--	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", edgeSize = 16,
+	--	insets = {left = 4, right = 4, top = 4, bottom = 4},
+	--})
+    --
+	--f:SetFrameLevel(f.backdrop:GetFrameLevel() + 2)
 
 	-- create drag handle
 	f.tab = CreateFrame("Frame", "$parentTab", f)
@@ -1038,7 +1038,7 @@ function PlexusLayout:LoadLayout(layoutName)
 	-- quit if layout has no groups (eg. None)
 	if groupsNeeded == 0 then
 		self:Debug("No groups found in layout")
-		self:UpdateDisplay()
+		--self:UpdateDisplay()
 		return
 	end
 
@@ -1123,14 +1123,14 @@ function PlexusLayout:LoadLayout(layoutName)
 		layoutGroup:Show()
 	end
 
-	self:UpdateDisplay()
+	--self:UpdateDisplay()
 end
 
 function PlexusLayout:UpdateDisplay()
 	--self:Debug("UpdateDisplay")
-	self:UpdateColor()
-	self:UpdateVisibility()
-	self:UpdateSize()
+	--self:UpdateColor()
+	--self:UpdateVisibility()
+	--self:UpdateSize()
 end
 
 function PlexusLayout:UpdateVisibility()
@@ -1138,7 +1138,7 @@ function PlexusLayout:UpdateVisibility()
 	if self.db.profile.layouts[(PlexusRoster:GetPartyState())] == "None" then
 		self.frame.backdrop:Hide()
 	else
-		self.frame.backdrop:Show()
+		self.frame.backdrop:Hide()
 	end
 end
 
