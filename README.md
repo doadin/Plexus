@@ -8,7 +8,7 @@ For options, type `/plexus`, right-click the tab on the Plexus layout frame, or 
 ### Need Help?
 
 - [Suggest a feature](https://google.com)
-- [Frequently asked questions](https://github.com/Phanx/Plexus/wiki/FAQ)
+- [Frequently asked questions](https://github.com/Doadin/Plexus/wiki/FAQ)
 - [API documentation for plugin authors](https://github.com/Doadin/Plexus/wiki)
 
 
