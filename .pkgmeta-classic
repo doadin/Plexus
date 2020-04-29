@@ -38,3 +38,10 @@ externals:
      url: https://github.com/doadin/LibDeflate.git
      tag: master
    Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
+   
+ignore:
+  - .luacheckrc
+  - .travis.yml
+  - README.md
+  - .github/ISSUE_TEMPLATE/bug_report.md
+  - .github/ISSUE_TEMPLATE/feature_request.md
