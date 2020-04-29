@@ -7,10 +7,9 @@ For options, type `/plexus`, right-click the tab on the Plexus layout frame, or 
 
 ### Need Help?
 
-- **[Report a bug](https://wow.curseforge.com/addons/plexus/pages/how-to-report-a-bug-in-plexus/)**
-- [Suggest a feature](https://wow.curseforge.com/addons/plexus/tickets/?status=+&type=e)
+- [Suggest a feature](https://google.com)
 - [Frequently asked questions](https://github.com/Phanx/Plexus/wiki/FAQ)
-- [API documentation for plugin authors](https://github.com/Phanx/Plexus/wiki)
+- [API documentation for plugin authors](https://github.com/Doadin/Plexus/wiki)
 
 
 ### Localization
