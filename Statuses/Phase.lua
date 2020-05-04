@@ -112,18 +112,13 @@ function PlexusStatusPhase:GainStatus(guid, key, settings)
         nil,
         nil,
         nil,
-        {left = 0.15625, right = 0.84375, top = 0.15625, bottom = 0.84375}
+        {left = 0.25, right = 0.75, top = 0.25, bottom = 0.75}
     )
 end
 
 function PlexusStatusPhase:UpdateAllUnits(event)
-    if event then
-        for guid, unitid in PlexusRoster:IterateRoster() do
-            self:UpdateUnit(unitid)
-        end
-    else
-        self:StopTimer("ClearStatus")
-        self.core:SendStatusLostAllUnits("phase_status")
+    for guid, unitid in PlexusRoster:IterateRoster() do
+        self:UpdateUnit(unitid)
     end
 end
 
