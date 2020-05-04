@@ -148,6 +148,17 @@ end
 
 function PlexusStatusSummon:GainStatus(guid, key, settings)
     local status = summonstatus[key]
+    local duration
+    local StartTime = GetTime()
+    if key == "SUMMON_STATUS_PENDING" then
+        duration = 120
+    elseif key == "SUMMON_STATUS_ACCEPTED" then
+        StartTime = nil
+        duration = PlexusStatusSummon.db.profile.summon_status.delay
+    elseif key == "SUMMON_STATUS_ACCEPTED" then
+        StartTime = nil
+        duration = PlexusStatusSummon.db.profile.summon_status.delay
+    end
     self.core:SendStatusGained(guid, "summon_status",
         settings.priority,
         nil,
@@ -156,12 +167,15 @@ function PlexusStatusSummon:GainStatus(guid, key, settings)
         nil,
         nil,
         status.icon,
+        StartTime,
+        duration,
         nil,
-        nil,
-        nil,
-        {left = 0.15625, right = 0.84375, top = 0.15625, bottom = 0.84375}
+        {left = 0.25, right = 0.85, top = 0.25, bottom = 0.85}
     )
 end
+--smaller { left = 0.06, right = 0.94, top = 0.06, bottom = 0.94 }
+--bigger {left = 0.15625, right = 0.84375, top = 0.15625, bottom = 0.84375}
+--better {left = 0.3, right = 0.7, top = 0.3, bottom = 0.7}
 
 function PlexusStatusSummon:UpdateAllUnits(event)
     for guid, unitid in PlexusRoster:IterateRoster() do
@@ -176,12 +190,16 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     if key == 1 then key = "SUMMON_STATUS_PENDING" end
     if key == 2 then key = "SUMMON_STATUS_ACCEPTED" end
     if key == 3 then key = "SUMMON_STATUS_DECLINED" end
-    if key == ("SUMMON_STATUS_PENDING" or "SUMMON_STATUS_ACCEPTED" or "SUMMON_STATUS_DECLINED") then
+    if key == "SUMMON_STATUS_PENDING" then
         local settings = self.db.profile.summon_status
         self:GainStatus(guid, key, settings)
+    elseif key == "SUMMON_STATUS_ACCEPTED" then
+        local settings = self.db.profile.summon_status
+        self:GainStatus(guid, key, settings)    
+    elseif key == "SUMMON_STATUS_DECLINED" then
+        local settings = self.db.profile.summon_status
+        self:GainStatus(guid, key, settings)    
     elseif key == "SUMMON_STATUS_NONE" then
-        self.core:SendStatusLost(guid, "summon_status")
-    else
         self.core:SendStatusLost(guid, "summon_status")
     end
 end
