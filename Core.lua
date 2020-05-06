@@ -11,14 +11,14 @@ local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0")
 local LibDeflate = LibStub:GetLibrary('LibDeflate')
 local AceGUI = LibStub:GetLibrary("AceGUI-3.0")
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
-local format, print, strfind, strlen, tostring, type , tcopy, timer = format, print, strfind, strlen, tostring, type, CopyTable, C_Timer
+local format, strfind, strlen, tostring, type , tcopy = format, strfind, strlen, tostring, type, CopyTable
 
 _G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
 _G.Grid = _G.Plexus
 end
 if (IsAddOnLoaded("Grid")) then
-StaticPopupDialogs["GRID_ENABLED"] = {
+StaticPopupDialogs["GRID_ENABLED"] = { --luacheck: ignore 112
   text = "Grid and Plexus should never be enabled at the same time, unless you are copying settings! Do you want to copy Grid settings to Plexus?(Please Have Backups and Note: Restart is Required After Copy)",
   button1 = "Yes",
   button2 = "No",
@@ -89,7 +89,7 @@ do
         if start.name == moduleName or start.moduleName == moduleName then
             return start
         end
-        for name, module in start:IterateModules() do
+        for _, module in start:IterateModules() do
             local found = FindModule(module, moduleName)
             if found then
                 --print("FOUND")
@@ -146,7 +146,7 @@ Plexus.options = {
                     get = function()
                         return not Plexus.db.profile.minimap.hide
                     end,
-                    set = function(info, value)
+                    set = function(info, value) --luacheck: ignore 212
                         Plexus.db.profile.minimap.hide = not value
                         if value then
                             LDBIcon:Show(PLEXUS)
@@ -164,7 +164,7 @@ Plexus.options = {
                     get = function()
                         return Plexus.db.profile.standaloneOptions
                     end,
-                    set = function(info, value)
+                    set = function(info, value) --luacheck: ignore 212
                         Plexus.db.profile.standaloneOptions = value
                     end,
                 },
@@ -200,10 +200,10 @@ Plexus.options = {
                     name = L["Output Frame"],
                     desc = L["Show debugging messages in this frame."],
                     type = "select",
-                    get = function(info)
+                    get = function(info) --luacheck: ignore 212
                         return Plexus.db.global.debugFrame
                     end,
-                    set = function(info, value)
+                    set = function(info, value) --luacheck: ignore 212
                         Plexus.db.global.debugFrame = value
                     end,
                     values = {
@@ -229,7 +229,7 @@ Plexus.options = {
     }
 }
 
-function Plexus:ExportProfile()
+function Plexus:ExportProfile() --luacheck: ignore 212
     local ExportProfile = tcopy(_G.PlexusDB.namespaces)
     local SerializedProfile = AceSerializer:Serialize(ExportProfile)
     local EncodedProfile = LibDeflate:EncodeForPrint(SerializedProfile);
@@ -247,11 +247,11 @@ function Plexus:ExportProfile()
     f:SetTitle("Export Profile")
     f:SetWidth(500)
     f:AddChild(input)
-    f:SetCallback("OnClose", function(input) AceGUI:Release(input) end)
+    f:SetCallback("OnClose", function() AceGUI:Release(input) end)
     input.editBox:SetScript("OnEscapePressed", function() f:Close(); end);
 end
 
-function Plexus:ImportProfile()
+function Plexus:ImportProfile() --luacheck: ignore 212
     local input = AceGUI:Create("MultiLineEditBox");
     input:SetWidth(400);
     input:SetNumLines(20);
@@ -305,7 +305,7 @@ Plexus.modulePrototype = {
     registeredModules = { },
 }
 
-function Plexus:IsClassicWow()
+function Plexus:IsClassicWow() --luacheck: ignore 212
     local gameVersion = GetBuildInfo()
     if (gameVersion:match ("%d") == "1") then
         return true
@@ -384,8 +384,8 @@ function Plexus.modulePrototype:RegisterModule(name, module)
             type = "group",
             args = {},
         }
-        for name, option in pairs(module.extraOptions) do
-            module.options.args[name] = option
+        for modulename, option in pairs(module.extraOptions) do
+            module.options.args[modulename] = option
         end
     end
 
@@ -397,13 +397,13 @@ function Plexus.modulePrototype:RegisterModule(name, module)
 end
 
 function Plexus.modulePrototype:EnableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:EnableModule(name)
     end
 end
 
 function Plexus.modulePrototype:DisableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:DisableModule(name)
     end
 end
@@ -497,7 +497,7 @@ function Plexus:OnInitialize()
         self.Broker = DataBroker:NewDataObject(PLEXUS, {
             type = "launcher",
             icon = "Interface\\AddOns\\Plexus\\Media\\icon",
-            OnClick = function(self, button)
+            OnClick = function(_, button)
                 if button == "RightButton" then
                     Plexus:ToggleOptions()
                 elseif not InCombatLockdown() then
@@ -566,7 +566,6 @@ end
 function Plexus:OnProfileEnable()
     self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-    local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0", true)
     if LDBIcon then
         LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
         if self.db.profile.minimap.hide then
@@ -628,7 +627,7 @@ function Plexus:SetupOptions()
     --	Interface Options frame integrated options
 
     local panels = {}
-    for k, v in pairs(self.options.args) do
+    for k in pairs(self.options.args) do
         if k ~= "general" then
             tinsert(panels, k)
         end
@@ -693,7 +692,7 @@ do
         return Plexus:SetDebuggingEnabled(info[#info], value)
     end
 
-    function Plexus:GetDebuggingOptions(moduleName)
+    function Plexus:GetDebuggingOptions(moduleName) --luacheck: ignore 212
         return {
             name = moduleName,
             desc = format(L["Enable debugging messages for the %s module."], moduleName),
@@ -735,13 +734,13 @@ function Plexus:RegisterModule(name, module)
 end
 
 function Plexus:EnableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:EnableModule(name)
     end
 end
 
 function Plexus:DisableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:DisableModule(name)
     end
 end
