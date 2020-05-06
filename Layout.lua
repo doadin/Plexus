@@ -6,7 +6,7 @@
 	All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+local _, Plexus = ...
 local L = Plexus.L
 
 local PlexusFrame
@@ -16,7 +16,7 @@ local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local PlexusLayout = Plexus:NewModule("PlexusLayout", "AceBucket-3.0", "AceTimer-3.0")
 PlexusLayout.LayoutList = {}
 
-local floor, next, pairs, select, tinsert, tonumber, tostring = floor, next, pairs, select, tinsert, tonumber, tostring
+local floor, pairs, select, tinsert, tonumber, tostring = floor, pairs, select, tinsert, tonumber, tostring
 
 local partyHandle
 
@@ -67,7 +67,7 @@ function PlexusLayout.prototype:Reset()
 	self:SetAttributeByProxy("columnAnchorPoint", nil)
 	self:SetAttributeByProxy("point", nil)
 	self:SetAttributeByProxy("unitsPerColumn", nil)
-	
+
 	self:SetAttribute("plexusGroupSpacing", nil) -- custom
 
 	self:SetAttribute("initialConfigFunction", PlexusLayout:GetInitialConfigSnippet())
@@ -132,7 +132,7 @@ function PlexusLayout.prototype:GetVisibleUnitCount()
 	return count
 end
 
-function PlexusLayout.prototype:initialConfigFunction(...)
+function PlexusLayout.prototype:initialConfigFunction(...) --luacheck: ignore 212
 	PlexusFrame:RegisterFrame(self[#self])
 end
 
@@ -159,7 +159,7 @@ local initialConfigSnippet = [[
 
 ]]
 
-function PlexusLayout:GetInitialConfigSnippet()
+function PlexusLayout:GetInitialConfigSnippet() --luacheck: ignore 212
 	return initialConfigSnippet .. PlexusFrame:GetInitialConfigSnippet()
 end
 
@@ -270,7 +270,7 @@ PlexusLayout.options = {
 			order = 2,
 			width = "double",
 			type = "toggle",
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.lock = v
 				PlexusLayout:UpdateTabVisibility()
 			end,
@@ -284,7 +284,7 @@ PlexusLayout.options = {
 			get = function()
 				return not PlexusLayout.db.profile.hideTab
 			end,
-			set = function(info, show)
+			set = function(info, show) --luacheck: ignore 212
 				PlexusLayout.db.profile.hideTab = not show
 				PlexusLayout:UpdateTabVisibility()
 			end,
@@ -298,7 +298,7 @@ PlexusLayout.options = {
 			get = function()
 				return PlexusLayout.db.profile.clickThrough
 			end,
-			set = function(info, value)
+			set = function(info, value) --luacheck: ignore 212
 				PlexusLayout.db.profile.clickThrough = value
 				PlexusLayout:UpdateTabVisibility()
 			end,
@@ -309,7 +309,7 @@ PlexusLayout.options = {
 			order = 8,
 			width = "double",
 			type = "toggle",
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.horizontal = v
 				PlexusLayout:ReloadLayout()
 			end,
@@ -321,7 +321,7 @@ PlexusLayout.options = {
 			order = 10,
 			width = "double",
 			type = "toggle",
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.splitGroups = v
 				PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
 			end,
@@ -333,7 +333,7 @@ PlexusLayout.options = {
 			order = 12,
 			width = "double",
 			type = "toggle",
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.showPets = v
 				PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
 			end,
@@ -399,7 +399,7 @@ PlexusLayout.options = {
 					order = 21,
 					width = "double",
 					type = "color", hasAlpha = true,
-					set = function(info, r, g, b, a)
+					set = function(info, r, g, b, a) --luacheck: ignore 212
 						local color = PlexusLayout.db.profile.backgroundColor
 						color.r, color.g, color.b, color.a = r, g, b, a
 						PlexusLayout:UpdateColor()
@@ -410,7 +410,7 @@ PlexusLayout.options = {
 					order = 22,
 					width = "double",
 					type = "color", hasAlpha = true,
-					set = function(info, r, g, b, a)
+					set = function(info, r, g, b, a) --luacheck: ignore 212
 						local color = PlexusLayout.db.profile.borderColor
 						color.r, color.g, color.b, color.a = r, g, b, a
 						PlexusLayout:UpdateColor()
@@ -423,7 +423,7 @@ PlexusLayout.options = {
 					type = "select",
 					dialogControl = "LSM30_Background",
 					values = Media:HashTable("background"),
-					set = function(info, v)
+					set = function(info, v) --luacheck: ignore 212
 						PlexusLayout.db.profile.backgroundTexture = v
 						PlexusLayout:UpdateColor()
 					end,
@@ -435,7 +435,7 @@ PlexusLayout.options = {
 					type = "select",
 					dialogControl = "LSM30_Border",
 					values = Media:HashTable("border"),
-					set = function(info, v)
+					set = function(info, v) --luacheck: ignore 212
 						PlexusLayout.db.profile.borderTexture = v
 						PlexusLayout:UpdateColor()
 					end,
@@ -445,7 +445,7 @@ PlexusLayout.options = {
 					order = 25,
 					width = "double",
 					type = "range", min = 1, max = 64, step = 1,
-					set = function(info, v)
+					set = function(info, v) --luacheck: ignore 212
 						PlexusLayout.db.profile.borderSize = v
 						PlexusLayout:UpdateColor()
 					end,
@@ -455,7 +455,7 @@ PlexusLayout.options = {
 					order = 26,
 					width = "double",
 					type = "range", min = 0, max = 32, step = 1,
-					set = function(info, v)
+					set = function(info, v) --luacheck: ignore 212
 						PlexusLayout.db.profile.borderInset = v
 						PlexusLayout:UpdateColor()
 					end,
@@ -479,7 +479,7 @@ PlexusLayout.options = {
 				BOTTOMLEFT  = L["Bottom Left"],
 				BOTTOMRIGHT = L["Bottom Right"],
 			},
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.anchor = v
 				PlexusLayout:SavePosition()
 				PlexusLayout:RestorePosition()
@@ -497,7 +497,7 @@ PlexusLayout.options = {
 				BOTTOMLEFT  = L["Bottom Left"],
 				BOTTOMRIGHT = L["Bottom Right"],
 			},
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.groupAnchor = v
 				PlexusLayout:ReloadLayout()
 			end,
@@ -508,7 +508,7 @@ PlexusLayout.options = {
 			order = 34,
 			width = "double",
 			type = "range", max = 20, min = 0, step = 1,
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.unitSpacing = v
 				PlexusLayout:ReloadLayout()
 			end,
@@ -519,7 +519,7 @@ PlexusLayout.options = {
 			order = 36,
 			width = "double",
 			type = "range", min = 0, max = 25, step = 1,
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.layoutPadding = v
 				PlexusLayout:ReloadLayout()
 			end,
@@ -529,7 +529,7 @@ PlexusLayout.options = {
 			order = 38,
 			width = "double",
 			type = "range", min = 0.5, max = 2.0, step = 0.05, isPercent = true,
-			set = function(info, v)
+			set = function(info, v) --luacheck: ignore 212
 				PlexusLayout.db.profile.scale = v
 				PlexusLayout:Scale()
 			end,
@@ -553,7 +553,7 @@ PlexusLayout.options = {
 					order = 12,
 					width = "double",
 					type = "toggle",
-					set = function(info, v)
+					set = function(info, v) --luacheck: ignore 212
 						PlexusLayout.db.profile.showOffline = v
 						PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
 					end,
@@ -570,7 +570,7 @@ PlexusLayout.options = {
 						RAIDINST = L["Hide when in raid instance"],
 						MYTHIC   = L["Hide when in mythic raid instance"],
 					},
-					set = function(info, v)
+					set = function(info, v) --luacheck: ignore 212
 						PlexusLayout.db.profile.showWrongZone = v
 						PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
 					end,
@@ -703,7 +703,7 @@ end
 
 function PlexusLayout:ShowWrongZone()
 	local showWrongZone = false
-	local name, instType, diffIndex = GetInstanceInfo()
+	local instType, diffIndex = GetInstanceInfo()
 
 	-- Show groups in wrong zone
 	if self.db.profile.showWrongZone == "ALL" then
@@ -801,7 +801,7 @@ local function PlexusLayout_OnMouseDown(frame, button)
 	end
 end
 
-local function PlexusLayout_OnMouseUp(frame)
+local function PlexusLayout_OnMouseUp()
 	PlexusLayout:StopMoveFrame()
 end
 
@@ -815,7 +815,7 @@ local function PlexusLayout_OnEnter(frame)
 	tip:Show()
 end
 
-local function PlexusLayout_OnLeave(frame)
+local function PlexusLayout_OnLeave()
 	GameTooltip:Hide()
 end
 
@@ -923,7 +923,7 @@ end
 local previousGroup
 function PlexusLayout:PlaceGroup(layoutGroup, groupNumber)
 	--self:Debug("PlaceGroup", groupNumber)
-	local frame = layoutGroup.frame
+	--local frame = layoutGroup.frame
 
 	local settings = self.db.profile
 	local horizontal = settings.horizontal
@@ -1145,7 +1145,6 @@ end
 function PlexusLayout:UpdateSize()
 	self:Debug("UpdateSize")
 	local p = self.db.profile
-	local layoutGroup
 	local x, y
 
 	local groupCount, curWidth, curHeight, maxWidth, maxHeight = -1, 0, 0, 0, 0
@@ -1337,7 +1336,7 @@ function PlexusLayout:FakeSize(width, height)
 	self.frame:SetHeight(y)
 end
 
-SLASH_PLEXUSLAYOUT1 = "/plexuslayout"
+SLASH_PLEXUSLAYOUT1 = "/plexuslayout" --luacheck: ignore 111
 
 SlashCmdList.PLEXUSLAYOUT = function(cmd)
 	local width, height = strmatch(strtrim(cmd), "^(%d+) ?(%d*)$")
