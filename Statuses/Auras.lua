@@ -13,10 +13,10 @@ local _, Plexus = ...
 local L = Plexus.L
 
 local strutf8sub = string.utf8sub
-local format, gmatch, gsub, pairs, strfind, strlen, strlower, strmatch, strsub, tostring, type
-    = format, gmatch, gsub, pairs, strfind, strlen, strlower, strmatch, strsub, tostring, type
-local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible
-    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible
+local format, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type
+    = format, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type
+local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsVisible
+    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsVisible
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -809,7 +809,7 @@ end
 function PlexusStatusAuras:EnabledStatusCount()
     local enable_count = 0
 
-    for status, settings in pairs(self.db.profile) do
+    for _, settings in pairs(self.db.profile) do
         if type(settings) == "table" and settings.enable then
             enable_count = enable_count + 1
         end
@@ -886,10 +886,6 @@ function PlexusStatusAuras:RegisterStatuses()
                     self:CopyDefaults(settings, self.defaultDB[status])
                     self:RegisterStatus(status, desc, self:OptionsForStatus(status, isBuff), false, order)
                 end
-            else
-                -- Can't do this because it screws people who play in multiple languages.
-                --self:Debug("Removing invalid status:", status)
-                --profile[status] = nil
             end
         end
     end
@@ -897,7 +893,7 @@ function PlexusStatusAuras:RegisterStatuses()
 end
 
 function PlexusStatusAuras:UnregisterStatuses()
-    for status, moduleName, desc in self.core:RegisteredStatusIterator() do
+    for status, moduleName in self.core:RegisteredStatusIterator() do
         if moduleName == self.name then
             self:UnregisterStatus(status)
             self.options.args[status] = nil
@@ -1328,7 +1324,7 @@ function PlexusStatusAuras:DeleteAura(status)
     self.options.args[status] = nil
     self.options.args.delete_aura.args[status] = nil
     self.db.profile[status] = nil
-    for indicator, indicatorTbl in pairs(PlexusFrame.db.profile.statusmap) do
+    for _, indicatorTbl in pairs(PlexusFrame.db.profile.statusmap) do
         indicatorTbl[status] = nil
     end
     self:DeleteDurationStatus(status)
@@ -1575,8 +1571,8 @@ function PlexusStatusAuras:ResetDurationStatuses()
 end
 
 function PlexusStatusAuras:HasActiveDurations()
-    for status, auras in pairs(self.durationAuras) do
-        for guid in pairs(auras) do
+    for _, auras in pairs(self.durationAuras) do
+        for _ in pairs(auras) do
             return true
         end
     end
@@ -1968,25 +1964,11 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
         return
     end
 
-    local seenBossAura
-
-    local _, class
-    --[[ -- ##DELETE
-    if UnitIsPlayer(unit) then
-        _, class = UnitClass(unit)
-        if class then
-            class = class:lower()
-        end
-    else
-        class = "pet" -- should catch pets, vehicles, and anything else
-    end
-    ]]
-
     self:Debug("UNIT_AURA", unit, guid)
 
     now = GetTime()
 
-    for status, auras in pairs(self.durationAuras) do
+    for _, auras in pairs(self.durationAuras) do
         if auras[guid] then
             durationAuraPool:put(auras[guid])
             auras[guid] = nil
@@ -2040,11 +2022,6 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
             if debuff_names[name] then
                 debuff_names_seen[name] = true
                 self:UnitGainedDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-            --[[
-            elseif isBossAura then
-                seenBossAura = true
-                self:UnitGainedBossDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-            ]]
             elseif debuff_types[debuffType] then
                 -- elseif so that a named debuff doesn't trigger the type status
                 debuff_types_seen[debuffType] = true
@@ -2086,10 +2063,5 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
             debuff_types_seen[debuffType] = nil
         end
     end
---[[
-    if not seenBossAura then
-        self:UnitLostBossDebuff(guid, class)
-    end
-]]
     self:ResetDurationTimer(self:HasActiveDurations())
 end
