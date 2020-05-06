@@ -6,7 +6,7 @@
 	All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+local _, Plexus = ...
 local L = Plexus.L
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
@@ -182,22 +182,22 @@ function PlexusStatus.modulePrototype:UnregisterStatus(status)
 	PlexusStatus:UnregisterStatus(status, (self.moduleName or true))
 end
 
-function PlexusStatus.modulePrototype:SendStatusGained(...)
+function PlexusStatus.modulePrototype:SendStatusGained(...) --luacheck: ignore 212
 	return PlexusStatus:SendStatusGained(...)
 end
 
-function PlexusStatus.modulePrototype:SendStatusLost(...)
+function PlexusStatus.modulePrototype:SendStatusLost(...) --luacheck: ignore 212
 	return PlexusStatus:SendStatusLost(...)
 end
 
-function PlexusStatus.modulePrototype:SendStatusLostAllUnits(...)
+function PlexusStatus.modulePrototype:SendStatusLostAllUnits(...) --luacheck: ignore 212
 	return PlexusStatus:SendStatusLostAllUnits(...)
 end
 
 PlexusStatus:SetDefaultModulePrototype(PlexusStatus.modulePrototype)
 PlexusStatus:SetDefaultModuleLibraries("AceEvent-3.0")
 
-function Plexus:NewStatusModule(name, ...)
+function Plexus:NewStatusModule(name, ...) --luacheck: ignore 212
 	return PlexusStatus:NewModule(name, ...)
 end
 
@@ -323,6 +323,7 @@ PlexusStatus.options = {
 ------------------------------------------------------------------------
 
 local creatureTypes = { L["Beast"], L["Demon"], L["Humanoid"], L["Undead"], L["Dragonkin"], L["Elemental"], L["Not specified"] }
+local PlexusClasses
 if not Plexus:IsClassicWow() then
 PlexusClasses = {
 ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
@@ -460,7 +461,6 @@ function PlexusStatus:RegisterStatus(status, description, moduleName)
 end
 
 function PlexusStatus:UnregisterStatus(status, moduleName)
-	local name
 
 	if self:IsStatusRegistered(status) then
 		self:Debug("Unregistered", status, "for", moduleName)
@@ -582,6 +582,7 @@ function PlexusStatus:SendStatusLostAllUnits(status)
 end
 
 function PlexusStatus:RemoveFromCache(event, guid)
+	self:Debug("RemoveFromCache Event", event)
 	self.cache[guid] = nil
 end
 
