@@ -151,7 +151,7 @@ function PlexusStatusName:UpdateGUID(event, guid)
 end
 
 function PlexusStatusName:UpdateAllUnits()
-    for guid, unitid in PlexusRoster:IterateRoster() do
+    for guid, _ in PlexusRoster:IterateRoster() do
         self:UpdateGUID("UpdateAllUnits", guid)
     end
 end
