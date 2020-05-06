@@ -25,9 +25,9 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
 
     -- Reset
     function(self)
-        if self.__owner.unit then
-            --print("Reset", self.__id, self.__owner.unit)
-        end
+        --if self.__owner.unit then
+        --    --print("Reset", self.__id, self.__owner.unit)
+        --end
 
         local profile = PlexusFrame.db.profile
         local texture = Media:Fetch("statusbar", profile.texture) or "Interface\\Addons\\Plexus\\gradient32x32"
