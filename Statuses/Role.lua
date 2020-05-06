@@ -178,7 +178,7 @@ function PlexusStatusRole:UpdateAllUnits(event)
 end
 
 function PlexusStatusRole:UpdateUnit(event, unit, guid)
-    local role = "None"
+    local role
     if Plexus.IsClassicWow() then
         role = "None"
     else
