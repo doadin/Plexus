@@ -1063,7 +1063,7 @@ function PlexusLayout:LoadLayout(layoutName)
 		end
 
 		layoutGroup:Reset()
-		
+
 		if groupSpacing then
 			layoutGroup:SetAttribute("plexusGroupSpacing", groupSpacing)
 		end

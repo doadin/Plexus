@@ -1,13 +1,13 @@
 --[[--------------------------------------------------------------------
-	Plexus
-	Compact party and raid unit frames.
-	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
-	Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-	All rights reserved. See the accompanying LICENSE file for details.
+    Plexus
+    Compact party and raid unit frames.
+    Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+    Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
-	PlexusLocale-zhTW.lua
-	Traditional Chinese localization
-	Contributors: ananhaid, helium, lsjyzjl, scorpion, Whyv, zhTW
+    PlexusLocale-zhTW.lua
+    Traditional Chinese localization
+    Contributors: ananhaid, helium, lsjyzjl, scorpion, Whyv, zhTW
 ----------------------------------------------------------------------]]
 
 if GetLocale() ~= "zhTW" then return end

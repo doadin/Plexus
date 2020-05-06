@@ -1,13 +1,13 @@
 --[[--------------------------------------------------------------------
-	Plexus
-	Compact party and raid unit frames.
-	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
-	Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-	All rights reserved. See the accompanying LICENSE file for details.
+    Plexus
+    Compact party and raid unit frames.
+    Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+    Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
-	PlexusLocale-ruRU.lua
-	Russian (Русский) localization
-	Contributors: Exzorm, Moschkara, nightik, onyxmaster, StingerSoft
+    PlexusLocale-ruRU.lua
+    Russian (Русский) localization
+    Contributors: Exzorm, Moschkara, nightik, onyxmaster, StingerSoft
 ----------------------------------------------------------------------]]
 
 if GetLocale() ~= "ruRU" then return end

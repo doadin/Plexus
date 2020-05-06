@@ -1,13 +1,13 @@
 --[[--------------------------------------------------------------------
-	Plexus
-	Compact party and raid unit frames.
-	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
-	Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-	All rights reserved. See the accompanying LICENSE file for details.
+    Plexus
+    Compact party and raid unit frames.
+    Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+    Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
-	PlexusLocale-itIT.lua
-	Italian localization
-	Contributors: Holydeath1984, kappesante, _YuSaKu_
+    PlexusLocale-itIT.lua
+    Italian localization
+    Contributors: Holydeath1984, kappesante, _YuSaKu_
 ----------------------------------------------------------------------]]
 
 if GetLocale() ~= "itIT" then return end

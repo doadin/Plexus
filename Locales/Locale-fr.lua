@@ -1,13 +1,13 @@
 --[[--------------------------------------------------------------------
-	Plexus
-	Compact party and raid unit frames.
-	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
-	Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-	All rights reserved. See the accompanying LICENSE file for details.
+    Plexus
+    Compact party and raid unit frames.
+    Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+    Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
-	PlexusLocale-frFR.lua
-	French localization
-	Contributors: brubru777, Devfool, Matisk, NoGynGz, Pettigrow, Strigx, trasher
+    PlexusLocale-frFR.lua
+    French localization
+    Contributors: brubru777, Devfool, Matisk, NoGynGz, Pettigrow, Strigx, trasher
 ----------------------------------------------------------------------]]
 
 if GetLocale() ~= "frFR" then return end

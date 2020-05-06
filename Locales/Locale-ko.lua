@@ -1,13 +1,13 @@
 --[[--------------------------------------------------------------------
-	Plexus
-	Compact party and raid unit frames.
-	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
-	Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-	All rights reserved. See the accompanying LICENSE file for details.
+    Plexus
+    Compact party and raid unit frames.
+    Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+    Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
-	PlexusLocale-koKR.lua
-	Korean localization
-	Contributors: 7destiny, Sayclub
+    PlexusLocale-koKR.lua
+    Korean localization
+    Contributors: 7destiny, Sayclub
 ----------------------------------------------------------------------]]
 
 if GetLocale() ~= "koKR" then return end

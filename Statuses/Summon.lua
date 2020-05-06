@@ -195,10 +195,10 @@ function PlexusStatusSummon:UpdateUnit(unitid)
         self:GainStatus(guid, key, settings)
     elseif key == "SUMMON_STATUS_ACCEPTED" then
         local settings = self.db.profile.summon_status
-        self:GainStatus(guid, key, settings)    
+        self:GainStatus(guid, key, settings)
     elseif key == "SUMMON_STATUS_DECLINED" then
         local settings = self.db.profile.summon_status
-        self:GainStatus(guid, key, settings)    
+        self:GainStatus(guid, key, settings)
     elseif key == "SUMMON_STATUS_NONE" then
         self.core:SendStatusLost(guid, "summon_status")
     end
