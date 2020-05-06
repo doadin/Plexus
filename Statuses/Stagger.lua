@@ -134,7 +134,8 @@ function PlexusStatusStagger:Plexus_UnitJoined(event, guid, unitid)
     end
 end
 
-function PlexusStatusStagger:Plexus_UnitLeft(event, guid)
+function PlexusStatusStagger:Plexus_UnitLeft(event, guid) --luacheck: ignore 212
+    self:Debug("Plexus_UnitLeft event: ", event)
     monks[guid] = nil
 end
 
@@ -150,12 +151,13 @@ function PlexusStatusStagger:UpdateName(event, unitid)
 end
 
 function PlexusStatusStagger:UpdateAllUnits()
-    for guid, unitid in PlexusRoster:IterateRoster() do
+    for _, unitid in PlexusRoster:IterateRoster() do
         self:UpdateUnit("UpdateAllUnits", unitid)
     end
 end
 
 function PlexusStatusStagger:UpdateUnit(event, unitid)
+    self:Debug("UpdateUnit event: ", event)
     local guid = UnitGUID(unitid)
     if monks[guid] then
         for i = 1, 40 do
