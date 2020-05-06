@@ -271,7 +271,7 @@ end
 
 function PlexusResourceBar:OnStatusDisable(status)
     if status == "unit_resource" then
-        for guid, unitid in PlexusRoster:IterateRoster() do
+        for guid, _ in PlexusRoster:IterateRoster() do
             self.core:SendStatusLost(guid, "unit_resource")
         end
         self:UnregisterEvent("UNIT_POWER_UPDATE")
@@ -283,12 +283,11 @@ end
 
 function PlexusResourceBar:UpdateUnit(_, unitid)
     if not unitid then return end
-    local unitGUID = UnitGUID(unitid)
     self:UpdateUnitResource(unitid)
 end
 
 function PlexusResourceBar:UpdateAllUnits(_, unitid)
-    for guid, id in PlexusRoster:IterateRoster() do
+    for _, id in PlexusRoster:IterateRoster() do
         self:UpdateUnitResource(id)
     end
 end
