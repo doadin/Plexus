@@ -77,13 +77,14 @@ function PlexusStatusMana:OnStatusDisable(status)
 end
 
 function PlexusStatusMana:Plexus_UnitJoined(event, guid, unit)
+	self:Debug("Plexus_UnitJoined guid: ", guid)
 	if unit then
-		self:UpdateUnit(event, unit)
+	    self:UpdateUnit(event, unit)
 	end
 end
 
 function PlexusStatusMana:UpdateAllUnits()
-	for guid, unit in PlexusRoster:IterateRoster() do
+	for _, unit in PlexusRoster:IterateRoster() do
 		self:UpdateUnit("UpdateAllUnits", unit)
 	end
 end
@@ -95,6 +96,7 @@ local cache = {}
 
 function PlexusStatusMana:UpdateUnit(event, unit)
 	local guid = UnitGUID(unit)
+	self:Debug("UpdateUnit event: ", event)
 	if not PlexusRoster:IsGUIDInRaid(guid) then return end
 
 	if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) and UnitPowerType(unit) == 0 then
