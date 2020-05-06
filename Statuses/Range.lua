@@ -94,8 +94,8 @@ do
     end
 end
 
-local IsSpellInRange, UnitInRange, UnitIsDead, UnitIsVisible, UnitIsUnit
-    = IsSpellInRange, UnitInRange, UnitIsDead, UnitIsVisible, UnitIsUnit
+local IsSpellInRange, UnitInRange, UnitIsDead, UnitIsUnit
+    = IsSpellInRange, UnitInRange, UnitIsDead, UnitIsUnit
 
 local function GroupRangeCheck(self, unit)
     if UnitIsUnit(unit, "player") then
