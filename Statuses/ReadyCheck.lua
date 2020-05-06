@@ -16,6 +16,14 @@ local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusReadyCheck = Plexus:NewStatusModule("PlexusStatusReadyCheck", "AceTimer-3.0")
 PlexusStatusReadyCheck.menuName = L["Ready Check"]
+local READY_CHECK_WAITING_TEXTURE
+local READY_CHECK_READY_TEXTURE
+local READY_CHECK_NOT_READY_TEXTURE
+local READY_CHECK_AFK_TEXTURE
+READY_CHECK_WAITING_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Waiting";
+READY_CHECK_READY_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Ready";
+READY_CHECK_NOT_READY_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-NotReady";
+READY_CHECK_AFK_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-NotReady";
 
 PlexusStatusReadyCheck.defaultDB = {
 	ready_check = {
@@ -166,7 +174,7 @@ end
 
 function PlexusStatusReadyCheck:UpdateAllUnits()
 	if GetReadyCheckStatus("player") then
-		for guid, unitid in PlexusRoster:IterateRoster() do
+		for _, unitid in PlexusRoster:IterateRoster() do
 			self:UpdateUnit(unitid)
 		end
 	else
@@ -194,6 +202,7 @@ function PlexusStatusReadyCheck:READY_CHECK()
 end
 
 function PlexusStatusReadyCheck:READY_CHECK_CONFIRM(event, unitid)
+	self:Debug("READY_CHECK_CONFIRM event: ", event)
 	if unitid and self.db.profile.ready_check.enable then
 		self:UpdateUnit(unitid)
 	end
@@ -203,7 +212,7 @@ function PlexusStatusReadyCheck:READY_CHECK_FINISHED()
 	local settings = self.db.profile.ready_check
 	if settings.enable then
 		local afk = {}
-		for guid, status, statusTbl in self.core:CachedStatusIterator("ready_check") do
+		for guid, _, statusTbl in self.core:CachedStatusIterator("ready_check") do
 			if statusTbl.texture == READY_CHECK_WAITING_TEXTURE then
 				afk[guid] = true
 			end
@@ -222,6 +231,8 @@ function PlexusStatusReadyCheck:GroupChanged()
 end
 
 function PlexusStatusReadyCheck:Plexus_UnitJoined(event, guid, unitid)
+	self:Debug("Plexus_UnitJoined event: ", event)
+	self:Debug("Plexus_UnitJoined guid: ", guid)
 	if unitid and self.db.profile.ready_check.enable then
 		self:UpdateUnit(unitid)
 	end
