@@ -73,7 +73,7 @@ local Layouts = {
 	}
 }
 --@debug@
-PLEXUSLAYOUTS = Layouts
+PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
 --@end-debug@
 
 --------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ function Manager:GetGroupFilter()
 	end
 
 	for i = 1, GetNumGroupMembers() do
-		local name, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
+		local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
 		local mapID = C_Map.GetBestMapForUnit("raid" .. i)
 		if (showOffline or online) and (showWrongZone or curMapID == mapID) then
 			hideGroup[subgroup] = nil
@@ -219,7 +219,7 @@ function Manager:GetGroupFilter()
 end
 
 
-local lastNumGroups, lastGroupFilter, lastShowPets
+local lastGroupFilter, lastShowPets
 
 function Manager:UpdateLayouts(event)
 	self:Debug("UpdateLayouts", event)
