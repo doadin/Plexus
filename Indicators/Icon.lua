@@ -101,7 +101,6 @@ end
 local function Icon_ResetIndicator(self, point, idx)
     local profile = PlexusFrame.db.profile
     local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-    local iconSize = 0
     if point == "CENTER" then
         iconSize = profile.centerIconSize
     else
@@ -123,7 +122,7 @@ local function Icon_ResetIndicator(self, point, idx)
     -- positioning
     self:ClearAllPoints()
 
-    local is_side = point == "TOP" or point == "BOTTOM" or point == "LEFT" or point == "RIGHT"
+    --local is_side = point == "TOP" or point == "BOTTOM" or point == "LEFT" or point == "RIGHT"
     local is_left = string.match(point, "LEFT") and 1 or string.match(point, "RIGHT") and -1 or 0
     local is_top = string.match(point, "TOP") and -1 or string.match(point, "BOTTOM") and 1 or 0
 
