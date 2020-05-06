@@ -8,7 +8,6 @@
 
 local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 local BACKDROP = {
@@ -47,7 +46,7 @@ local function Reset(self)
     self:SetPoint(unpack(anchor[self.__id]))
 end
 
-local function SetStatus(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+local function SetStatus(self, color)
     if not color then return end
     self:SetBackdropColor(color.r, color.g, color.b, color.a or 1)
     self:Show()
