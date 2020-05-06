@@ -1,3 +1,4 @@
+local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
@@ -140,7 +141,7 @@ local resourcebar_options = {
     },
 }
 
-function PlexusResourceBar:ResetResourceColors()
+function PlexusResourceBar:ResetResourceColors() --luacheck: ignore 212
     PlexusResourceBar.db.profile.manacolor = PlexusResourceBar.defaultDB.manacolor
     PlexusResourceBar.db.profile.energycolor = PlexusResourceBar.defaultDB.energycolor
     PlexusResourceBar.db.profile.ragecolor = PlexusResourceBar.defaultDB.ragecolor
@@ -166,7 +167,7 @@ function PlexusResourceBar:OnInitialize()
             bar:Hide()
             return bar
         end,
-        function(self)
+        function(self) -- luacheck: ignore 432
             local texture = LibSharedMedia:Fetch("statusbar", PlexusFrame.db.profile.texture) or "Interface\\Addons\\Plexus\\gradient32x32"
             local frame = self.__owner
             local side = PlexusResourceBar.db.profile.side
@@ -214,7 +215,7 @@ function PlexusResourceBar:OnInitialize()
             self:SetStatusBarTexture(texture)
             self.bg:SetTexture(texture)
         end,
-        function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+        function(self, color, _, value, maxValue) -- luacheck: ignore 432
             if not value or not maxValue then return end
             self:SetMinMaxValues(0, maxValue)
             self:SetValue(value)
@@ -241,7 +242,7 @@ function PlexusResourceBar:OnInitialize()
             end
             self:Show()
         end,
-        function(self)
+        function(self) -- luacheck: ignore 432
             if self:IsShown() then
                 local frame = self.__owner
                 local healthBar = frame.indicators.bar
@@ -271,7 +272,7 @@ end
 
 function PlexusResourceBar:OnStatusDisable(status)
     if status == "unit_resource" then
-        for guid, unitid in PlexusRoster:IterateRoster() do
+        for guid, _ in PlexusRoster:IterateRoster() do
             self.core:SendStatusLost(guid, "unit_resource")
         end
         self:UnregisterEvent("UNIT_POWER_UPDATE")
@@ -283,17 +284,17 @@ end
 
 function PlexusResourceBar:UpdateUnit(_, unitid)
     if not unitid then return end
-    local unitGUID = UnitGUID(unitid)
     self:UpdateUnitResource(unitid)
 end
 
-function PlexusResourceBar:UpdateAllUnits(_, unitid)
-    for guid, id in PlexusRoster:IterateRoster() do
-        self:UpdateUnitResource(id)
+function PlexusResourceBar:UpdateAllUnits()
+    for _, unitid in PlexusRoster:IterateRoster() do
+        self:UpdateUnitResource(unitid)
     end
 end
 
-function PlexusResourceBar:UpdateUnitResource(unitid, guid)
+function PlexusResourceBar:UpdateUnitResource(unitid)
+    local color
     if not unitid then return end
     local UnitGUID = UnitGUID(unitid)
     if not UnitGUID then return end
