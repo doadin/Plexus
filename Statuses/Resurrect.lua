@@ -153,7 +153,7 @@ function PlexusStatusResurrect:UpdateUnit(unit, guid)
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
 
     local db = self.db.profile.alert_resurrect
-    local hasRes, endTime, casterUnit, casterGUID = LibResInfo:UnitHasIncomingRes(guid)
+    local hasRes, endTime, casterUnit = LibResInfo:UnitHasIncomingRes(guid)
 
     if not hasRes or (hasRes == "PENDING" and not db.showUntilUsed) then
         return self.core:SendStatusLost(guid, "alert_resurrect")
