@@ -77,13 +77,13 @@ function PlexusStatusAbsorbs:PostReset()
 end
 
 function PlexusStatusAbsorbs:UpdateAllUnits()
-    for guid, unit in PlexusRoster:IterateRoster() do
+    for _, unit in PlexusRoster:IterateRoster() do
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
 
-local UnitGetTotalAbsorbs, UnitGUID, UnitHealth, UnitHealthMax, UnitIsDeadOrGhost, UnitIsVisible
-    = UnitGetTotalAbsorbs, UnitGUID, UnitHealth, UnitHealthMax, UnitIsDeadOrGhost, UnitIsVisible
+local UnitGetTotalAbsorbs, UnitGUID, UnitHealth, UnitHealthMax, UnitIsVisible
+    = UnitGetTotalAbsorbs, UnitGUID, UnitHealth, UnitHealthMax, UnitIsVisible
 
 function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     if not unit then return end
