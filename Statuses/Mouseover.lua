@@ -59,13 +59,13 @@ updater:SetScript("OnUpdate", function(self, elapsed)
     end
 end)
 
-function PlexusStatusMouseover:UpdateAllUnits(event)
+function PlexusStatusMouseover:UpdateAllUnits()
     local profile = self.db.profile.mouseover
     local mouseover = UnitGUID("mouseover")
     if not mouseover then
         return self.core:SendStatusLostAllUnits("mouseover")
     end
-    for guid, unit in PlexusRoster:IterateRoster() do
+    for guid, _ in PlexusRoster:IterateRoster() do
         if guid == mouseover then
             self.core:SendStatusGained(guid, "mouseover",
                 profile.priority,
