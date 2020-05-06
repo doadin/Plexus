@@ -166,7 +166,7 @@ end
 
 function PlexusStatusReadyCheck:UpdateAllUnits()
 	if GetReadyCheckStatus("player") then
-		for guid, unitid in PlexusRoster:IterateRoster() do
+		for _, unitid in PlexusRoster:IterateRoster() do
 			self:UpdateUnit(unitid)
 		end
 	else
@@ -203,7 +203,7 @@ function PlexusStatusReadyCheck:READY_CHECK_FINISHED()
 	local settings = self.db.profile.ready_check
 	if settings.enable then
 		local afk = {}
-		for guid, status, statusTbl in self.core:CachedStatusIterator("ready_check") do
+		for guid, _, statusTbl in self.core:CachedStatusIterator("ready_check") do
 			if statusTbl.texture == READY_CHECK_WAITING_TEXTURE then
 				afk[guid] = true
 			end
