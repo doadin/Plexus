@@ -9,8 +9,7 @@
 	Keeps track of GUID <-> name <-> unitID mappings for party/raid members.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
-local L = Plexus.L
+local _, Plexus = ...
 
 local PlexusRoster = Plexus:NewModule("PlexusRoster")
 
@@ -68,8 +67,8 @@ end
 
 ------------------------------------------------------------------------
 
-function PlexusRoster:PostInitialize()
-	for attr, attr_tbl in pairs(roster) do
+function PlexusRoster:PostInitialize() --luacheck: ignore 212
+	for _, attr_tbl in pairs(roster) do
 		for k in pairs(attr_tbl) do
 			attr_tbl[k] = nil
 		end
@@ -91,7 +90,7 @@ end
 
 ------------------------------------------------------------------------
 
-function PlexusRoster:GetGUIDByName(name, realm)
+function PlexusRoster:GetGUIDByName(name, realm) --luacheck: ignore 212
 	if realm == my_realm or realm == "" then realm = nil end
 	for guid, unit_name in pairs(roster.name) do
 		if name == unit_name and roster.realm[guid] == realm then
@@ -100,7 +99,7 @@ function PlexusRoster:GetGUIDByName(name, realm)
 	end
 end
 
-function PlexusRoster:GetNameByGUID(guid)
+function PlexusRoster:GetNameByGUID(guid) --luacheck: ignore 212
 	return roster.name[guid], roster.realm[guid]
 end
 
@@ -119,29 +118,29 @@ function PlexusRoster:GetFullNameByGUID(guid)
 	end
 end
 
-function PlexusRoster:GetUnitidByGUID(guid)
+function PlexusRoster:GetUnitidByGUID(guid) --luacheck: ignore 212
 	return roster.unitid[guid]
 end
 
-function PlexusRoster:GetOwnerUnitidByGUID(guid)
+function PlexusRoster:GetOwnerUnitidByGUID(guid) --luacheck: ignore 212
 	local unitid = roster.unitid[guid]
 	return owner_of_unit[unitid]
 end
 
-function PlexusRoster:GetPetUnitidByUnitid(unitid)
+function PlexusRoster:GetPetUnitidByUnitid(unitid) --luacheck: ignore 212
 	return pet_of_unit[unitid]
 end
 
-function PlexusRoster:GetOwnerUnitidByUnitid(unitid)
+function PlexusRoster:GetOwnerUnitidByUnitid(unitid) --luacheck: ignore 212
 	return owner_of_unit[unitid]
 end
 
-function PlexusRoster:IsGUIDInGroup(guid)
+function PlexusRoster:IsGUIDInGroup(guid) --luacheck: ignore 212
 	return roster.guid[guid] ~= nil
 end
 PlexusRoster.IsGUIDInRaid = PlexusRoster.IsGUIDInGroup -- deprecated
 
-function PlexusRoster:IterateRoster()
+function PlexusRoster:IterateRoster() --luacheck: ignore 212
 	return pairs(roster.unitid)
 end
 
@@ -194,7 +193,7 @@ do
 	end
 
 	function PlexusRoster:UpdateRoster()
-		for guid, unit in pairs(roster.unitid) do
+		for guid in pairs(roster.unitid) do
 			units_to_remove[guid] = true
 		end
 
@@ -218,7 +217,7 @@ do
 			updated = true
 			self:SendMessage("Plexus_UnitLeft", guid)
 
-			for attr, attr_tbl in pairs(roster) do
+			for _, attr_tbl in pairs(roster) do
 				attr_tbl[guid] = nil
 			end
 
