@@ -55,12 +55,13 @@ function PlexusStatusVehicle:OnStatusDisable(status)
 end
 
 function PlexusStatusVehicle:UpdateAllUnits()
-    for guid, unit in Roster:IterateRoster() do
-        self:UpdateUnit("UpdateAllUnits", unit)
+    for _, unit in Roster:IterateRoster() do
+        self:UpdateUnit(unit)
     end
 end
 
-function PlexusStatusVehicle:UpdateUnit(event, unit, guid)
+function PlexusStatusVehicle:UpdateUnit(unit)
+    local guid
     if unit ~= "UpdateAllUnits" then
         guid = UnitGUID(unit)
     end
