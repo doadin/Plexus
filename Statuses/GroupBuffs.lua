@@ -1,13 +1,12 @@
 local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
-local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
-    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
-local settings
+local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
+    = UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 
-local spellNameList = {}
-local spellIconList = {}
+local spellNameList
+local spellIconList
 if not Plexus:IsClassicWow() then
 spellNameList = {
     ["Power Word: Fortitude"] = GetSpellInfo(21562),
@@ -208,19 +207,19 @@ PlexusStatusGroupBuffs.defaultDB = {
 }
 end
 
-local extraOptionsForStatus = {
-    class = {
-        type = "toggle",
-        name = "Class",
-        desc = "Only show buffs your class can cast.",
-        get = function()
-            return PlexusStatusGroupBuffs.db.profile.class
-        end,
-        set = function(_, v)
-            PlexusStatusGroupBuffs.db.profile.class = v
-        end,
-    },
-}
+--local extraOptionsForStatus = {
+--    class = {
+--        type = "toggle",
+--        name = "Class",
+--        desc = "Only show buffs your class can cast.",
+--        get = function()
+--            return PlexusStatusGroupBuffs.db.profile.class
+--        end,
+--        set = function(_, v)
+--            PlexusStatusGroupBuffs.db.profile.class = v
+--        end,
+--    },
+--}
 
 function PlexusStatusGroupBuffs:OnInitialize()
     self.super.OnInitialize(self)
@@ -243,13 +242,13 @@ function PlexusStatusGroupBuffs:PLAYER_ENTERING_WORLD()
     self:RegisterEvent("UNIT_AURA", "UpdateUnit")
 end
 
-function PlexusStatusGroupBuffs:Plexus_UnitJoined(guid, unit)
+function PlexusStatusGroupBuffs:Plexus_UnitJoined(guid, unit) --luacheck: ignore 212
     --self:Debug("Plexus_UnitJoined", unit)
     self:UpdateUnit(unit)
 end
 
 function PlexusStatusGroupBuffs:RegisterStatuses()
-    local status, settings, desc
+    local desc
 
     --self:RegisterStatus("alert_groupbuffs", "Settings", extraOptionsForStatus)
     for status, settings in self:ConfiguredStatusIterator() do
@@ -260,7 +259,6 @@ function PlexusStatusGroupBuffs:RegisterStatuses()
 end
 
 function PlexusStatusGroupBuffs:UnregisterStatuses()
-    local status, moduleName, desc
     for status, moduleName, desc in self.core:RegisteredStatusIterator() do
         if (moduleName == self.name) then
             self:Debug("unregistering", status, desc)
@@ -297,7 +295,7 @@ function PlexusStatusGroupBuffs:Reset()
     self:UpdateAllUnits()
 end
 
-function PlexusStatusGroupBuffs:UpdateAllUnits(guid)
+function PlexusStatusGroupBuffs:UpdateAllUnits()
     for guid, unit in PlexusRoster:IterateRoster() do
         self:UpdateUnit(unit, guid)
     end
@@ -312,6 +310,7 @@ function PlexusStatusGroupBuffs:UpdateUnit(event, unit, guid)
 end
 
 function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
+    self:Debug("UpdateUnit Event: ", event)
     if not unit then return end
     if not status then return end
     if not guid then return end
@@ -328,9 +327,8 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
 
     if UnitIsVisible(unit) then
         for i = 1, 40 do
-            local name, icon, count, debuffType, duration, expirationTime, caster, isStealable
-            name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
-            for buffId, buff in pairs(settings.buffs) do
+            local name = UnitAura(unit, i, "HELPFUL")
+            for _, buff in pairs(settings.buffs) do
                 if name == buff then
                     return self.core:SendStatusLost(guid, status)
                 end
@@ -355,7 +353,7 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     end
 
     --self:Debug("UnitClass", UnitClass)
-    local localizedClass, englishClass, classIndex = UnitClass("player")
+    local _, englishClass= UnitClass("player")
     if Plexus:IsClassicWow() and UnitIsPlayer(unit) and BuffClass == englishClass then
     self:Debug("status", icon)
         self.core:SendStatusGained(
