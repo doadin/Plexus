@@ -6,9 +6,9 @@
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+local _, Plexus = ...
 local L = Plexus.L
-local format, gsub, pairs, tonumber, type = format, gsub, pairs, tonumber, type
+local format, gsub, pairs, type = format, gsub, pairs, type
 local PlexusStatus, PlexusStatusRange
 
 local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
@@ -194,7 +194,6 @@ local COLOR_WHITE = { r = 1, g = 1, b = 1, a = 1 }
 local COORDS_FULL = { left = 0, right = 1, top = 0, bottom = 1 }
 
 function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, texture, start, duration, count, texCoords)
-    local profile = PlexusFrame.db.profile
 
     if not color then
         color = COLOR_WHITE
@@ -212,16 +211,6 @@ function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, te
     else
         PlexusFrame:Debug("SetIndicator:", id, "does not exist")
     end
-
-    --[[ TODO: Why does this exist?
-    elseif indicator == "frameAlpha" and type(color) == "table" and type(color.a) == "number" then
-        for i = 1, 4 do
-            local corner = "corner" .. i
-            if self[corner] then
-                self[corner]:SetAlpha(color.a)
-            end
-        end
-    ]]
 end
 
 function PlexusFrame.prototype:ClearIndicator(id)
