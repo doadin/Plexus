@@ -150,7 +150,7 @@ function PlexusStatusStagger:UpdateName(event, unitid)
 end
 
 function PlexusStatusStagger:UpdateAllUnits()
-    for guid, unitid in PlexusRoster:IterateRoster() do
+    for _, unitid in PlexusRoster:IterateRoster() do
         self:UpdateUnit("UpdateAllUnits", unitid)
     end
 end
