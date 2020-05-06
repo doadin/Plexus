@@ -117,7 +117,7 @@ function PlexusStatusPhase:GainStatus(guid, key, settings)
 end
 
 function PlexusStatusPhase:UpdateAllUnits(event)
-    for guid, unitid in PlexusRoster:IterateRoster() do
+    for _, unitid in PlexusRoster:IterateRoster() do
         self:UpdateUnit(unitid)
     end
 end
