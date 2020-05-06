@@ -6,9 +6,9 @@
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+local _, Plexus = ...
 local L = Plexus.L
-local format, gsub, pairs, tonumber, type = format, gsub, pairs, tonumber, type
+local format, gsub, pairs, type = format, gsub, pairs, type
 local PlexusStatus, PlexusStatusRange
 
 local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
@@ -163,7 +163,7 @@ function PlexusFrame.prototype:OnLeave()
     UnitFrame_OnLeave(self)
 end
 
-function PlexusFrame.prototype:OnShow()
+function PlexusFrame.prototype:OnShow() --luacheck: ignore 212
     PlexusFrame:SendMessage("UpdateFrameUnits")
     PlexusFrame:SendMessage("Plexus_UpdateLayoutSize")
 end
@@ -194,7 +194,6 @@ local COLOR_WHITE = { r = 1, g = 1, b = 1, a = 1 }
 local COORDS_FULL = { left = 0, right = 1, top = 0, bottom = 1 }
 
 function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, texture, start, duration, count, texCoords)
-    local profile = PlexusFrame.db.profile
 
     if not color then
         color = COLOR_WHITE
@@ -212,16 +211,6 @@ function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, te
     else
         PlexusFrame:Debug("SetIndicator:", id, "does not exist")
     end
-
-    --[[ TODO: Why does this exist?
-    elseif indicator == "frameAlpha" and type(color) == "table" and type(color.a) == "number" then
-        for i = 1, 4 do
-            local corner = "corner" .. i
-            if self[corner] then
-                self[corner]:SetAlpha(color.a)
-            end
-        end
-    ]]
 end
 
 function PlexusFrame.prototype:ClearIndicator(id)
@@ -384,7 +373,7 @@ PlexusFrame.options = {
                     desc = L["Adjust the width of each unit's frame."],
                     order = 1, width = "double",
                     type = "range", min = 10, max = 100, step = 1,
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.frameWidth = v
                         PlexusFrame:ResizeAllFrames()
                         PlexusLayout:ReloadLayout()
@@ -395,7 +384,7 @@ PlexusFrame.options = {
                     desc = L["Adjust the height of each unit's frame."],
                     order = 2, width = "double",
                     type = "range", min = 10, max = 100, step = 1,
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.frameHeight = v
                         PlexusFrame:ResizeAllFrames()
                         PlexusLayout:ReloadLayout()
@@ -419,7 +408,7 @@ PlexusFrame.options = {
                     order = 5, width = "double",
                     type = "select",
                     values = { Always = L["Always"], Never = L["Never"], OOC = L["OOC"] },
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.showTooltip = v
                     end,
                 },
@@ -428,7 +417,7 @@ PlexusFrame.options = {
                     desc = L["Show the standard unit menu when right-clicking on a frame."],
                     order = 6, width = "double",
                     type = "toggle",
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.rightClickMenu = v
                         for _, frame in pairs(PlexusFrame.registeredFrames) do
                             local attrib = frame:GetAttribute("*type2") or ""
@@ -465,7 +454,7 @@ PlexusFrame.options = {
                     desc = L["Throttle updates on group changes. This option may cause delays in updating frames, so you should only enable it if you're experiencing temporary freezes or lockups when people join or leave your group."],
                     type = "toggle",
                     order = 9, width = "double",
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.throttleUpdates = v
                         if v then
                             PlexusFrame:UnregisterMessage("UpdateFrameUnits")
@@ -499,7 +488,7 @@ PlexusFrame.options = {
                     desc = format(L["Toggle the %s indicator."], L["Health Bar Color"]),
                     order = 2, width = "double",
                     type = "toggle",
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableBarColor = v
                         PlexusFrame:UpdateOptionsMenu()
                         PlexusFrame:UpdateAllFrames()
@@ -650,7 +639,7 @@ PlexusFrame.options = {
                     desc = format(L["Toggle the %s indicator."], L["Center Text 2"]),
                     order = 6, width = "double",
                     type = "toggle",
-                    set = function(info, v)
+                    set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableText2 = v
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
@@ -713,8 +702,8 @@ function PlexusFrame:SendMessage_UpdateFrameUnits()
     self:SendMessage("UpdateFrameUnits")
 end
 
-function PlexusFrame:LibSharedMedia_Update(callback, type, handle)
-     if type == "font" or type == "statusbar" then
+function PlexusFrame:LibSharedMedia_Update(_, mediatype)
+     if mediatype == "font" or mediatype == "statusbar" then
         self:UpdateAllFrames()
     end
 end
@@ -860,7 +849,7 @@ function PlexusFrame:UpdateIndicator(frame, indicator)
     end
 end
 
-function PlexusFrame:StatusForIndicator(unitid, guid, indicator)
+function PlexusFrame:StatusForIndicator(_, guid, indicator)
     local topPriority = 0
     local topStatus
     local statusmap = self.db.profile.statusmap[indicator]
@@ -902,7 +891,7 @@ function PlexusFrame:StatusForIndicator(unitid, guid, indicator)
     return topStatus
 end
 
-function PlexusFrame:UnitInRange(unit)
+function PlexusFrame:UnitInRange(unit) --luacheck: ignore 212
     if not unit or not UnitExists(unit) then return false end
 
     if UnitIsUnit(unit, "player") then
@@ -918,7 +907,7 @@ end
 
 ------------------------------------------------------------------------
 
-function PlexusFrame:Plexus_StatusGained(event, guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count)
+function PlexusFrame:Plexus_StatusGained(_, guid, status)
     for _, frame in pairs(self.registeredFrames) do
         if frame.unitGUID == guid then
             self:UpdateIndicatorsForStatus(frame, status)
@@ -926,7 +915,7 @@ function PlexusFrame:Plexus_StatusGained(event, guid, status, priority, range, c
     end
 end
 
-function PlexusFrame:Plexus_StatusLost(event, guid, status)
+function PlexusFrame:Plexus_StatusLost(_, guid, status)
     for _, frame in pairs(self.registeredFrames) do
         if frame.unitGUID == guid then
             self:UpdateIndicatorsForStatus(frame, status)
@@ -947,7 +936,7 @@ end
 
 function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
     local menu = Plexus.options.args.PlexusIndicator.args
-    local PlexusStatus = Plexus:GetModule("PlexusStatus")
+    PlexusStatus = Plexus:GetModule("PlexusStatus")
 
     if indicator == "bar" then
         menu[indicator] = nil
@@ -1018,7 +1007,7 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
                 get = function()
                     return PlexusFrame.db.profile.statusmap[indicatorType][statusKey]
                 end,
-                set = function(info, v)
+                set = function(info, v) --luacheck: ignore 212
                     PlexusFrame.db.profile.statusmap[indicatorType][statusKey] = v
                     PlexusFrame:UpdateAllFrames()
                 end,
