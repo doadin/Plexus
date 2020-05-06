@@ -65,7 +65,7 @@ function PlexusStatusMouseover:UpdateAllUnits(event)
     if not mouseover then
         return self.core:SendStatusLostAllUnits("mouseover")
     end
-    for guid, unit in PlexusRoster:IterateRoster() do
+    for guid, _ in PlexusRoster:IterateRoster() do
         if guid == mouseover then
             self.core:SendStatusGained(guid, "mouseover",
                 profile.priority,
