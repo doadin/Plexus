@@ -11,7 +11,7 @@ local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0")
 local LibDeflate = LibStub:GetLibrary('LibDeflate')
 local AceGUI = LibStub:GetLibrary("AceGUI-3.0")
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
-local format, print, strfind, strlen, tostring, type , tcopy, timer = format, print, strfind, strlen, tostring, type, CopyTable, C_Timer
+local format, strfind, strlen, tostring, type , tcopy = format, strfind, strlen, tostring, type, CopyTable
 
 _G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
@@ -89,7 +89,7 @@ do
         if start.name == moduleName or start.moduleName == moduleName then
             return start
         end
-        for name, module in start:IterateModules() do
+        for _, module in start:IterateModules() do
             local found = FindModule(module, moduleName)
             if found then
                 --print("FOUND")
@@ -397,13 +397,13 @@ function Plexus.modulePrototype:RegisterModule(name, module)
 end
 
 function Plexus.modulePrototype:EnableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:EnableModule(name)
     end
 end
 
 function Plexus.modulePrototype:DisableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:DisableModule(name)
     end
 end
@@ -628,7 +628,7 @@ function Plexus:SetupOptions()
     --	Interface Options frame integrated options
 
     local panels = {}
-    for k, v in pairs(self.options.args) do
+    for k in pairs(self.options.args) do
         if k ~= "general" then
             tinsert(panels, k)
         end
@@ -735,13 +735,13 @@ function Plexus:RegisterModule(name, module)
 end
 
 function Plexus:EnableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:EnableModule(name)
     end
 end
 
 function Plexus:DisableModules()
-    for name, module in self:IterateModules() do
+    for name, _ in self:IterateModules() do
         self:DisableModule(name)
     end
 end
