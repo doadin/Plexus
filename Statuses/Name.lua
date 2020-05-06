@@ -69,9 +69,9 @@ function PlexusStatusName:OnStatusEnable(status)
     end
     self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
 
-    self:RegisterMessage("Plexus_UnitJoined", "UpdateGUID")
-    self:RegisterMessage("Plexus_UnitChanged", "UpdateGUID")
-    self:RegisterMessage("Plexus_UnitLeft", "UpdateGUID")
+    self:RegisterMessage("Plexus_UnitJoined", "UpdateUnit")
+    self:RegisterMessage("Plexus_UnitChanged", "UpdateUnit")
+    self:RegisterMessage("Plexus_UnitLeft", "UpdateUnit")
 
     self:RegisterMessage("Plexus_ColorsChanged", "UpdateAllUnits")
 
@@ -105,14 +105,8 @@ function PlexusStatusName:UpdateVehicle(event, unitid)
     end
 end
 
-function PlexusStatusName:UpdateUnit(event, unitid)
-    local guid = unitid and UnitGUID(unitid)
-    if guid then
-        self:UpdateGUID(event, guid)
-    end
-end
-
-function PlexusStatusName:UpdateGUID(event, guid)
+function PlexusStatusName:UpdateUnit(event, guid)
+    self:Debug("UpdateUnit event: ", event)
     local settings = self.db.profile.unit_name
 
     local name = PlexusRoster:GetNameByGUID(guid)
@@ -151,7 +145,7 @@ function PlexusStatusName:UpdateGUID(event, guid)
 end
 
 function PlexusStatusName:UpdateAllUnits()
-    for guid, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateGUID("UpdateAllUnits", guid)
+    for guid, _ in PlexusRoster:IterateRoster() do
+        self:UpdateUnit("UpdateAllUnits", guid)
     end
 end
