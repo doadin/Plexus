@@ -25,9 +25,9 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
 
     -- Reset
     function(self)
-        if self.__owner.unit then
-            --print("Reset", self.__id, self.__owner.unit)
-        end
+        --if self.__owner.unit then
+        --    --print("Reset", self.__id, self.__owner.unit)
+        --end
 
         local profile = PlexusFrame.db.profile
         local texture = Media:Fetch("statusbar", profile.texture) or "Interface\\Addons\\Plexus\\gradient32x32"
@@ -52,7 +52,7 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
     end,
 
     -- SetStatus
-    function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+    function(self, color, _, value, maxValue)
         if not value or not maxValue or value == 0 or maxValue == 0 then
             return self:Hide()
         end
