@@ -17,10 +17,10 @@ local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatusSummon = Plexus:NewStatusModule("PlexusStatusSummon", "AceTimer-3.0")
 PlexusStatusSummon.menuName = L["Summon Status"]
 
-local SUMMON_STATUS_NONE = Enum.SummonStatus.None or 0
-local SUMMON_STATUS_PENDING = Enum.SummonStatus.Pending or 1
-local SUMMON_STATUS_ACCEPTED = Enum.SummonStatus.Accepted or 2
-local SUMMON_STATUS_DECLINED = Enum.SummonStatus.Declined or 3
+--local SUMMON_STATUS_NONE = Enum.SummonStatus.None or 0
+--local SUMMON_STATUS_PENDING = Enum.SummonStatus.Pending or 1
+--local SUMMON_STATUS_ACCEPTED = Enum.SummonStatus.Accepted or 2
+--local SUMMON_STATUS_DECLINED = Enum.SummonStatus.Declined or 3
 
 PlexusStatusSummon.defaultDB = {
     summon_status = {
@@ -177,8 +177,8 @@ end
 --bigger {left = 0.15625, right = 0.84375, top = 0.15625, bottom = 0.84375}
 --better {left = 0.3, right = 0.7, top = 0.3, bottom = 0.7}
 
-function PlexusStatusSummon:UpdateAllUnits(event)
-    for guid, unitid in PlexusRoster:IterateRoster() do
+function PlexusStatusSummon:UpdateAllUnits()
+    for _, unitid in PlexusRoster:IterateRoster() do
         self:UpdateUnit(unitid)
     end
 end
@@ -205,12 +205,13 @@ function PlexusStatusSummon:UpdateUnit(unitid)
 end
 
 function PlexusStatusSummon:ClearStatus()
-    for guid, unitid in PlexusRoster:IterateRoster() do
+    for _, unitid in PlexusRoster:IterateRoster() do
         self:UpdateUnit(unitid)
     end
 end
 
 function PlexusStatusSummon:INCOMING_SUMMON_CHANGED(event, unitid)
+    self:Debug("INCOMING_SUMMON_CHANGED event: ", event)
     if unitid and self.db.profile.summon_status.enable then
         self:UpdateUnit(unitid)
     end
@@ -223,6 +224,8 @@ function PlexusStatusSummon:GroupChanged()
 end
 
 function PlexusStatusSummon:Plexus_UnitJoined(event, guid, unitid)
+    self:Debug("Plexus_UnitJoined event: ", event)
+    self:Debug("Plexus_UnitJoined guid: ", guid)
     if unitid and self.db.profile.summon_status.enable then
         self:UpdateUnit(unitid)
     end
