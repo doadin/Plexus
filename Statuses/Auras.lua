@@ -13,10 +13,10 @@ local _, Plexus = ...
 local L = Plexus.L
 
 local strutf8sub = string.utf8sub
-local format, gmatch, gsub, pairs, strfind, strlen, strlower, strmatch, strsub, tostring, type
-    = format, gmatch, gsub, pairs, strfind, strlen, strlower, strmatch, strsub, tostring, type
-local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible
-    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible
+local format, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type
+    = format, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type
+local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsVisible
+    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsVisible
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -26,6 +26,7 @@ PlexusStatusAuras.menuName = L["Auras"]
 
 local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
+local spell_names
 
 if not Plexus:IsClassicWow() then
 spell_names = {
@@ -106,11 +107,11 @@ local debuff_types = {
     ["Poison"] = "dispel_poison",
 }
 
-function PlexusStatusAuras:StatusForSpell(spell, isBuff)
+function PlexusStatusAuras:StatusForSpell(spell, isBuff) --luacheck: ignore 212
     return format(isBuff and "buff_%s" or "debuff_%s", gsub(spell, " ", ""))
 end
 
-function PlexusStatusAuras:TextForSpell(spell)
+function PlexusStatusAuras:TextForSpell(spell) --luacheck: ignore 212
     if strfind(spell, "%s") then
         local str = ""
         for word in gmatch(spell, "%S+") do
@@ -809,7 +810,7 @@ end
 function PlexusStatusAuras:EnabledStatusCount()
     local enable_count = 0
 
-    for status, settings in pairs(self.db.profile) do
+    for _, settings in pairs(self.db.profile) do
         if type(settings) == "table" and settings.enable then
             enable_count = enable_count + 1
         end
@@ -886,10 +887,6 @@ function PlexusStatusAuras:RegisterStatuses()
                     self:CopyDefaults(settings, self.defaultDB[status])
                     self:RegisterStatus(status, desc, self:OptionsForStatus(status, isBuff), false, order)
                 end
-            else
-                -- Can't do this because it screws people who play in multiple languages.
-                --self:Debug("Removing invalid status:", status)
-                --profile[status] = nil
             end
         end
     end
@@ -897,20 +894,11 @@ function PlexusStatusAuras:RegisterStatuses()
 end
 
 function PlexusStatusAuras:UnregisterStatuses()
-    for status, moduleName, desc in self.core:RegisteredStatusIterator() do
+    for status, moduleName in self.core:RegisteredStatusIterator() do
         if moduleName == self.name then
             self:UnregisterStatus(status)
             self.options.args[status] = nil
         end
-    end
-end
-
-local classes = {}
-do
-    local t = {}
-    FillLocalizedClassList(t, false)
-    for token, name in pairs(t) do
-        classes[token:lower()] = name
     end
 end
 
@@ -1182,23 +1170,7 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
             },
         },
     }
---[[ -- ##DELETE
-    for class, name in pairs(classes) do
-        local class, name = class, name
-        auraOptions.class.args[class] = {
-            name = name,
-            desc = format(L["Show on %s players."], name),
-            type = "toggle",
-            get = function()
-                return PlexusStatusAuras.db.profile[status][class] ~= false
-            end,
-            set = function(_, v)
-                PlexusStatusAuras.db.profile[status][class] = v
-                PlexusStatusAuras:UpdateAllUnitAuras()
-            end,
-        }
-    end
-]]
+
     if isBuff then
         auraOptions.statusInfo.args.textInfo.values["name"] = L["Buff name"]
         auraOptions.mine = {
@@ -1259,7 +1231,6 @@ end
 
 function PlexusStatusAuras:CreateRemoveOptions()
     for status, settings in pairs(self.db.profile) do
-        local status = status
         if type(settings) == "table" and settings.text and not default_auras[status] then
             local debuffName = settings.desc or settings.text
             self.options.args.delete_aura.args[status] = {
@@ -1328,7 +1299,7 @@ function PlexusStatusAuras:DeleteAura(status)
     self.options.args[status] = nil
     self.options.args.delete_aura.args[status] = nil
     self.db.profile[status] = nil
-    for indicator, indicatorTbl in pairs(PlexusFrame.db.profile.statusmap) do
+    for _, indicatorTbl in pairs(PlexusFrame.db.profile.statusmap) do
         indicatorTbl[status] = nil
     end
     self:DeleteDurationStatus(status)
@@ -1345,7 +1316,7 @@ function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
     self:ScanUnitAuras(event, unitid, guid)
 end
 
-function PlexusStatusAuras:UpdateDispellable()
+function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
 if not Plexus.IsClassicWow() then
     if PLAYER_CLASS == "DRUID" then
         --  88423   Nature's Cure       Restoration                Curse, Poison, Magic
@@ -1501,9 +1472,7 @@ local Pool = {
     clean = nil, -- called in Pool:new() to return a "cleaned" pool item
     empty = function(self) -- empty the pool
         while self.pool do
-            local l = self.pool
             self.pool = self.pool.nextPoolItem
-            l = nil
         end
     end,
 }
@@ -1511,7 +1480,7 @@ local Pool = {
 -- durationAuraPool is a Pool of tables used by durationAuras[status][guid]
 local durationAuraPool = Pool:new(
     {
-        clean = function(self, item)
+        clean = function(self, item) --luacheck: ignore 212
             item.duration = nil
             item.expirationTime = nil
         end
@@ -1549,7 +1518,7 @@ function PlexusStatusAuras:UnitGainedDurationStatus(status, guid, class, name, r
     end
 end
 
-function PlexusStatusAuras:UnitLostDurationStatus(status, guid, class, name)
+function PlexusStatusAuras:UnitLostDurationStatus(status, guid)
     local auras = self.durationAuras[status]
     if auras and auras[guid] then
         durationAuraPool:put(auras[guid])
@@ -1575,8 +1544,8 @@ function PlexusStatusAuras:ResetDurationStatuses()
 end
 
 function PlexusStatusAuras:HasActiveDurations()
-    for status, auras in pairs(self.durationAuras) do
-        for guid in pairs(auras) do
+    for _, auras in pairs(self.durationAuras) do
+        for i = 1 , #auras do -- luacheck: ignore
             return true
         end
     end
@@ -1605,7 +1574,7 @@ function PlexusStatusAuras:ResetDurationTimer(hasActiveDurations)
     end
 end
 
-function PlexusStatusAuras:StatusTextColor(settings, count, timeLeft)
+function PlexusStatusAuras:StatusTextColor(settings, count, timeLeft) --luacheck: ignore 212
     local text, color
 
     count = count or 0
@@ -1962,31 +1931,17 @@ local player_buff_names_seen = {}
 local debuff_names_seen = {}
 local debuff_types_seen = {}
 
-function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
+function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 212
     if not guid then guid = UnitGUID(unit) end
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
     end
 
-    local seenBossAura
-
-    local _, class
-    --[[ -- ##DELETE
-    if UnitIsPlayer(unit) then
-        _, class = UnitClass(unit)
-        if class then
-            class = class:lower()
-        end
-    else
-        class = "pet" -- should catch pets, vehicles, and anything else
-    end
-    ]]
-
     self:Debug("UNIT_AURA", unit, guid)
 
     now = GetTime()
 
-    for status, auras in pairs(self.durationAuras) do
+    for _, auras in pairs(self.durationAuras) do
         if auras[guid] then
             durationAuraPool:put(auras[guid])
             auras[guid] = nil
@@ -1995,7 +1950,8 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 
     if UnitIsVisible(unit) then
         for i = 1, 40 do
-            local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
+            --local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
+            local name, icon, count, debuffType, duration, expirationTime, caster, isStealable
             if not Plexus:IsClassicWow() then
                 name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
             else
@@ -2004,7 +1960,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
                     LibClassicDurations:Register("Plexus")
                     UnitAura = LibClassicDurations.UnitAuraWrapper
                 end
-                name, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spellId, _, _ = UnitAura(unit, i, "HELPFUL")
+                name, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spellID, _, _ = UnitAura(unit, i, "HELPFUL") --luacheck: ignore 111
             end
 
             if not name then
@@ -2026,11 +1982,12 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
 
         -- scan for debuffs
         for index = 1, 40 do
-            local name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer
+            --local name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer
+            local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer
             if not Plexus:IsClassicWow() then
                 name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
             else
-                name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellId, _, _  = UnitDebuff(unit, index, "HARMFUL")
+                name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellID, _, _  = UnitDebuff(unit, index, "HARMFUL")
             end
 
             if not name then
@@ -2040,11 +1997,6 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
             if debuff_names[name] then
                 debuff_names_seen[name] = true
                 self:UnitGainedDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-            --[[
-            elseif isBossAura then
-                seenBossAura = true
-                self:UnitGainedBossDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-            ]]
             elseif debuff_types[debuffType] then
                 -- elseif so that a named debuff doesn't trigger the type status
                 debuff_types_seen[debuffType] = true
@@ -2086,10 +2038,5 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid)
             debuff_types_seen[debuffType] = nil
         end
     end
---[[
-    if not seenBossAura then
-        self:UnitLostBossDebuff(guid, class)
-    end
-]]
     self:ResetDurationTimer(self:HasActiveDurations())
 end
