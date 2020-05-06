@@ -83,7 +83,7 @@ function PlexusStatusMana:Plexus_UnitJoined(event, guid, unit)
 end
 
 function PlexusStatusMana:UpdateAllUnits()
-	for guid, unit in PlexusRoster:IterateRoster() do
+	for _, unit in PlexusRoster:IterateRoster() do
 		self:UpdateUnit("UpdateAllUnits", unit)
 	end
 end
