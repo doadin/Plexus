@@ -50,12 +50,12 @@ function PlexusStatusName:PostInitialize()
     self:RegisterStatus("master_looter", L["Master Looter"])
 end
 
-function PlexusStatusName:OnStatusEnable(status)
+function PlexusStatusName:OnStatusEnable()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
     self:RegisterEvent("PARTY_LEADER_CHANGED", "UpdateAllUnits")
     self:RegisterEvent("PARTY_LOOT_METHOD_CHANGED", "UpdateAllUnits")
 
-    for status, settings in pairs(self.db.profile) do
+    for _, settings in pairs(self.db.profile) do
         if settings.hideInCombat then
             self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
             self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
@@ -69,8 +69,8 @@ end
 function PlexusStatusName:OnStatusDisable(status)
     if not self.db.profile[status] then return end
 
-    local enable, combat
-    for status, settings in pairs(self.db.profile) do
+    local enable
+    for _, settings in pairs(self.db.profile) do
         if settings.enable then
             enable = true
         end
