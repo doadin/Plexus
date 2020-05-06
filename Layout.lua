@@ -6,7 +6,7 @@
 	All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+local _, Plexus = ...
 local L = Plexus.L
 
 local PlexusFrame
@@ -16,7 +16,7 @@ local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local PlexusLayout = Plexus:NewModule("PlexusLayout", "AceBucket-3.0", "AceTimer-3.0")
 PlexusLayout.LayoutList = {}
 
-local floor, next, pairs, select, tinsert, tonumber, tostring = floor, next, pairs, select, tinsert, tonumber, tostring
+local floor, pairs, select, tinsert, tonumber, tostring = floor, pairs, select, tinsert, tonumber, tostring
 
 local partyHandle
 
@@ -67,7 +67,7 @@ function PlexusLayout.prototype:Reset()
 	self:SetAttributeByProxy("columnAnchorPoint", nil)
 	self:SetAttributeByProxy("point", nil)
 	self:SetAttributeByProxy("unitsPerColumn", nil)
-	
+
 	self:SetAttribute("plexusGroupSpacing", nil) -- custom
 
 	self:SetAttribute("initialConfigFunction", PlexusLayout:GetInitialConfigSnippet())
@@ -703,7 +703,7 @@ end
 
 function PlexusLayout:ShowWrongZone()
 	local showWrongZone = false
-	local name, instType, diffIndex = GetInstanceInfo()
+	local instType, diffIndex = GetInstanceInfo()
 
 	-- Show groups in wrong zone
 	if self.db.profile.showWrongZone == "ALL" then
@@ -923,7 +923,7 @@ end
 local previousGroup
 function PlexusLayout:PlaceGroup(layoutGroup, groupNumber)
 	--self:Debug("PlaceGroup", groupNumber)
-	local frame = layoutGroup.frame
+	--local frame = layoutGroup.frame
 
 	local settings = self.db.profile
 	local horizontal = settings.horizontal
@@ -1145,7 +1145,6 @@ end
 function PlexusLayout:UpdateSize()
 	self:Debug("UpdateSize")
 	local p = self.db.profile
-	local layoutGroup
 	local x, y
 
 	local groupCount, curWidth, curHeight, maxWidth, maxHeight = -1, 0, 0, 0, 0
