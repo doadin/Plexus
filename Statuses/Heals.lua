@@ -110,7 +110,7 @@ function PlexusStatusHeals:PostReset()
 end
 
 function PlexusStatusHeals:UpdateAllUnits()
-    for guid, unit in PlexusRoster:IterateRoster() do
+    for _, unit in PlexusRoster:IterateRoster() do
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
@@ -132,15 +132,14 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         if Plexus:IsClassicWow() then
             local myGUID = UnitGUID('player')
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
-            local otherIncomingHeal = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             incoming = myIncomingHeal or 0
         end
         if incoming > 0 then
-            --self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
+            self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
         end
         if settings.ignore_self then
             if Plexus:IsClassicWow() then
-                incoming = otherIncomingHeal or 0
+                incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
             if not Plexus:IsClassicWow() then
                 incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
