@@ -210,7 +210,7 @@ function PlexusStatusAggro:PostReset()
 end
 
 function PlexusStatusAggro:UpdateAllUnits()
-    for guid, unit in PlexusRoster:IterateRoster() do
+    for _, unit in PlexusRoster:IterateRoster() do
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
@@ -219,17 +219,6 @@ function PlexusStatusAggro:UNIT_COMBAT_A(event, unitTarget, flagText, amount, sc
 end
 
 ------------------------------------------------------------------------
-
-if not Plexus.IsClassicWow() then
-local UnitGUID, UnitIsVisible, UnitThreatSituation
-     = UnitGUID, UnitIsVisible, UnitThreatSituation
-end
-
-if Plexus.IsClassicWow() then
-local UnitGUID, UnitIsVisible, UnitExists, UnitIsEnemy, UnitIsUnit
-     = UnitGUID, UnitIsVisible, UnitExists, UnitIsEnemy, UnitIsUnit
-local a,b,c,d,e,y,eUnit=0,0,nil
-end
 
 function PlexusStatusAggro:UpdateUnit(event, unit, guid)
     local guid = guid or unit and UnitGUID(unit)
