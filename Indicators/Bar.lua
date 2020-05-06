@@ -64,9 +64,9 @@ PlexusFrame:RegisterIndicator("bar", L["Health Bar"],
 
     -- Reset
     function(self)
-        if self.__owner.unit then
-            --print("Reset", self.__id, self.__owner.unit)
-        end
+        --if self.__owner.unit then
+        --    --print("Reset", self.__id, self.__owner.unit)
+        --end
 
         local profile = PlexusFrame.db.profile
         local texture = Media:Fetch("statusbar", profile.texture) or "Interface\\Addons\\Plexus\\gradient32x32"
@@ -94,7 +94,7 @@ PlexusFrame:RegisterIndicator("bar", L["Health Bar"],
         if not value or not maxValue then return end
 
         local profile = PlexusFrame.db.profile
-        local frame = self.__owner
+        --local frame = self.__owner
 
         self:SetMinMaxValues(0, maxValue)
         self:SetValue(value)
@@ -116,7 +116,7 @@ PlexusFrame:RegisterIndicator("bar", L["Health Bar"],
     -- ClearStatus
     function(self)
         local profile = PlexusFrame.db.profile
-        local frame = self.__owner
+        --local frame = self.__owner
 
         self:SetMinMaxValues(0, 100)
         self:SetValue(100)
