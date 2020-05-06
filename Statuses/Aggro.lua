@@ -29,19 +29,31 @@ local function getthreatcolor(status)
         return { r = r, g = g, b = b, a = 1 }
     end
     if Plexus:IsClassicWow() then
-        function GetThreatStatusColor(status)
-            if status == 1 then
-                return 0, 0, 0, 0
-            end
-            if status == 2 then
-                return 255, 255, 0, 1
-            end
-            if status == 3 then
-                return 1, 0, 0, 1
-            end
+        --function GetThreatStatusColor(status)
+        --    if status == 1 then
+        --        return 0, 0, 0, 0
+        --    end
+        --    if status == 2 then
+        --        return 255, 255, 0, 1
+        --    end
+        --    if status == 3 then
+        --        return 1, 0, 0, 1
+        --    end
+        --end
+        if status == 1 then
+            --return 0, 0, 0, 0
+            return { r = 0, g = 0, b = 0, a = 0 }
         end
-        local r, g, b, a = GetThreatStatusColor(status)
-        return { r = r, g = g, b = b, a = a }
+        if status == 2 then
+            --return 255, 255, 0, 1
+            return { r = 255, g = 255, b = 0, a = 1 }
+        end
+        if status == 3 then
+            --return 1, 0, 0, 1
+            return { r = 1, g = 0, b = 0, a = 1 }
+        end
+        --local r, g, b, a = GetThreatStatusColor(status)
+        --return { r = r, g = g, b = b, a = a }
     end
 end
 
@@ -169,7 +181,7 @@ function PlexusStatusAggro:OnStatusEnable(status)
             self:RegisterEvent("UNIT_TARGET", "UpdateAllUnits")
             self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "UpdateAllUnits")
             libCTM = LibStub:GetLibrary("LibThreatClassic2")
-            local function ThreatUpdated(event, guid)
+            local function ThreatUpdated(guid)
                 if guid then
                     self:UpdateUnit("UpdateAllUnits", nil, guid)
                 end
@@ -205,72 +217,65 @@ function PlexusStatusAggro:OnStatusDisable(status)
     end
 end
 
-function PlexusStatusAggro:PostReset()
+function PlexusStatusAggro:PostReset() --luacheck: ignore 212
     setupmenu()
 end
 
 function PlexusStatusAggro:UpdateAllUnits()
-    for guid, unit in PlexusRoster:IterateRoster() do
+    for _, unit in PlexusRoster:IterateRoster() do
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
-function PlexusStatusAggro:UNIT_COMBAT_A(event, unitTarget, flagText, amount, schoolMask)
+function PlexusStatusAggro:UNIT_COMBAT_A(event, unitTarget)
     self:UpdateUnit(event, unitTarget)
 end
 
 ------------------------------------------------------------------------
 
-if not Plexus.IsClassicWow() then
-local UnitGUID, UnitIsVisible, UnitThreatSituation
-     = UnitGUID, UnitIsVisible, UnitThreatSituation
-end
-
-if Plexus.IsClassicWow() then
-local UnitGUID, UnitIsVisible, UnitExists, UnitIsEnemy, UnitIsUnit
-     = UnitGUID, UnitIsVisible, UnitExists, UnitIsEnemy, UnitIsUnit
-local a,b,c,d,e,y,eUnit=0,0,nil
-end
-
 function PlexusStatusAggro:UpdateUnit(event, unit, guid)
-    local guid = guid or unit and UnitGUID(unit)
+    self:Debug("UpdateUnit Event", event)
+    if not guid then
+        guid = UnitGUID(unit)
+    end
     if not guid or not PlexusRoster:IsGUIDInRaid(guid) then return end -- sometimes unit can be nil or invalid, wtf?
 
     local status = 0
     if not Plexus.IsClassicWow() then
         status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
     else
+        local b,c,y,eUnit
         if not unit then return end
         if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then
             if UnitIsUnit(unit, unit.."targettarget") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit=unit.."target"
             end
         elseif UnitExists("target") and UnitIsEnemy("player", "target") then
             if UnitIsUnit(unit, "playertargettarget") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit="target"
             end
         elseif UnitExists("boss1") and UnitIsEnemy("player", "boss1") then
             if UnitIsUnit(unit, "boss1target") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit="boss1"
             end
         elseif UnitExists("boss2") and UnitIsEnemy("player", "boss2") then
             if UnitIsUnit(unit, "boss2target") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit="boss2"
             end
         end
         if eUnit then
-            a, b, c, d, e = libCTM:UnitDetailedThreatSituation(unit, eUnit)
-            y = libCTM:UnitThreatSituation(unit, eUnit)
-            c=floor(c or 0)
-            d=floor(d or 0)
-            e=floor(e or 0)
+            _, b, _ = libCTM:UnitDetailedThreatSituation(unit, eUnit)
+            --y = libCTM:UnitThreatSituation(unit, eUnit)
+            --c=floor(c or 0)
+            --d=floor(d or 0)
+            --e=floor(e or 0)
             status = b
         elseif c == 0 then
             y = libCTM:UnitThreatSituation(unit, eUnit)
