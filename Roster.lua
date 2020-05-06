@@ -9,8 +9,7 @@
 	Keeps track of GUID <-> name <-> unitID mappings for party/raid members.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
-local L = Plexus.L
+local _, Plexus = ...
 
 local PlexusRoster = Plexus:NewModule("PlexusRoster")
 
@@ -69,7 +68,7 @@ end
 ------------------------------------------------------------------------
 
 function PlexusRoster:PostInitialize()
-	for attr, attr_tbl in pairs(roster) do
+	for _, attr_tbl in pairs(roster) do
 		for k in pairs(attr_tbl) do
 			attr_tbl[k] = nil
 		end
@@ -194,7 +193,7 @@ do
 	end
 
 	function PlexusRoster:UpdateRoster()
-		for guid, unit in pairs(roster.unitid) do
+		for guid in pairs(roster.unitid) do
 			units_to_remove[guid] = true
 		end
 
@@ -218,7 +217,7 @@ do
 			updated = true
 			self:SendMessage("Plexus_UnitLeft", guid)
 
-			for attr, attr_tbl in pairs(roster) do
+			for _, attr_tbl in pairs(roster) do
 				attr_tbl[guid] = nil
 			end
 
