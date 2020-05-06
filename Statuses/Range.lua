@@ -64,12 +64,12 @@ function PlexusStatusRange:PostInitialize()
     self:RegisterStatus("alert_range", L["Out of Range"], extraOptions, true)
 end
 
-function PlexusStatusRange:OnStatusEnable(status)
+function PlexusStatusRange:OnStatusEnable()
     self:RegisterMessage("Plexus_PartyTransition", "PartyTransition")
     self:PartyTransition("OnStatusEnable", PlexusRoster:GetPartyState())
 end
 
-function PlexusStatusRange:OnStatusDisable(status)
+function PlexusStatusRange:OnStatusDisable()
     self:StopTimer("CheckRange")
     self.core:SendStatusLostAllUnits("alert_range")
 end
@@ -94,10 +94,10 @@ do
     end
 end
 
-local IsSpellInRange, UnitInRange, UnitIsDead, UnitIsVisible, UnitIsUnit
-    = IsSpellInRange, UnitInRange, UnitIsDead, UnitIsVisible, UnitIsUnit
+local IsSpellInRange, UnitInRange, UnitIsDead, UnitIsUnit
+    = IsSpellInRange, UnitInRange, UnitIsDead, UnitIsUnit
 
-local function GroupRangeCheck(self, unit)
+local function GroupRangeCheck(_, unit)
     if UnitIsUnit(unit, "player") then
         return true
     elseif resSpell and UnitIsDead(unit) and not UnitIsDead("player") then
@@ -110,12 +110,6 @@ local function GroupRangeCheck(self, unit)
             return true
         end
     end
-end
-
-local function SoloRangeCheck(self, unit)
-    -- This is a workaround for the bug in WoW 5.0.4 in which UnitInRange
-    -- returns *false* for player/pet while solo.
-    return true
 end
 
 PlexusStatusRange.UnitInRange = GroupRangeCheck
@@ -139,7 +133,7 @@ function PlexusStatusRange:PartyTransition(message, state, oldstate)
     self:Debug("PartyTransition", message, state, oldstate)
     if state == "solo" then
         self:StopTimer("CheckRange")
-        self.UnitInRange = SoloRangeCheck
+        self.UnitInRange = "True"
         self.core:SendStatusLostAllUnits("alert_range")
     else
         self:StartTimer("CheckRange", self.db.profile.alert_range.frequency, true)
