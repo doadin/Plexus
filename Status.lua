@@ -6,7 +6,7 @@
 	All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+local _, Plexus = ...
 local L = Plexus.L
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
@@ -460,7 +460,6 @@ function PlexusStatus:RegisterStatus(status, description, moduleName)
 end
 
 function PlexusStatus:UnregisterStatus(status, moduleName)
-	local name
 
 	if self:IsStatusRegistered(status) then
 		self:Debug("Unregistered", status, "for", moduleName)
