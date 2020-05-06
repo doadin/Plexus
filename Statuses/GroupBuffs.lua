@@ -1,8 +1,7 @@
 local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
-local IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
-    = IsPlayerSpell, UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
-local settings
+local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
+    = UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 
@@ -249,7 +248,7 @@ function PlexusStatusGroupBuffs:Plexus_UnitJoined(guid, unit)
 end
 
 function PlexusStatusGroupBuffs:RegisterStatuses()
-    local status, settings, desc
+    local desc
 
     --self:RegisterStatus("alert_groupbuffs", "Settings", extraOptionsForStatus)
     for status, settings in self:ConfiguredStatusIterator() do
@@ -260,7 +259,6 @@ function PlexusStatusGroupBuffs:RegisterStatuses()
 end
 
 function PlexusStatusGroupBuffs:UnregisterStatuses()
-    local status, moduleName, desc
     for status, moduleName, desc in self.core:RegisteredStatusIterator() do
         if (moduleName == self.name) then
             self:Debug("unregistering", status, desc)
@@ -328,9 +326,8 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
 
     if UnitIsVisible(unit) then
         for i = 1, 40 do
-            local name, icon, count, debuffType, duration, expirationTime, caster, isStealable
-            name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
-            for buffId, buff in pairs(settings.buffs) do
+            local name = UnitAura(unit, i, "HELPFUL")
+            for _, buff in pairs(settings.buffs) do
                 if name == buff then
                     return self.core:SendStatusLost(guid, status)
                 end
@@ -355,7 +352,7 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     end
 
     --self:Debug("UnitClass", UnitClass)
-    local localizedClass, englishClass, classIndex = UnitClass("player")
+    local _, englishClass= UnitClass("player")
     if Plexus:IsClassicWow() and UnitIsPlayer(unit) and BuffClass == englishClass then
     self:Debug("status", icon)
         self.core:SendStatusGained(
