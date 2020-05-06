@@ -8,7 +8,6 @@
 
 local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 local BACKDROP = {
