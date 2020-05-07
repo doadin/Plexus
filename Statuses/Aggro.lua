@@ -29,19 +29,31 @@ local function getthreatcolor(status)
         return { r = r, g = g, b = b, a = 1 }
     end
     if Plexus:IsClassicWow() then
-        function GetThreatStatusColor(status)
-            if status == 1 then
-                return 0, 0, 0, 0
-            end
-            if status == 2 then
-                return 255, 255, 0, 1
-            end
-            if status == 3 then
-                return 1, 0, 0, 1
-            end
+        --function GetThreatStatusColor(status)
+        --    if status == 1 then
+        --        return 0, 0, 0, 0
+        --    end
+        --    if status == 2 then
+        --        return 255, 255, 0, 1
+        --    end
+        --    if status == 3 then
+        --        return 1, 0, 0, 1
+        --    end
+        --end
+        if status == 1 then
+            --return 0, 0, 0, 0
+            return { r = 0, g = 0, b = 0, a = 0 }
         end
-        local r, g, b, a = GetThreatStatusColor(status)
-        return { r = r, g = g, b = b, a = a }
+        if status == 2 then
+            --return 255, 255, 0, 1
+            return { r = 255, g = 255, b = 0, a = 1 }
+        end
+        if status == 3 then
+            --return 1, 0, 0, 1
+            return { r = 1, g = 0, b = 0, a = 1 }
+        end
+        --local r, g, b, a = GetThreatStatusColor(status)
+        --return { r = r, g = g, b = b, a = a }
     end
 end
 
@@ -221,7 +233,9 @@ end
 ------------------------------------------------------------------------
 
 function PlexusStatusAggro:UpdateUnit(event, unit, guid)
-    local guid = guid or unit and UnitGUID(unit)
+    if not guid then
+        guid = UnitGUID(unit)
+    end
     if not guid or not PlexusRoster:IsGUIDInRaid(guid) then return end -- sometimes unit can be nil or invalid, wtf?
 
     local status = 0
@@ -231,25 +245,25 @@ function PlexusStatusAggro:UpdateUnit(event, unit, guid)
         if not unit then return end
         if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then
             if UnitIsUnit(unit, unit.."targettarget") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit=unit.."target"
             end
         elseif UnitExists("target") and UnitIsEnemy("player", "target") then
             if UnitIsUnit(unit, "playertargettarget") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit="target"
             end
         elseif UnitExists("boss1") and UnitIsEnemy("player", "boss1") then
             if UnitIsUnit(unit, "boss1target") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit="boss1"
             end
         elseif UnitExists("boss2") and UnitIsEnemy("player", "boss2") then
             if UnitIsUnit(unit, "boss2target") then
-                a,b,c,d,e=100
+                c=100
             else
                 eUnit="boss2"
             end
