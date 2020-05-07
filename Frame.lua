@@ -702,8 +702,8 @@ function PlexusFrame:SendMessage_UpdateFrameUnits()
     self:SendMessage("UpdateFrameUnits")
 end
 
-function PlexusFrame:LibSharedMedia_Update(callback, type, handle)
-     if type == "font" or type == "statusbar" then
+function PlexusFrame:LibSharedMedia_Update(callback, mediatype, handle)
+     if mediatype == "font" or mediatype == "statusbar" then
         self:UpdateAllFrames()
     end
 end
@@ -936,7 +936,7 @@ end
 
 function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
     local menu = Plexus.options.args.PlexusIndicator.args
-    local PlexusStatus = Plexus:GetModule("PlexusStatus")
+    PlexusStatus = Plexus:GetModule("PlexusStatus")
 
     if indicator == "bar" then
         menu[indicator] = nil
