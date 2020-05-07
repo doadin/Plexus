@@ -5,8 +5,8 @@ local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, Un
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 
-local spellNameList = {}
-local spellIconList = {}
+local spellNameList
+local spellIconList
 if not Plexus:IsClassicWow() then
 spellNameList = {
     ["Power Word: Fortitude"] = GetSpellInfo(21562),
@@ -207,19 +207,19 @@ PlexusStatusGroupBuffs.defaultDB = {
 }
 end
 
-local extraOptionsForStatus = {
-    class = {
-        type = "toggle",
-        name = "Class",
-        desc = "Only show buffs your class can cast.",
-        get = function()
-            return PlexusStatusGroupBuffs.db.profile.class
-        end,
-        set = function(_, v)
-            PlexusStatusGroupBuffs.db.profile.class = v
-        end,
-    },
-}
+--local extraOptionsForStatus = {
+--    class = {
+--        type = "toggle",
+--        name = "Class",
+--        desc = "Only show buffs your class can cast.",
+--        get = function()
+--            return PlexusStatusGroupBuffs.db.profile.class
+--        end,
+--        set = function(_, v)
+--            PlexusStatusGroupBuffs.db.profile.class = v
+--        end,
+--    },
+--}
 
 function PlexusStatusGroupBuffs:OnInitialize()
     self.super.OnInitialize(self)
@@ -295,7 +295,7 @@ function PlexusStatusGroupBuffs:Reset()
     self:UpdateAllUnits()
 end
 
-function PlexusStatusGroupBuffs:UpdateAllUnits(guid)
+function PlexusStatusGroupBuffs:UpdateAllUnits()
     for guid, unit in PlexusRoster:IterateRoster() do
         self:UpdateUnit(unit, guid)
     end
