@@ -166,7 +166,7 @@ function PlexusResourceBar:OnInitialize()
             bar:Hide()
             return bar
         end,
-        function(self)
+        function(self) -- luacheck: ignore 432
             local texture = LibSharedMedia:Fetch("statusbar", PlexusFrame.db.profile.texture) or "Interface\\Addons\\Plexus\\gradient32x32"
             local frame = self.__owner
             local side = PlexusResourceBar.db.profile.side
@@ -214,7 +214,7 @@ function PlexusResourceBar:OnInitialize()
             self:SetStatusBarTexture(texture)
             self.bg:SetTexture(texture)
         end,
-        function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+        function(self, color, text, value, maxValue, texture, texCoords, count, start, duration) -- luacheck: ignore 432
             if not value or not maxValue then return end
             self:SetMinMaxValues(0, maxValue)
             self:SetValue(value)
@@ -241,7 +241,7 @@ function PlexusResourceBar:OnInitialize()
             end
             self:Show()
         end,
-        function(self)
+        function(self) -- luacheck: ignore 432
             if self:IsShown() then
                 local frame = self.__owner
                 local healthBar = frame.indicators.bar
