@@ -4,13 +4,8 @@ exclude_files = {
 	"**/Libs",
 }
 ignore = {
-        "11/SLASH_.*", -- slash handlers
-        "1/[A-Z][A-Z][A-Z0-9_]+", -- three letter+ constants
         "113", -- Accessing an undefined global variable
-        "111", -- Setting an undefined global variable.
-        "112", -- Mutating an undefined global variable.
 		"143", -- Accessing an undefined field of a global variable.
-		"212", -- Unused argument.
 }
 globals = {
 	-- wow std api
@@ -235,4 +230,5 @@ globals = {
 	"UnitPowerMax",
 	"UnitRace",
 	"UnitSetRole",
+	"CONFIGMODE_CALLBACKS",
 }
