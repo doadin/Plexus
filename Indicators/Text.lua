@@ -84,7 +84,7 @@ local function Reset(self)
     end
 end
 
-local function SetStatus(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+local function SetStatus(self, color, text)
     local profile = PlexusFrame.db.profile
     if self.__id == "text2" and not profile.enableText2 then
         return
