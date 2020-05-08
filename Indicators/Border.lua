@@ -43,7 +43,7 @@ PlexusFrame:RegisterIndicator("border", L["Border"],
     end,
 
     -- SetStatus
-    function(self, color, text, value, maxValue, texture, texCoords, count, start, duration)
+    function(self, color)
         if not color then return end
 
         local frame = self.__owner
