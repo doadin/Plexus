@@ -167,7 +167,7 @@ function PlexusStatusHealth:PostEnable()
     self:RegisterMessage("Plexus_ColorsChanged", "UpdateAllUnits")
 end
 
-function PlexusStatusHealth:OnStatusEnable(status)
+function PlexusStatusHealth:OnStatusEnable()
     self:UpdateAllUnits()
 end
 
@@ -182,6 +182,7 @@ function PlexusStatusHealth:UpdateAllUnits()
 end
 
 function PlexusStatusHealth:Plexus_UnitJoined(event, guid, unitid)
+    self:Debug("Plexus_UnitJoined guid: ", guid)
     if unitid then
         self:UpdateUnit(event, unitid, true)
         self:UpdateUnit(event, unitid)
@@ -191,6 +192,7 @@ end
 local UnitGUID, UnitHealth, UnitHealthMax, UnitIsConnected, UnitIsDeadOrGhost, UnitIsFeignDeath = UnitGUID, UnitHealth, UnitHealthMax, UnitIsConnected, UnitIsDeadOrGhost, UnitIsFeignDeath
 
 function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
+    self:Debug("UpdateUnit Event: ", event)
     if not unitid then
         -- 7.1: UNIT_HEALTH and UNIT_MAXHEALTH sometimes fire with no unit token
         -- https://wow.curseforge.com/addons/plexus/tickets/859
