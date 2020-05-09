@@ -14,11 +14,11 @@ jobs:
     - stage: Create Retail package
       if: tag IS present
       install: skip
-      script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -m .pkgmeta
+      script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmeta
     - stage: Create Classic package
       if: tag IS present
       install: skip
-      script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g 1.13.4
+      script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g 1.13.4
  
 notifications:
  email:
