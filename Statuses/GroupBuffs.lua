@@ -88,6 +88,8 @@ if Plexus:IsClassicWow() then
 spellNameList = {
     ["Power Word: Fortitude"] = GetSpellInfo(1243),
     ["Prayer of Fortitude"] = GetSpellInfo(21562),
+    ["Divine Spirit"] = GetSpellInfo(27841),
+    ["Prayer of Spirit"] = GetSpellInfo(27681),
 
     ["Arcane Intellect"] = GetSpellInfo(1472),
 
@@ -109,6 +111,8 @@ spellNameList = {
 spellIconList = {
     ["Power Word: Fortitude"] = GetSpellTexture(1243),
     ["Prayer of Fortitude"] = GetSpellTexture(21562),
+    ["Divine Spirit"] = GetSpellTexture(27841),
+    ["Prayer of Spirit"] = GetSpellInfo(27681),
 
     ["Arcane Intellect"] = GetSpellTexture(1472),
 
@@ -142,6 +146,19 @@ PlexusStatusGroupBuffs.defaultDB = {
         buffs = {
             spellNameList["Power Word: Fortitude"],
             spellNameList["Prayer of Fortitude"]
+        },
+        enable = true,
+        color = { r = 0, g = 0, b = 1, a = 1 },
+        priority = 99,
+        class = "PRIEST",
+    },
+    buffGroup_Spirit = {
+        text = spellNameList["Divine Spirit"],
+        desc = "Buff Group: "..spellNameList["Divine Spirit"],
+        icon = spellIconList["Divine Spirit"],
+        buffs = {
+            spellNameList["Divine Spirit"],
+            spellNameList["Prayer of Spirit"]
         },
         enable = true,
         color = { r = 0, g = 0, b = 1, a = 1 },
