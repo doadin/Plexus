@@ -1,5 +1,6 @@
 language: shell
 os: linux
+dist: focal
 
 jobs:
   include:
@@ -9,15 +10,22 @@ jobs:
         apt:
          packages:
            - luarocks
-      install: luarocks install --local luacheck
+      before_install: sudo apt-get update
+      install:
+      - sudo apt-get install curl -y
+      - luarocks install --local luacheck
       script: /home/travis/.luarocks/bin/luacheck . --no-color -q
     - stage: Create Retail package
       if: tag IS present
-      install: skip
-      script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmeta
+      before_install: sudo apt-get update
+      install:
+      - sudo apt-get install curl -y
+      script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash
     - stage: Create Classic package
       if: tag IS present
-      install: skip
+      before_install: sudo apt-get update
+      install:
+      - sudo apt-get install curl -y
       script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g 1.13.4
  
 notifications:

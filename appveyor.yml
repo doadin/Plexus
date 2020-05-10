@@ -1,0 +1,19 @@
+#branches:
+#  only:
+#    - master
+#    - RC_1_2
+#    - RC_1_1
+image: Ubuntu
+#clone_depth: 1
+#environment:
+#    matrix:
+#        - variant: Create Retail
+#          retail: 1
+#        - variant: Create Classic
+#          classic: 1
+artifacts:
+  - path: '**\*.zip'
+
+build_script:
+  - curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmeta
+  - curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g 1.13.4
