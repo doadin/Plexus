@@ -10,8 +10,15 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
+    - name: Set up source download tools
+      run: |
+        echo "Update package lists."
+        sudo apt-get update
+        echo "Install base packages."
+        sudo apt-get install -y subversion
     - name: Create Retail Package
-      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d
+      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash  -s -- -d
       env:
         CF_API_KEY: ${{ secrets.CF_API_KEY }}
         GITHUB_OAUTH: ${{ secrets.OAUTH }}
