@@ -83,6 +83,7 @@ function PlexusStatusPhase:OnStatusEnable(status)
 
     self:RegisterEvent("UNIT_PHASE")
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "GroupChanged")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "GroupChanged")
     self:RegisterMessage("Plexus_PartyTransition", "GroupChanged")
     self:RegisterMessage("Plexus_UnitJoined")
 end
@@ -92,6 +93,7 @@ function PlexusStatusPhase:OnStatusDisable(status)
 
     self:UnregisterEvent("UNIT_PHASE")
     self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
     self:UnregisterMessage("Plexus_PartyTransition")
     self:UnregisterMessage("Plexus_UnitJoined")
 
