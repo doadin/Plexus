@@ -26,7 +26,7 @@ jobs:
       before_install: sudo apt-get update
       install:
       - sudo apt-get install curl -y
-      script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g 1.13.4
+      script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmeta-classic -g 1.13.4
  
 notifications:
  email:
