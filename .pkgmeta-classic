@@ -31,9 +31,6 @@ externals:
    Libs/LibHealComm-4.0:
      url: https://github.com/doadin/LibHealComm-4.0.git
      tag: master
-   Libs/LibThreatClassic2:
-     url: git://github.com/dfherr/LibThreatClassic2.git
-     tag: latest
    Libs/LibDeflate:
      url: https://github.com/doadin/LibDeflate.git
      tag: master
