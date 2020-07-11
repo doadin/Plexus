@@ -92,6 +92,7 @@ spellNameList = {
     ["Prayer of Spirit"] = GetSpellInfo(27681),
 
     ["Arcane Intellect"] = GetSpellInfo(1472),
+    ["Arcane Brilliance"] = GetSpellInfo(23028),
 
     ["Battle Shout"] = GetSpellInfo(6673),
 
@@ -115,6 +116,7 @@ spellIconList = {
     ["Prayer of Spirit"] = GetSpellInfo(27681),
 
     ["Arcane Intellect"] = GetSpellTexture(1472),
+    ["Arcane Brilliance"] = GetSpellInfo(23028),
 
     ["Battle Shout"] = GetSpellTexture(6673),
 
@@ -170,7 +172,8 @@ PlexusStatusGroupBuffs.defaultDB = {
         desc = "Buff Group: "..spellNameList["Arcane Intellect"],
         icon = spellIconList["Arcane Intellect"],
         buffs = {
-            spellNameList["Arcane Intellect"]
+            spellNameList["Arcane Intellect"],
+            spellNameList["Arcane Brilliance"]
         },
         enable = true,
         color = { r = 0, g = 0, b = 1, a = 1 },
