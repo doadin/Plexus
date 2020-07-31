@@ -59,7 +59,6 @@ Libs\LibHealComm-4.0\LibHealComm-4.0.lua
 #@non-retail@
 Libs\LibClassicDurations\LibClassicDurations.xml
 #@end-non-retail@
-Libs\LibResInfo-1.0\LibResInfo-1.0.lua
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua
