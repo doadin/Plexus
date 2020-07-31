@@ -44,7 +44,7 @@ local extraOptionsForStatus = {
         end,
         set = function(t, v) --luacheck: ignore 212
             PlexusStatusResurrect.db.profile.alert_resurrect.showUntilUsed = v
-            PlexusStatusResurrect:UpdateAllUnits()
+            --PlexusStatusResurrect:UpdateAllUnits()
         end,
     },
     colors = {
@@ -102,6 +102,45 @@ local extraOptionsForStatus = {
     },
 }
 
+local ResSpells = {
+    -- Class Abilities
+    [2008]   = GetSpellInfo(2008),   -- Ancestral Spirit (Shaman)
+    [7328]   = GetSpellInfo(7328),   -- Redemption (Paladin)
+    [2006]   = GetSpellInfo(2006),   -- Resurrection (Priest)
+    [115178] = GetSpellInfo(115178), -- Resuscitate (Monk)
+    [50769]  = GetSpellInfo(50769),  -- Revive (Druid)
+    [20484]  = GetSpellInfo(20484),  -- Rebirth (Druid)
+    --[982]    = GetSpellInfo(982),    -- Revive Pet (Hunter)
+    -- Items
+    [8342]   = GetSpellInfo(8342),   -- Defibrillate (Goblin Jumper Cables)
+    [22999]  = GetSpellInfo(22999),  -- Defibrillate (Goblin Jumper Cables XL)
+    [54732]  = GetSpellInfo(54732),  -- Defibrillate (Gnomish Army Knife)
+    [164729] = GetSpellInfo(164729), -- Defibrillate (Ultimate Gnomish Army Knife)
+    [265116] = GetSpellInfo(265116), -- Defibrillate (Unstable Temporal Time Shifter)
+    [199119] = GetSpellInfo(199119), -- Failure Detection Aura (Failure Detection Pylon) -- NEEDS CHECK
+    [187777] = GetSpellInfo(187777), -- Reawaken (Brazier of Awakening)
+    -- massSpells
+    --[212056] = GetSpellInfo(212056), -- Absolution (Holy Paladin)
+    --[212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
+    --[212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
+    --[212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
+    --[212040] = GetSpellInfo(212040), -- Revitalize (Restoration Druid)
+    -- pening souslstone ank etc
+    [160029] = GetSpellInfo(160029), -- Resurrecting aka pending
+    --[27740] = GetSpellInfo(27740), -- Reincarnation
+    --[20608] = GetSpellInfo(20608), -- Reincarnation
+    --[225080] = GetSpellInfo(225080), -- Reincarnation
+    --[21169] = GetSpellInfo(21169), -- Reincarnation
+}
+local MassResSpells = {
+    -- massSpells
+    [212056] = GetSpellInfo(212056), -- Absolution (Holy Paladin)
+    [212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
+    [212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
+    [212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
+    [212040] = GetSpellInfo(212040) -- Revitalize (Restoration Druid)
+}
+
 ------------------------------------------------------------------------
 
 function PlexusStatusResurrect:PostInitialize()
@@ -115,82 +154,338 @@ end
 function PlexusStatusResurrect:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
 
-    LibResInfo = LibStub:GetLibrary("LibResInfo-1.0")
-    LibResInfo.RegisterAllCallbacks(self, "HandleCallback", true)
+    if not Plexus:IsClassicWow() then
+      self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+      self:RegisterEvent("UNIT_SPELLCAST_STOP")
+      self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+      --self:RegisterEvent("UNIT_AURA", "HasRessPending")
+    end
+    if Plexus:IsClassicWow() then
+        self:RegisterEvent("INCOMING_RESURRECT_CHANGED")
+    end
 
-    self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")
+    --self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")
 end
 
 function PlexusStatusResurrect:OnStatusDisable(status)
     self:Debug("OnStatusDisable", status)
 
-    LibResInfo.UnregisterAllCallbacks(self)
+    if not Plexus:IsClassicWow() then
+        self:UnRegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        self:UnRegisterEvent("UNIT_SPELLCAST_STOP")
+        self:UnRegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+        --self:UnRegisterEvent("UNIT_AURA", "HasRessPending")
+    end
+    if Plexus:IsClassicWow() then
+        self:UnRegisterEvent("INCOMING_RESURRECT_CHANGED")
+    end
 
+    --self:UnRegisterMessage("Plexus_RosterUpdated")
     self.core:SendStatusLostAllUnits("alert_resurrect")
 end
 
 ------------------------------------------------------------------------
+function PlexusStatusResurrect:UNIT_SPELLCAST_STOP(event, unit, castguid, spellid)
+    --print(event)
+    for spelllistid, spelllistname in pairs(MassResSpells) do
+        if spellid == spelllistid then
+            self.core:SendStatusLostAllUnits("alert_resurrect")
+        end
+    end
 
-function PlexusStatusResurrect:UpdateAllUnits(event)
-    self:Debug("UpdateAllUnits", event)
-    for guid, unit in PlexusRoster:IterateRoster() do
-        self:UpdateUnit(unit, guid)
+    for spelllistid, spelllistname in pairs(ResSpells) do
+        if spellid == spelllistid then
+            for guid, unit in PlexusRoster:IterateRoster() do
+                self.core:SendStatusLost(guid, "alert_resurrect")
+            end
+        end
+    end
+end
+function PlexusStatusResurrect:UNIT_SPELLCAST_INTERRUPTED(event, unit, castguid, spellid)
+    for spelllistid, spelllistname in pairs(MassResSpells) do
+        if spellid == spelllistid then
+            self.core:SendStatusLostAllUnits("alert_resurrect")
+        end
+    end
+
+    for spelllistid, spelllistname in pairs(ResSpells) do
+        if spellid == spelllistid then
+            for guid, unit in PlexusRoster:IterateRoster() do
+                self.core:SendStatusLost(guid, "alert_resurrect")
+            end
+        end
+    end
+end
+-- Guess mass ress from combat log since INCOMING_RESURRECT_CHANGED event doesnt fire
+function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, unit, castguid, spellid)
+    --print(CombatLogGetCurrentEventInfo())
+    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool = CombatLogGetCurrentEventInfo()
+    local db = self.db.profile.alert_resurrect
+    for spelllistid, spelllistname in pairs(MassResSpells) do --check that the spell casted is a mass res
+        if spellName == spelllistname then
+            if eventType == "SPELL_CAST_START" then
+                --print("Mass Ress Casting")
+                for guid, unit in PlexusRoster:IterateRoster() do
+                    if UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit) then
+                        local startTime = GetTime()
+                        local name, text, texture, startTimeMS, endTimeMS, isTradeSkill, castID, notInterruptible, spellId = UnitCastingInfo(sourceName)
+                        local duration = ((endTimeMS - startTimeMS) / 1000)
+                        --print("duration: ", duration)
+                        --print(spellId)
+                        local n, _, icon = GetSpellInfo(spellId)
+                        if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+                        --print(icon)
+                        self.core:SendStatusGained(guid, "alert_resurrect",
+                        db.priority,
+                        nil,
+                        nil,
+                        db.text,
+                        nil,
+                        nil,
+                        icon,
+                        startTime,
+                        duration)
+                    end
+                end
+            end
+            if eventType == "SPELL_CAST_SUCCESS" then
+                --print("Mass Ress Finished")
+                --print("COMBAT_LOG_EVENT_UNFILTERED MassResSpells SPELL_CAST_SUCCESS")
+                self.core:SendStatusLostAllUnits("alert_resurrect")
+            end
+            --print(stopevent)
+            --if stopevent ~= "COMBAT_LOG_EVENT_UNFILTERED" then print(stopevent) end
+            if eventType == "SPELL_CAST_FAILED" or event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_INTERRUPTED" then --luacheck: ignore 631
+                --print("Mass Ress Interupted")
+                for guid, unit in PlexusRoster:IterateRoster() do
+                    local name, text, texture, startTimeMS, endTimeMS, isTradeSkill, castID, notInterruptible, spellId = UnitCastingInfo(sourceName)
+                    local n, _, icon = GetSpellInfo(spellId)
+                    if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+                    --print(icon)
+                    if spellId == spelllistid then
+                        for guid, unit in PlexusRoster:IterateRoster() do
+                            self.core:SendStatusLost(guid, "alert_resurrect")
+                        end
+                        local duration = ((endTimeMS - startTimeMS) / 1000)
+                        self.core:SendStatusGained(guid, "alert_resurrect",
+                        db.priority,
+                        nil,
+                        nil,
+                        db.text,
+                        nil,
+                        nil,
+                        icon,
+                        startTimeMS,
+                        duration)
+                    else
+                        self.core:SendStatusLost(guid, "alert_resurrect")
+                    end
+                end
+            end
+            --if eventType == "SPELL_RESURRECT" then
+            --    print(timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool)
+            --end
+        end
+    end
+    for spelllistid, spelllistname in pairs(ResSpells) do --check that the spell casted is a mass res
+        if spellName == spelllistname then
+            if eventType == "SPELL_CAST_START" then
+                --print("Ress Casting")
+                for guid, unit in PlexusRoster:IterateRoster() do
+                    if UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit) then
+                        local startTime = GetTime()
+                        local name, text, texture, startTimeMS, endTimeMS, isTradeSkill, castID, notInterruptible, spellId = UnitCastingInfo(sourceName)
+                        local n, _, icon = GetSpellInfo(spellId)
+                        if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+                        --print(icon)
+                        if not startTimeMS then startTimeMS = GetTime() end
+                        if not endTimeMS then endTimeMS = startTimeMS + 3 end
+                        local duration = ((endTimeMS - startTimeMS) / 1000)
+                        --combat res does not work with above math.
+                        if duration <= 0 then
+                            duration = ((endTimeMS - startTimeMS))
+                        end
+                        self.core:SendStatusGained(guid, "alert_resurrect",
+                        db.priority,
+                        nil,
+                        nil,
+                        db.text,
+                        nil,
+                        nil,
+                        icon,
+                        startTime,
+                        duration)
+                    end
+                end
+            end
+            if eventType == "SPELL_CAST_SUCCESS" then
+                --print("Ress Finished")
+                for guid, unit in PlexusRoster:IterateRoster() do
+                    --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_CAST_SUCCESS")
+                    self.core:SendStatusLost(guid, "alert_resurrect")
+                end
+            end
+            --if stopevent ~= "COMBAT_LOG_EVENT_UNFILTERED" then print(stopevent) end
+            if eventType == "SPELL_CAST_FAILED" or event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_INTERRUPTED" then
+                --print("Ress Interupted")
+                for guid, unit in PlexusRoster:IterateRoster() do
+                    local name, text, texture, startTimeMS, endTimeMS, isTradeSkill, castID, notInterruptible, spellId = UnitCastingInfo(sourceName)
+                    local n, _, icon = GetSpellInfo(spellId)
+                    if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+                    --print(icon)
+                    if name == spelllistname then
+                        for guid, unit in PlexusRoster:IterateRoster() do
+                            --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_CAST_FAILED")
+                            self.core:SendStatusLost(guid, "alert_resurrect")
+                        end
+                        local duration
+                        if startTimeMS and endTimeMS then
+                            duration = ((endTimeMS - startTimeMS) / 1000)
+                            --print("duration: ", duration)
+                        end
+                        self.core:SendStatusGained(guid, "alert_resurrect",
+                        db.priority,
+                        nil,
+                        nil,
+                        db.text,
+                        nil,
+                        nil,
+                        icon,
+                        startTimeMS,
+                        duration)
+                    else
+                        --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_CAST_FAILED")
+                        self.core:SendStatusLost(guid, "alert_resurrect")
+                    end
+                end
+            end
+            if eventType == "SPELL_AURA_APPLIED" then
+                --print("SPELL_AURA_APPLIED")
+                --print(spellId, " ", spellName)
+                --print(timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool)
+                local _, _, icon = GetSpellInfo(spelllistid)
+                if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+                --icon = "Interface\\ICONS\\Spell_Shadow_Soulgem"
+                --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_AURA_APPLIED")
+                if not timestamp then timestamp = GetTime() end
+                local startTime = GetTime()
+                self.core:SendStatusGained(destGUID, "alert_resurrect",
+                db.priority,
+                nil,
+                nil,
+                db.text,
+                nil,
+                nil,
+                icon,
+                startTime,
+                60)
+            end
+            if eventType == "SPELL_AURA_REMOVED" then
+                --print("SPELL_AURA_REMOVED")
+                --print(spellId, " ", spellName)
+                --print(timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool)
+                --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_AURA_REMOVED")
+                self.core:SendStatusLost(destGUID, "alert_resurrect")
+            end
+        end
     end
 end
 
-function PlexusStatusResurrect:HandleCallback(callback, targetUnit, targetGUID, casterUnit)
-    if strsub(callback, 1, 18) == "LibResInfo_MassRes" then
-        self:Debug(callback, casterUnit)
-        self:UpdateAllUnits()
-    else
-        self:Debug(callback, targetUnit, casterUnit)
-        self:UpdateUnit(targetUnit, targetGUID)
-    end
-end
-
-function PlexusStatusResurrect:UpdateUnit(unit, guid)
+function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit)
+    --print("INCOMING RESURRECT CHANGED")
     if not unit then return end
     if not guid then guid = UnitGUID(unit) end
-    if not PlexusRoster:IsGUIDInRaid(guid) then return end
-
     local db = self.db.profile.alert_resurrect
-    local hasRes, endTime, casterUnit = LibResInfo:UnitHasIncomingRes(guid)
-
-    if not hasRes or (hasRes == "PENDING" and not db.showUntilUsed) then
-        return self.core:SendStatusLost(guid, "alert_resurrect")
+    if not PlexusRoster:IsGUIDInRaid(guid) then return end
+    local startTime = GetTime()
+    local duration = 10
+    local hasIncomingRes = UnitHasIncomingResurrection(unit)
+    if hasIncomingRes then
+           --for guid, unit in PlexusRoster:IterateRoster() do
+              --local name, text, texture, startTimeMS, endTimeMS, isTradeSkill, castID, notInterruptible, spellId = UnitCastingInfo(sourceName)
+           --end
+        self.core:SendStatusGained(guid, "alert_resurrect",
+            db.priority,
+            nil,
+            nil,
+            nil,
+            nil,
+            nil,
+            "Interface\\ICONS\\Spell_Shadow_Soulgem",
+            startTime,
+            duration)
+    else
+        self.core:SendStatusLost(guid, "alert_resurrect")
     end
+end
 
-    local icon, startTime, duration, _
-    if hasRes == "PENDING" then
-        icon = "Interface\\Icons\\Spell_Nature_Reincarnation"
-        startTime = endTime - 60
-        duration = 60
-    elseif hasRes == "SELFRES" then
-        icon = "Interface\\ICONS\\Spell_Shadow_Soulgem"
-        startTime = endTime - 360
-        duration = 360
-    else -- CASTING or PENDING
-        if not Plexus:IsClassicWow() then
-            _, _, icon, startTime = UnitCastingInfo(casterUnit)
-        else
-            _, _, _, icon, startTime = UnitCastingInfo(casterUnit)
-        end
-        if not startTime then
-            -- ignore instant casts
-            return
-        end
-        startTime = startTime / 1000
-        duration = endTime - startTime
-    end
-
-    self.core:SendStatusGained(guid, "alert_resurrect",
-        db.priority,
-        nil,
-        hasRes == "SELFRES" and db.color3 or hasRes == "PENDING" and db.color2 or db.color,
-        db.text,
-        nil,
-        nil,
-        icon,
-        startTime,
-        duration)
+function PlexusStatusResurrect:HasRessPending(event, unit)
+    --if UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit) then
+    --    for guid, unit in PlexusRoster:IterateRoster() do
+    --        for i = 1, 40 do
+    --            local startTime = GetTime()
+    --            local db = self.db.profile.alert_resurrect
+    --            local name, texture, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll, timeMod = UnitAura(unit, i, "HELPFUL")
+    --            local _, _, icon = GetSpellInfo(spellId)
+    --            if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+    --            if startTime and expirationTime then
+    --                endTime = ((expirationTime - startTime))
+    --            end
+    --            if name == "Soulstone" then
+    --                local endTime = ((expirationTime - startTime))
+    --                self.core:SendStatusGained(guid, "alert_resurrect",
+    --                db.priority,
+    --                nil,
+    --                nil,
+    --                db.text,
+    --                nil,
+    --                nil,
+    --                icon,
+    --                startTime,
+    --                endTime)
+    --            end
+    --        end
+    --        for i = 1, 40 do
+    --            local db = self.db.profile.alert_resurrect
+    --            local startTime = GetTime()
+    --            local name, texture, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll, timeMod = UnitAura(unit, i, "HARMFUL")
+    --            local _, _, icon = GetSpellInfo(spellId)
+    --            if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+    --            --Interface\\ICONS\\Spell_holy_guardianspirit
+    --            local endTime
+    --            if startTime and expirationTime then
+    --                endTime = ((expirationTime - startTime))
+    --            end
+    --            if name == "Resurrecting" then
+    --                self.core:SendStatusGained(guid, "alert_resurrect",
+    --                db.priority,
+    --                nil,
+    --                nil,
+    --                db.text,
+    --                nil,
+    --                nil,
+    --                icon,
+    --                startTime,
+    --                endTime)
+    --            end
+    --            if name == "Reincarnation" then
+    --                self.core:SendStatusGained(guid, "alert_resurrect",
+    --                db.priority,
+    --                nil,
+    --                nil,
+    --                db.text,
+    --                nil,
+    --                nil,
+    --                icon,
+    --                startTime,
+    --                endTime)
+    --            end
+    --        end
+    --    end
+    --end
+    --if not UnitIsDead(unit) or not UnitIsGhost(unit) or not UnitIsDeadOrGhost(unit) then
+    --    local guid
+    --    if not guid then guid = UnitGUID(unit) end
+    --    self.core:SendStatusLost(guid, "alert_resurrect")
+    --end
 end
