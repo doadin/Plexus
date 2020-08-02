@@ -703,7 +703,7 @@ end
 
 function PlexusLayout:ShowWrongZone()
 	local showWrongZone = false
-	local instType, diffIndex = GetInstanceInfo()
+	local _, instType, diffIndex = GetInstanceInfo()
 
 	-- Show groups in wrong zone
 	if self.db.profile.showWrongZone == "ALL" then
