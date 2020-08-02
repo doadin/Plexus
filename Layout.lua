@@ -417,7 +417,7 @@ PlexusLayout.options = {
 					end,
 				},
 				backgroundTexture = {
-					name = L["Background Texture"],
+					name = L["                Background Texture"],
 					order = 23,
 					width = "double",
 					type = "select",
@@ -429,7 +429,7 @@ PlexusLayout.options = {
 					end,
 				},
 				borderTexture = {
-					name = L["Border Texture"],
+					name = L["                Border Texture"],
 					order = 24,
 					width = "double",
 					type = "select",
