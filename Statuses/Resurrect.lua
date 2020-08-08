@@ -237,7 +237,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                         self.core:SendStatusGained(guid, "alert_resurrect",
                         db.priority,
                         nil,
-                        nil,
+                        db.color,
                         db.text,
                         nil,
                         nil,
@@ -265,17 +265,17 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                         for rosterguid, _ in PlexusRoster:IterateRoster() do
                             self.core:SendStatusLost(rosterguid, "alert_resurrect")
                         end
-                        local duration = ((endTimeMS - startTimeMS) / 1000)
-                        self.core:SendStatusGained(guid, "alert_resurrect",
-                        db.priority,
-                        nil,
-                        nil,
-                        db.text,
-                        nil,
-                        nil,
-                        icon,
-                        startTimeMS,
-                        duration)
+                        --local duration = ((endTimeMS - startTimeMS) / 1000)
+                        --self.core:SendStatusGained(guid, "alert_resurrect",
+                        --db.priority,
+                        --nil,
+                        --db.color,
+                        --db.text,
+                        --nil,
+                        --nil,
+                        --icon,
+                        --startTimeMS,
+                        --duration)
                     else
                         self.core:SendStatusLost(guid, "alert_resurrect")
                     end
@@ -307,7 +307,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                         self.core:SendStatusGained(guid, "alert_resurrect",
                         db.priority,
                         nil,
-                        nil,
+                        db.color,
                         db.text,
                         nil,
                         nil,
@@ -337,21 +337,21 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                             --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_CAST_FAILED")
                             self.core:SendStatusLost(rosterguid, "alert_resurrect")
                         end
-                        local duration
-                        if startTimeMS and endTimeMS then
-                            duration = ((endTimeMS - startTimeMS) / 1000)
-                            --print("duration: ", duration)
-                        end
-                        self.core:SendStatusGained(guid, "alert_resurrect",
-                        db.priority,
-                        nil,
-                        nil,
-                        db.text,
-                        nil,
-                        nil,
-                        icon,
-                        startTimeMS,
-                        duration)
+                        --local duration
+                        --if startTimeMS and endTimeMS then
+                        --    duration = ((endTimeMS - startTimeMS) / 1000)
+                        --    --print("duration: ", duration)
+                        --end
+                        --self.core:SendStatusGained(guid, "alert_resurrect",
+                        --db.priority,
+                        --nil,
+                        --db.color,
+                        --db.text,
+                        --nil,
+                        --nil,
+                        --icon,
+                        --startTimeMS,
+                        --duration)
                     else
                         --print("COMBAT_LOG_EVENT_UNFILTERED ResSpells SPELL_CAST_FAILED")
                         self.core:SendStatusLost(guid, "alert_resurrect")
@@ -371,7 +371,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                 self.core:SendStatusGained(destGUID, "alert_resurrect",
                 db.priority,
                 nil,
-                nil,
+                db.color2,
                 db.text,
                 nil,
                 nil,
@@ -406,8 +406,8 @@ function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luachec
         self.core:SendStatusGained(guid, "alert_resurrect",
             db.priority,
             nil,
-            nil,
-            nil,
+            db.color,
+            db.text,
             nil,
             nil,
             "Interface\\ICONS\\Spell_Shadow_Soulgem",
