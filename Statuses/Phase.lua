@@ -126,7 +126,13 @@ end
 
 function PlexusStatusPhase:UpdateUnit(unitid)
     local guid = UnitGUID(unitid)
-    local isInSamePhase = UnitInPhase(unitid) and not UnitIsWarModePhased(unitid)
+    local _, _, _, wowtocversion = GetBuildInfo()
+    local isInSamePhase
+    if (wowtocversion > 90000) then
+        isInSamePhase = not UnitPhaseReason(unitid)
+    else
+        isInSamePhase = UnitInPhase(unitid) and not UnitIsWarModePhased(unitid)
+    end
     if not isInSamePhase then
         local key = "OUT_PHASE"
         local settings = self.db.profile.phase_status
