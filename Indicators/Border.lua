@@ -19,6 +19,10 @@ local BACKDROP = {
 PlexusFrame:RegisterIndicator("border", L["Border"],
     -- New
     function(frame)
+        local _, _, _, wowtocversion = GetBuildInfo()
+        if (wowtocversion > 90000) then
+            Mixin(frame, BackdropTemplateMixin)
+        end
         frame:SetBackdrop(BACKDROP)
         return {}
     end,
