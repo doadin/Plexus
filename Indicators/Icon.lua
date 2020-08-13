@@ -17,7 +17,7 @@ local BACKDROP = {
 }
 
 local function Icon_NewIndicator(frame)
-    local icon = CreateFrame("Frame", nil, frame)
+    local icon = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
     icon:SetPoint("CENTER")
     icon:SetBackdrop(BACKDROP)
 
