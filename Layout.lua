@@ -836,7 +836,7 @@ function PlexusLayout:CreateFrames()
 	f:SetScript("OnHide", PlexusLayout_OnMouseUp)
 
 	-- create backdrop
-	f.backdrop = CreateFrame("Frame", "$parentBackdrop", f)
+	f.backdrop = CreateFrame("Frame", "$parentBackdrop", f, BackdropTemplateMixin and "BackdropTemplate")
 	f.backdrop:SetPoint("BOTTOMLEFT", -4, -4)
 	f.backdrop:SetPoint("TOPRIGHT", 4, 4)
 	f.backdrop:SetBackdrop({
@@ -848,7 +848,7 @@ function PlexusLayout:CreateFrames()
 	f:SetFrameLevel(f.backdrop:GetFrameLevel() + 2)
 
 	-- create drag handle
-	f.tab = CreateFrame("Frame", "$parentTab", f)
+	f.tab = CreateFrame("Frame", "$parentTab", f, BackdropTemplateMixin and "BackdropTemplate")
 	f.tab:SetWidth(48)
 	f.tab:SetHeight(28)
 	f.tab:EnableMouse(true)
