@@ -1936,6 +1936,14 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
     end
+    local LibClassicDurations
+    if Plexus:IsClassicWow() then
+        LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
+    end
+    if LibClassicDurations then
+        LibClassicDurations:Register("Plexus")
+        UnitAura = LibClassicDurations.UnitAuraWrapper
+    end
 
     self:Debug("UNIT_AURA", unit, guid)
 
@@ -1955,11 +1963,6 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
             if not Plexus:IsClassicWow() then
                 name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
             else
-                local LibClassicDurations = LibStub:GetLibrary("LibClassicDurations", true)
-                if LibClassicDurations then
-                    LibClassicDurations:Register("Plexus")
-                    UnitAura = LibClassicDurations.UnitAuraWrapper
-                end
                 name, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spellID, _, _ = UnitAura(unit, i, "HELPFUL") --luacheck: ignore 111
             end
 
@@ -1987,7 +1990,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
             if not Plexus:IsClassicWow() then
                 name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
             else
-                name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellID, _, _  = UnitDebuff(unit, index, "HARMFUL")
+                name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellID, _, _  = UnitAura(unit, index, "HARMFUL")
             end
 
             if not name then
