@@ -1195,17 +1195,19 @@ function PlexusLayout:UpdateColor()
 	local settings = self.db.profile
 
 	local backdrop = self.frame.backdrop:GetBackdrop()
-	backdrop.bgFile = Media:Fetch(Media.MediaType.BACKGROUND, settings.backgroundTexture)
-	backdrop.edgeFile = Media:Fetch(Media.MediaType.BORDER, settings.borderTexture)
-	backdrop.edgeSize = settings.borderSize
-	backdrop.insets.left = settings.borderInset
-	backdrop.insets.right = settings.borderInset
-	backdrop.insets.top =  settings.borderInset
-	backdrop.insets.bottom = settings.borderInset
-	self.frame.backdrop:SetBackdrop(backdrop)
+	if backdrop then
+	    backdrop.bgFile = Media:Fetch(Media.MediaType.BACKGROUND, settings.backgroundTexture)
+	    backdrop.edgeFile = Media:Fetch(Media.MediaType.BORDER, settings.borderTexture)
+	    backdrop.edgeSize = settings.borderSize
+	    backdrop.insets.left = settings.borderInset
+	    backdrop.insets.right = settings.borderInset
+	    backdrop.insets.top =  settings.borderInset
+	    backdrop.insets.bottom = settings.borderInset
+	    self.frame.backdrop:SetBackdrop(backdrop)
 
-	self.frame.backdrop:SetBackdropBorderColor(settings.borderColor.r, settings.borderColor.g, settings.borderColor.b, settings.borderColor.a)
-	self.frame.backdrop:SetBackdropColor(settings.backgroundColor.r, settings.backgroundColor.g, settings.backgroundColor.b, settings.backgroundColor.a)
+	    self.frame.backdrop:SetBackdropBorderColor(settings.borderColor.r, settings.borderColor.g, settings.borderColor.b, settings.borderColor.a)
+		self.frame.backdrop:SetBackdropColor(settings.backgroundColor.r, settings.backgroundColor.g, settings.backgroundColor.b, settings.backgroundColor.a)
+	end
 end
 
 function PlexusLayout:SavePosition()
