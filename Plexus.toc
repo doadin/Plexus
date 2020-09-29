@@ -93,6 +93,7 @@ Indicators\Text.lua
 Statuses\Absorbs.lua
 #@end-retail@
 Statuses\Aggro.lua
+Statuses\AFK.lua
 Statuses\Auras.lua
 Statuses\Group.lua
 Statuses\GroupBuffs.lua
