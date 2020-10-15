@@ -185,6 +185,7 @@ function Manager:GetGroupFilter()
 	local showOffline = Layout.db.profile.showOffline
 	local showWrongZone = Layout:ShowWrongZone()
 	local curMapID = C_Map.GetBestMapForUnit("player")
+	local MAX_RAID_GROUPS = MAX_RAID_GROUPS or 8 --luacheck: ignore 111
 
 	for i = 1, MAX_RAID_GROUPS do
 		hideGroup[i] = ""
