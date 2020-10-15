@@ -823,6 +823,7 @@ function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
     self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
+    self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
 
     self:DeleteDurationStatus(status)
     self:UpdateDispellable()
