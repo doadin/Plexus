@@ -1964,7 +1964,7 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
             if not Plexus:IsClassicWow() then
                 name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
             else
-                name, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spellID, _, _ = UnitAura(unit, i, "HELPFUL") --luacheck: ignore 111
+                name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
             end
 
             if not name then
