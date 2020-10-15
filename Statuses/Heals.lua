@@ -47,7 +47,7 @@ local healsOptions = {
     },
     minimumValue = {
         width = "double",
-        type = "range", min = 0, max = 0.5, step = 0.05, isPercent = true,
+        type = "range", min = 0, max = 0.5, step = 0.005, isPercent = true,
         name = L["Minimum Value"],
         desc = L["Only show incoming heals greater than this percent of the unit's maximum health."],
         get = function()
