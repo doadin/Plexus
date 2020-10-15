@@ -364,7 +364,7 @@ end
 function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luacheck: ignore 212
     if Plexus:IsClassicWow() then
         if not unit then return end
-        if not guid then guid = UnitGUID(unit) end --luacheck: ignore 111
+        local guid = UnitGUID(unit)
         local db = self.db.profile.alert_resurrect
         if not PlexusRoster:IsGUIDInRaid(guid) then return end
         local startTime = GetTime()
@@ -387,7 +387,7 @@ function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luachec
     end
     if not Plexus:IsClassicWow() then
         if not unit then return end
-        if not guid then guid = UnitGUID(unit) end --luacheck: ignore 111
+        local guid = UnitGUID(unit)
         local db = self.db.profile.alert_resurrect
         if not PlexusRoster:IsGUIDInRaid(guid) then return end
         local startTime = GetTime()
