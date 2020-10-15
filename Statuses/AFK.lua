@@ -52,7 +52,7 @@ end
 
 function PlexusStatusAFK:UpdateAllUnits()
     self:Debug("UpdateAllUnits", "Updating Units")
-	for guid, unit in PlexusRoster:IterateRoster() do
+	for _, unit in PlexusRoster:IterateRoster() do
 		if (UnitExists(unit)) then
 			self:UpdateUnit(unit)
 		end
