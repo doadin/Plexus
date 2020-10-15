@@ -269,7 +269,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                         local _, _, _, startTimeMS, endTimeMS, _, _, _, spellId = UnitCastingInfo(sourceName)
                         local duration = ((endTimeMS - startTimeMS) / 1000)
                         local _, _, icon = GetSpellInfo(spellId)
-                        if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
+                        if not icon then icon = "Interface\\ICONS\\Spell_holy_guardianspirit" end
                         self.core:SendStatusGained(guid, "alert_resurrect",
                         db.priority,
                         nil,
@@ -381,7 +381,7 @@ function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luachec
                 db.text,
                 nil,
                 nil,
-                "Interface\\ICONS\\Spell_Shadow_Soulgem",
+                "Interface\\ICONS\\Spell_holy_guardianspirit",
                 startTime,
                 duration)
         else
@@ -391,33 +391,24 @@ function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luachec
     if not Plexus:IsClassicWow() then
         if not unit then return end
         if not guid then guid = UnitGUID(unit) end --luacheck: ignore 111
+        local db = self.db.profile.alert_resurrect
+        if not PlexusRoster:IsGUIDInRaid(guid) then return end
+        local startTime = GetTime()
+        local duration = 10
         local hasIncomingRes = UnitHasIncomingResurrection(unit)
-        if not hasIncomingRes then
-            self.core:SendStatusLost(guid, "alert_resurrect")
-            return
-        end
-        for _, unit in PlexusRoster:IterateRoster() do
-            for spelllistid, spelllistname in pairs(ResSpells) do
-                local db = self.db.profile.alert_resurrect
-                local name, _, _, startTimeMS, endTimeMS, _, _, _, spellId = UnitCastingInfo(unit)
-                if not spelllistid == spellId then return end
-                local duration
-                if startTimeMS and endTimeMS then
-                    duration = ((endTimeMS - startTimeMS) / 1000)
-                end
-                local name, rank, icon, castTime, minRange, maxRange = GetSpellInfo(spellId)
-                if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
-                self.core:SendStatusGained(guid, "alert_resurrect",
+        if hasIncomingRes then
+            self.core:SendStatusGained(guid, "alert_resurrect",
                 db.priority,
                 nil,
                 db.color,
                 db.text,
                 nil,
                 nil,
-                icon,
-                startTimeMS,
+                "Interface\\ICONS\\Spell_holy_guardianspirit",
+                startTime,
                 duration)
-            end
+        else
+            self.core:SendStatusLost(guid, "alert_resurrect")
         end
     end
 end
