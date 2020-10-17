@@ -23,6 +23,8 @@ PlexusResourceBar.defaultDB = {
     },
     size = 0.1,
     side = "Bottom",
+    EnableForHealers = false,
+    EnableOnlyMana = false,
 }
 
 local resourcebar_options = {
@@ -40,6 +42,32 @@ local resourcebar_options = {
         set = function(_, v)
             PlexusResourceBar.db.profile.size = v / 100
             PlexusFrame:UpdateAllFrames()
+        end
+    },
+    ["Resource Bar Healer Only"] = {
+        type = "toggle",
+        name = "Only show Healers Bar",
+        order = 50,
+        desc = "Only show healers resource bar",
+        get = function ()
+            return PlexusResourceBar.db.profile.EnableForHealers
+            end,
+        set = function(_, v)
+            PlexusResourceBar.db.profile.EnableForHealers = v
+            PlexusResourceBar:UpdateAllUnits()
+        end
+    },
+    ["Resource Bar Mana Only"] = {
+        type = "toggle",
+        name = "Only show mana Bars",
+        order = 60,
+        desc = "Only show mana bars",
+        get = function ()
+            return PlexusResourceBar.db.profile.EnableOnlyMana
+            end,
+        set = function(_, v)
+            PlexusResourceBar.db.profile.EnableOnlyMana = v
+            PlexusResourceBar:UpdateAllUnits()
         end
     },
     ["Resource Bar Side"] = {
@@ -296,21 +324,40 @@ end
 function PlexusResourceBar:UpdateUnitResource(unitid)
     local color
     if not unitid then return end
-    local UnitGUID = UnitGUID(unitid)
-    if not UnitGUID then return end
+    --local UnitGUID = UnitGUID(unitid)
+    --if not UnitGUID then return end
+    local unitGUID = UnitGUID(unitid)
     local current, max = UnitPower(unitid), UnitPowerMax(unitid)
     local priority = PlexusResourceBar.db.profile.unit_resource.priority
-    local UnitPowerType = UnitPowerType(unitid)
-    if UnitPowerType == 3 or UnitPowerType == 2 then
+    local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
+    local unitpower = UnitPowerType(unitid)
+    if EnableForHealers then
+        local members = GetNumGroupMembers();
+        local subGroupMembers = GetNumSubgroupMembers()
+        if (members ~= 0 or subGroupMembers ~=0) then
+            if UnitGroupRolesAssigned(unitid) ~= "HEALER" then
+                self.core:SendStatusLost(unitGUID, "unit_resource")
+                return
+            end
+        end
+    end
+    local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
+    if EnableOnlyMana then
+        if unitpower ~= 0 then
+            self.core:SendStatusLost(unitGUID, "unit_resource")
+            return
+        end
+    end
+
+    if unitpower == 3 or unitpower == 2 then
         color = PlexusResourceBar.db.profile.energycolor
-    elseif UnitPowerType == 6 then
+    elseif unitpower == 6 then
         color = PlexusResourceBar.db.profile.runiccolor
-    elseif UnitPowerType == 1 then
+    elseif unitpower == 1 then
         color = PlexusResourceBar.db.profile.ragecolor
     else
         color = PlexusResourceBar.db.profile.manacolor
     end
-    local unitGUID = UnitGUID
     self.core:SendStatusGained(
         unitGUID, "unit_resource",
         priority,
