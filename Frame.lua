@@ -331,6 +331,9 @@ PlexusFrame.defaultDB = {
         icon = {
             raid_icon = true,
             ready_check = true,
+        },
+        resourcebar = {
+            unit_resource = true,
         }
     },
 }
