@@ -34,8 +34,8 @@ local resourcebar_options = {
         order = 30,
         desc = "Percentage of frame for resource bar",
         max = 50,
-        min = 10,
-        step = 5,
+        min = 1,
+        step = 1,
         get = function ()
             return PlexusResourceBar.db.profile.size * 100
         end,
