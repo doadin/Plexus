@@ -28,12 +28,13 @@ local defaultOrder = {
     healingBar = 4,
     text = 5,
     text2 = 6,
-    icon = 7,
-    corner3 = 8,
-    corner4 = 9,
-    corner1 = 10,
-    corner2 = 11,
-    frameAlpha = 12,
+    text3 = 7,
+    icon = 9,
+    corner3 = 9,
+    corner4 = 10,
+    corner1 = 11,
+    corner2 = 12,
+    frameAlpha = 13,
 }
 
 local defaultNew = function() return {} end
@@ -260,8 +261,6 @@ PlexusFrame.defaultDB = {
     stackOffsety = -2,
     enableIconCooldown = true,
     enableIconStackText = true,
-    iconsMore1 = true,
-    iconsMore2 = false,
     font = "Friz Quadrata TT",
     fontSize = 12,
     fontOutline = "NONE",
@@ -579,18 +578,6 @@ PlexusFrame.options = {
                     name = format(L["Enable %s"], L["Icon Stack Text"]),
                     desc = L["Toggle icon stack count text."],
                     order = 7, width = "double",
-                    type = "toggle",
-                },
-                iconsMore = {
-                    name = format(L["Enable %s"], L["more icons"]),
-                    desc = L["Toggle more icon indicators."],
-                    order = 8, width = "double",
-                    type = "toggle",
-                },
-                iconsMore2 = {
-                    name = format(L["Enable %s"], L["even MORE icons"]),
-                    desc = L["Toggle even MORE icon indicators."],
-                    order = 9, width = "double",
                     type = "toggle",
                 },
             },
@@ -964,6 +951,18 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         return
     end
 
+    if indicator == "text3" and not self.db.profile.enableText3 then
+        self:Debug("indicator text3 is disabled")
+        menu[indicator] = nil
+        return
+    end
+
+    if indicator == "resourcebar"  then
+        self:Debug("disableing resourcebar menu")
+        menu[indicator] = nil
+        return
+    end
+
     if indicator == "barcolor" and not self.db.profile.enableBarColor then
         self:Debug("indicator barcolor is disabled")
         menu[indicator] = nil
@@ -992,6 +991,12 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         }
         if indicator == "text2" then
             menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableText2 end
+        end
+        if indicator == "text3" then
+            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableText3 end
+        end
+        if indicator == "resourcebar" then
+            menu[indicator].disabled = function() return true end
         end
     end
 
