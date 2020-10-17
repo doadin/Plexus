@@ -268,6 +268,7 @@ PlexusFrame.defaultDB = {
     fontShadow = true,
     textlength = 4,
     enableText2 = false,
+    enableText3 = false,
     statusmap = {
         text = {
             alert_death = true,
@@ -644,6 +645,17 @@ PlexusFrame.options = {
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableText2 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
+                enableText3 = {
+                    name = format(L["Enable %s indicator"], L["Center Text 3"]),
+                    desc = format(L["Toggle the %s indicator."], L["Center Text 3"]),
+                    order = 7, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableText3 = v
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,

@@ -47,7 +47,7 @@ local function Reset(self)
             self:SetJustifyV("CENTER")
             self:SetPoint("TOPLEFT", 2, -2)
             self:SetPoint("BOTTOMLEFT", 2, 2)
-            if profile.enableText2 then
+            if profile.enableText2 or profile.enableText3 then
                 self:SetPoint("RIGHT", bar, "CENTER")
             else
                 self:SetPoint("RIGHT", bar, -2, 0)
@@ -57,7 +57,7 @@ local function Reset(self)
             self:SetJustifyV("CENTER")
             self:SetPoint("TOPLEFT", 2, -2)
             self:SetPoint("TOPRIGHT", -2, -2)
-            if profile.enableText2 then
+            if profile.enableText2 or profile.enableText2 then
                 self:SetPoint("BOTTOM", bar, "CENTER")
             else
                 self:SetPoint("BOTTOM", bar, 0, 2)
@@ -81,12 +81,30 @@ local function Reset(self)
             self:SetPoint("BOTTOMRIGHT", -2, -2)
             self:SetPoint("TOP", bar, "CENTER")
         end
+    elseif self.__id == "text3" then
+        if not profile.enableText3 then
+            return self:Hide()
+        end
+        self:Show()
+        if profile.textorientation == "HORIZONTAL" then
+            self:SetJustifyH("RIGHT")
+            self:SetJustifyV("CENTER")
+            self:SetPoint("TOPRIGHT", -22, -22)
+            self:SetPoint("BOTTOMRIGHT", -22, 22)
+            self:SetPoint("LEFT", bar, "CENTER")
+        else
+            self:SetJustifyH("CENTER")
+            self:SetJustifyV("CENTER")
+            self:SetPoint("BOTTOMLEFT", 22, -22)
+            self:SetPoint("BOTTOMRIGHT", -22, -22)
+            self:SetPoint("TOP", bar, "CENTER")
+        end
     end
 end
 
 local function SetStatus(self, color, text)
     local profile = PlexusFrame.db.profile
-    if self.__id == "text2" and not profile.enableText2 then
+    if (self.__id == "text2" or self.__id == "text3") and not (profile.enableText2 or profile.enableText3) then
         return
     elseif not text or text == "" then
         return self:SetText("")
@@ -109,3 +127,4 @@ end
 
 PlexusFrame:RegisterIndicator("text",  L["Center Text"],   New, Reset, SetStatus, Clear)
 PlexusFrame:RegisterIndicator("text2", L["Center Text 2"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("text3", L["Center Text 3"], New, Reset, SetStatus, Clear)
