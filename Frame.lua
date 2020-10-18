@@ -957,11 +957,11 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         return
     end
 
-    if indicator == "resourcebar"  then
-        self:Debug("disableing resourcebar menu")
-        menu[indicator] = nil
-        return
-    end
+    --if indicator == "resourcebar"  then
+    --    self:Debug("disableing resourcebar menu")
+    --    menu[indicator] = nil
+    --    return
+    --end
 
     if indicator == "barcolor" and not self.db.profile.enableBarColor then
         self:Debug("indicator barcolor is disabled")
@@ -995,9 +995,9 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         if indicator == "text3" then
             menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableText3 end
         end
-        if indicator == "resourcebar" then
-            menu[indicator].disabled = function() return true end
-        end
+        --if indicator == "resourcebar" then
+        --    menu[indicator].disabled = function() return true end
+        --end
     end
 
     local indicatorMenu = menu[indicator].args
