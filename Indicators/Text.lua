@@ -20,7 +20,19 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
-    local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
+    local PLEXUS_STANDARD_TEXT_FONT
+    if (GetLocale() == koKR) then
+        PLEXUS_STANDARD_TEXT_FONT = "Fonts\\2002.TTF";
+    elseif (GetLocale() == zhCN) then
+        PLEXUS_STANDARD_TEXT_FONT = "Fonts\\ARKai_T.ttf";
+    elseif (GetLocale() == zhTW) then
+        PLEXUS_STANDARD_TEXT_FONT = "Fonts\\blei00d.TTF";
+    elseif (GetLocale() == ruRU) then
+        PLEXUS_STANDARD_TEXT_FONT = "Fonts\\FRIZQT___CYR.TTF";
+    else
+        PLEXUS_STANDARD_TEXT_FONT = "Fonts\\FRIZQT__.TTF";
+    end
+    local font = Media:Fetch("font", profile.font) or PLEXUS_STANDARD_TEXT_FONT
 
     local frame = self.__owner
     local bar = frame.indicators.bar
