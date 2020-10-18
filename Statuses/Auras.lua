@@ -1546,7 +1546,7 @@ end
 
 function PlexusStatusAuras:HasActiveDurations()
 	for _, auras in pairs(self.durationAuras) do
-		for _ in pairs(auras) do
+		for _ in pairs(auras) do --luacheck: ignore 512
 			return true
 		end
 	end
