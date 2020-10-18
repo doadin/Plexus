@@ -398,7 +398,7 @@ PlexusStatusAuras.defaultDB = {
     },
     [PlexusStatusAuras:StatusForSpell("Sacred Dawn")] = {
         -- 243174
-        desc = format(L["Debuff: %s"], spell_names["Sacred Dawn"]),
+        desc = format(L["Buff: %s"], spell_names["Sacred Dawn"]),
         buff = spell_names["Sacred Dawn"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Sacred Dawn"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
@@ -409,7 +409,7 @@ PlexusStatusAuras.defaultDB = {
     },
     [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
         -- 200654
-        desc = format(L["Debuff: %s"], spell_names["Tyr's Deliverance"]),
+        desc = format(L["Buff: %s"], spell_names["Tyr's Deliverance"]),
         buff = spell_names["Tyr's Deliverance"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
