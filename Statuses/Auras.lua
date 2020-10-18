@@ -99,6 +99,7 @@ end
 local buff_names = {}
 local player_buff_names = {}
 local debuff_names = {}
+local player_debuff_names = {}
 
 local debuff_types = {
     ["Curse"] = "dispel_curse",
@@ -515,6 +516,7 @@ PlexusStatusAuras.defaultDB = {
         debuff = spell_names["Weakened Soul"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
         color = { r = 1, g = 0, b = 0, a = 1 },
+        mine = true,
     },
 
     ---------------------
@@ -1206,6 +1208,26 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
         }
     end
 
+    if not isBuff then
+        auraOptions.statusInfo.args.textInfo.values["name"] = L["Debuff name"]
+        auraOptions.mine = {
+            name = L["Show if mine"],
+            desc = L["Display status only if the debuff was cast by you."],
+            order = 60,
+            width = "double",
+            type = "toggle",
+            get = function()
+                return PlexusStatusAuras.db.profile[status].mine
+            end,
+            set = function(_, v)
+                PlexusStatusAuras.db.profile[status].mine = v
+                PlexusStatusAuras:DeleteDurationStatus(status)
+                PlexusStatusAuras:UpdateAuraScanList()
+                PlexusStatusAuras:UpdateAllUnitAuras()
+            end,
+        }
+    end
+
     -- super inefficient...
     for name, found in pairs(debuff_types) do
         if status == found then
@@ -1805,9 +1827,51 @@ function PlexusStatusAuras:UnitGainedDebuff(guid, class, name, rank, icon, count
     end
 end
 
+function PlexusStatusAuras:UnitGainedPlayerDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+    self:Debug("UnitGainedPlayerDebuff", guid, class, name)
+
+    local status = player_debuff_names[name]
+    local settings = self.db.profile[status]
+    if not settings then return end
+
+    if settings.enable then -- and settings[class] ~= false then -- ##DELETE
+        local start = expirationTime and (expirationTime - duration)
+        local timeLeft = expirationTime and expirationTime > now and (expirationTime - now) or 0
+        local text, color = self:StatusTextColor(settings, count, timeLeft)
+        if duration and expirationTime and duration > 0 and expirationTime > 0 then
+            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+        end
+        self.core:SendStatusGained(guid,
+            status,
+            settings.priority,
+            nil,
+            color,
+            text,
+            count,
+            nil,
+            icon,
+            start,
+            duration,
+            count,
+            ICON_TEX_COORDS)
+    else
+        self.core:SendStatusLost(guid, status)
+    end
+end
+
 function PlexusStatusAuras:UnitLostDebuff(guid, class, name)
     --self:Debug("UnitLostDebuff", guid, class, name)
     local status = debuff_names[name]
+    local settings = self.db.profile[status]
+    if not settings then return end
+
+    self:UnitLostDurationStatus(status, guid, class, name)
+    self.core:SendStatusLost(guid, status)
+end
+
+function PlexusStatusAuras:UnitLostPlayerDebuff(guid, class, name)
+    --self:Debug("UnitLostPlayerDebuff", guid, class, name)
+    local status = player_debuff_names[name]
     local settings = self.db.profile[status]
     if not settings then return end
 
@@ -1900,6 +1964,7 @@ function PlexusStatusAuras:UpdateAuraScanList()
     wipe(buff_names)
     wipe(player_buff_names)
     wipe(debuff_names)
+    wipe(player_debuff_names)
 
     for status, settings in pairs(self.db.profile) do
         if type(settings) == "table" and settings.enable then
@@ -1917,9 +1982,15 @@ function PlexusStatusAuras:UpdateAuraScanList()
                         self:Debug("Added to buff_names")
                         buff_names[name] = status
                     end
-                else
-                    self:Debug("Added to debuff_names")
-                    debuff_names[name] = status
+                end
+                if not isBuff then
+                    if settings.mine then
+                        self:Debug("Added to player_debuff_names")
+                        player_debuff_names[name] = status
+                    else
+                        self:Debug("Added to debuff_names")
+                        debuff_names[name] = status
+                    end
                 end
             end
         end
@@ -1930,6 +2001,7 @@ end
 local buff_names_seen = {}
 local player_buff_names_seen = {}
 local debuff_names_seen = {}
+local player_debuff_names_seen = {}
 local debuff_types_seen = {}
 
 function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 212
@@ -2001,6 +2073,9 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
             if debuff_names[name] then
                 debuff_names_seen[name] = true
                 self:UnitGainedDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+            elseif player_debuff_names[name] and casterUnit == "player" then
+                player_debuff_names_seen[name] = true
+                self:UnitGainedPlayerDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
             elseif debuff_types[debuffType] then
                 -- elseif so that a named debuff doesn't trigger the type status
                 debuff_types_seen[debuffType] = true
@@ -2032,6 +2107,14 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
             self:UnitLostDebuff(guid, class, name)
         else
             debuff_names_seen[name] = nil
+        end
+    end
+
+    for name in pairs(player_debuff_names) do
+        if not player_debuff_names_seen[name] then
+            self:UnitLostPlayerDebuff(guid, class, name)
+        else
+            player_debuff_names_seen[name] = nil
         end
     end
 
