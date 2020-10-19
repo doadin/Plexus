@@ -30,11 +30,7 @@ local defaultOrder = {
     text2 = 6,
     text3 = 7,
     icon = 9,
-    corner3 = 9,
-    corner4 = 10,
-    corner1 = 11,
-    corner2 = 12,
-    frameAlpha = 13,
+    frameAlpha = 10,
 }
 
 local defaultNew = function() return {} end
