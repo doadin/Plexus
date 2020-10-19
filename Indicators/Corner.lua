@@ -23,8 +23,8 @@ local anchor = {
     topleft3 = { "TOPLEFT", 4, 1 },
     -- left/right up/down
     corner4 = { "TOPRIGHT", 1, 1 },
-    topright2 = { "TOPRIGHT", 1, -4 },
-    topright3 = { "TOPRIGHT", -4, 1 },
+    topright2 = { "TOPRIGHT", -4, 1 },
+    topright3 = { "TOPRIGHT", 1, -4 },
     -- left/right up/down
     corner1 = { "BOTTOMLEFT", -1, -1 },
     bottomleft2 = { "BOTTOMLEFT", -1, 4 },
@@ -33,25 +33,26 @@ local anchor = {
     corner2 = { "BOTTOMRIGHT", 1, -1 },
     bottomright2 = { "BOTTOMRIGHT", 1, 4 },
     bottomright3 = { "BOTTOMRIGHT", -4, -1 },
-    Top = { "TOP", -1, 1 },
-    Top2 = { "TOP", -1, -4 },
-    Top3 = { "TOP", -6, 1 },
-    Top4 = { "TOP", 4, 1 },
     -- left/right up/down
-    Bottom = { "BOTTOM", 1, 1 },
-    Bottom2 = { "BOTTOM", 1, 6 },
-    Bottom3 = { "BOTTOM", -4, 1 },
-    Bottom4 = { "BOTTOM", 6, 1 },
+    Top = { "TOP", 1, 1 },
+    Top2 = { "TOP", -4, 1 },
+    Top3 = { "TOP", 1, -4 },
+    Top4 = { "TOP", 6, 1 },
+    -- left/right up/down
+    Bottom = { "BOTTOM", 1, 0 },
+    Bottom2 = { "BOTTOM", 1, 5 },
+    Bottom3 = { "BOTTOM", -4, 0 },
+    Bottom4 = { "BOTTOM", 6, 0 },
     -- left/right up/down
     Left = { "LEFT", -1, -1 },
-    Left2 = { "LEFT", -1, -6 },
-    Left3 = { "LEFT", -1, 4 },
+    Left2 = { "LEFT", -1, 4 },
+    Left3 = { "LEFT", -1, -6 },
     Left4 = { "LEFT", 4, -1 },
     -- left/right up/down
     Right = { "RIGHT", 1, -1 },
-    Right2 = { "RIGHT", 1, -6 },
+    Right2 = { "RIGHT", 1, 4 },
     Right3 = { "RIGHT", -4, -1 },
-    Right4 = { "RIGHT", 1, 4 },
+    Right4 = { "RIGHT", 1, -6 },
 }
 
 local function New(frame)
