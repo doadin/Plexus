@@ -187,6 +187,11 @@ function Manager:GetGroupFilter()
     local curMapID = C_Map.GetBestMapForUnit("player")
     local MAX_RAID_GROUPS = MAX_RAID_GROUPS or 8 --luacheck: ignore 111
 
+    local curZone
+    if curMapID then
+        curZone = C_Map.GetMapInfo(curMapID)
+    end
+
     for i = 1, MAX_RAID_GROUPS do
         hideGroup[i] = ""
     end
@@ -194,6 +199,23 @@ function Manager:GetGroupFilter()
     for i = 1, GetNumGroupMembers() do
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local mapID = C_Map.GetBestMapForUnit("raid" .. i)
+		local memberZone
+		if mapID then
+			memberZone = C_Map.GetMapInfo(mapID)
+		end
+
+		if ( not IsInInstance() or not curZone ) or C_PvP.IsBattleground() or ( select(3, GetInstanceInfo()) == 16 and subgroup < 5 ) then -- On field or In BG or In mythic raid
+			hideGroup[subgroup] = nil
+		elseif not memberZone then
+			hideGroup[subgroup] = (hideGroup[subgroup] or "") .. " ZONE"
+		elseif (showOffline or online) and (showWrongZone or curZone.name == memberZone.name) then
+			hideGroup[subgroup] = nil
+		elseif curZone.name ~= memberZone.name and not showWrongZone then
+			hideGroup[subgroup] = (hideGroup[subgroup] or "") .. " ZONE"
+		elseif not online and not showOffline then
+			hideGroup[subgroup] = (hideGroup[subgroup] or "") .. " OFFLINE"
+		end
+--[[
         if (showOffline or online) and (showWrongZone or curMapID == mapID) then
             hideGroup[subgroup] = nil
 --@debug@
@@ -203,6 +225,7 @@ function Manager:GetGroupFilter()
             hideGroup[subgroup] = (hideGroup[subgroup] or "") .. " OFFLINE"
 --@end-debug@
         end
+]]
     end
 
     local groupFilter, numGroups = "", 0
@@ -228,6 +251,10 @@ function Manager:UpdateLayouts(event)
     local groupFilter, numGroups = self:GetGroupFilter()
     local showPets = Layout.db.profile.showPets
     local splitGroups = Layout.db.profile.splitGroups
+
+    if not groupFilter then
+        return false
+    end
 
     self:Debug("groupFilter", groupFilter, "numGroups", numGroups, "showPets", showPets, "splitGroups", splitGroups)
 
