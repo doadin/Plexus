@@ -27,7 +27,7 @@ jobs:
       install:
       - sudo apt-get install curl -y
       script: curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmeta-classic -g 1.13.5
- 
+
 notifications:
  email:
    on_success: never

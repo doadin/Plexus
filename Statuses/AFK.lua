@@ -34,29 +34,29 @@ end
 
 function PlexusStatusAFK:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
-	self:RegisterEvent("PLAYER_FLAGS_CHANGED", "UpdateAllUnits")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateAllUnits")
-	self:RegisterEvent("READY_CHECK", "UpdateAllUnits")
-	self:RegisterEvent("READY_CHECK_FINISHED", "UpdateAllUnits")
+    self:RegisterEvent("PLAYER_FLAGS_CHANGED", "UpdateAllUnits")
+    self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateAllUnits")
+    self:RegisterEvent("READY_CHECK", "UpdateAllUnits")
+    self:RegisterEvent("READY_CHECK_FINISHED", "UpdateAllUnits")
     self:UpdateAllUnits()
 end
 
 function PlexusStatusAFK:OnStatusDisable(status)
     self:Debug("OnStatusDisable", status)
-	self:UnregisterEvent("PLAYER_FLAGS_CHANGED")
-	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
-	self:UnregisterEvent("READY_CHECK")
-	self:UnregisterEvent("READY_CHECK_FINISHED")
+    self:UnregisterEvent("PLAYER_FLAGS_CHANGED")
+    self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+    self:UnregisterEvent("READY_CHECK")
+    self:UnregisterEvent("READY_CHECK_FINISHED")
     self:SendStatusLostAllUnits(status)
 end
 
 function PlexusStatusAFK:UpdateAllUnits()
     self:Debug("UpdateAllUnits", "Updating Units")
-	for _, unit in PlexusRoster:IterateRoster() do
-		if (UnitExists(unit)) then
-			self:UpdateUnit(unit)
-		end
-	end
+    for _, unit in PlexusRoster:IterateRoster() do
+        if (UnitExists(unit)) then
+            self:UpdateUnit(unit)
+        end
+    end
 end
 
 function PlexusStatusAFK:UpdateUnit(unit)
