@@ -23,7 +23,9 @@ PlexusResourceBar.defaultDB = {
     },
     size = 0.1,
     side = "Bottom",
+--@retail@
     EnableForHealers = false,
+--@end-retail@
     EnableOnlyMana = false,
 }
 
@@ -44,6 +46,7 @@ local resourcebar_options = {
             PlexusFrame:UpdateAllFrames()
         end
     },
+--@retail@
     ["Resource Bar Healer Only"] = {
         type = "toggle",
         name = "Only show Healers Bar",
@@ -57,6 +60,7 @@ local resourcebar_options = {
             PlexusResourceBar:UpdateAllUnits()
         end
     },
+--@end-retail@
     ["Resource Bar Mana Only"] = {
         type = "toggle",
         name = "Only show mana Bars",
@@ -331,6 +335,7 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
     local priority = PlexusResourceBar.db.profile.unit_resource.priority
     local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
     local unitpower = UnitPowerType(unitid)
+--@retail@
     if EnableForHealers then
         local members = GetNumGroupMembers();
         local subGroupMembers = GetNumSubgroupMembers()
@@ -342,6 +347,7 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
             return
         end
     end
+--@end-retail@
     local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
     if EnableOnlyMana then
         if unitpower ~= 0 then
