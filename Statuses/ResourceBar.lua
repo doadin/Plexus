@@ -334,11 +334,12 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
     if EnableForHealers then
         local members = GetNumGroupMembers();
         local subGroupMembers = GetNumSubgroupMembers()
-        if (members ~= 0 or subGroupMembers ~=0) then
-            if UnitGroupRolesAssigned(unitid) ~= "HEALER" then
-                self.core:SendStatusLost(unitGUID, "unit_resource")
-                return
-            end
+        local currentSpec = GetSpecialization()
+        local currentSpecRole = currentSpec and select(5, GetSpecializationInfo(currentSpec)) or "None"
+        if (members ~= 0 or subGroupMembers ~=0 and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
+        (UnitGUID("player") == UnitGUID(unitid) and currentSpecRole ~= "HEALER") then
+            self.core:SendStatusLost(unitGUID, "unit_resource")
+            return
         end
     end
     local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
