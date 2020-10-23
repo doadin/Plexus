@@ -348,7 +348,7 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
         local subGroupMembers = GetNumSubgroupMembers()
         local currentSpec = GetSpecialization()
         local currentSpecRole = currentSpec and select(5, GetSpecializationInfo(currentSpec)) or "None"
-        if (members ~= 0 or subGroupMembers ~=0 and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
+        if ((members ~= 0 or subGroupMembers ~= 0) and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
         (UnitGUID("player") == UnitGUID(unitid) and currentSpecRole ~= "HEALER") then
             self.core:SendStatusLost(unitGUID, "unit_resource")
             return
