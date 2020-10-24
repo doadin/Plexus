@@ -304,7 +304,7 @@ function PlexusResourceBar:OnStatusEnable(status)
         self:RegisterEvent("UNIT_POWER_UPDATE","UpdateUnit")
         self:RegisterEvent("UNIT_MAXPOWER","UpdateUnit")
         self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateAllUnits")
-        self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitJoined")
         self:UpdateAllUnits()
     end
 end
@@ -317,11 +317,17 @@ function PlexusResourceBar:OnStatusDisable(status)
         self:UnregisterEvent("UNIT_POWER_UPDATE")
         self:UnregisterEvent("UNIT_MAXPOWER")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-        self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+        self:UnregisterMessage("Plexus_UnitJoined")
     end
 end
 
 function PlexusResourceBar:UpdateUnit(_, unitid)
+    if not unitid then return end
+    self:UpdateUnitResource(unitid)
+end
+
+
+function PlexusResourceBar:Plexus_UnitJoined(_, _, unitid)
     if not unitid then return end
     self:UpdateUnitResource(unitid)
 end
