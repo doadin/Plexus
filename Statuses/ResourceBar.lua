@@ -304,6 +304,9 @@ function PlexusResourceBar:OnStatusEnable(status)
         self:RegisterEvent("UNIT_POWER_UPDATE","UpdateUnit")
         self:RegisterEvent("UNIT_MAXPOWER","UpdateUnit")
         self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateAllUnits")
+--@retail@
+        self:RegisterEvent("ROLE_CHANGED_INFORM")
+--@end-retail@
         self:RegisterMessage("Plexus_UnitJoined")
         self:UpdateAllUnits()
     end
@@ -317,6 +320,9 @@ function PlexusResourceBar:OnStatusDisable(status)
         self:UnregisterEvent("UNIT_POWER_UPDATE")
         self:UnregisterEvent("UNIT_MAXPOWER")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+--@retail@
+        self:UnregisterEvent("ROLE_CHANGED_INFORM")
+--@end-retail@
         self:UnregisterMessage("Plexus_UnitJoined")
     end
 end
@@ -326,6 +332,26 @@ function PlexusResourceBar:UpdateUnit(_, unitid)
     self:UpdateUnitResource(unitid)
 end
 
+--@retail@
+function PlexusResourceBar:ROLE_CHANGED_INFORM(event, changedName, fromName, oldRole, newRole)
+    -- Catch if a unit changes role so that if a unit power doesn't change(role changed spec not changed)
+    -- We will still update their frame
+    local unitGUID = PlexusRoster:GetGUIDByFullName(changedName)
+    local unitid = PlexusRoster:GetUnitidByGUID(unitGUID)
+    self:Debug("ROLE_CHANGED_INFORM", event, changedName, fromName, oldRole, newRole)
+    self:Debug("ROLE_CHANGED_INFORM",changedName, unitGUID, unitid)
+    local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
+    if EnableForHealers then
+        if newRole ~= "HEALER" then
+            self.core:SendStatusLost(unitGUID, "unit_resource")
+            return
+        end
+    end
+
+    if not unitid then return end
+    self:UpdateUnitResource(unitid)
+end
+--@end-retail@
 
 function PlexusResourceBar:Plexus_UnitJoined(_, _, unitid)
     if not unitid then return end
