@@ -34,37 +34,39 @@ end
 
 function PlexusStatusAFK:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
-    self:RegisterEvent("PLAYER_FLAGS_CHANGED", "UpdateAllUnits")
-    self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateAllUnits")
-    self:RegisterEvent("READY_CHECK", "UpdateAllUnits")
-    self:RegisterEvent("READY_CHECK_FINISHED", "UpdateAllUnits")
+    self:RegisterEvent("PLAYER_FLAGS_CHANGED", "UpdateUnit")
+    self:RegisterEvent("UNIT_FLAGS", "UpdateUnit")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
+    self:RegisterMessage("Plexus_UnitJoined")
     self:UpdateAllUnits()
 end
 
 function PlexusStatusAFK:OnStatusDisable(status)
     self:Debug("OnStatusDisable", status)
     self:UnregisterEvent("PLAYER_FLAGS_CHANGED")
-    self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
-    self:UnregisterEvent("READY_CHECK")
-    self:UnregisterEvent("READY_CHECK_FINISHED")
+    self:UnregisterEvent("UNIT_FLAGS")
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    self:UnregisterMessage("Plexus_UnitJoined")
     self:SendStatusLostAllUnits(status)
 end
 
 function PlexusStatusAFK:UpdateAllUnits()
-    self:Debug("UpdateAllUnits", "Updating Units")
     for _, unit in PlexusRoster:IterateRoster() do
-        if (UnitExists(unit)) then
-            self:UpdateUnit(unit)
-        end
+        self:UpdateUnit("UpdateAllUnits",unit)
     end
 end
 
-function PlexusStatusAFK:UpdateUnit(unit)
-    self:Debug("UpdateUnit", "Updating Unit")
+function PlexusStatusAFK:Plexus_UnitJoined(_, _, unitid)
+    if not unitid then return end
+    self:UpdateUnit(_,unitid)
+end
+
+function PlexusStatusAFK:UpdateUnit(event, unitid)
+    self:Debug("UpdateUnit Event", event)
     local profile = self.db.profile.afk
-    local uguid = UnitGUID(unit)
-        if UnitIsAFK(unit) then
-            self:Debug("UpdateUnit", "Unit is afk", unit)
+    local uguid = UnitGUID(unitid)
+        if UnitIsAFK(unitid) then
+            self:Debug("UpdateUnit", "Unit is afk", unitid)
             self.core:SendStatusGained(uguid, "afk",
                 profile.priority,
                 nil,
@@ -72,7 +74,7 @@ function PlexusStatusAFK:UpdateUnit(unit)
                 profile.text
             )
         else
-            self:Debug("UpdateUnit", "Unit is NOT afk", unit)
+            self:Debug("UpdateUnit", "Unit is NOT afk", unitid)
             self.core:SendStatusLost(uguid, "afk")
         end
 end
