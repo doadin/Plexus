@@ -12,6 +12,7 @@ local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local LibSharedMedia = LibStub:GetLibrary("LibSharedMedia-3.0", true)
 
 local PlexusResourceBar = PlexusStatus:NewModule("PlexusResourceBar")
+local listofhealers = {}
 
 PlexusResourceBar.menuName = "ResourceBar"
 
@@ -338,23 +339,45 @@ function PlexusResourceBar:ROLE_CHANGED_INFORM(event, changedName, fromName, old
     -- We will still update their frame
     local unitGUID = PlexusRoster:GetGUIDByFullName(changedName)
     local unitid = PlexusRoster:GetUnitidByGUID(unitGUID)
+    if not unitid then return end
     self:Debug("ROLE_CHANGED_INFORM", event, changedName, fromName, oldRole, newRole)
     self:Debug("ROLE_CHANGED_INFORM",changedName, unitGUID, unitid)
     local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
-    if EnableForHealers then
-        if newRole ~= "HEALER" then
-            self.core:SendStatusLost(unitGUID, "unit_resource")
-            return
-        end
+    if (newRole == "HEALER" or UnitGroupRolesAssigned(unitid) == "HEALER") then
+        local currenttableSize = table.getn(listofhealers)
+        tinsert(listofhealers, currenttableSize+1, unitGUID)
+    end
+    -- If a unti's new role is not healer and they where in the list of healers remove them
+    if (newRole ~= "HEALER" and listofhealers[unitGUID]) then
+        listofhealers[unitGUID] = nil
     end
 
-    if not unitid then return end
     self:UpdateUnitResource(unitid)
 end
+
+function PlexusResourceBar:PLAYER_SPECIALIZATION_CHANGED(event, unitd)
+    self:Debug("PLAYER_SPECIALIZATION_CHANGED",event, unitid)
+    local unitGUID = UnitGUID(unitd)
+    local currentSpec = GetSpecialization()
+    local currentSpecRole = currentSpec and select(5, GetSpecializationInfo(currentSpec)) or "None"
+    -- if player changes to healing role add them to list of healers
+    if currentSpecRole == "HEALER" then
+        local currenttableSize = table.getn(listofhealers)
+        tinsert(listofhealers, currenttableSize+1, unitGUID)
+    end
+    if (currentSpecRole ~= "HEALER" and listofhealers[unitGUID]) then
+        listofhealers[unitGUID] = nil
+    end
+end
+
 --@end-retail@
 
 function PlexusResourceBar:Plexus_UnitJoined(_, _, unitid)
     if not unitid then return end
+    if UnitGroupRolesAssigned(unitid) == "HEALER" then
+        local currenttableSize = table.getn(listofhealers)
+        tinsert(listofhealers, currenttableSize+1, unitGUID)
+    end
     self:UpdateUnitResource(unitid)
 end
 
@@ -362,6 +385,19 @@ function PlexusResourceBar:UpdateAllUnits()
     for _, unitid in PlexusRoster:IterateRoster() do
         self:UpdateUnitResource(unitid)
     end
+end
+
+function PlexusResourceBar:PLAYER_ENTERING_WORLD()
+    --Clear Table When Loading in
+    wipe(listofhealers)
+    --Update Table of healers
+    for _, unitid in PlexusRoster:IterateRoster() do
+        if UnitGroupRolesAssigned(unitid) == "HEALER" then
+            local currenttableSize = table.getn(listofhealers)
+            tinsert(listofhealers, currenttableSize+1, unitGUID)
+        end
+    end
+    self:UpdateAllUnits()
 end
 
 function PlexusResourceBar:UpdateUnitResource(unitid)
@@ -374,25 +410,17 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
     local priority = PlexusResourceBar.db.profile.unit_resource.priority
     local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
     local unitpower = UnitPowerType(unitid)
---@retail@
-    if EnableForHealers then
-        local members = GetNumGroupMembers();
-        local subGroupMembers = GetNumSubgroupMembers()
-        local currentSpec = GetSpecialization()
-        local currentSpecRole = currentSpec and select(5, GetSpecializationInfo(currentSpec)) or "None"
-        if ((members ~= 0 or subGroupMembers ~= 0) and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
-        (UnitGUID("player") == UnitGUID(unitid) and currentSpecRole ~= "HEALER") then
-            self.core:SendStatusLost(unitGUID, "unit_resource")
-            return
-        end
-    end
---@end-retail@
     local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
     if EnableOnlyMana then
         if unitpower ~= 0 then
             self.core:SendStatusLost(unitGUID, "unit_resource")
             return
         end
+    end
+    if EnableForHealers and not listofhealers[unitGUID] then
+        --clear the status in case they had it previously
+        self.core:SendStatusLost(unitGUID, "unit_resource")
+        return
     end
 
     if unitpower == 3 or unitpower == 2 then
