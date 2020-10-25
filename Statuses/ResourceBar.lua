@@ -329,6 +329,9 @@ end
 
 function PlexusResourceBar:UpdateUnit(_, unitid)
     if not unitid then return end
+    local unitGUID = UnitGUID(unitid)
+    --don't update for a unit not in group
+    if not PlexusRoster:IsGUIDInGroup(unitGUID) then return end
     self:UpdateUnitResource(unitid)
 end
 
