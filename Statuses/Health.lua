@@ -24,6 +24,8 @@ PlexusStatusHealth.defaultDB = {
         range = false,
         deadAsFullHealth = true,
         useClassColors = true,
+        enableupdateFrequency = false,
+        updateFrequency = 1,
     },
     unit_healthDeficit = {
         enable = true,
@@ -94,6 +96,30 @@ local healthOptions = {
         end,
         set = function(_, v)
             PlexusStatusHealth.db.profile.unit_health.useClassColors = v
+            PlexusStatusHealth:UpdateAllUnits()
+        end,
+    },
+    enableupdateFrequency = {
+        name = "Enable Custom Health Update Interval",
+        desc = "Enable Use of Update Frequency Setting",
+        type = "toggle", width = "double",
+        get = function()
+            return PlexusStatusHealth.db.profile.unit_health.enableupdateFrequency
+        end,
+        set = function(_, v)
+            PlexusStatusHealth.db.profile.unit_health.enableupdateFrequency = v
+            PlexusStatusHealth:UpdateAllUnits()
+        end,
+    },
+    updateFrequency = {
+        name = "Update Frequency (Note setting this too low can hurt performance)",
+        desc = "How often unit health will update in seconds",
+        type = "range", min = 0.01, max = 1, step = 0.01,
+        get = function()
+            return PlexusStatusHealth.db.profile.unit_health.updateFrequency
+        end,
+        set = function(_, v)
+            PlexusStatusHealth.db.profile.unit_health.updateFrequency = v
             PlexusStatusHealth:UpdateAllUnits()
         end,
     },
@@ -171,6 +197,9 @@ end
 
 function PlexusStatusHealth:OnStatusEnable()
     self:UpdateAllUnits()
+    if self.db.profile.unit_health.enableupdateFrequency then
+        self.timer = self:ScheduleRepeatingTimer("FrequentHealth", self.db.profile.unit_health.updateFrequency)
+    end
 end
 
 function PlexusStatusHealth:OnStatusDisable(status)
@@ -275,6 +304,12 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         cur,
         max,
         healthSettings.icon)
+end
+
+function PlexusStatusHealth:FrequentHealth()
+    if self.db.profile.unit_health.enableupdateFrequency then
+        self:UpdateAllUnits()
+    end
 end
 
 function PlexusStatusHealth:IsLowHealth(cur, max)
