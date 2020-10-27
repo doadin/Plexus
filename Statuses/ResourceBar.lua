@@ -42,6 +42,7 @@ PlexusResourceBar.defaultDB = {
     EnableForHealers = false,
 --@end-retail@
     EnableOnlyMana = false,
+    NoPets = false,
 }
 
 local resourcebar_options = {
@@ -86,6 +87,19 @@ local resourcebar_options = {
             end,
         set = function(_, v)
             PlexusResourceBar.db.profile.EnableOnlyMana = v
+            PlexusResourceBar:UpdateAllUnits()
+        end
+    },
+    ["No Pets"] = {
+        type = "toggle",
+        name = "Don't Show Pets",
+        order = 70,
+        desc = "Only show player bars",
+        get = function ()
+            return PlexusResourceBar.db.profile.NoPets
+            end,
+        set = function(_, v)
+            PlexusResourceBar.db.profile.NoPets = v
             PlexusResourceBar:UpdateAllUnits()
         end
     },
@@ -508,6 +522,10 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
         end
     end
 --@end-retail@
+    local NoPets = PlexusResourceBar.db.profile.NoPets
+    if (NoPets and not UnitIsPlayer(unitid)) then
+        self.core:SendStatusLost(unitGUID, "unit_resource")
+    end
     local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
     if EnableOnlyMana then
         if unitpower ~= 0 then
