@@ -20,7 +20,15 @@ PlexusResourceBar.defaultDB = {
     manacolor = { r = 0, g = 0.5, b = 1, a = 1.0 },
     energycolor = { r = 1, g = 1, b = 0, a = 1.0 },
     ragecolor = { r = 1, g = 0, b = 0, a = 1.0 },
+--@retail@
     runiccolor = { r = 0, g = 0.8, b = 0.8, a = 1.0 },
+    focuscolor = { r = 1, g = 0.50, b = 0.25, a = 1.0 };
+    insanitycolor = { r = 0.40, g = 0, b = 0.80, a = 1.0 };
+    furycolor = { r = 0.788, g = 0.259, b = 0.992, a = 1.0 };
+    paincolor = { r = 255/255, g = 156/255, b = 0, a = 1.0 };
+    maelstromcolor = { r = 0.00, g = 0.50, b = 1.00, a = 1.0 };
+    lunarcolor = { r = 0.30, g = 0.52, b = 0.90, a = 1.0 };
+--@end-retail@
     unit_resource = {
         color = { r=1, g=1, b=1, a=1 },
         text = "ResourceBar",
@@ -153,6 +161,7 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
+--@retail@
             ["Runic Bar Color"] = {
                 name = "Runic Color",
                 order = 70,
@@ -170,8 +179,111 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Reset"] = {
+            ["Focus Bar Color"] = {
+                name = "Focus Color",
                 order = 80,
+                type = "color", hasAlpha = true,
+                get = function()
+                    local color = PlexusResourceBar.db.profile.focuscolor
+                    return color.r, color.g, color.b, color.a
+                end,
+                set = function(_, r, g, b, a)
+                    local color = PlexusResourceBar.db.profile.focuscolor
+                    color.r = r
+                    color.g = g
+                    color.b = b
+                    color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+                end,
+            },
+            ["Insanity Bar Color"] = {
+                name = "Insanity Color",
+                order = 90,
+                type = "color", hasAlpha = true,
+                get = function()
+                    local color = PlexusResourceBar.db.profile.insanitycolor
+                    return color.r, color.g, color.b, color.a
+                end,
+                set = function(_, r, g, b, a)
+                    local color = PlexusResourceBar.db.profile.insanitycolor
+                    color.r = r
+                    color.g = g
+                    color.b = b
+                    color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+                end,
+            },
+            ["Fury Bar Color"] = {
+                name = "Fury Color",
+                order = 100,
+                type = "color", hasAlpha = true,
+                get = function()
+                    local color = PlexusResourceBar.db.profile.furycolor
+                    return color.r, color.g, color.b, color.a
+                end,
+                set = function(_, r, g, b, a)
+                    local color = PlexusResourceBar.db.profile.furycolor
+                    color.r = r
+                    color.g = g
+                    color.b = b
+                    color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+                end,
+            },
+            ["Pain Bar Color"] = {
+                name = "Pain Color",
+                order = 110,
+                type = "color", hasAlpha = true,
+                get = function()
+                    local color = PlexusResourceBar.db.profile.paincolor
+                    return color.r, color.g, color.b, color.a
+                end,
+                set = function(_, r, g, b, a)
+                    local color = PlexusResourceBar.db.profile.paincolor
+                    color.r = r
+                    color.g = g
+                    color.b = b
+                    color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+                end,
+            },
+            ["Maelstrom Bar Color"] = {
+                name = "Maelstrom Color",
+                order = 120,
+                type = "color", hasAlpha = true,
+                get = function()
+                    local color = PlexusResourceBar.db.profile.maelstromcolor
+                    return color.r, color.g, color.b, color.a
+                end,
+                set = function(_, r, g, b, a)
+                    local color = PlexusResourceBar.db.profile.maelstromcolor
+                    color.r = r
+                    color.g = g
+                    color.b = b
+                    color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+                end,
+            },
+            ["Lunar Bar Color"] = {
+                name = "Lunar Color(Balance Druid)",
+                order = 130,
+                type = "color", hasAlpha = true,
+                get = function()
+                    local color = PlexusResourceBar.db.profile.lunarcolor
+                    return color.r, color.g, color.b, color.a
+                end,
+                set = function(_, r, g, b, a)
+                    local color = PlexusResourceBar.db.profile.lunarcolor
+                    color.r = r
+                    color.g = g
+                    color.b = b
+                    color.a = a or 1
+                    PlexusFrame:UpdateAllFrames()
+                end,
+            },
+--@end-retail@
+            ["Reset"] = {
+                order = 1000,
                 name = "Reset Resource colors (Require Reload)",
                 type = "execute", width = "double",
                 func = function() PlexusResourceBar:ResetResourceColors() end,
@@ -185,6 +297,12 @@ function PlexusResourceBar:ResetResourceColors() --luacheck: ignore 212
     PlexusResourceBar.db.profile.energycolor = PlexusResourceBar.defaultDB.energycolor
     PlexusResourceBar.db.profile.ragecolor = PlexusResourceBar.defaultDB.ragecolor
     PlexusResourceBar.db.profile.runiccolor = PlexusResourceBar.defaultDB.runiccolor
+    PlexusResourceBar.db.profile.focuscolor = PlexusResourceBar.defaultDB.focuscolor
+    PlexusResourceBar.db.profile.insanitycolor = PlexusResourceBar.defaultDB.insanitycolor
+    PlexusResourceBar.db.profile.furycolor = PlexusResourceBar.defaultDB.furycolor
+    PlexusResourceBar.db.profile.paincolor = PlexusResourceBar.defaultDB.paincolor
+    PlexusResourceBar.db.profile.maelstromcolor = PlexusResourceBar.defaultDB.maelstromcolor
+    PlexusResourceBar.db.profile.lunarcolor = PlexusResourceBar.defaultDB.lunarcolor
     PlexusFrame:UpdateAllFrames()
 end
 
@@ -398,10 +516,24 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
         end
     end
 
-    if unitpower == 3 or unitpower == 2 then
+    if unitpower == 3 then
         color = PlexusResourceBar.db.profile.energycolor
+--@retail@
+    elseif unitpower == 2 then
+        color = PlexusResourceBar.db.profile.focuscolor
     elseif unitpower == 6 then
         color = PlexusResourceBar.db.profile.runiccolor
+    elseif unitpower == 8 then
+        color = PlexusResourceBar.db.profile.lunarcolor
+    elseif unitpower == 11 then
+        color = PlexusResourceBar.db.profile.maelstromcolor
+    elseif unitpower == 13 then
+        color = PlexusResourceBar.db.profile.insanitycolor
+    elseif unitpower == 17 then
+        color = PlexusResourceBar.db.profile.furycolor
+    elseif unitpower == 18 then
+        color = PlexusResourceBar.db.profile.paincolor
+--@end-retail@
     elseif unitpower == 1 then
         color = PlexusResourceBar.db.profile.ragecolor
     else
