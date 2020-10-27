@@ -42,6 +42,7 @@ PlexusResourceBar.defaultDB = {
     EnableForHealers = false,
 --@end-retail@
     EnableOnlyMana = false,
+    NoPets = false,
 }
 
 local resourcebar_options = {
@@ -86,6 +87,19 @@ local resourcebar_options = {
             end,
         set = function(_, v)
             PlexusResourceBar.db.profile.EnableOnlyMana = v
+            PlexusResourceBar:UpdateAllUnits()
+        end
+    },
+    ["No Pets"] = {
+        type = "toggle",
+        name = "Don't Show Pets",
+        order = 70,
+        desc = "Only show player bars",
+        get = function ()
+            return PlexusResourceBar.db.profile.NoPets
+            end,
+        set = function(_, v)
+            PlexusResourceBar.db.profile.NoPets = v
             PlexusResourceBar:UpdateAllUnits()
         end
     },
@@ -447,10 +461,15 @@ end
 
 function PlexusResourceBar:UpdateUnit(_, unitid)
     if not unitid then return end
+    local NoPets = PlexusResourceBar.db.profile.NoPets
     local unitGUID = UnitGUID(unitid)
     --don't update for a unit not in group
     if not PlexusRoster:IsGUIDInGroup(unitGUID) then return end
-    self:UpdateUnitResource(unitid)
+    if (NoPets and not UnitIsPlayer(unitid)) then
+        self.core:SendStatusLost(unitGUID, "unit_resource")
+    else
+        self:UpdateUnitResource(unitid)
+    end
 end
 
 --@retail@
@@ -475,13 +494,25 @@ end
 --@end-retail@
 
 function PlexusResourceBar:Plexus_UnitJoined(_, _, unitid)
+    local NoPets = PlexusResourceBar.db.profile.NoPets
+    local unitGUID = UnitGUID(unitid)
     if not unitid then return end
-    self:UpdateUnitResource(unitid)
+    if (NoPets and not UnitIsPlayer(unitid)) then
+        self.core:SendStatusLost(unitGUID, "unit_resource")
+    else
+        self:UpdateUnitResource(unitid)
+    end
 end
 
 function PlexusResourceBar:UpdateAllUnits()
+    local NoPets = PlexusResourceBar.db.profile.NoPets
     for _, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateUnitResource(unitid)
+        local unitGUID = UnitGUID(unitid)
+        if (NoPets and not UnitIsPlayer(unitid)) then
+            self.core:SendStatusLost(unitGUID, "unit_resource")
+        else
+            self:UpdateUnitResource(unitid)
+        end
     end
 end
 
@@ -508,6 +539,11 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
         end
     end
 --@end-retail@
+    local NoPets = PlexusResourceBar.db.profile.NoPets
+    if (NoPets and not UnitIsPlayer(unitid)) then
+        self.core:SendStatusLost(unitGUID, "unit_resource")
+        return
+    end
     local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
     if EnableOnlyMana then
         if unitpower ~= 0 then
