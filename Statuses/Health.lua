@@ -13,7 +13,7 @@ local _, Plexus = ...
 local L = Plexus.L
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
-local PlexusStatusHealth = Plexus:NewStatusModule("PlexusStatusHealth")
+local PlexusStatusHealth = Plexus:NewStatusModule("PlexusStatusHealth", "AceTimer-3.0")
 PlexusStatusHealth.menuName = L["Health"]
 
 PlexusStatusHealth.defaultDB = {
@@ -207,6 +207,14 @@ function PlexusStatusHealth:OnStatusDisable(status)
 end
 
 function PlexusStatusHealth:UpdateAllUnits()
+    if (self.timer and not self.db.profile.unit_health.enableupdateFrequency) then
+        self:Debug("have timer but not enabled")
+        self:CancelTimer(self.timer)
+    end
+    if (not self.timer and self.db.profile.unit_health.enableupdateFrequency) then
+        self:Debug("no timer but enabled")
+        self.timer = self:ScheduleRepeatingTimer("FrequentHealth", self.db.profile.unit_health.updateFrequency)
+    end
     for guid, unitid in PlexusRoster:IterateRoster() do
         self:Plexus_UnitJoined("UpdateAllUnits", guid, unitid)
     end
