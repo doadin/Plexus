@@ -100,7 +100,7 @@ local healthOptions = {
         end,
     },
     enableupdateFrequency = {
-        name = "Enable Custom Health Update Interval(Requires Reload UI)",
+        name = "Enable Custom Health Update Interval",
         desc = "Enable Use of Update Frequency Setting",
         type = "toggle", width = "double",
         get = function()
