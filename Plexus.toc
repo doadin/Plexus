@@ -108,6 +108,7 @@ Statuses\Name.lua
 #@retail@
 Statuses\Phase.lua
 #@end-retail@
+Statuses\Player.lua
 Statuses\RaidIcon.lua
 Statuses\Range.lua
 Statuses\ReadyCheck.lua
