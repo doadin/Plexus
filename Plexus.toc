@@ -110,8 +110,8 @@ Statuses\Range.lua
 Statuses\ReadyCheck.lua
 Statuses\ResourceBar.lua
 Statuses\Resurrect.lua
-Statuses\Role.lua
 #@retail@
+Statuses\Role.lua
 Statuses\Stagger.lua
 #@end-retail@
 #@retail@
