@@ -99,6 +99,9 @@ Statuses\Group.lua
 Statuses\GroupBuffs.lua
 Statuses\Heals.lua
 Statuses\Health.lua
+#@retail@
+Statuses\HostileUnit.lua
+#@end-retail@
 Statuses\Mana.lua
 Statuses\Mouseover.lua
 Statuses\Name.lua
