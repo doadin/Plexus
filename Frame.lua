@@ -262,8 +262,12 @@ PlexusFrame.defaultDB = {
     fontOutline = "NONE",
     fontShadow = true,
     textlength = 4,
+    enableCorner2 = true,
+    enableCorner34 = true,
     enableText2 = false,
     enableText3 = false,
+    enableIcon2 = true,
+    enableIcon34 = true,
     statusmap = {
         text = {
             alert_death = true,
@@ -394,12 +398,6 @@ PlexusFrame.options = {
                     desc = L["Adjust the size of the border indicators."],
                     order = 3, width = "double",
                     type = "range", min = 1, max = 9, step = 1,
-                },
-                cornerSize = {
-                    name = L["Corner Size"],
-                    desc = L["Adjust the size of the corner indicators."],
-                    order = 4, width = "double",
-                    type = "range", min = 1, max = 20, step = 1,
                 },
                 showTooltip = {
                     name = L["Show Tooltip"],
@@ -576,6 +574,28 @@ PlexusFrame.options = {
                     order = 7, width = "double",
                     type = "toggle",
                 },
+                enableIcon2 = {
+                    name = format(L["Enable %s indicators"], "Extra Icon xx 2"),
+                    desc = format(L["Toggle the %s indicators."], "Extra Icon xx 2"),
+                    order = 8, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableIcon2 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
+                enableIcon34 = {
+                    name = format(L["Enable %s indicators"], "Extra Icon xx 3/4"),
+                    desc = format(L["Toggle the %s indicators."], "Extra Icon xx 3/4"),
+                    order = 9, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableIcon34 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
             },
         },
         text = {
@@ -642,6 +662,42 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,
+                },
+            },
+        },
+        corner = {
+            name = L["Corner Indicator Options"],
+            desc = L["Options related to corner indicators."],
+            order = 5,
+            type = "group",
+            args = {
+                enableCorner2 = {
+                    name = format(L["Enable %s indicators"], "xx 2"),
+                    desc = format(L["Toggle the %s indicators."], "xx 2"),
+                    order = 8, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableCorner2 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
+                enableCorner34 = {
+                    name = format(L["Enable %s indicators"], "xx 3/4"),
+                    desc = format(L["Toggle the %s indicators."], "xx 3/4"),
+                    order = 9, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableCorner34 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
+                cornerSize = {
+                    name = L["Size"],
+                    desc = L["Adjust the size of the corner indicators."],
+                    order = 4, width = "double",
+                    type = "range", min = 1, max = 20, step = 1,
                 },
             },
         },
@@ -953,6 +1009,34 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         return
     end
 
+    if indicator == "tooltip" then
+        self:Debug("indicator text3 is disabled")
+        menu[indicator] = nil
+        return
+    end
+
+    if (string.find(indicator, "ei_corner") and (string.find(indicator, "2")) and not self.db.profile.enableCorner2) then --luacheck:ignore 631
+        self:Debug("Disabling Corners 2")
+        menu[indicator] = nil
+        return
+    end
+    if (string.find(indicator, "ei_corner") and (string.find(indicator, "3") or string.find(indicator, "4")) and not self.db.profile.enableCorner34) then --luacheck:ignore 631
+        self:Debug("Disabling Corners 3-4")
+        menu[indicator] = nil
+        return
+    end
+
+    if (string.find(indicator, "ei_icon") and (string.find(indicator, "2")) and not self.db.profile.enableIcon2) then
+        self:Debug("Disabling Extra Icons 2")
+        menu[indicator] = nil
+        return
+    end
+    if (string.find(indicator, "ei_icon") and (string.find(indicator, "3") or string.find(indicator, "4")) and not self.db.profile.enableIcon34) then --luacheck:ignore 631
+        self:Debug("Disabling Extra Icons 3-4")
+        menu[indicator] = nil
+        return
+    end
+
     --if indicator == "resourcebar"  then
     --    self:Debug("disableing resourcebar menu")
     --    menu[indicator] = nil
@@ -990,6 +1074,21 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         end
         if indicator == "text3" then
             menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableText3 end
+        end
+        if indicator == "tooltip" then
+            menu[indicator].disabled = function() return true end
+        end
+        if (string.find(indicator, "ei_corner") and string.find(indicator, "2")) then
+            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableCorner2 end
+        end
+        if (string.find(indicator, "ei_corner") and (string.find(indicator, "3") or string.find(indicator, "4"))) then
+            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableCorner34 end
+        end
+        if (string.find(indicator, "ei_icon") and string.find(indicator, "2")) then
+            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableIcon2 end
+        end
+        if (string.find(indicator, "ei_icon") and (string.find(indicator, "3") or string.find(indicator, "4"))) then
+            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableIcon34 end
         end
         --if indicator == "resourcebar" then
         --    menu[indicator].disabled = function() return true end
