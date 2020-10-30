@@ -717,10 +717,16 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateAllFrames()
                     end
                 },
+                ExtraBarBorderSize = {
+                    name = L["Border Size"],
+                    desc = L["Adjust the size of the border on extra bar."],
+                    order = 2, width = "double",
+                    type = "range", min = 1, max = 20, step = 1,
+                },
                 ExtraBarSide = {
                     type = "select",
                     name = "Location",
-                    order = 2,
+                    order = 3,
                     desc = "Where extra bar attaches to",
                     get = function ()
                         return PlexusFrame.db.profile.ExtraBarSide
@@ -734,7 +740,7 @@ PlexusFrame.options = {
                 ExtraBarInvertColor = {
                     name = L["Invert Extra Bar Color"],
                     desc = L["Swap foreground/background colors on bars."],
-                    order = 3, width = "double",
+                    order = 4, width = "double",
                     type = "toggle",
                 },
             },
