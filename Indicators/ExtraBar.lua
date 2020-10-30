@@ -71,7 +71,7 @@ local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 43
     self:SetValue(value)
 
     if color then
-        if PlexusFrame.db.profile.invertResourceBarColor then
+        if PlexusFrame.db.profile.ExtraBarInvertColor then
             self:SetStatusBarColor(color.r,color.g,color.b,color.a)
             self.bg:SetVertexColor(0,0,0,0.8)
         else
