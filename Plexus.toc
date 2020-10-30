@@ -95,6 +95,9 @@ Statuses\Absorbs.lua
 #@end-retail@
 Statuses\Aggro.lua
 Statuses\AFK.lua
+#@retail@
+Statuses\AltPower.lua
+#@end-retail@
 Statuses\Auras.lua
 Statuses\Group.lua
 Statuses\GroupBuffs.lua
