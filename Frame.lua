@@ -244,7 +244,6 @@ PlexusFrame.defaultDB = {
     texture = "Gradient",
     enableBarColor = false,
     invertBarColor = false,
-    invertResourceBarColor = false,
     invertTextColor = false,
     healingBar_intensity = 0.5,
     healingBar_useStatusColor = false,
@@ -268,6 +267,10 @@ PlexusFrame.defaultDB = {
     enableText3 = false,
     enableIcon2 = true,
     enableIcon34 = true,
+    ExtraBarSize = 0.1,
+    ExtraBarSide = "Bottom",
+    ExtraBarBorderSize = 1,
+    ExtraBarInvertColor = false,
     statusmap = {
         text = {
             alert_death = true,
@@ -332,7 +335,7 @@ PlexusFrame.defaultDB = {
             raid_icon = true,
             ready_check = true,
         },
-        resourcebar = {
+        ei_bar_barone = {
             unit_resource = true,
         }
     },
@@ -470,10 +473,16 @@ PlexusFrame.options = {
                     values = Media:HashTable("statusbar"),
                     dialogControl = "LSM30_Statusbar",
                 },
+                healingBar_intensity = {
+                    name = L["Healing Bar Opacity"],
+                    desc = L["Sets the opacity of the healing bar."],
+                    order = 2, width = "double",
+                    type = "range", min = 0, max = 1, step = 0.01, bigStep = 0.05,
+                },
                 enableBarColor = {
                     name = format(L["Enable %s indicator"], L["Health Bar Color"]),
                     desc = format(L["Toggle the %s indicator."], L["Health Bar Color"]),
-                    order = 2, width = "double",
+                    order = 3, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableBarColor = v
@@ -483,12 +492,6 @@ PlexusFrame.options = {
                 },
                 invertBarColor = {
                     name = L["Invert Health Bar Color"],
-                    desc = L["Swap foreground/background colors on bars."],
-                    order = 3, width = "double",
-                    type = "toggle",
-                },
-                invertResourceBarColor = {
-                    name = L["Invert Resource Bar Color"],
                     desc = L["Swap foreground/background colors on bars."],
                     order = 4, width = "double",
                     type = "toggle",
@@ -501,12 +504,6 @@ PlexusFrame.options = {
                     disabled = function()
                         return not PlexusFrame.db.profile.invertBarColor
                     end,
-                },
-                healingBar_intensity = {
-                    name = L["Healing Bar Opacity"],
-                    desc = L["Sets the opacity of the healing bar."],
-                    order = 5, width = "double",
-                    type = "range", min = 0, max = 1, step = 0.01, bigStep = 0.05,
                 },
                 healingBar_useStatusColor = {
                     name = L["Healing Bar Uses Status Color"],
@@ -698,6 +695,47 @@ PlexusFrame.options = {
                     desc = L["Adjust the size of the corner indicators."],
                     order = 4, width = "double",
                     type = "range", min = 1, max = 20, step = 1,
+                },
+            },
+        },
+        extrabar = {
+            name = L["Extra Bar Indicator Options"],
+            desc = L["Options related to extra indicators."],
+            order = 6,
+            type = "group",
+            args = {
+                ExtraBarSize = {
+                    name = L["Size"],
+                    desc = "Percentage of frame for extra bar",
+                    order = 1, width = "double",
+                    type = "range", min = 1, max = 50, step = 1,
+                    get = function ()
+                        return PlexusFrame.db.profile.ExtraBarSize * 100
+                    end,
+                    set = function(_, v)
+                        PlexusFrame.db.profile.ExtraBarSize = v / 100
+                        PlexusFrame:UpdateAllFrames()
+                    end
+                },
+                ExtraBarSide = {
+                    type = "select",
+                    name = "Location",
+                    order = 2,
+                    desc = "Where extra bar attaches to",
+                    get = function ()
+                        return PlexusFrame.db.profile.ExtraBarSide
+                        end,
+                    set = function(_, v)
+                        PlexusFrame.db.profile.ExtraBarSide = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                    values={["Left"] = "Left", ["Top"] = "Top", ["Right"] = "Right", ["Bottom"] = "Bottom" },
+                },
+                ExtraBarInvertColor = {
+                    name = L["Invert Extra Bar Color"],
+                    desc = L["Swap foreground/background colors on bars."],
+                    order = 3, width = "double",
+                    type = "toggle",
                 },
             },
         },

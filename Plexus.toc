@@ -85,6 +85,7 @@ Indicators\Alpha.lua
 Indicators\Bar.lua
 Indicators\Border.lua
 Indicators\Corner.lua
+Indicators\ExtraBar.lua
 Indicators\HealingBar.lua
 Indicators\Icon.lua
 Indicators\Text.lua
