@@ -436,21 +436,11 @@ PlexusFrame.options = {
                         HORIZONTAL = L["Horizontal"]
                     },
                 },
-                textorientation = {
-                    name = L["Orientation of Text"],
-                    desc = L["Set frame text orientation."],
-                    order = 8, width = "double",
-                    type = "select",
-                    values = {
-                        VERTICAL = L["Vertical"],
-                        HORIZONTAL = L["Horizontal"]
-                    },
-                },
                 throttleUpdates = {
                     name = L["Throttle Updates"],
                     desc = L["Throttle updates on group changes. This option may cause delays in updating frames, so you should only enable it if you're experiencing temporary freezes or lockups when people join or leave your group."],
                     type = "toggle",
-                    order = 9, width = "double",
+                    order = 8, width = "double",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.throttleUpdates = v
                         if v then
@@ -612,16 +602,26 @@ PlexusFrame.options = {
                     values = Media:HashTable("font"),
                     dialogControl = "LSM30_Font",
                 },
+                textorientation = {
+                    name = L["Orientation of Text"],
+                    desc = L["Set frame text orientation."],
+                    order = 2, width = "double",
+                    type = "select",
+                    values = {
+                        VERTICAL = L["Vertical"],
+                        HORIZONTAL = L["Horizontal"]
+                    },
+                },
                 fontSize = {
                     name = L["Font Size"],
                     desc = L["Adjust the font size."],
-                    order = 2, width = "double",
+                    order = 3, width = "double",
                     type = "range", min = 6, max = 24, step = 1,
                 },
                 fontOutline = {
                     name = L["Font Outline"],
                     desc = L["Adjust the font outline."],
-                    order = 3, width = "double",
+                    order = 4, width = "double",
                     type = "select",
                     values = {
                         NONE = L["None"],
@@ -632,19 +632,19 @@ PlexusFrame.options = {
                 fontShadow = {
                     name = L["Font Shadow"],
                     desc = L["Toggle the font drop shadow effect."],
-                    order = 4, width = "double",
+                    order = 5, width = "double",
                     type = "toggle",
                 },
                 textlength = {
                     name = L["Center Text Length"],
                     desc = L["Number of characters to show on Center Text indicator."],
-                    order = 5, width = "double",
+                    order = 6, width = "double",
                     type = "range", min = 1, max = 12, step = 1,
                 },
                 enableText2 = {
                     name = format(L["Enable %s indicator"], L["Center Text 2"]),
                     desc = format(L["Toggle the %s indicator."], L["Center Text 2"]),
-                    order = 6, width = "double",
+                    order = 7, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableText2 = v
@@ -655,7 +655,7 @@ PlexusFrame.options = {
                 enableText3 = {
                     name = format(L["Enable %s indicator"], L["Center Text 3"]),
                     desc = format(L["Toggle the %s indicator."], L["Center Text 3"]),
-                    order = 7, width = "double",
+                    order = 8, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableText3 = v
