@@ -24,7 +24,7 @@ PlexusAltPowerBar.defaultDB = {
     },
 }
 
-local settings
+local settings --luacheck:ignore 231
 
 function PlexusAltPowerBar:OnInitialize()
     self.super.OnInitialize(self)
