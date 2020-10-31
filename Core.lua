@@ -755,6 +755,38 @@ function Plexus:ResetModules()
     end
 end
 
+function Plexus:ConvertSettings()
+    self:Debug("ConvertSettings")
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.corner3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.topleft
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.topleft2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_topleft2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.topleft3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_topleft3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.corner4 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.topright
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.topright2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_topright2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.topright3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_topright3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.corner1 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottomleft
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottomleft2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottomleft2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottomleft3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottomleft3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.corner2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottomright
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottomright2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottomright2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottomright3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottomright3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Top = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.top
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Top2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_top2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Top3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_top3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Top4 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_top4
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Bottom = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.bottom
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Bottom2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottom2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Bottom3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottom3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Bottom4 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_bottom4
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Left = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.left
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Left2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_left2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Left3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_left3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Left4 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_left4
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Right = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.right
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Right2 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_right2
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Right3 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_right3
+    _G.Plexus.modules.PlexusFrame.db.profile.statusmap.Right4 = _G.Plexus.modules.PlexusFrame.db.profile.statusmap.ei_corner_right4
+end
+
 ------------------------------------------------------------------------
 
 function Plexus:PLAYER_ENTERING_WORLD()
@@ -780,4 +812,5 @@ function Plexus:ADDON_LOADED()
     for name, module in self:IterateModules() do
         self:RegisterModule(name, module)
     end
+    self:ConvertSettings()
 end
