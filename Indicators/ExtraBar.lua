@@ -54,10 +54,10 @@ local function Reset(self) -- luacheck: ignore 432
     if self:IsShown() then
         frame.indicators.text:SetParent(self)
         frame.indicators.text2:SetParent(self)
-        frame.indicators.corner1:SetParent(self)
-        frame.indicators.corner2:SetParent(self)
-        frame.indicators.corner3:SetParent(self)
-        frame.indicators.corner4:SetParent(self)
+        frame.indicators.bottomleft:SetParent(self)
+        frame.indicators.bottomright:SetParent(self)
+        frame.indicators.topleft:SetParent(self)
+        frame.indicators.topright:SetParent(self)
         frame.indicators.icon:SetParent(self)
     end
 
@@ -84,10 +84,10 @@ local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 43
         local frame = self.__owner
         frame.indicators.text:SetParent(self)
         frame.indicators.text2:SetParent(self)
-        frame.indicators.corner1:SetParent(self)
-        frame.indicators.corner2:SetParent(self)
-        frame.indicators.corner3:SetParent(self)
-        frame.indicators.corner4:SetParent(self)
+        frame.indicators.bottomleft:SetParent(self)
+        frame.indicators.bottomright:SetParent(self)
+        frame.indicators.topleft:SetParent(self)
+        frame.indicators.topright:SetParent(self)
         frame.indicators.icon:SetParent(self)
     end
     self:Show()
@@ -99,10 +99,10 @@ local function Clear(self) -- luacheck: ignore 432
         local healthBar = frame.indicators.bar
         frame.indicators.text:SetParent(healthBar)
         frame.indicators.text2:SetParent(healthBar)
-        frame.indicators.corner1:SetParent(healthBar)
-        frame.indicators.corner2:SetParent(healthBar)
-        frame.indicators.corner3:SetParent(healthBar)
-        frame.indicators.corner4:SetParent(healthBar)
+        frame.indicators.bottomleft:SetParent(healthBar)
+        frame.indicators.bottomright:SetParent(healthBar)
+        frame.indicators.topleft:SetParent(healthBar)
+        frame.indicators.topright:SetParent(healthBar)
         frame.indicators.icon:SetParent(healthBar)
     end
     self:Hide()
