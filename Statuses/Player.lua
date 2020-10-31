@@ -5,17 +5,17 @@ PlexusStatusPlayer.menuName = "Player"
 
 PlexusStatusPlayer.defaultDB = {
 	alert_me = {
-		text = "Self",
-		enable = false,
-		color = { r = 0.25, g = 1.0, b = 0.25, a = 1 },
-		priority = 75,
-		range = false,
-	},
+	    text = "Self",
+	    enable = false,
+	    color = { r = 1.0, g = 1.0, b = 1.0, a = 1 },
+	    priority = 75,
+	    range = false,
+	}
 }
 
 function PlexusStatusPlayer:PostInitialize()
 	self:Debug("OnInitialize")
-    self:RegisterStatus("alert_me", "Player")
+    self:RegisterStatus("alert_me", "Player", nil, true)
 end
 
 function PlexusStatusPlayer:OnStatusEnable(status)
@@ -38,7 +38,7 @@ function PlexusStatusPlayer:Update()
 	self:ClearAll("alert_me")
     local me = UnitGUID("player")
 	local settings_me = self.db.profile.alert_me
-    self.core:SendStatusGained(me, "alert_self",
+    self.core:SendStatusGained(me, "alert_me",
                                settings_me.priority,
                                settings_me.range,
                                settings_me.color,
