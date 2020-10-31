@@ -18,41 +18,41 @@ local BACKDROP = {
 
 local anchor = {
     -- left/right up/down
-    corner3 = { "TOPLEFT", -1, 1 },
-    topleft2 = { "TOPLEFT", 4, 1 },
-    topleft3 = { "TOPLEFT", -1, -4 },
+    topleft = { "TOPLEFT", -1, 1 },
+    ei_corner_topleft2 = { "TOPLEFT", 4, 1 },
+    ei_corner_topleft3 = { "TOPLEFT", -1, -4 },
     -- left/right up/down
-    corner4 = { "TOPRIGHT", 1, 1 },
-    topright2 = { "TOPRIGHT", 1, -4 },
-    topright3 = { "TOPRIGHT", -4, 1 },
+    topright = { "TOPRIGHT", 1, 1 },
+    ei_corner_topright2 = { "TOPRIGHT", 1, -4 },
+    ei_corner_topright3 = { "TOPRIGHT", -4, 1 },
     -- left/right up/down
-    corner1 = { "BOTTOMLEFT", -1, -1 },
-    bottomleft2 = { "BOTTOMLEFT", -1, 4 },
-    bottomleft3 = { "BOTTOMLEFT", 4, -1 },
+    bottomleft = { "BOTTOMLEFT", -1, -1 },
+    ei_corner_bottomleft2 = { "BOTTOMLEFT", -1, 4 },
+    ei_corner_bottomleft3 = { "BOTTOMLEFT", 4, -1 },
     -- left/right up/down
-    corner2 = { "BOTTOMRIGHT", 1, -1 },
-    bottomright2 = { "BOTTOMRIGHT", -4, -1 },
-    bottomright3 = { "BOTTOMRIGHT", 1, 4 },
+    bottomright = { "BOTTOMRIGHT", 1, -1 },
+    ei_corner_bottomright2 = { "BOTTOMRIGHT", -4, -1 },
+    ei_corner_bottomright3 = { "BOTTOMRIGHT", 1, 4 },
     -- left/right up/down
-    Top = { "TOP", 1, 1 },
-    Top2 = { "TOP", 6, 1 },
-    Top3 = { "TOP", 1, -4 },
-    Top4 = { "TOP", -4, 1 },
+    top = { "TOP", 1, 1 },
+    ei_corner_top2 = { "TOP", 6, 1 },
+    ei_corner_top3 = { "TOP", 1, -4 },
+    ei_corner_top4 = { "TOP", -4, 1 },
     -- left/right up/down
-    Bottom = { "BOTTOM", 1, 0 },
-    Bottom2 = { "BOTTOM", -4, 0 },
-    Bottom3 = { "BOTTOM", 1, 5 },
-    Bottom4 = { "BOTTOM", 6, 0 },
+    bottom = { "BOTTOM", 1, 0 },
+    ei_corner_bottom2 = { "BOTTOM", -4, 0 },
+    ei_corner_bottom3 = { "BOTTOM", 1, 5 },
+    ei_corner_bottom4 = { "BOTTOM", 6, 0 },
     -- left/right up/down
-    Left = { "LEFT", -1, -1 },
-    Left2 = { "LEFT", -1, 4 },
-    Left3 = { "LEFT", 4, -1 },
-    Left4 = { "LEFT", -1, -6 },
+    left = { "LEFT", -1, -1 },
+    ei_corner_left2 = { "LEFT", -1, 4 },
+    ei_corner_left3 = { "LEFT", 4, -1 },
+    ei_corner_left4 = { "LEFT", -1, -6 },
     -- left/right up/down
-    Right = { "RIGHT", 1, -1 },
-    Right2 = { "RIGHT", 1, -6 },
-    Right3 = { "RIGHT", -4, -1 },
-    Right4 = { "RIGHT", 1, 4 },
+    right = { "RIGHT", 1, -1 },
+    ei_corner_right2 = { "RIGHT", 1, -6 },
+    ei_corner_right3 = { "RIGHT", -4, -1 },
+    ei_corner_right4 = { "RIGHT", 1, 4 },
 }
 
 local function New(frame)
@@ -85,31 +85,31 @@ local function Clear(self)
     self:Hide()
 end
 
-PlexusFrame:RegisterIndicator("Top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Top2",  L["Indicator Top 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Top3",  L["Indicator Top 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Top4",  L["Indicator Top 4"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner3",  L["Indicator Top Left Corner"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topleft2",  L["Indicator Top Left Corner 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topleft3",  L["Indicator Top Left Corner 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner4",  L["Indicator Top Right Corner"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topright2",  L["Indicator Top Right Corner 2"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topright3",  L["Indicator Top Right Corner 3"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom",  L["Indicator Bottom"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom2",  L["Indicator Bottom 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom3",  L["Indicator Bottom 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom4",  L["Indicator Bottom 4"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner1",  L["Indicator Bottom Left Corner"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomleft2",  L["Indicator Bottom Left Corner 2"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomleft3",  L["Indicator Bottom Left Corner 3"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner2",  L["Indicator Bottom Right Corner"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomright2",  L["Indicator Bottom Right Corner 2"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomright3",  L["Indicator Bottom Right Corner 3"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left",  L["Indicator Left"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left2",  L["Indicator Left 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left3",  L["Indicator Left 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left4",  L["Indicator Left 4"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right",  L["Indicator Right"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right2",  L["Indicator Right 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right3",  L["Indicator Right 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right4",  L["Indicator Right 4"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_top2",  L["Indicator Top 2"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_top3",  L["Indicator Top 3"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_top4",  L["Indicator Top 4"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("topleft",  L["Indicator Top Left Corner"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_topleft2",  L["Indicator Top Left Corner 2"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_topleft3",  L["Indicator Top Left Corner 3"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("topright",  L["Indicator Top Right Corner"],    New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_topright2",  L["Indicator Top Right Corner 2"],    New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_topright3",  L["Indicator Top Right Corner 3"],    New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("bottom",  L["Indicator Bottom"],  New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottom2",  L["Indicator Bottom 2"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottom3",  L["Indicator Bottom 3"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottom4",  L["Indicator Bottom 4"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("bottomleft",  L["Indicator Bottom Left Corner"],  New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottomleft2",  L["Indicator Bottom Left Corner 2"],  New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottomleft3",  L["Indicator Bottom Left Corner 3"],  New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("bottomright",  L["Indicator Bottom Right Corner"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottomright2",  L["Indicator Bottom Right Corner 2"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_bottomright3",  L["Indicator Bottom Right Corner 3"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("left",  L["Indicator Left"], New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_left2",  L["Indicator Left 2"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_left3",  L["Indicator Left 3"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_left4",  L["Indicator Left 4"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("right",  L["Indicator Right"],    New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_right2",  L["Indicator Right 2"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_right3",  L["Indicator Right 3"],     New, Reset, SetStatus, Clear)
+PlexusFrame:RegisterIndicator("ei_corner_right4",  L["Indicator Right 4"],     New, Reset, SetStatus, Clear)
