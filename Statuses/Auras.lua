@@ -2043,6 +2043,11 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
                 break
             end
 
+            local class
+            if type(caster) == "string" then
+                class = UnitClass(caster)
+            end
+
             -- scan for buffs
             if buff_names[name] then
                 buff_names_seen[name] = true
