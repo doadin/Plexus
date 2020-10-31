@@ -23,6 +23,14 @@ local function Reset(self) -- luacheck: ignore 432
     local healthBar = frame.indicators.bar
     local barWidth = profile.ExtraBarSize
     local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
+
+    if string.find(self.__id,"ei_bar_barone") then
+        if not profile.enableExtraBar then
+            return self:Hide()
+        end
+        self:Show()
+    end
+
     self:SetParent(healthBar)
     self:ClearAllPoints()
     if side == "Right" then
@@ -66,6 +74,8 @@ local function Reset(self) -- luacheck: ignore 432
 end
 
 local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 432
+    local profile = PlexusFrame.db.profile
+
     if not value or not maxValue then return end
     self:SetMinMaxValues(0, maxValue)
     self:SetValue(value)
@@ -80,15 +90,21 @@ local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 43
         end
     end
 
-    if not self:IsShown() then
-        local frame = self.__owner
-        frame.indicators.text:SetParent(self)
-        frame.indicators.text2:SetParent(self)
-        frame.indicators.corner1:SetParent(self)
-        frame.indicators.corner2:SetParent(self)
-        frame.indicators.corner3:SetParent(self)
-        frame.indicators.corner4:SetParent(self)
-        frame.indicators.icon:SetParent(self)
+    --if not self:IsShown() then
+    --    local frame = self.__owner
+    --    frame.indicators.text:SetParent(self)
+    --    frame.indicators.text2:SetParent(self)
+    --    frame.indicators.corner1:SetParent(self)
+    --    frame.indicators.corner2:SetParent(self)
+    --    frame.indicators.corner3:SetParent(self)
+    --    frame.indicators.corner4:SetParent(self)
+    --    frame.indicators.icon:SetParent(self)
+    --end
+    if string.find(self.__id,"ei_bar_barone") then
+        if not profile.enableExtraBar then
+            return self:Hide()
+        end
+        self:Show()
     end
     self:Show()
 end
