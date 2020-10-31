@@ -271,6 +271,7 @@ PlexusFrame.defaultDB = {
     ExtraBarSide = "Bottom",
     ExtraBarBorderSize = 1,
     ExtraBarInvertColor = false,
+    enableExtraBar = true,
     statusmap = {
         text = {
             alert_death = true,
@@ -704,10 +705,21 @@ PlexusFrame.options = {
             order = 6,
             type = "group",
             args = {
+                enableExtraBar = {
+                    name = "Enable Extra Bar",
+                    desc = "Enable/disable Extra Bar Indicator.",
+                    order = 1, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableExtraBar = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
                 ExtraBarSize = {
                     name = L["Size"],
                     desc = "Percentage of frame for extra bar",
-                    order = 1, width = "double",
+                    order = 2, width = "double",
                     type = "range", min = 1, max = 50, step = 1,
                     get = function ()
                         return PlexusFrame.db.profile.ExtraBarSize * 100
@@ -720,13 +732,13 @@ PlexusFrame.options = {
                 ExtraBarBorderSize = {
                     name = L["Border Size"],
                     desc = L["Adjust the size of the border on extra bar."],
-                    order = 2, width = "double",
+                    order = 3, width = "double",
                     type = "range", min = 1, max = 20, step = 1,
                 },
                 ExtraBarSide = {
                     type = "select",
                     name = "Location",
-                    order = 3,
+                    order = 4,
                     desc = "Where extra bar attaches to",
                     get = function ()
                         return PlexusFrame.db.profile.ExtraBarSide
@@ -740,7 +752,7 @@ PlexusFrame.options = {
                 ExtraBarInvertColor = {
                     name = L["Invert Extra Bar Color"],
                     desc = L["Swap foreground/background colors on bars."],
-                    order = 4, width = "double",
+                    order = 5, width = "double",
                     type = "toggle",
                 },
             },
@@ -1081,11 +1093,11 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         return
     end
 
-    --if indicator == "resourcebar"  then
-    --    self:Debug("disableing resourcebar menu")
-    --    menu[indicator] = nil
-    --    return
-    --end
+    if indicator == "ei_bar_barone" and not self.db.profile.enableExtraBar  then
+        self:Debug("disableing extra bar one menu")
+        menu[indicator] = nil
+        return
+    end
 
     if indicator == "barcolor" and not self.db.profile.enableBarColor then
         self:Debug("indicator barcolor is disabled")
@@ -1134,9 +1146,9 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
         if (string.find(indicator, "ei_icon") and (string.find(indicator, "3") or string.find(indicator, "4"))) then
             menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableIcon34 end
         end
-        --if indicator == "resourcebar" then
-        --    menu[indicator].disabled = function() return true end
-        --end
+        if indicator == "ei_bar_barone" then
+            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableExtraBar end
+        end
     end
 
     local indicatorMenu = menu[indicator].args
