@@ -35,7 +35,7 @@ end
 function PlexusStatusPlayer:Update()
 	self:Debug("Update")
 
-	self:ClearAll("alert_me")
+	self:ClearAll("alert_self")
     local me = UnitGUID("player")
 	local settings_me = self.db.profile.alert_me
     self.core:SendStatusGained(me, "alert_me",
