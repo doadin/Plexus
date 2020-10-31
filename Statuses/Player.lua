@@ -21,14 +21,14 @@ end
 function PlexusStatusPlayer:OnStatusEnable(status)
 	self:Debug("OnEnable")
 	if status ~= "alert_me" then return end
-	self:RegisterEvent("Plexus_RosterUpdated","Update")
+	self:RegisterMessage("Plexus_RosterUpdated","Update")
 	self:Update()
 end
 
 function PlexusStatusPlayer:OnStatusDisable(status)
 	self:Debug("OnDisable")
 	if status ~= "alert_me" then return end
-	self:UnregisterEvent("Plexus_RosterUpdated")
+	self:UnregisterMessage("Plexus_RosterUpdated")
 	self:ClearAll("alert_me")
 end
 
