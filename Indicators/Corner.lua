@@ -64,6 +64,18 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
+    if (not string.find(self.__id,"corner") and string.find(self.__id, "2")) then
+        if not profile.enableCorner2 then
+            return self:Hide()
+        end
+        self:Show()
+    end
+    if (not string.find(self.__id,"corner") and (string.find(self.__id, "3") or string.find(self.__id, "4"))) then
+        if not profile.enableCorner34 then
+            return self:Hide()
+        end
+        self:Show()
+    end
 
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
@@ -77,12 +89,13 @@ end
 local function SetStatus(self, color)
     if not color then return end
     self:SetBackdropColor(color.r, color.g, color.b, color.a or 1)
-    self:Show()
+    --self:Show()
 end
 
 local function Clear(self)
-    self:SetBackdropColor(1, 1, 1, 1)
-    self:Hide()
+    self:SetBackdropColor(1, 1, 1, 0)
+    self:SetBackdropBorderColor(1, 1, 1, 0)
+    --self:Hide()
 end
 
 PlexusFrame:RegisterIndicator("Top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)
