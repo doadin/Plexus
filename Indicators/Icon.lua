@@ -95,6 +95,19 @@ local function Icon_SetStatus(self, color, _, _, _, texture, texCoords, count, s
         self.text:SetText("")
     end
 
+    if string.find(self.__id, "2") then
+        if not profile.enableIcon2 then
+            return self:Hide()
+        end
+        self:Show()
+    end
+    if (string.find(self.__id, "3") or string.find(self.__id, "4")) then
+        if not profile.enableIcon34 then
+            return self:Hide()
+        end
+        self:Show()
+    end
+
     self:Show()
 end
 
@@ -102,6 +115,20 @@ local function Icon_ResetIndicator(self, point, idx)
     local profile = PlexusFrame.db.profile
     local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
     local iconSize
+
+    if string.find(self.__id, "2") then
+        if not profile.enableIcon2 then
+            return self:Hide()
+        end
+        self:Show()
+    end
+    if (string.find(self.__id, "3") or string.find(self.__id, "4")) then
+        if not profile.enableIcon34 then
+            return self:Hide()
+        end
+        self:Show()
+    end
+    self:Show()
     if point == "CENTER" then
         iconSize = profile.centerIconSize
     else
