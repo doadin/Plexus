@@ -155,7 +155,7 @@ function PlexusStatusSummon:GainStatus(guid, key, settings)
     elseif key == "SUMMON_STATUS_ACCEPTED" then
         StartTime = nil
         duration = PlexusStatusSummon.db.profile.summon_status.delay
-    elseif key == "SUMMON_STATUS_ACCEPTED" then
+    elseif key == "SUMMON_STATUS_DECLINED" then
         StartTime = nil
         duration = PlexusStatusSummon.db.profile.summon_status.delay
     end
