@@ -14,7 +14,7 @@ local L = Plexus.L
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
-local PlexusStatusPhase = Plexus:NewStatusModule("PlexusStatusPhase", "AceTimer-3.0")
+local PlexusStatusPhase = Plexus:NewStatusModule("PlexusStatusPhase")
 PlexusStatusPhase.menuName = L["Phase Status"]
 
 PlexusStatusPhase.defaultDB = {
@@ -97,7 +97,6 @@ function PlexusStatusPhase:OnStatusDisable(status)
     self:UnregisterMessage("Plexus_PartyTransition")
     self:UnregisterMessage("Plexus_UnitJoined")
 
-    self:StopTimer("ClearStatus")
     self.core:SendStatusLostAllUnits("phase_status")
 end
 
