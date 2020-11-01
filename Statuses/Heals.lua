@@ -73,7 +73,7 @@ function PlexusStatusHeals:OnStatusEnable(status)
         end
         if Plexus:IsClassicWow() then
             --local HealComm
-            assert(LibStub, "Aggro Status requires LibStub")
+            assert(LibStub, "Heals Status requires LibStub")
             assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
             HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             local function HealComm_Heal_Update()
@@ -101,6 +101,19 @@ function PlexusStatusHeals:OnStatusDisable(status)
         self:UnregisterEvent("UNIT_MAXHEALTH")
         if not Plexus:IsClassicWow() then
             self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+        end
+        if not Plexus:IsClassicWow() then
+            --local HealComm
+            assert(LibStub, "Heals Status requires LibStub")
+            assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
+            HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
+
+            HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
+            HealComm.UnregisterCallback(self, 'HealComm_HealUpdated')
+            HealComm.UnregisterCallback(self, 'HealComm_HealDelayed')
+            HealComm.UnregisterCallback(self, 'HealComm_HealStopped')
+            HealComm.UnregisterCallback(self, 'HealComm_ModifierChanged')
+            HealComm.UnregisterCallback(self, 'HealComm_GUIDDisappeared')
         end
         self.core:SendStatusLostAllUnits("alert_heals")
     end
