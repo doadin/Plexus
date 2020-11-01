@@ -71,6 +71,7 @@ end
 
 function PlexusStatusRange:OnStatusDisable()
     self:StopTimer("CheckRange")
+    self:UnregisterMessage("Plexus_PartyTransition", "PartyTransition")
     self.core:SendStatusLostAllUnits("alert_range")
 end
 
