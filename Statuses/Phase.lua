@@ -13,6 +13,7 @@ local _, Plexus = ...
 local L = Plexus.L
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
+local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
 local PlexusStatusPhase = Plexus:NewStatusModule("PlexusStatusPhase")
 PlexusStatusPhase.menuName = L["Phase Status"]
@@ -38,6 +39,7 @@ PlexusStatusPhase.defaultDB = {
             NORMAL = L["N"],
         },
         icon = {
+            ignoreColor = true,
             WAR_MODE = "Interface\\TargetingFrame\\UI-PhasingIcon",
             CHROMIE_TIME = "Interface\\TargetingFrame\\UI-PhasingIcon",
             PHASING = "Interface\\TargetingFrame\\UI-PhasingIcon",
@@ -56,15 +58,52 @@ end
 
 local function setstatuscolor(key, r, g, b, a)
     local color = PlexusStatusPhase.db.profile.phase_status.colors[key]
+    local ignoreColor = PlexusStatusPhase.db.profile.phase_status.icon.ignoreColor
     color.r = r
     color.g = g
     color.b = b
     color.a = a or 1
-    color.ignore = true
+    color.ignore = ignoreColor
+    for _, frame in pairs(PlexusFrame.registeredFrames) do
+        PlexusFrame:UpdateIndicators(frame)
+    end
+end
+
+local function getignoreColor()
+    local ignoreColor = PlexusStatusPhase.db.profile.phase_status.icon.ignoreColor
+    return ignoreColor
+end
+
+local function setignoreColor()
+    local ignoreColor = PlexusStatusPhase.db.profile.phase_status.icon.ignoreColor
+    if ignoreColor == true then PlexusStatusPhase.db.profile.phase_status.icon.ignoreColor = false end
+    if ignoreColor == false then PlexusStatusPhase.db.profile.phase_status.icon.ignoreColor = true end
+    for k in pairs(PlexusStatusPhase.db.profile.phase_status.colors) do
+        local r,g,b,a = getstatuscolor(k)
+        setstatuscolor(k,r,g,b,a)
+    end
+    for _, frame in pairs(PlexusFrame.registeredFrames) do
+        PlexusFrame:UpdateIndicators(frame)
+    end
 end
 
 local phaseStatusOptions = {
     color = false,
+    ["phase_icon"] = {
+        type = "group",
+        dialogInline = true,
+        name = L["Icon"],
+        order = 85,
+        args = {
+            ignoreColor = {
+                name = L["Ignore Color On Icon"],
+                order = 100,
+                type = "toggle",
+                get = getignoreColor,
+                set = setignoreColor,
+            },
+        },
+    },
     ["phase_colors"] = {
         type = "group",
         dialogInline = true,
