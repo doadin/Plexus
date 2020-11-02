@@ -267,6 +267,8 @@ PlexusFrame.defaultDB = {
     enableText3 = false,
     enableIcon2 = true,
     enableIcon34 = true,
+    enableIconBackgroundColor = false,
+    iconBackgroundAlpha = 0.8,
     ExtraBarSize = 0.1,
     ExtraBarSide = "Bottom",
     ExtraBarBorderSize = 1,
@@ -583,6 +585,34 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,
+                },
+                iconbackground = {
+                    name = L["Icon Background"],
+                    desc = L["Options related to icon indicators."],
+                    order = 10,
+                    type = "group", inline = true,
+                    args = {
+                        enableIconBackgroundColor = {
+                            name = "Enable",
+                            desc = "Enable Showing Background Colors from Status Behinde the icon.",
+                            order = 1, width = "double",
+                            type = "toggle",
+                            set = function(info, v) --luacheck: ignore 212
+                                PlexusFrame.db.profile.enableIconBackgroundColor = v
+                                PlexusFrame:UpdateAllFrames()
+                                PlexusFrame:UpdateOptionsMenu()
+                            end,
+                        },
+                        iconBackgroundAlpha = {
+                            name = L["Icon Alpha"],
+                            desc = L["Adjust how much the icon shows over background."],
+                            order = 2, width = "double",
+                            disabled = function()
+                                return not PlexusFrame.db.profile.enableIconBackgroundColor
+                            end,
+                            type = "range", min = 0, max = 1, step = 0.1,
+                        },
+                    },
                 },
             },
         },
