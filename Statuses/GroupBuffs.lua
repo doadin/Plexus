@@ -358,7 +358,7 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     local _, englishClass= UnitClass("player")
 
     if not settings.enable then
-        self.core:SendStatusLost(guid, status)
+        self.core:SendStatusLostAllUnits(status)
         return
     end
 
