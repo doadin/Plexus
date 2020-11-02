@@ -91,6 +91,7 @@ local healthOptions = {
         name = L["Use class color"],
         desc = L["Color health based on class."],
         type = "toggle", width = "double",
+        order = 1,
         get = function()
             return PlexusStatusHealth.db.profile.unit_health.useClassColors
         end,
@@ -103,6 +104,7 @@ local healthOptions = {
         name = "Enable Custom Health Update Interval",
         desc = "Enable Use of Update Frequency Setting",
         type = "toggle", width = "double",
+        order = 100,
         get = function()
             return PlexusStatusHealth.db.profile.unit_health.enableupdateFrequency
         end,
@@ -115,6 +117,10 @@ local healthOptions = {
         name = "Update Frequency (Note setting this too low can hurt performance)",
         desc = "How often unit health will update in seconds",
         type = "range", min = 0.01, max = 1, step = 0.01,
+        order = 200,
+        hidden = function()
+            return not PlexusStatusHealth.db.profile.unit_health.enableupdateFrequency
+        end,
         get = function()
             return PlexusStatusHealth.db.profile.unit_health.updateFrequency
         end,
