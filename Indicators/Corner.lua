@@ -88,14 +88,20 @@ end
 
 local function SetStatus(self, color)
     if not color then return end
+    local bordercolor = PlexusFrame.db.profile.cornerBorderColor
     self:SetBackdropColor(color.r, color.g, color.b, color.a or 1)
-    --self:Show()
+    if bordercolor then
+        self:SetBackdropBorderColor(bordercolor.r, bordercolor.g, bordercolor.b, bordercolor.a or 1)
+    else
+        self:SetBackdropBorderColor(0, 0, 0, 1)
+    end
+    self:Show()
 end
 
 local function Clear(self)
     self:SetBackdropColor(1, 1, 1, 0)
     self:SetBackdropBorderColor(1, 1, 1, 0)
-    --self:Hide()
+    self:Hide()
 end
 
 PlexusFrame:RegisterIndicator("Top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)

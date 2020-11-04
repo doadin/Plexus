@@ -235,7 +235,6 @@ PlexusFrame.defaultDB = {
     frameWidth = 36,
     frameHeight = 36,
     borderSize = 1,
-    cornerSize = 6,
     showTooltip = "OOC",
     rightClickMenu = true,
     orientation = "VERTICAL",
@@ -261,6 +260,8 @@ PlexusFrame.defaultDB = {
     fontOutline = "NONE",
     fontShadow = true,
     textlength = 4,
+    cornerSize = 6,
+    cornerBorderColor = { r = 0, g = 0, b = 0, a = 1 },
     enableCorner2 = true,
     enableCorner34 = true,
     enableText2 = false,
@@ -726,6 +727,25 @@ PlexusFrame.options = {
                     desc = L["Adjust the size of the corner indicators."],
                     order = 4, width = "double",
                     type = "range", min = 1, max = 20, step = 1,
+                },
+                cornerBorderColor = {
+                    name = L["Corner Border color"],
+                    order = 22,
+                    width = "double",
+                    type = "color", hasAlpha = true,
+                    get = function(info) --luacheck: ignore 212
+                        local v = PlexusFrame.db.profile.cornerBorderColor
+                        if type(v) == "table" and v.r and v.g and v.b then
+                            return v.r, v.g, v.b, v.a
+                        else
+                            return v
+                        end
+                    end,
+                    set = function(info, r, g, b, a) --luacheck: ignore 212
+                        local color = PlexusFrame.db.profile.cornerBorderColor
+                        color.r, color.g, color.b, color.a = r, g, b, a
+                        PlexusFrame:UpdateAllFrames()
+                    end,
                 },
             },
         },
