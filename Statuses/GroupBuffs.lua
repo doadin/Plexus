@@ -348,6 +348,8 @@ end
 
 function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     self:Debug("UpdateUnit Event: ", event)
+    self:Debug("UpdateUnit Unit: ", unit)
+    self:Debug("UpdateUnit GUID: ", guid)
     if not unit then return end
     if not status then return end
     if not guid then return end
@@ -368,9 +370,8 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     end
 
     if EnableClassFilter then
-        self:Debug("Class Filter is on")
         if BuffClass ~= englishClass then
-            self:Debug("Class Filter is on, we are not the class")
+            --self:Debug("Class Filter is on, we are not the class")
             self.core:SendStatusLost(guid, status)
             return
         end
@@ -379,9 +380,11 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     if UnitIsVisible(unit) then
         for i = 1, 40 do
             local name = UnitAura(unit, i, "HELPFUL")
+            if not name then break end
             for _, buff in pairs(settings.buffs) do
                 if name == buff then
-                    return self.core:SendStatusLost(guid, status)
+                    self.core:SendStatusLost(guid, status)
+                    return
                 end
             end
         end
@@ -389,34 +392,16 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
 
     local icon = settings.icon
 
-    --self:Debug("UnitClass", UnitClass)
-    if EnableClassFilter and BuffClass == englishClass then
-        self:Debug("Class Filter is on and we are the class")
-        self.core:SendStatusGained(
-            guid,
-            status,
-            settings.priority,
-            nil,
-            settings.color,
-            settings.text,
-            nil,
-            nil,
-            icon
-        )
-    end
+    self.core:SendStatusGained(
+        guid,
+        status,
+        settings.priority,
+        nil,
+        settings.color,
+        settings.text,
+        nil,
+        nil,
+        icon
+    )
 
-    if not EnableClassFilter then
-        self:Debug("Class Filter is off we don't care")
-        self.core:SendStatusGained(
-            guid,
-            status,
-            settings.priority,
-            nil,
-            settings.color,
-            settings.text,
-            nil,
-            nil,
-            icon
-        )
-    end
 end
