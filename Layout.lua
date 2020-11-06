@@ -1103,19 +1103,7 @@ function PlexusLayout:LoadLayout(layoutName)
         end
 
         -- deals with the blizz bug that prevents initializing unit frames in combat
-        -- should be called when each group in a layout is initialized
-        -- http://forums.wowace.com/showpost.php?p=307503&postcount=3163
-        local maxColumns = layoutGroup:GetAttribute("maxColumns") or 1
-        local unitsPerColumn = layoutGroup:GetAttribute("unitsPerColumn") or 5
-        local startingIndex = layoutGroup:GetAttribute("startingIndex")
-        local maxUnits = maxColumns * unitsPerColumn
-        self:Debug("maxColumns", maxColumns, "unitsPerColumn", unitsPerColumn, "startingIndex", startingIndex, "maxUnits", maxUnits)
-        if not layoutGroup.UnitFramesCreated or layoutGroup.UnitFramesCreated < maxUnits then
-            layoutGroup.UnitFramesCreated = maxUnits
-            layoutGroup:Show()
-            layoutGroup:SetAttribute("startingIndex", -maxUnits + 1)
-            layoutGroup:SetAttribute("startingIndex", startingIndex)
-        end
+        self:ForceFramesCreation(layoutGroup)
 
         -- place groups
         layoutGroup:SetOrientation(p.horizontal)
@@ -1124,6 +1112,22 @@ function PlexusLayout:LoadLayout(layoutName)
     end
 
     self:UpdateDisplay()
+end
+
+function PlexusLayout:ForceFramesCreation(layoutGroup)
+    -- should be called when each group in a layout is initialized
+    -- http://forums.wowace.com/showpost.php?p=307503&postcount=3163
+    local maxColumns = layoutGroup:GetAttribute("maxColumns") or 1
+    local unitsPerColumn = layoutGroup:GetAttribute("unitsPerColumn") or 5
+    local startingIndex = layoutGroup:GetAttribute("startingIndex")
+    local maxUnits = maxColumns * unitsPerColumn
+    self:Debug("maxColumns", maxColumns, "unitsPerColumn", unitsPerColumn, "startingIndex", startingIndex, "maxUnits", maxUnits)
+    if not layoutGroup.UnitFramesCreated or layoutGroup.UnitFramesCreated < maxUnits then
+        layoutGroup.UnitFramesCreated = maxUnits
+        layoutGroup:Show()
+        layoutGroup:SetAttribute("startingIndex", -maxUnits + 1)
+        layoutGroup:SetAttribute("startingIndex", startingIndex)
+    end
 end
 
 function PlexusLayout:UpdateDisplay()
