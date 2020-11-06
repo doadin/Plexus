@@ -295,16 +295,16 @@ function Manager:UpdateLayouts(event)
     local groupFilter, numGroups = self:GetGroupFilter()
     --local showPets = Layout.db.profile.showPets
     local splitGroups = Layout.db.profile.splitGroups
-    local layoutName = Layout.db.profile.layout
-    local layout = Layout.layoutSettings[layoutName]
-    local showPets
-    for i = 1, #layout do
-        if not layout[i].isPetGroup then
-            showPets = false
-        elseif layout[i].isPetGroup then
-            showPets = true
-        end
-    end
+    --local layoutName = Layout.db.profile.layout
+    --local layout = Layout.layoutSettings[layoutName]
+    --local showPets
+    --for i = 1, #layout do
+    --    if not layout[i].isPetGroup then
+    --        showPets = false
+    --    elseif layout[i].isPetGroup then
+    --        showPets = true
+    --    end
+    --end
 
     if not groupFilter then
         return false
