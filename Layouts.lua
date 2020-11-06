@@ -11,6 +11,9 @@ local L = Plexus.L
 local Layout = Plexus:GetModule("PlexusLayout")
 local Roster = Plexus:GetModule("PlexusRoster")
 
+local DEFAULT_ROLE 		  = Plexus:IsClassicWow() and 'ROLE' or 'ASSIGNEDROLE'
+local DEFAULT_ROLE_ORDER  = Plexus:IsClassicWow() and 'MAINTANK,MAINASSIST,NONE' or 'TANK,HEALER,DAMAGER,NONE'
+
 -- nameList = "",
 -- groupFilter = "",
 -- sortMethod = "INDEX", -- or "NAME"
@@ -81,8 +84,8 @@ local Layouts = {
     ByRole = {
         name = L["By Role"],
         defaults = {
-            groupBy = "ASSIGNEDROLE",
-            groupingOrder = "TANK,HEALER,DAMAGER,NONE",
+            groupBy = DEFAULT_ROLE,
+            groupingOrder = DEFAULT_ROLE_ORDER,
             sortMethod = "NAME",
             unitsPerColumn = 5,
         },
@@ -93,8 +96,8 @@ local Layouts = {
     ByRolePet = {
         name = L["By Role w/Pets"],
         defaults = {
-            groupBy = "ASSIGNEDROLE",
-            groupingOrder = "TANK,HEALER,DAMAGER,NONE",
+            groupBy = DEFAULT_ROLE,
+            groupingOrder = DEFAULT_ROLE_ORDER,
             sortMethod = "NAME",
             unitsPerColumn = 5,
         },
