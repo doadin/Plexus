@@ -1217,51 +1217,50 @@ function PlexusLayout:SavePosition()
     local uiScale = UIParent:GetEffectiveScale()
     local anchor = self.db.profile.anchor
 
-    local x, y, relativePoint
+    local x, y
 
-    relativePoint = anchor
-
-    if f:GetLeft() == nil then
-        self:Debug("WTF, GetLeft is nil")
+    if f:GetLeft() and f:GetWidth() then
+        if anchor == "CENTER" then
+            x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
+            y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
+        elseif anchor == "TOP" then
+            x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
+            y = f:GetTop() * s - UIParent:GetHeight() * uiScale
+        elseif anchor == "LEFT" then
+            x = f:GetLeft() * s
+            y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
+        elseif anchor == "RIGHT" then
+            x = f:GetRight() * s - UIParent:GetWidth() * uiScale
+            y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
+        elseif anchor == "BOTTOM" then
+            x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
+            y = f:GetBottom() * s
+        elseif anchor == "TOPLEFT" then
+            x = f:GetLeft() * s
+            y = f:GetTop() * s - UIParent:GetHeight() * uiScale
+        elseif anchor == "TOPRIGHT" then
+            x = f:GetRight() * s - UIParent:GetWidth() * uiScale
+            y = f:GetTop() * s - UIParent:GetHeight() * uiScale
+        elseif anchor == "BOTTOMLEFT" then
+            x = f:GetLeft() * s
+            y = f:GetBottom() * s
+        elseif anchor == "BOTTOMRIGHT" then
+            x = f:GetRight() * s - UIParent:GetWidth() * uiScale
+            y = f:GetBottom() * s
+        end
+    else
+        self:Debug("Something went wrong")
         return
     end
 
-    if anchor == "CENTER" then
-        x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
-        y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
-    elseif anchor == "TOP" then
-        x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
-        y = f:GetTop() * s - UIParent:GetHeight() * uiScale
-    elseif anchor == "LEFT" then
-        x = f:GetLeft() * s
-        y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
-    elseif anchor == "RIGHT" then
-        x = f:GetRight() * s - UIParent:GetWidth() * uiScale
-        y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
-    elseif anchor == "BOTTOM" then
-        x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
-        y = f:GetBottom() * s
-    elseif anchor == "TOPLEFT" then
-        x = f:GetLeft() * s
-        y = f:GetTop() * s - UIParent:GetHeight() * uiScale
-    elseif anchor == "TOPRIGHT" then
-        x = f:GetRight() * s - UIParent:GetWidth() * uiScale
-        y = f:GetTop() * s - UIParent:GetHeight() * uiScale
-    elseif anchor == "BOTTOMLEFT" then
-        x = f:GetLeft() * s
-        y = f:GetBottom() * s
-    elseif anchor == "BOTTOMRIGHT" then
-        x = f:GetRight() * s - UIParent:GetWidth() * uiScale
-        y = f:GetBottom() * s
-    end
-
     if x and y and s then
-        x, y = floor(x + 0.5), floor(y + 0.5)
         self.db.profile.PosX = x
         self.db.profile.PosY = y
-        --self.db.profile.anchor = point
-        self.db.profile.anchorRel = relativePoint
+        self.db.profile.anchorRel = anchor
         self:Debug("Saved position", anchor, x, y)
+    else
+        self:Debug("Something went wrong")
+        return
     end
 end
 
@@ -1269,8 +1268,8 @@ function PlexusLayout:ResetPosition()
     self:Debug("ResetPosition")
     local uiScale = UIParent:GetEffectiveScale()
 
-    self.db.profile.PosX = UIParent:GetWidth() / 2 * uiScale + 0.5
-    self.db.profile.PosY = -UIParent:GetHeight() / 2 * uiScale + 0.5
+    self.db.profile.PosX = UIParent:GetWidth() / 2 * uiScale
+    self.db.profile.PosY = -UIParent:GetHeight() / 2 * uiScale
     self.db.profile.anchor = "TOPLEFT"
 
     self:RestorePosition()
@@ -1280,14 +1279,16 @@ end
 function PlexusLayout:RestorePosition()
     self:Debug("RestorePosition")
     local f = self.frame
+    --local b = f.backdrop
     local s = f:GetEffectiveScale()
-    local x = self.db.profile.PosX
-    local y = self.db.profile.PosY
+    local x = self.db.profile.PosX / s
+    local y = self.db.profile.PosY / s
     local point = self.db.profile.anchor
     self:Debug("Loaded position", point, x, y)
-    x, y = floor(x / s + 0.5), floor(y / s + 0.5)
     f:ClearAllPoints()
-    f:SetPoint(point, UIParent, point, x, y)
+    f:SetPoint(point, x, y)
+    --b:ClearAllPoints()
+    --b:SetPoint(self.db.profile.groupAnchor)
     self:Debug("Restored position", point, x, y)
 end
 
