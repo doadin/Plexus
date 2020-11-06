@@ -36,6 +36,21 @@ local Layouts = {
         },
         -- additional groups added/removed dynamically
     },
+    ByGroupPet = {
+        name = L["By Group w/Pets"],
+        defaults = {
+            sortMethod = "INDEX",
+            unitsPerColumn = 5,
+            maxColumns = 1,
+        },
+        [1] = {
+            groupFilter = "1",
+        },
+        [2] = {
+            isPetGroup = true,
+        }
+        -- additional groups added/removed dynamically
+    },
     ByClass = {
         name = L["By Class"],
         defaults = {
@@ -48,6 +63,21 @@ local Layouts = {
             groupFilter = "1", -- updated dynamically
         },
     },
+    ByClassPet = {
+        name = L["By Class w/Pets"],
+        defaults = {
+            groupBy = "CLASS",
+            groupingOrder = "WARRIOR,DEATHKNIGHT,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,HUNTER",
+            sortMethod = "NAME",
+            unitsPerColumn = 5,
+        },
+        [1] = {
+            groupFilter = "1", -- updated dynamically
+        },
+        [2] = {
+            isPetGroup = true,
+        }
+    },
     ByRole = {
         name = L["By Role"],
         defaults = {
@@ -59,6 +89,21 @@ local Layouts = {
         [1] = {
             groupFilter = "1", -- updated dynamically
         },
+    },
+    ByRolePet = {
+        name = L["By Role w/Pets"],
+        defaults = {
+            groupBy = "ASSIGNEDROLE",
+            groupingOrder = "TANK,HEALER,DAMAGER,NONE",
+            sortMethod = "NAME",
+            unitsPerColumn = 5,
+        },
+        [1] = {
+            groupFilter = "1", -- updated dynamically
+        },
+        [2] = {
+            isPetGroup = true,
+        }
     },
     ByName = {
         name = L["By Name"],
@@ -245,8 +290,18 @@ function Manager:UpdateLayouts(event)
     self:Debug("UpdateLayouts", event)
 
     local groupFilter, numGroups = self:GetGroupFilter()
-    local showPets = Layout.db.profile.showPets
+    --local showPets = Layout.db.profile.showPets
     local splitGroups = Layout.db.profile.splitGroups
+    local layoutName = Layout.db.profile.layout
+    local layout = Layout.layoutSettings[layoutName]
+    local showPets
+    for i = 1, #layout do
+        if not layout[i].isPetGroup then
+            showPets = false
+        elseif layout[i].isPetGroup then
+            showPets = true
+        end
+    end
 
     if not groupFilter then
         return false
@@ -254,7 +309,7 @@ function Manager:UpdateLayouts(event)
 
     self:Debug("groupFilter", groupFilter, "numGroups", numGroups, "showPets", showPets, "splitGroups", splitGroups)
 
-    if lastGroupFilter == groupFilter and lastShowPets == showPets then
+    if lastGroupFilter == groupFilter then
         self:Debug("No changes necessary")
         return false
     end
