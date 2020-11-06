@@ -287,7 +287,7 @@ function Manager:GetGroupFilter()
 end
 
 
-local lastGroupFilter, lastShowPets
+local lastGroupFilter
 
 function Manager:UpdateLayouts(event)
     self:Debug("UpdateLayouts", event)
@@ -318,7 +318,6 @@ function Manager:UpdateLayouts(event)
     end
 
     lastGroupFilter = groupFilter
-    lastShowPets = showPets
 
     -- Update class and role layouts
     if splitGroups then
