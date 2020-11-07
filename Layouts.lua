@@ -39,8 +39,32 @@ local Layouts = {
         },
         -- additional groups added/removed dynamically
     },
+    ByGroupPets = {
+        name = L["By Group With Pets"],
+        defaults = {
+            sortMethod = "INDEX",
+            unitsPerColumn = 5,
+            maxColumns = 1,
+        },
+        [1] = {
+            groupFilter = "1",
+        },
+        -- additional groups added/removed dynamically
+    },
     ByClass = {
         name = L["By Class"],
+        defaults = {
+            groupBy = "CLASS",
+            groupingOrder = "WARRIOR,DEATHKNIGHT,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,HUNTER",
+            sortMethod = "NAME",
+            unitsPerColumn = 5,
+        },
+        [1] = {
+            groupFilter = "1", -- updated dynamically
+        },
+    },
+    ByClassPets = {
+        name = L["By Class With Pets"],
         defaults = {
             groupBy = "CLASS",
             groupingOrder = "WARRIOR,DEATHKNIGHT,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,HUNTER",
@@ -63,12 +87,35 @@ local Layouts = {
             groupFilter = "1", -- updated dynamically
         },
     },
+    ByRolePets = {
+        name = L["By Role With Pets"],
+        defaults = {
+            groupBy = DEFAULT_ROLE,
+            groupingOrder = DEFAULT_ROLE_ORDER,
+            sortMethod = "NAME",
+            unitsPerColumn = 5,
+        },
+        [1] = {
+            groupFilter = "1", -- updated dynamically
+        },
+    },
     ByName = {
         name = L["By Name"],
         defaults = {
             sortMethod = "NAME",
             unitsPerColumn = 5;NOREPEAT,
-            maxColumns = 20,
+            maxColumns = 8,
+        },
+        [1] = {
+            groupFilter = "1", -- updated dynamically
+        },
+    },
+    ByNamePets = {
+        name = L["By Name With Pets"],
+        defaults = {
+            sortMethod = "NAME",
+            unitsPerColumn = 5;NOREPEAT,
+            maxColumns = 8,
         },
         [1] = {
             groupFilter = "1", -- updated dynamically
@@ -242,40 +289,43 @@ function Manager:GetGroupFilter()
 end
 
 
-local lastGroupFilter, lastShowPets
+local lastGroupFilter
 
 function Manager:UpdateLayouts(event)
     self:Debug("UpdateLayouts", event)
 
     local groupFilter, numGroups = self:GetGroupFilter()
-    local showPets = Layout.db.profile.showPets
     local splitGroups = Layout.db.profile.splitGroups
 
     if not groupFilter then
         return false
     end
 
-    self:Debug("groupFilter", groupFilter, "numGroups", numGroups, "showPets", showPets, "splitGroups", splitGroups)
+    self:Debug("groupFilter", groupFilter, "numGroups", numGroups, "splitGroups", splitGroups)
 
-    if lastGroupFilter == groupFilter and lastShowPets == showPets then
+    if lastGroupFilter == groupFilter then
         self:Debug("No changes necessary")
         return false
     end
 
     lastGroupFilter = groupFilter
-    lastShowPets = showPets
 
     -- Update class and role layouts
     if splitGroups then
-        UpdateSplitGroups(Layouts.ByClass,  groupFilter, numGroups, showPets)
-        UpdateSplitGroups(Layouts.ByRole,   groupFilter, numGroups, showPets)
+        UpdateSplitGroups(Layouts.ByClass,  groupFilter, numGroups, false)
+        UpdateSplitGroups(Layouts.ByRole,   groupFilter, numGroups, false)
     else
-        UpdateMergedGroups(Layouts.ByClass, groupFilter, numGroups, showPets)
-        UpdateMergedGroups(Layouts.ByRole,  groupFilter, numGroups, showPets)
+        UpdateMergedGroups(Layouts.ByClass, groupFilter, numGroups, false)
+        UpdateMergedGroups(Layouts.ByClassPets, groupFilter, numGroups, true)
+        UpdateMergedGroups(Layouts.ByRole,  groupFilter, numGroups, false)
+        UpdateMergedGroups(Layouts.ByRolePets,  groupFilter, numGroups, true)
     end
 
     -- Update group layout (always split)
-    UpdateSplitGroups(Layouts.ByGroup, groupFilter, numGroups, showPets)
+    UpdateSplitGroups(Layouts.ByGroup, groupFilter, numGroups, false)
+    UpdateSplitGroups(Layouts.ByGroupPets, groupFilter, numGroups, true)
+    UpdateSplitGroups(Layouts.ByName, groupFilter, numGroups, false)
+    UpdateSplitGroups(Layouts.ByNamePets, groupFilter, numGroups, true)
 
     -- Apply changes
     Layout:ReloadLayout()

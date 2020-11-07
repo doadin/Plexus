@@ -220,7 +220,6 @@ PlexusLayout.defaultDB = {
 
     lock = false,
     horizontal = false,
-    showPets = false,
     showOffline = false,
     showWrongZone = "MYTHIC",
 
@@ -327,17 +326,6 @@ PlexusLayout.options = {
             end,
         },
 --@end-debug@
-        showPets = {
-            name = COMPACT_UNIT_FRAME_PROFILE_DISPLAYPETS, -- L["Show Pets"]
-            desc = L["Layouts added by plugins might not support this option."], -- TODO
-            order = 12,
-            width = "double",
-            type = "toggle",
-            set = function(info, v) --luacheck: ignore 212
-                PlexusLayout.db.profile.showPets = v
-                PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
-            end,
-        },
         layouts = {
             name = L["Layouts"],
             order = 18,
@@ -1003,14 +991,13 @@ function PlexusLayout:LoadLayout(layoutName)
         self:Debug("Layout not found, using default instead:", layoutName)
     end
 
-    local showPets = self.db.profile.showPets
     local groupsNeeded, petGroupsNeeded = 0, 0
     local groupsAvailable, petGroupsAvailable = #self.layoutGroups, #self.layoutPetGroups
 
     for i = 1, #layout do
         if not layout[i].isPetGroup then
             groupsNeeded = groupsNeeded + 1
-        elseif showPets then
+        elseif layout[i].isPetGroup then
             petGroupsNeeded = petGroupsNeeded + 1
         end
     end
@@ -1048,10 +1035,6 @@ function PlexusLayout:LoadLayout(layoutName)
     -- configure groups
     for i = 1, #layout do
         local l = layout[i]
-        if l.isPetGroup and not showPets then
-            -- #TODO: this assumes pet groups are always last
-            break
-        end
 
         local layoutGroup
         if not l.isPetGroup then
