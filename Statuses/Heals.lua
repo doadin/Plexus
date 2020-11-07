@@ -20,6 +20,8 @@ local PlexusStatusHeals = Plexus:NewStatusModule("PlexusStatusHeals")
 PlexusStatusHeals.menuName = L["Heals"]
 PlexusStatusHeals.options = false
 
+local HealComm
+
 PlexusStatusHeals.defaultDB = {
     alert_heals = {
         enable = true,
