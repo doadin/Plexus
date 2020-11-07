@@ -54,7 +54,7 @@ end
 local function Icon_ClearStatus(self)
     self:Hide()
 
-    self.texture:SetTexture(1, 1, 1, 0)
+    self.texture:SetColorTexture(1, 1, 1, 0)
     self.texture:SetTexCoord(0, 1, 0, 1)
 
     self.text:SetText("")
