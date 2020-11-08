@@ -267,13 +267,9 @@ function PlexusStatusGroupBuffs:OnEnable()
     self.debugging = self.db.profile.debug
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
-    self:RegisterEvent("PLAYER_LEAVING_WORLD")
     self:RegisterEvent("UNIT_AURA", "UpdateUnit")
 end
 
-function PlexusStatusGroupBuffs:PLAYER_LEAVING_WORLD()
-    self:UnregisterEvent("UNIT_AURA")
-end
 
 function PlexusStatusGroupBuffs:PLAYER_ENTERING_WORLD()
     self:UpdateAllUnits()
