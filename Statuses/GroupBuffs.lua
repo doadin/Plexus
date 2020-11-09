@@ -268,6 +268,7 @@ function PlexusStatusGroupBuffs:OnEnable()
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("UNIT_AURA", "UpdateUnit")
+    self:RegisterMessage("Plexus_UnitJoined")
 end
 
 
@@ -275,9 +276,10 @@ function PlexusStatusGroupBuffs:PLAYER_ENTERING_WORLD()
     self:UpdateAllUnits()
 end
 
-function PlexusStatusGroupBuffs:Plexus_UnitJoined(guid, unit) --luacheck: ignore 212
+function PlexusStatusGroupBuffs:Plexus_UnitJoined(event, guid, unit) --luacheck: ignore 212
+    --self:RegisterMessage("Plexus_UnitJoined", guid, roster.unitid[guid])
     --self:Debug("Plexus_UnitJoined", unit)
-    self:UpdateUnit(unit)
+    self:UpdateUnit(event, unit, guid)
 end
 
 function PlexusStatusGroupBuffs:RegisterStatuses()
