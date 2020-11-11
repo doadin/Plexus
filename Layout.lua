@@ -601,9 +601,9 @@ function PlexusLayout:PostEnable()
     self:RegisterMessage("Plexus_ReloadLayout", "PartyTypeChanged")
     self:RegisterMessage("Plexus_PartyTransition", "PartyTypeChanged")
 
-    self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 0.2, "PartyMembersChanged")
+    self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "PartyMembersChanged")
     self:RegisterMessage("Plexus_RosterUpdated", "PartyMembersChanged")
-    self:RegisterEvent("GROUP_ROSTER_UPDATE", "PartyMembersChanged")
+    self:RegisterBucketEvent("GROUP_ROSTER_UPDATE", 1, "PartyMembersChanged")
     self:RegisterEvent("PLAYER_ENTERING_WORLD", "ZoneCheck")
 
     self:RegisterMessage("Plexus_EnteringCombat", "EnteringCombat")
@@ -637,7 +637,7 @@ function PlexusLayout:EnteringCombat()
 
     --self:Debug("EnteringOrLeavingCombat")
     if reloadLayoutQueued then return self:PartyTypeChanged() end
-    if updateSizeQueued then return self:PartyMembersChanged() end
+    if updateSizeQueued then return self:PartyMembersChanged("EnteringCombat") end
 end
 
 function PlexusLayout:LeavingCombat()
@@ -652,7 +652,7 @@ function PlexusLayout:LeavingCombat()
     if reloadLayoutQueued then return self:PartyTypeChanged() end
 
     -- If we know the party size changed, definitely do an update
-    if updateSizeQueued then return self:PartyMembersChanged() end
+    if updateSizeQueued then return self:PartyMembersChanged("EnteringCombat") end
 
     -- Otherwise, check to see if the layout needs updating
     self:Plexus_CheckPartyMembersUpdate()
@@ -666,7 +666,7 @@ function PlexusLayout:CombatFix()
 end
 
 function PlexusLayout:Plexus_CheckPartyMembersUpdate()
-        local update_size
+    local update_size
 
     if InCombatLockdown() then
         return
@@ -674,17 +674,21 @@ function PlexusLayout:Plexus_CheckPartyMembersUpdate()
 
     update_size = PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
     if update_size then
-        self:PartyMembersChanged()
+        self:PartyMembersChanged("Plexus_CheckPartyMembersUpdate")
     end
 end
 
-function PlexusLayout:PartyMembersChanged()
-    --self:Debug("PartyMembersChanged")
+function PlexusLayout:PartyMembersChanged(event)
     self:Debug("PartyMembersChanged")
     if InCombatLockdown() then
         updateSizeQueued = true
     else
-        self:UpdateSize()
+        if type(event) == "table" then
+            for _,v in pairs(event) do
+                self:Debug("PartyMembersChanged Bucket Counts: ", v)
+            end
+        end
+        self:UpdateSize(event)
         updateSizeQueued = false
     end
 end
@@ -1117,7 +1121,7 @@ function PlexusLayout:UpdateDisplay()
     --self:Debug("UpdateDisplay")
     self:UpdateColor()
     self:UpdateVisibility()
-    self:UpdateSize()
+    self:UpdateSize("UpdateDisplay")
 end
 
 function PlexusLayout:UpdateVisibility()
@@ -1129,8 +1133,9 @@ function PlexusLayout:UpdateVisibility()
     end
 end
 
-function PlexusLayout:UpdateSize()
+function PlexusLayout:UpdateSize(event)
     self:Debug("UpdateSize")
+    self:Debug("UpdateSize", GetTime(), event)
     local p = self.db.profile
     local x, y
 
