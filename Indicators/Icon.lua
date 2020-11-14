@@ -116,7 +116,34 @@ local function Reset(self)
 
 	self:ClearAllPoints()
 
-	self:SetPoint(unpack(anchor[self.__id]))
+    local point, x, y = unpack(anchor[self.__id])
+    local ExtraBarSide = profile.ExtraBarSide
+    local ExtraBarSize = profile.ExtraBarSize
+    if x == 10 then
+        x = 0 + totalSize
+    end
+    if x == -10 then
+        x = 0 - totalSize
+    end
+    if y == 10 then
+        y = 0 + totalSize
+    end
+    if y == -10 then
+        y = 0 - totalSize
+    end
+    if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
+        y = y + ExtraBarSize * 80
+    end
+    if enableExtraBar and ExtraBarSide == "Left" and (point == "LEFT" or point == "TOPLEFT" or point == "BOTTOMLEFT") then
+        x = x + ExtraBarSize * 120
+    end
+    if enableExtraBar and ExtraBarSide == "Top" and (point == "TOP" or point == "TOPLEFT" or point == "TOPRIGHT") then
+        y = y - ExtraBarSize * 80
+    end
+    if enableExtraBar and ExtraBarSide == "Right" and (point == "RIGHT" or point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
+        x = x - ExtraBarSize * 120
+    end
+    self:SetPoint( point, x, y )
 
 	if iconBorderSize == 0 then
 		self:SetBackdrop(nil)
