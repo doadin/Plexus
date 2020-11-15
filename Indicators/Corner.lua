@@ -10,6 +10,7 @@ local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local L = Plexus.L
 
+local PlexusIndicatorCornerSquares = PlexusFrame:NewModule("PlexusIndicatorCornerSquares")
 local BACKDROP = {
     bgFile = "Interface\\BUTTONS\\WHITE8X8", tile = true, tileSize = 8,
     edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 1,
@@ -64,18 +65,6 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
-    if (not string.find(self.__id,"corner") and string.find(self.__id, "2")) then
-        if not profile.enableCorner2 then
-            return self:Hide()
-        end
-        self:Show()
-    end
-    if (not string.find(self.__id,"corner") and (string.find(self.__id, "3") or string.find(self.__id, "4"))) then
-        if not profile.enableCorner34 then
-            return self:Hide()
-        end
-        self:Show()
-    end
 
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
@@ -134,31 +123,74 @@ local function Clear(self)
     self:Hide()
 end
 
-PlexusFrame:RegisterIndicator("Top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Top2",  L["Indicator Top 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Top3",  L["Indicator Top 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Top4",  L["Indicator Top 4"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner3",  L["Indicator Top Left Corner"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topleft2",  L["Indicator Top Left Corner 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topleft3",  L["Indicator Top Left Corner 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner4",  L["Indicator Top Right Corner"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topright2",  L["Indicator Top Right Corner 2"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("topright3",  L["Indicator Top Right Corner 3"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom",  L["Indicator Bottom"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom2",  L["Indicator Bottom 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom3",  L["Indicator Bottom 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Bottom4",  L["Indicator Bottom 4"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner1",  L["Indicator Bottom Left Corner"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomleft2",  L["Indicator Bottom Left Corner 2"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomleft3",  L["Indicator Bottom Left Corner 3"],  New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("corner2",  L["Indicator Bottom Right Corner"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomright2",  L["Indicator Bottom Right Corner 2"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("bottomright3",  L["Indicator Bottom Right Corner 3"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left",  L["Indicator Left"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left2",  L["Indicator Left 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left3",  L["Indicator Left 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Left4",  L["Indicator Left 4"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right",  L["Indicator Right"],    New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right2",  L["Indicator Right 2"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right3",  L["Indicator Right 3"],     New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("Right4",  L["Indicator Right 4"],     New, Reset, SetStatus, Clear)
+function PlexusIndicatorCornerSquares:OnInitialize() --luacheck: ignore 212
+    local profile = PlexusFrame.db.profile
+
+    PlexusFrame:RegisterIndicator("Top",  L["Indicator Top"],     New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("Top2",  L["Indicator Top 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("Top3",  L["Indicator Top 3"],     New, Reset, SetStatus, Clear)
+        PlexusFrame:RegisterIndicator("Top4",  L["Indicator Top 4"],     New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("corner3",  L["Indicator Top Left Corner"],     New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("topleft2",  L["Indicator Top Left Corner 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("topleft3",  L["Indicator Top Left Corner 3"],     New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("corner4",  L["Indicator Top Right Corner"],    New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("topright2",  L["Indicator Top Right Corner 2"],    New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("topright3",  L["Indicator Top Right Corner 3"],    New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("Bottom",  L["Indicator Bottom"],  New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("Bottom2",  L["Indicator Bottom 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("Bottom3",  L["Indicator Bottom 3"],     New, Reset, SetStatus, Clear)
+        PlexusFrame:RegisterIndicator("Bottom4",  L["Indicator Bottom 4"],     New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("corner1",  L["Indicator Bottom Left Corner"],  New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("bottomleft2",  L["Indicator Bottom Left Corner 2"],  New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("bottomleft3",  L["Indicator Bottom Left Corner 3"],  New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("corner2",  L["Indicator Bottom Right Corner"], New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("bottomright2",  L["Indicator Bottom Right Corner 2"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("bottomright3",  L["Indicator Bottom Right Corner 3"], New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("Left",  L["Indicator Left"], New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("Left2",  L["Indicator Left 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("Left3",  L["Indicator Left 3"],     New, Reset, SetStatus, Clear)
+        PlexusFrame:RegisterIndicator("Left4",  L["Indicator Left 4"],     New, Reset, SetStatus, Clear)
+    end
+
+    PlexusFrame:RegisterIndicator("Right",  L["Indicator Right"],    New, Reset, SetStatus, Clear)
+    if profile.enableCorner2 then
+        PlexusFrame:RegisterIndicator("Right2",  L["Indicator Right 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableCorner34 then
+        PlexusFrame:RegisterIndicator("Right3",  L["Indicator Right 3"],     New, Reset, SetStatus, Clear)
+        PlexusFrame:RegisterIndicator("Right4",  L["Indicator Right 4"],     New, Reset, SetStatus, Clear)
+    end
+end
