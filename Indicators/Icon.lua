@@ -14,6 +14,7 @@ local L = Plexus.L
 
 local PlexusIndicatorCornerIcons = PlexusFrame:NewModule("PlexusIndicatorCornerIcons")
 local BACKDROP = {
+    bgFile = "Interface\\BUTTONS\\WHITE8X8",
 	edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 2,
 	insets = { left = 2, right = 2, top = 2, bottom = 2 },
 }
@@ -176,16 +177,23 @@ local function SetStatus(self, color, _, _, _, texture, texCoords, stack, start,
 	if type(texture) == "table" then
 		self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
 	else
-		self.texture:SetTexture(texture)
+        self.texture:SetTexture(texture)
+        if profile.enableIconBackgroundColor then
+            self.texture:SetAlpha(profile.iconBackgroundAlpha)
+        else
+            self.texture:SetAlpha(1)
+        end
 		self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
 	end
 
 	if type(color) == "table" then
 		self:SetAlpha(color.a or 1)
-		self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
+        self:SetBackdropBorderColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
+        self:SetBackdropColor(color.r, color.g, color.b, color.ignore and 0 or color.a or 1)
 	else
 		self:SetAlpha(1)
-		self:SetBackdropBorderColor(0, 0, 0, 0)
+        self:SetBackdropBorderColor(0, 0, 0, 0)
+        self:SetBackdropColor(0, 0, 0, 0)
 	end
 
 	if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then --luacheck: ignore 631
