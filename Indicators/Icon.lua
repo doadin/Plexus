@@ -20,7 +20,7 @@ local BACKDROP = {
 
 local anchor = {
     -- left/right up/down
-    icon = { "CENTER" },
+    icon = { "CENTER", 0, 0},
     ei_icon_topleft = { "TOPLEFT", -1, 1 },
     ei_icon_topleft2 = { "TOPLEFT", 10, 1 },
     ei_icon_topleft3 = { "TOPLEFT", -1, -10 },
