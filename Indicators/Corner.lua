@@ -18,41 +18,41 @@ local BACKDROP = {
 
 local anchor = {
     -- left/right up/down
-    corner3 = { "TOPLEFT", -1, 1 },
-    topleft2 = { "TOPLEFT", 4, 1 },
-    topleft3 = { "TOPLEFT", -1, -4 },
+    corner3 = { "TOPLEFT", 0, 0 },
+    topleft2 = { "TOPLEFT", 10, 0 },
+    topleft3 = { "TOPLEFT", 0, -10 },
     -- left/right up/down
-    corner4 = { "TOPRIGHT", 1, 1 },
-    topright2 = { "TOPRIGHT", 1, -4 },
-    topright3 = { "TOPRIGHT", -4, 1 },
+    corner4 = { "TOPRIGHT", 0, 0 },
+    topright2 = { "TOPRIGHT", 0, -10 },
+    topright3 = { "TOPRIGHT", -10, 0 },
     -- left/right up/down
-    corner1 = { "BOTTOMLEFT", -1, -1 },
-    bottomleft2 = { "BOTTOMLEFT", -1, 4 },
-    bottomleft3 = { "BOTTOMLEFT", 4, -1 },
+    corner1 = { "BOTTOMLEFT", 0, 0 },
+    bottomleft2 = { "BOTTOMLEFT", 0, 10 },
+    bottomleft3 = { "BOTTOMLEFT", 10, 0 },
     -- left/right up/down
-    corner2 = { "BOTTOMRIGHT", 1, -1 },
-    bottomright2 = { "BOTTOMRIGHT", -4, -1 },
-    bottomright3 = { "BOTTOMRIGHT", 1, 4 },
+    corner2 = { "BOTTOMRIGHT", 0, 0 },
+    bottomright2 = { "BOTTOMRIGHT", -10, 0 },
+    bottomright3 = { "BOTTOMRIGHT", 0, 10 },
     -- left/right up/down
-    Top = { "TOP", 1, 1 },
-    Top2 = { "TOP", 6, 1 },
-    Top3 = { "TOP", 1, -4 },
-    Top4 = { "TOP", -4, 1 },
+    Top = { "TOP", 0, 0 },
+    Top2 = { "TOP", 10, 0 },
+    Top3 = { "TOP", 0, -10 },
+    Top4 = { "TOP", -10, 0 },
     -- left/right up/down
-    Bottom = { "BOTTOM", 1, 0 },
-    Bottom2 = { "BOTTOM", -4, 0 },
-    Bottom3 = { "BOTTOM", 1, 5 },
-    Bottom4 = { "BOTTOM", 6, 0 },
+    Bottom = { "BOTTOM", 0, 0 },
+    Bottom2 = { "BOTTOM", -10, 0 },
+    Bottom3 = { "BOTTOM", 0, 10 },
+    Bottom4 = { "BOTTOM", 10, 0 },
     -- left/right up/down
-    Left = { "LEFT", -1, -1 },
-    Left2 = { "LEFT", -1, 4 },
-    Left3 = { "LEFT", 4, -1 },
-    Left4 = { "LEFT", -1, -6 },
+    Left = { "LEFT", 0, 0 },
+    Left2 = { "LEFT", 0, 10 },
+    Left3 = { "LEFT", 10, 0 },
+    Left4 = { "LEFT", 0, -10 },
     -- left/right up/down
-    Right = { "RIGHT", 1, -1 },
-    Right2 = { "RIGHT", 1, -6 },
-    Right3 = { "RIGHT", -4, -1 },
-    Right4 = { "RIGHT", 1, 4 },
+    Right = { "RIGHT", 0, 0 },
+    Right2 = { "RIGHT", 0, -10 },
+    Right3 = { "RIGHT", -10, 0 },
+    Right4 = { "RIGHT", 0, 10 },
 }
 
 local function New(frame)
@@ -83,7 +83,37 @@ local function Reset(self)
     self:SetFrameLevel(self.__owner.indicators.bar:GetFrameLevel() + 1)
 
     self:ClearAllPoints()
-    self:SetPoint(unpack(anchor[self.__id]))
+    local point, x, y = unpack(anchor[self.__id])
+    local totalSize = profile.cornerSize
+    local ExtraBarSide = profile.ExtraBarSide
+    local ExtraBarSize = profile.ExtraBarSize
+    local enableExtraBar = profile.enableExtraBar
+
+    if x == 10 then
+        x = 0 + totalSize
+    end
+    if x == -10 then
+        x = 0 - totalSize
+    end
+    if y == 10 then
+        y = 0 + totalSize
+    end
+    if y == -10 then
+        y = 0 - totalSize
+    end
+    if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
+        y = y + ExtraBarSize * 40
+    end
+    if enableExtraBar and ExtraBarSide == "Left" and (point == "LEFT" or point == "TOPLEFT" or point == "BOTTOMLEFT") then
+        x = x + ExtraBarSize * 60
+    end
+    if enableExtraBar and ExtraBarSide == "Top" and (point == "TOP" or point == "TOPLEFT" or point == "TOPRIGHT") then
+        y = y - ExtraBarSize * 40
+    end
+    if enableExtraBar and ExtraBarSide == "Right" and (point == "RIGHT" or point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
+        x = x - ExtraBarSize * 60
+    end
+    self:SetPoint( point, x, y )
 end
 
 local function SetStatus(self, color)
