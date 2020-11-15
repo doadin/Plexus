@@ -124,16 +124,16 @@ local function Reset(self)
     local ExtraBarSize = profile.ExtraBarSize
     local enableExtraBar = profile.enableExtraBar
     if x == 10 then
-        x = 0 + totalSize
+        x = 0 + totalSize + profile.spacingSize
     end
     if x == -10 then
-        x = 0 - totalSize
+        x = 0 - totalSize - profile.spacingSize
     end
     if y == 10 then
-        y = 0 + totalSize
+        y = 0 + totalSize + profile.spacingSize
     end
     if y == -10 then
-        y = 0 - totalSize
+        y = 0 - totalSize - profile.spacingSize
     end
     if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
         y = y + ExtraBarSize * 80
