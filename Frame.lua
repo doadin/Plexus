@@ -552,6 +552,7 @@ PlexusFrame.options = {
                     desc = L["Adjust the size of icon margins."],
                     order = 5, width = "double",
                     type = "range", min = 0, max = 9, step = 1,
+                    hidden = true,
                 },
                 enableIconCooldown = {
                     name = format(L["Enable %s"], L["Icon Cooldown Frame"]),
