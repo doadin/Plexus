@@ -566,8 +566,8 @@ PlexusFrame.options = {
                     type = "toggle",
                 },
                 enableIcon2 = {
-                    name = format(L["Enable %s indicators"], "Extra Icon xx 2"),
-                    desc = format(L["Toggle the %s indicators."], "Extra Icon xx 2"),
+                    name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Icon xx 2 Indicators",
                     order = 8, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
@@ -577,8 +577,8 @@ PlexusFrame.options = {
                     end,
                 },
                 enableIcon34 = {
-                    name = format(L["Enable %s indicators"], "Extra Icon xx 3/4"),
-                    desc = format(L["Toggle the %s indicators."], "Extra Icon xx 3/4"),
+                    name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
                     order = 9, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
@@ -701,8 +701,8 @@ PlexusFrame.options = {
             type = "group",
             args = {
                 enableCorner2 = {
-                    name = format(L["Enable %s indicators"], "xx 2"),
-                    desc = format(L["Toggle the %s indicators."], "xx 2"),
+                    name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
                     order = 8, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
@@ -712,8 +712,8 @@ PlexusFrame.options = {
                     end,
                 },
                 enableCorner34 = {
-                    name = format(L["Enable %s indicators"], "xx 3/4"),
-                    desc = format(L["Toggle the %s indicators."], "xx 3/4"),
+                    name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
                     order = 9, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
