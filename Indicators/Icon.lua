@@ -81,8 +81,11 @@ end
 
 local function Reset(self)
 	if not self.cooldown then
-		local cd = CreateFrame("Cooldown", "GIDIconCooldownFrame"..self.__id, self, "CooldownFrameTemplate")
-		cd:SetAllPoints(true)
+		local cd = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
+        cd:SetAllPoints(true)
+        cd:SetDrawBling(false)
+        cd:SetDrawEdge(false)
+        cd:SetHideCountdownNumbers(true)
 		cd:SetReverse(true)
 		self.cooldown = cd
 
