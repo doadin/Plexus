@@ -128,6 +128,7 @@ end
 ------------------------------------------------------------------------
 
 Plexus.options = {
+    name = function() return "Plexus " .. GetAddOnMetadata(PLEXUS, "Version") end,
     handler = Plexus,
     type = "group",
     childGroups = "tab",
