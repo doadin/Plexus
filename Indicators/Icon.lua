@@ -15,52 +15,52 @@ local L = Plexus.L
 local PlexusIndicatorCornerIcons = PlexusFrame:NewModule("PlexusIndicatorCornerIcons")
 local BACKDROP = {
     bgFile = "Interface\\BUTTONS\\WHITE8X8",
-	edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 2,
-	insets = { left = 2, right = 2, top = 2, bottom = 2 },
+	edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 1,
+	insets = { left = 1, right = 1, top = 1, bottom = 1 },
 }
 
 local anchor = {
     -- left/right up/down
     icon = { "CENTER", 0, 0},
-    ei_icon_topleft = { "TOPLEFT", -1, 1 },
-    ei_icon_topleft2 = { "TOPLEFT", 10, 1 },
-    ei_icon_topleft3 = { "TOPLEFT", -1, -10 },
+    ei_icon_topleft = { "TOPLEFT", 1, -1 },
+    ei_icon_topleft2 = { "TOPLEFT", 10, -1 },
+    ei_icon_topleft3 = { "TOPLEFT", 1, -10 },
     ei_icon_topleft4 = { "TOPLEFT", 10, -10 },
     -- left/right up/down
-    ei_icon_topright = { "TOPRIGHT", 1, 1 },
-    ei_icon_topright2 = { "TOPRIGHT", -10, 1 },
-    ei_icon_topright3 = { "TOPRIGHT", 1, -10 },
+    ei_icon_topright = { "TOPRIGHT", -1, -1 },
+    ei_icon_topright2 = { "TOPRIGHT", -10, -1 },
+    ei_icon_topright3 = { "TOPRIGHT", -1, -10 },
     ei_icon_topright4 = { "TOPRIGHT", -10, -10 },
     -- left/right up/down
-    ei_icon_botleft = { "BOTTOMLEFT", -1, -1 },
-    ei_icon_botleft2 = { "BOTTOMLEFT", 10, -1 },
-    ei_icon_botleft3 = { "BOTTOMLEFT", -1, 10 },
+    ei_icon_botleft = { "BOTTOMLEFT", 1, 1 },
+    ei_icon_botleft2 = { "BOTTOMLEFT", 10, 1 },
+    ei_icon_botleft3 = { "BOTTOMLEFT", 1, 10 },
     ei_icon_botleft4 = { "BOTTOMLEFT", 10, 10 },
     -- left/right up/down
-    ei_icon_botright = { "BOTTOMRIGHT", 1, -1 },
-    ei_icon_botright2 = { "BOTTOMRIGHT", -10, -1 },
-    ei_icon_botright3 = { "BOTTOMRIGHT", 1, 10 },
+    ei_icon_botright = { "BOTTOMRIGHT", -1, 1 },
+    ei_icon_botright2 = { "BOTTOMRIGHT", -10, 1 },
+    ei_icon_botright3 = { "BOTTOMRIGHT", -1, 10 },
     ei_icon_botright4 = { "BOTTOMRIGHT", -10, 10 },
     -- left/right up/down
-    ei_icon_top = { "TOP", 1, 1 },
-    ei_icon_top2 = { "TOP", 1, -10 },
-    ei_icon_top3 = { "TOP", -10, 1 },
-    ei_icon_top4 = { "TOP", 10, 1 },
+    ei_icon_top = { "TOP", 0, -1 },
+    ei_icon_top2 = { "TOP", 0, -10 },
+    ei_icon_top3 = { "TOP", -10, -1 },
+    ei_icon_top4 = { "TOP", 10, -1 },
     -- left/right up/down
-    ei_icon_bottom = { "BOTTOM", 1, 0 },
-    ei_icon_bottom2 = { "BOTTOM", 1, 10 },
-    ei_icon_bottom3 = { "BOTTOM", -10, 0 },
-    ei_icon_bottom4 = { "BOTTOM", 10, 0 },
+    ei_icon_bottom = { "BOTTOM", 0, 1 },
+    ei_icon_bottom2 = { "BOTTOM", 0, 10 },
+    ei_icon_bottom3 = { "BOTTOM", -10, 1 },
+    ei_icon_bottom4 = { "BOTTOM", 10, 1 },
     -- left/right up/down
-    ei_icon_left = { "LEFT", -1, -1 },
-    ei_icon_left2 = { "LEFT", 10, -1 },
-    ei_icon_left3 = { "LEFT", -1, 10 },
-    ei_icon_left4 = { "LEFT", -1, -10 },
+    ei_icon_left = { "LEFT", 1, 0 },
+    ei_icon_left2 = { "LEFT", 10, 0 },
+    ei_icon_left3 = { "LEFT", 1, 10 },
+    ei_icon_left4 = { "LEFT", 1, -10 },
     -- left/right up/down
-    ei_icon_right = { "RIGHT", 1, -1 },
-    ei_icon_right2 = { "RIGHT", -10, -1 },
-    ei_icon_right3 = { "RIGHT", 1, 10 },
-    ei_icon_right4 = { "RIGHT", 1, -10 },
+    ei_icon_right = { "RIGHT", -1, 0 },
+    ei_icon_right2 = { "RIGHT", -10, 0 },
+    ei_icon_right3 = { "RIGHT", -1, 10 },
+    ei_icon_right4 = { "RIGHT", -1, -10 },
 }
 
 local function New(frame)
@@ -124,6 +124,14 @@ local function Reset(self)
     local ExtraBarSide = profile.ExtraBarSide
     local ExtraBarSize = profile.ExtraBarSize
     local enableExtraBar = profile.enableExtraBar
+    ---- Do Border Spacing
+    --if x == 1 then
+    --    x = x + profile.borderSize
+    --end
+    --if x == -1 then
+    --    x = x - profile.borderSize
+    --end
+    -- Do Spacing
     if x == 10 then
         x = 0 + totalSize + profile.spacingSize
     end
