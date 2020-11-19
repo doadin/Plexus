@@ -12,6 +12,18 @@ local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 local strsub = string.utf8sub or string.sub
+local PlexusIndicatorsText = PlexusFrame:NewModule("PlexusIndicatorsText")
+
+local anchor = {
+    -- left/right up/down
+    ei_text_topleft = { "TOPLEFT", 1, -1 },
+    -- left/right up/down
+    ei_text_topright = { "TOPRIGHT", -1, -1 },
+    -- left/right up/down
+    ei_text_bottomleft = { "BOTTOMLEFT", 1, 1 },
+    -- left/right up/down
+    ei_text_bottomright = { "BOTTOMRIGHT", -1, 1 },
+}
 
 local function New(frame)
     local text = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -76,10 +88,6 @@ local function Reset(self)
             end
         end
     elseif self.__id == "text2" then
-        if not profile.enableText2 then
-            return self:Hide()
-        end
-        self:Show()
         if profile.textorientation == "HORIZONTAL" then
             self:SetJustifyH("RIGHT")
             self:SetJustifyV("CENTER")
@@ -102,10 +110,6 @@ local function Reset(self)
             end
         end
     elseif self.__id == "text3" then
-        if not profile.enableText3 then
-            return self:Hide()
-        end
-        self:Show()
         if profile.textorientation == "HORIZONTAL" then
             self:SetJustifyH("RIGHT")
             self:SetJustifyV("CENTER")
@@ -119,6 +123,9 @@ local function Reset(self)
             self:SetPoint("BOTTOMRIGHT", -2, -2)
             self:SetPoint("TOP", bar, "CENTER")
         end
+    else
+        local point, x, y = unpack(anchor[self.__id])
+        self:SetPoint(point, x, y)
     end
 end
 
@@ -145,6 +152,25 @@ local function Clear(self)
     self:SetText("")
 end
 
-PlexusFrame:RegisterIndicator("text",  L["Center Text"],   New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("text2", L["Center Text 2"], New, Reset, SetStatus, Clear)
-PlexusFrame:RegisterIndicator("text3", L["Center Text 3"], New, Reset, SetStatus, Clear)
+function PlexusIndicatorsText:OnInitialize() --luacheck: ignore 212
+    local profile = PlexusFrame.db.profile
+    PlexusFrame:RegisterIndicator("text",  L["Center Text"],   New, Reset, SetStatus, Clear)
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("text2", L["Center Text 2"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText3 then
+        PlexusFrame:RegisterIndicator("text3", L["Center Text 3"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableTextTopLeft then
+        PlexusFrame:RegisterIndicator("ei_text_topleft", L["Extra Text: Top Left"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableTextTopRight then
+        PlexusFrame:RegisterIndicator("ei_text_topright", L["Extra Text: Top Right"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableTextBottomLeft then
+        PlexusFrame:RegisterIndicator("ei_text_bottomleft", L["Extra Text: Bottom Left"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableTextBottomRight then
+        PlexusFrame:RegisterIndicator("ei_text_bottomright", L["Extra Text: Bottom Right"], New, Reset, SetStatus, Clear)
+    end
+end
