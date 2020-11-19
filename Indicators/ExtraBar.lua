@@ -2,6 +2,8 @@ local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local LibSharedMedia = LibStub:GetLibrary("LibSharedMedia-3.0", true)
 
+local PlexusIndicatorsExtraBar = PlexusFrame:NewModule("PlexusIndicatorsExtraBar")
+
 local function New(frame)
     local bar = CreateFrame("StatusBar", nil, frame)
     local bg = bar:CreateTexture(nil, "BACKGROUND")
@@ -23,13 +25,6 @@ local function Reset(self) -- luacheck: ignore 432
     local healthBar = frame.indicators.bar
     local barWidth = profile.ExtraBarSize
     local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
-
-    if string.find(self.__id,"ei_bar_barone") then
-        if not profile.enableExtraBar then
-            return self:Hide()
-        end
-        self:Show()
-    end
 
     self:SetParent(healthBar)
     self:ClearAllPoints()
@@ -59,22 +54,12 @@ local function Reset(self) -- luacheck: ignore 432
         self:SetHeight((frame:GetHeight()-2*offset) * barWidth)
         self:SetOrientation("HORIZONTAL")
     end
-    if self:IsShown() then
-        frame.indicators.text:SetParent(self)
-        frame.indicators.text2:SetParent(self)
-        frame.indicators.corner1:SetParent(self)
-        frame.indicators.corner2:SetParent(self)
-        frame.indicators.corner3:SetParent(self)
-        frame.indicators.corner4:SetParent(self)
-        frame.indicators.icon:SetParent(self)
-    end
 
     self:SetStatusBarTexture(texture)
     self.bg:SetTexture(texture)
 end
 
 local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 432
-    local profile = PlexusFrame.db.profile
 
     if not value or not maxValue then return end
     self:SetMinMaxValues(0, maxValue)
@@ -89,40 +74,18 @@ local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 43
             self.bg:SetVertexColor(color.r,color.g,color.b,color.a)
         end
     end
-
-    --if not self:IsShown() then
-    --    local frame = self.__owner
-    --    frame.indicators.text:SetParent(self)
-    --    frame.indicators.text2:SetParent(self)
-    --    frame.indicators.corner1:SetParent(self)
-    --    frame.indicators.corner2:SetParent(self)
-    --    frame.indicators.corner3:SetParent(self)
-    --    frame.indicators.corner4:SetParent(self)
-    --    frame.indicators.icon:SetParent(self)
-    --end
-    if string.find(self.__id,"ei_bar_barone") then
-        if not profile.enableExtraBar then
-            return self:Hide()
-        end
-        self:Show()
-    end
     self:Show()
+
 end
 
 local function Clear(self) -- luacheck: ignore 432
-    if self:IsShown() then
-        local frame = self.__owner
-        local healthBar = frame.indicators.bar
-        frame.indicators.text:SetParent(healthBar)
-        frame.indicators.text2:SetParent(healthBar)
-        frame.indicators.corner1:SetParent(healthBar)
-        frame.indicators.corner2:SetParent(healthBar)
-        frame.indicators.corner3:SetParent(healthBar)
-        frame.indicators.corner4:SetParent(healthBar)
-        frame.indicators.icon:SetParent(healthBar)
-    end
     self:Hide()
     self:SetValue(0)
 end
 
-PlexusFrame:RegisterIndicator("ei_bar_barone", "Extra Bar", New, Reset, SetStatus, Clear)
+function PlexusIndicatorsExtraBar:OnInitialize() --luacheck: ignore 212
+    local profile = PlexusFrame.db.profile
+    if profile.enableExtraBar then
+        PlexusFrame:RegisterIndicator("ei_bar_barone", "Extra Bar", New, Reset, SetStatus, Clear)
+    end
+end
