@@ -592,10 +592,96 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                IconTestModeEnable = {
+                    name = "Icon Test Mode Enable",
+                    order = 10,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local texture = "Interface\\Icons\\Spell_Holy_GuardianSpirit"
+                        local start = GetTime()
+                        local duration = 30
+                        local count = 2
+                        SetIndicator(frame.indicators.icon, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topleft, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topleft2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topleft3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topleft4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topright, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topright2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topright3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_topright4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botleft, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botleft2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botleft3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botleft4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botright, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botright2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botright3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_botright4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_top, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_top2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_top3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_top4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_bottom, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_bottom2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_bottom3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_bottom4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_left, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_left2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_left3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_left4, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_right, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_right2, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_right3, nil, nil, nil, nil, texture, start, duration, count)
+                        SetIndicator(frame.indicators.ei_icon_right4, nil, nil, nil, nil, texture, start, duration, count)
+                    end,
+                },
+                IconTestModeDisable = {
+                    name = "Icon Test Mode Enable",
+                    order = 10,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        ClearIndicator(frame.indicators.icon)
+                        ClearIndicator(frame.indicators.ei_icon_topleft)
+                        ClearIndicator(frame.indicators.ei_icon_topleft2)
+                        ClearIndicator(frame.indicators.ei_icon_topleft3)
+                        ClearIndicator(frame.indicators.ei_icon_topleft4)
+                        ClearIndicator(frame.indicators.ei_icon_topright)
+                        ClearIndicator(frame.indicators.ei_icon_topright2)
+                        ClearIndicator(frame.indicators.ei_icon_topright3)
+                        ClearIndicator(frame.indicators.ei_icon_topright4)
+                        ClearIndicator(frame.indicators.ei_icon_botleft)
+                        ClearIndicator(frame.indicators.ei_icon_botleft2)
+                        ClearIndicator(frame.indicators.ei_icon_botleft3)
+                        ClearIndicator(frame.indicators.ei_icon_botleft4)
+                        ClearIndicator(frame.indicators.ei_icon_botright)
+                        ClearIndicator(frame.indicators.ei_icon_botright2)
+                        ClearIndicator(frame.indicators.ei_icon_botright3)
+                        ClearIndicator(frame.indicators.ei_icon_botright4)
+                        ClearIndicator(frame.indicators.ei_icon_top)
+                        ClearIndicator(frame.indicators.ei_icon_top2)
+                        ClearIndicator(frame.indicators.ei_icon_top3)
+                        ClearIndicator(frame.indicators.ei_icon_top4)
+                        ClearIndicator(frame.indicators.ei_icon_bottom)
+                        ClearIndicator(frame.indicators.ei_icon_bottom2)
+                        ClearIndicator(frame.indicators.ei_icon_bottom3)
+                        ClearIndicator(frame.indicators.ei_icon_bottom4)
+                        ClearIndicator(frame.indicators.ei_icon_left)
+                        ClearIndicator(frame.indicators.ei_icon_left2)
+                        ClearIndicator(frame.indicators.ei_icon_left3)
+                        ClearIndicator(frame.indicators.ei_icon_left4)
+                        ClearIndicator(frame.indicators.ei_icon_right)
+                        ClearIndicator(frame.indicators.ei_icon_right2)
+                        ClearIndicator(frame.indicators.ei_icon_right3)
+                        ClearIndicator(frame.indicators.ei_icon_right4)
+                    end,
+                },
                 iconbackground = {
                     name = L["Icon Background"],
                     desc = L["Options related to icon indicators."],
-                    order = 10,
+                    order = 12,
                     type = "group", inline = true,
                     args = {
                         enableIconBackgroundColor = {
