@@ -101,6 +101,7 @@ Statuses\AltPower.lua
 Statuses\Auras.lua
 Statuses\Group.lua
 Statuses\GroupBuffs.lua
+Statuses\GroupNumber.lua
 Statuses\Heals.lua
 Statuses\Health.lua
 #@retail@
