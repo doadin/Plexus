@@ -843,7 +843,7 @@ PlexusFrame.options = {
             type = "group",
             args = {
                 enableExtraBar = {
-                    name = "Enable Extra Bar",
+                    name = "Enable Extra Bar Requires ReloadUI",
                     desc = "Enable/disable Extra Bar Indicator.",
                     order = 1, width = "double",
                     type = "toggle",
