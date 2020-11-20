@@ -834,6 +834,88 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateAllFrames()
                     end,
                 },
+                CornerTestModeEnable = {
+                    name = "Icon Test Mode Enable",
+                    order = 23,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local color = { r = 0, g = 1, b = 0, a = 1 }
+                        local start = GetTime()
+                        local duration = 30
+                        local count = 2
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for _, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            frame:SetIndicator("corner3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("topleft2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("topleft3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("corner4", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("topright2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("topright3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("corner1", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("bottomleft2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("bottomleft3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("corner2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("bottomright2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("bottomright3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Top", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Top2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Top3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Top4", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Bottom", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Bottom2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Bottom3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Bottom4", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Left", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Left2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Left3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Left4", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Right", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Right2", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Right3", color, nil, nil, nil, nil, start, duration, count)
+                            frame:SetIndicator("Right4", color, nil, nil, nil, nil, start, duration, count)
+                        end
+                    end,
+                },
+                CornerTestModeDisable = {
+                    name = "Icon Test Mode Disable",
+                    order = 24,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for _, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            frame:ClearIndicator("corner3")
+                            frame:ClearIndicator("topleft2")
+                            frame:ClearIndicator("topleft3")
+                            frame:ClearIndicator("corner4")
+                            frame:ClearIndicator("topright2")
+                            frame:ClearIndicator("topright3")
+                            frame:ClearIndicator("corner1")
+                            frame:ClearIndicator("bottomleft2")
+                            frame:ClearIndicator("bottomleft3")
+                            frame:ClearIndicator("corner2")
+                            frame:ClearIndicator("bottomright2")
+                            frame:ClearIndicator("bottomright3")
+                            frame:ClearIndicator("Top")
+                            frame:ClearIndicator("Top2")
+                            frame:ClearIndicator("Top3")
+                            frame:ClearIndicator("Top4")
+                            frame:ClearIndicator("Bottom")
+                            frame:ClearIndicator("Bottom2")
+                            frame:ClearIndicator("Bottom3")
+                            frame:ClearIndicator("Bottom4")
+                            frame:ClearIndicator("Left")
+                            frame:ClearIndicator("Left2")
+                            frame:ClearIndicator("Left3")
+                            frame:ClearIndicator("Left4")
+                            frame:ClearIndicator("Right")
+                            frame:ClearIndicator("Right2")
+                            frame:ClearIndicator("Right3")
+                            frame:ClearIndicator("Right4")
+                        end
+                    end,
+                },
             },
         },
         extrabar = {
