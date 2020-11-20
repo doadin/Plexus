@@ -55,6 +55,14 @@ local function Reset(self) -- luacheck: ignore 432
         self:SetOrientation("HORIZONTAL")
     end
 
+    if self:IsShown() then
+        frame.indicators.text:SetParent(self)
+        if profile.enableText2 then
+            frame.indicators.text2:SetParent(self)
+        end
+        frame.indicators.icon:SetParent(self)
+    end
+
     self:SetStatusBarTexture(texture)
     self.bg:SetTexture(texture)
 end
@@ -74,11 +82,28 @@ local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 43
             self.bg:SetVertexColor(color.r,color.g,color.b,color.a)
         end
     end
+    --if not self:IsShown() then
+    --    local frame = self.__owner
+    --    frame.indicators.text:SetParent(self)
+    --    if profile.enableText2 then
+    --        frame.indicators.text2:SetParent(self)
+    --    end
+    --    frame.indicators.icon:SetParent(self)
+    --end
     self:Show()
 
 end
 
 local function Clear(self) -- luacheck: ignore 432
+    if self:IsShown() then
+        local frame = self.__owner
+        local healthBar = frame.indicators.bar
+        frame.indicators.text:SetParent(healthBar)
+        if profile.enableText2 then
+            frame.indicators.text2:SetParent(healthBar)
+        end
+        frame.indicators.icon:SetParent(healthBar)
+    end
     self:Hide()
     self:SetValue(0)
 end
