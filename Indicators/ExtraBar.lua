@@ -95,6 +95,7 @@ local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 43
 end
 
 local function Clear(self) -- luacheck: ignore 432
+    local profile = PlexusFrame.db.profile
     if self:IsShown() then
         local frame = self.__owner
         local healthBar = frame.indicators.bar
