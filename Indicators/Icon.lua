@@ -73,9 +73,10 @@ local function New(frame)
 	texture:SetPoint("TOPRIGHT", -2, -2)
 	icon.texture = texture
 
-	local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-	text:SetJustifyH("CENTER")
-	text:SetJustifyV("CENTER")
+    local text = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    text:SetPoint("BOTTOMRIGHT", 2, -2)
+	text:SetJustifyH("RIGHT")
+	text:SetJustifyV("BOTTOM")
 	icon.text = text
 	return icon
 end
