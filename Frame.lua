@@ -1018,7 +1018,11 @@ PlexusFrame.options = {
                         local maxvalue = 100
                         local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
                         for _, frame in pairs(PlexusFrameTest.registeredFrames) do
-                            frame:SetIndicator("ei_bar_barone", color, nil, value, maxvalue)
+                            for k in pairs(frame.indicators) do
+                                if string.find(k, "ei_bar") then
+                                    frame:SetIndicator(k, color, nil, value, maxvalue)
+                                end
+                            end
                         end
                     end,
                 },
@@ -1030,7 +1034,11 @@ PlexusFrame.options = {
                     func = function()
                         local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
                         for _, frame in pairs(PlexusFrameTest.registeredFrames) do
-                            frame:ClearIndicator("ei_bar_barone")
+                            for k in pairs(frame.indicators) do
+                                if string.find(k, "ei_bar") then
+                                    frame:ClearIndicator(k)
+                                end
+                            end
                         end
                     end,
                 },
