@@ -779,6 +779,39 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                TextTestModeEnable = {
+                    name = "Icon Test Mode Enable",
+                    order = 10,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local text = "Test"
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for _, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            for k in pairs(frame.indicators) do
+                                if string.find(k, "ei_text") then
+                                    frame:SetIndicator(k, nil, text)
+                                end
+                            end
+                        end
+                    end,
+                },
+                TextTestModeDisable = {
+                    name = "Icon Test Mode Disable",
+                    order = 11,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for _, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            for k in pairs(frame.indicators) do
+                                if string.find(k, "ei_text") then
+                                    frame:ClearIndicator(k)
+                                end
+                            end
+                        end
+                    end,
+                },
             },
         },
         corner = {
