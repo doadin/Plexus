@@ -974,6 +974,33 @@ PlexusFrame.options = {
                     order = 5, width = "double",
                     type = "toggle",
                 },
+                ExtraBarTestModeEnable = {
+                    name = "Icon Test Mode Enable",
+                    order = 6,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local color = { r = 0, g = 1, b = 0, a = 1 }
+                        local value = 50
+                        local maxvalue = 100
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for _, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            frame:SetIndicator("ei_bar_barone", color, nil, value, maxvalue)
+                        end
+                    end,
+                },
+                ExtraBarTestModeDisable = {
+                    name = "Icon Test Mode Disable",
+                    order = 7,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for _, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            frame:ClearIndicator("ei_bar_barone")
+                        end
+                    end,
+                },
             },
         },
     },
