@@ -261,6 +261,7 @@ PlexusFrame.defaultDB = {
     fontShadow = true,
     textlength = 4,
     cornerSize = 6,
+    cornerBorderSize = 1,
     cornerBorderColor = { r = 0, g = 0, b = 0, a = 1 },
     enableCorner2 = true,
     enableCorner34 = true,
@@ -836,13 +837,19 @@ PlexusFrame.options = {
                 cornerSize = {
                     name = L["Size"],
                     desc = L["Adjust the size of the corner indicators."],
-                    order = 1, width = "full",
+                    order = 1, width = "double",
                     type = "range", min = 1, max = 20, step = 1,
+                },
+                cornerBorderSize = {
+                    name = "Border Size",
+                    desc = "Adjust the size of the border on corner indicators.",
+                    order = 2, width = "double",
+                    type = "range", min = 0, max = 20, step = 1,
                 },
                 enableCorner2 = {
                     name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
                     desc = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
-                    order = 2, width = "double",
+                    order = 3, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableCorner2 = v
@@ -853,7 +860,7 @@ PlexusFrame.options = {
                 enableCorner34 = {
                     name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
                     desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
-                    order = 3, width = "double",
+                    order = 4, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableCorner34 = v
@@ -863,7 +870,7 @@ PlexusFrame.options = {
                 },
                 cornerBorderColor = {
                     name = L["Corner Border color"],
-                    order = 4,
+                    order = 5,
                     width = "double",
                     type = "color", hasAlpha = true,
                     get = function(info) --luacheck: ignore 212
@@ -883,7 +890,7 @@ PlexusFrame.options = {
                 enableCornerBarSeparation = {
                     name = "Enable Separation of Corner and Extra Bar Requires ReloadUI",
                     desc = "Enable Separation of Corner indicators away from Extra Bar Requires ReloadUI",
-                    order = 5, width = "double",
+                    order = 6, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableCornerBarSeparation = v
@@ -893,7 +900,7 @@ PlexusFrame.options = {
                 },
                 CornerTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 6,
+                    order = 7,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -936,7 +943,7 @@ PlexusFrame.options = {
                 },
                 CornerTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 7,
+                    order = 8,
                     width = "double",
                     type = "execute",
                     func = function()
