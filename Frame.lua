@@ -573,10 +573,15 @@ PlexusFrame.options = {
                     order = 7, width = "double",
                     type = "toggle",
                 },
+                IconHeader1 = {
+                    name = "",
+                    order = 8, width = "double",
+                    type = "header",
+                },
                 enableIcon2 = {
                     name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
                     desc = "Enable Extra Icon xx 2 Indicators",
-                    order = 8, width = "double",
+                    order = 9, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableIcon2 = v
@@ -587,7 +592,7 @@ PlexusFrame.options = {
                 enableIcon34 = {
                     name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
                     desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
-                    order = 9, width = "double",
+                    order = 10, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableIcon34 = v
@@ -595,10 +600,15 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                IconHeader2 = {
+                    name = "",
+                    order = 11, width = "double",
+                    type = "header",
+                },
                 enableIconBarSeparation = {
                     name = "Enable Separation of Icons and Extra Bar Requires ReloadUI",
                     desc = "Enable Separation of Icon indicators away from Extra Bar Requires ReloadUI",
-                    order = 10, width = "double",
+                    order = 12, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableIconBarSeparation = v
@@ -606,9 +616,14 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                IconHeader3 = {
+                    name = "",
+                    order = 13, width = "double",
+                    type = "header",
+                },
                 IconTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 11,
+                    order = 14,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -629,7 +644,7 @@ PlexusFrame.options = {
                 },
                 IconTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 12,
+                    order = 15,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -647,7 +662,7 @@ PlexusFrame.options = {
                 iconbackground = {
                     name = L["Icon Background"],
                     desc = L["Options related to icon indicators."],
-                    order = 13,
+                    order = 16,
                     type = "group", inline = true,
                     args = {
                         enableIconBackgroundColor = {
@@ -698,16 +713,10 @@ PlexusFrame.options = {
                         HORIZONTAL = L["Horizontal"]
                     },
                 },
-                fontSize = {
-                    name = L["Font Size"],
-                    desc = L["Adjust the font size."],
-                    order = 3, width = "double",
-                    type = "range", min = 6, max = 24, step = 1,
-                },
                 fontOutline = {
                     name = L["Font Outline"],
                     desc = L["Adjust the font outline."],
-                    order = 4, width = "double",
+                    order = 3, width = "double",
                     type = "select",
                     values = {
                         NONE = L["None"],
@@ -715,11 +724,16 @@ PlexusFrame.options = {
                         THICKOUTLINE = L["Thick"] ,
                     },
                 },
-                fontShadow = {
-                    name = L["Font Shadow"],
-                    desc = L["Toggle the font drop shadow effect."],
+                TextHeader1 = {
+                    name = "",
+                    order = 4, width = "double",
+                    type = "header",
+                },
+                fontSize = {
+                    name = L["Font Size"],
+                    desc = L["Adjust the font size."],
                     order = 5, width = "double",
-                    type = "toggle",
+                    type = "range", min = 6, max = 24, step = 1,
                 },
                 textlength = {
                     name = L["Center Text Length"],
@@ -727,10 +741,21 @@ PlexusFrame.options = {
                     order = 6, width = "double",
                     type = "range", min = 1, max = 12, step = 1,
                 },
+                fontShadow = {
+                    name = L["Font Shadow"],
+                    desc = L["Toggle the font drop shadow effect."],
+                    order = 7, width = "double",
+                    type = "toggle",
+                },
+                TextHeader2 = {
+                    name = "",
+                    order = 8, width = "double",
+                    type = "header",
+                },
                 enableText2 = {
                     name = format(L["Enable %s indicator"], L["Center Text 2"]) .. " Requires ReloadUI",
                     desc = format(L["Toggle the %s indicator."], L["Center Text 2"]),
-                    order = 7, width = "double",
+                    order = 9, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableText2 = v
@@ -741,7 +766,7 @@ PlexusFrame.options = {
                 enableText3 = {
                     name = format(L["Enable %s indicator"], L["Center Text 3"]) .. " Requires ReloadUI",
                     desc = format(L["Toggle the %s indicator."], L["Center Text 3"]),
-                    order = 8, width = "double",
+                    order = 10, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableText3 = v
@@ -752,7 +777,7 @@ PlexusFrame.options = {
                 enableTextTopLeft = {
                     name = "Enable Top Left Text Requires ReloadUI",
                     desc = "Enable Top Left Text Requires ReloadUI",
-                    order = 9, width = "double",
+                    order = 11, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextTopLeft = v
@@ -763,7 +788,7 @@ PlexusFrame.options = {
                 enableTextTopRight = {
                     name = "Enable Top Right Text Requires ReloadUI",
                     desc = "Enable Top Right Text Requires ReloadUI",
-                    order = 10, width = "double",
+                    order = 12, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextTopRight = v
@@ -774,7 +799,7 @@ PlexusFrame.options = {
                 enableTextBottomLeft = {
                     name = "Enable Bottom Left Text Requires ReloadUI",
                     desc = "Enable Bottom Left Text Requires ReloadUI",
-                    order = 11, width = "double",
+                    order = 13, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextBottomLeft = v
@@ -785,7 +810,7 @@ PlexusFrame.options = {
                 enableTextBottomRight = {
                     name = "Enable Bottom Right Text Requires ReloadUI",
                     desc = "Enable Bottom Right Text Requires ReloadUI",
-                    order = 12, width = "double",
+                    order = 14, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextBottomRight = v
@@ -793,9 +818,14 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                TextHeader3 = {
+                    name = "",
+                    order = 15, width = "double",
+                    type = "header",
+                },
                 TextTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 10,
+                    order = 16,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -812,7 +842,7 @@ PlexusFrame.options = {
                 },
                 TextTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 11,
+                    order = 17,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -844,33 +874,11 @@ PlexusFrame.options = {
                     name = "Border Size",
                     desc = "Adjust the size of the border on corner indicators.",
                     order = 2, width = "double",
-                    type = "range", min = 0, max = 20, step = 1,
-                },
-                enableCorner2 = {
-                    name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
-                    desc = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
-                    order = 3, width = "double",
-                    type = "toggle",
-                    set = function(info, v) --luacheck: ignore 212
-                        PlexusFrame.db.profile.enableCorner2 = v
-                        PlexusFrame:UpdateAllFrames()
-                        PlexusFrame:UpdateOptionsMenu()
-                    end,
-                },
-                enableCorner34 = {
-                    name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
-                    desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
-                    order = 4, width = "double",
-                    type = "toggle",
-                    set = function(info, v) --luacheck: ignore 212
-                        PlexusFrame.db.profile.enableCorner34 = v
-                        PlexusFrame:UpdateAllFrames()
-                        PlexusFrame:UpdateOptionsMenu()
-                    end,
+                    type = "range", min = 0, max = 9, step = 1,
                 },
                 cornerBorderColor = {
                     name = L["Corner Border color"],
-                    order = 5,
+                    order = 3,
                     width = "double",
                     type = "color", hasAlpha = true,
                     get = function(info) --luacheck: ignore 212
@@ -887,10 +895,37 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateAllFrames()
                     end,
                 },
+                CornerHeader1 = {
+                    name = "",
+                    order = 4, width = "double",
+                    type = "header",
+                },
+                enableCorner2 = {
+                    name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
+                    order = 5, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableCorner2 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
+                enableCorner34 = {
+                    name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
+                    order = 6, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableCorner34 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
                 enableCornerBarSeparation = {
                     name = "Enable Separation of Corner and Extra Bar Requires ReloadUI",
                     desc = "Enable Separation of Corner indicators away from Extra Bar Requires ReloadUI",
-                    order = 6, width = "double",
+                    order = 7, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableCornerBarSeparation = v
@@ -898,9 +933,14 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                CornerHeader2 = {
+                    name = "",
+                    order = 8, width = "double",
+                    type = "header",
+                },
                 CornerTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 7,
+                    order = 9,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -943,7 +983,7 @@ PlexusFrame.options = {
                 },
                 CornerTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 8,
+                    order = 10,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -999,10 +1039,15 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                ExtraBarHeader1 = {
+                    name = "",
+                    order = 2, width = "double",
+                    type = "header",
+                },
                 ExtraBarSize = {
                     name = L["Size"],
                     desc = "Percentage of frame for extra bar",
-                    order = 2, width = "double",
+                    order = 3, width = "double",
                     type = "range", min = 1, max = 50, step = 1,
                     get = function ()
                         return PlexusFrame.db.profile.ExtraBarSize * 100
@@ -1015,13 +1060,13 @@ PlexusFrame.options = {
                 ExtraBarBorderSize = {
                     name = L["Border Size"],
                     desc = L["Adjust the size of the border on extra bar."],
-                    order = 3, width = "double",
+                    order = 4, width = "double",
                     type = "range", min = 1, max = 20, step = 1,
                 },
                 ExtraBarSide = {
                     type = "select",
                     name = "Location",
-                    order = 4,
+                    order = 5, width = "full",
                     desc = "Where extra bar attaches to",
                     get = function ()
                         return PlexusFrame.db.profile.ExtraBarSide
@@ -1035,12 +1080,17 @@ PlexusFrame.options = {
                 ExtraBarInvertColor = {
                     name = L["Invert Extra Bar Color"],
                     desc = L["Swap foreground/background colors on bars."],
-                    order = 5, width = "double",
+                    order = 6, width = "double",
                     type = "toggle",
+                },
+                ExtraBarHeader2 = {
+                    name = "",
+                    order = 7, width = "double",
+                    type = "header",
                 },
                 ExtraBarTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 6,
+                    order = 8,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -1059,7 +1109,7 @@ PlexusFrame.options = {
                 },
                 ExtraBarTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 7,
+                    order = 9,
                     width = "double",
                     type = "execute",
                     func = function()
