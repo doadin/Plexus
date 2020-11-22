@@ -125,6 +125,7 @@ local function Reset(self)
     local ExtraBarSide = profile.ExtraBarSide
     local ExtraBarSize = profile.ExtraBarSize
     local enableExtraBar = profile.enableExtraBar
+    local enableIconBarSeparation = profile.enableIconBarSeparation
     ---- Do Border Spacing
     --if x == 1 then
     --    x = x + profile.borderSize
@@ -145,17 +146,19 @@ local function Reset(self)
     if y == -10 then
         y = 0 - totalSize - profile.spacingSize
     end
-    if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
-        y = y + ExtraBarSize * 80
-    end
-    if enableExtraBar and ExtraBarSide == "Left" and (point == "LEFT" or point == "TOPLEFT" or point == "BOTTOMLEFT") then
-        x = x + ExtraBarSize * 120
-    end
-    if enableExtraBar and ExtraBarSide == "Top" and (point == "TOP" or point == "TOPLEFT" or point == "TOPRIGHT") then
-        y = y - ExtraBarSize * 80
-    end
-    if enableExtraBar and ExtraBarSide == "Right" and (point == "RIGHT" or point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
-        x = x - ExtraBarSize * 120
+    if enableIconBarSeparation then
+        if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
+            y = y + ExtraBarSize * 80
+        end
+        if enableExtraBar and ExtraBarSide == "Left" and (point == "LEFT" or point == "TOPLEFT" or point == "BOTTOMLEFT") then
+            x = x + ExtraBarSize * 120
+        end
+        if enableExtraBar and ExtraBarSide == "Top" and (point == "TOP" or point == "TOPLEFT" or point == "TOPRIGHT") then
+            y = y - ExtraBarSize * 80
+        end
+        if enableExtraBar and ExtraBarSide == "Right" and (point == "RIGHT" or point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
+            x = x - ExtraBarSize * 120
+        end
     end
     self:SetPoint( point, x, y )
 
