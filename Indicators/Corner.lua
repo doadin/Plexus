@@ -19,41 +19,41 @@ local BACKDROP = {
 
 local anchor = {
     -- left/right up/down
-    corner3 = { "TOPLEFT", 0, 0 },
-    topleft2 = { "TOPLEFT", 10, 0 },
-    topleft3 = { "TOPLEFT", 0, -10 },
+    corner3 = { "TOPLEFT", -1, 1 },
+    topleft2 = { "TOPLEFT", 10, 1 },
+    topleft3 = { "TOPLEFT", -1, -10 },
     -- left/right up/down
-    corner4 = { "TOPRIGHT", 0, 0 },
-    topright2 = { "TOPRIGHT", 0, -10 },
-    topright3 = { "TOPRIGHT", -10, 0 },
+    corner4 = { "TOPRIGHT", 1, 1 },
+    topright2 = { "TOPRIGHT", 1, -10 },
+    topright3 = { "TOPRIGHT", -10, 1 },
     -- left/right up/down
-    corner1 = { "BOTTOMLEFT", 0, 0 },
-    bottomleft2 = { "BOTTOMLEFT", 0, 10 },
-    bottomleft3 = { "BOTTOMLEFT", 10, 0 },
+    corner1 = { "BOTTOMLEFT", -1, -1 },
+    bottomleft2 = { "BOTTOMLEFT", -1, 10 },
+    bottomleft3 = { "BOTTOMLEFT", 10, -1 },
     -- left/right up/down
-    corner2 = { "BOTTOMRIGHT", 0, 0 },
-    bottomright2 = { "BOTTOMRIGHT", -10, 0 },
-    bottomright3 = { "BOTTOMRIGHT", 0, 10 },
+    corner2 = { "BOTTOMRIGHT", 1, -1 },
+    bottomright2 = { "BOTTOMRIGHT", -10, -1 },
+    bottomright3 = { "BOTTOMRIGHT", 1, 10 },
     -- left/right up/down
-    Top = { "TOP", 0, 0 },
-    Top2 = { "TOP", 10, 0 },
+    Top = { "TOP", 0, 1 },
+    Top2 = { "TOP", 10, 1 },
     Top3 = { "TOP", 0, -10 },
-    Top4 = { "TOP", -10, 0 },
+    Top4 = { "TOP", -10, 1 },
     -- left/right up/down
-    Bottom = { "BOTTOM", 0, 0 },
-    Bottom2 = { "BOTTOM", -10, 0 },
+    Bottom = { "BOTTOM", 0, -1 },
+    Bottom2 = { "BOTTOM", -10, -1 },
     Bottom3 = { "BOTTOM", 0, 10 },
-    Bottom4 = { "BOTTOM", 10, 0 },
+    Bottom4 = { "BOTTOM", 10, -1 },
     -- left/right up/down
-    Left = { "LEFT", 0, 0 },
-    Left2 = { "LEFT", 0, 10 },
+    Left = { "LEFT", -1, 0 },
+    Left2 = { "LEFT", -1, 10 },
     Left3 = { "LEFT", 10, 0 },
-    Left4 = { "LEFT", 0, -10 },
+    Left4 = { "LEFT", -1, -10 },
     -- left/right up/down
-    Right = { "RIGHT", 0, 0 },
-    Right2 = { "RIGHT", 0, -10 },
+    Right = { "RIGHT", 1, 0 },
+    Right2 = { "RIGHT", 1, -10 },
     Right3 = { "RIGHT", -10, 0 },
-    Right4 = { "RIGHT", 0, 10 },
+    Right4 = { "RIGHT", 1, 10 },
 }
 
 local function New(frame)
@@ -65,7 +65,7 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
-    --local cornerBorderSize = profile.cornerBorderSize
+    local cornerBorderSize = profile.cornerBorderSize
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
     self:SetParent(self.__owner.indicators.bar)
@@ -80,16 +80,16 @@ local function Reset(self)
     local enableCornerBarSeparation = profile.enableCornerBarSeparation
 
     if x == 10 then
-        x = 0 + totalSize
+        x = -1 + totalSize
     end
     if x == -10 then
-        x = 0 - totalSize
+        x = 1 - totalSize
     end
     if y == 10 then
-        y = 0 + totalSize
+        y = -1 + totalSize
     end
     if y == -10 then
-        y = 0 - totalSize
+        y = 1 - totalSize
     end
     if enableCornerBarSeparation then
         if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
@@ -107,17 +107,11 @@ local function Reset(self)
     end
     self:SetPoint( point, x, y )
     --if cornerBorderSize == 0 then
-	--	self:SetBackdrop(nil)
+    --    BACKDROP.edgeFile = nil
+    --    self:SetBackdrop(BACKDROP)
 	--else
 	--	BACKDROP.edgeSize = cornerBorderSize
-	--	BACKDROP.insets.left = cornerBorderSize
-	--	BACKDROP.insets.right = cornerBorderSize
-	--	BACKDROP.insets.top = cornerBorderSize
-	--	BACKDROP.insets.bottom = cornerBorderSize
-
-    --    local r, g, b, a = unpack(profile.cornerBorderColor)
-    --    self:SetBackdrop(BACKDROP)
-    --    self:SetBackdropBorderColor(r, g, b, a)
+	--	self:SetBackdrop(BACKDROP)
 	--end
 end
 
