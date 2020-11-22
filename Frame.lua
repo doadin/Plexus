@@ -874,6 +874,8 @@ PlexusFrame.options = {
                     name = "Border Size",
                     desc = "Adjust the size of the border on corner indicators.",
                     order = 2, width = "double",
+                    disabled = true,
+                    hidden = true,
                     type = "range", min = 0, max = 9, step = 1,
                 },
                 cornerBorderColor = {

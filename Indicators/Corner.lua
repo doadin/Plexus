@@ -65,7 +65,7 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
-    local cornerBorderSize = profile.cornerBorderSize
+    --local cornerBorderSize = profile.cornerBorderSize
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
     self:SetParent(self.__owner.indicators.bar)
@@ -106,17 +106,19 @@ local function Reset(self)
         end
     end
     self:SetPoint( point, x, y )
-    if cornerBorderSize == 0 then
-		self:SetBackdrop(nil)
-	else
-		BACKDROP.edgeSize = cornerBorderSize
-		BACKDROP.insets.left = cornerBorderSize
-		BACKDROP.insets.right = cornerBorderSize
-		BACKDROP.insets.top = cornerBorderSize
-		BACKDROP.insets.bottom = cornerBorderSize
+    --if cornerBorderSize == 0 then
+	--	self:SetBackdrop(nil)
+	--else
+	--	BACKDROP.edgeSize = cornerBorderSize
+	--	BACKDROP.insets.left = cornerBorderSize
+	--	BACKDROP.insets.right = cornerBorderSize
+	--	BACKDROP.insets.top = cornerBorderSize
+	--	BACKDROP.insets.bottom = cornerBorderSize
 
-		self:SetBackdrop(BACKDROP)
-	end
+    --    local r, g, b, a = unpack(profile.cornerBorderColor)
+    --    self:SetBackdrop(BACKDROP)
+    --    self:SetBackdropBorderColor(r, g, b, a)
+	--end
 end
 
 local function SetStatus(self, color)
