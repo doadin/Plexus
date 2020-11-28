@@ -16,9 +16,13 @@ local PlexusIndicatorsText = PlexusFrame:NewModule("PlexusIndicatorsText")
 
 local anchor = {
     -- left/right up/down
+    ei_text_top = { "TOP", 0, -1 },
+    -- left/right up/down
     ei_text_topleft = { "TOPLEFT", 1, -1 },
     -- left/right up/down
     ei_text_topright = { "TOPRIGHT", -1, -1 },
+    -- left/right up/down
+    ei_text_bottom = { "BOTTOM", 0, 1 },
     -- left/right up/down
     ei_text_bottomleft = { "BOTTOMLEFT", 1, 1 },
     -- left/right up/down
@@ -161,11 +165,17 @@ function PlexusIndicatorsText:OnInitialize() --luacheck: ignore 212
     if profile.enableText3 then
         PlexusFrame:RegisterIndicator("text3", L["Center Text 3"], New, Reset, SetStatus, Clear)
     end
+    if profile.enableTextTop then
+        PlexusFrame:RegisterIndicator("ei_text_top", L["Extra Text: Top"], New, Reset, SetStatus, Clear)
+    end
     if profile.enableTextTopLeft then
         PlexusFrame:RegisterIndicator("ei_text_topleft", L["Extra Text: Top Left"], New, Reset, SetStatus, Clear)
     end
     if profile.enableTextTopRight then
         PlexusFrame:RegisterIndicator("ei_text_topright", L["Extra Text: Top Right"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableTextBottom then
+        PlexusFrame:RegisterIndicator("ei_text_bottom", L["Extra Text: Bottom"], New, Reset, SetStatus, Clear)
     end
     if profile.enableTextBottomLeft then
         PlexusFrame:RegisterIndicator("ei_text_bottomleft", L["Extra Text: Bottom Left"], New, Reset, SetStatus, Clear)

@@ -268,8 +268,10 @@ PlexusFrame.defaultDB = {
     enableCornerBarSeparation = true,
     enableText2 = false,
     enableText3 = false,
+    enableTextTop = false,
     enableTextTopLeft = false,
     enableTextTopRight = false,
+    enableTextBottom = false,
     enableTextBottomLeft = false,
     enableTextBottomRight = false,
     enableIcon2 = true,
@@ -774,7 +776,7 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
-                enableTextTopLeft = {
+                enableTextTop = {
                     name = "Enable Top Left Text Requires ReloadUI",
                     desc = "Enable Top Left Text Requires ReloadUI",
                     order = 11, width = "double",
@@ -785,10 +787,21 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                enableTextTopLeft = {
+                    name = "Enable Top Left Text Requires ReloadUI",
+                    desc = "Enable Top Left Text Requires ReloadUI",
+                    order = 12, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableTextTopLeft = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
                 enableTextTopRight = {
                     name = "Enable Top Right Text Requires ReloadUI",
                     desc = "Enable Top Right Text Requires ReloadUI",
-                    order = 12, width = "double",
+                    order = 13, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextTopRight = v
@@ -796,10 +809,21 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                enableTextBottom = {
+                    name = "Enable Bottom Left Text Requires ReloadUI",
+                    desc = "Enable Bottom Left Text Requires ReloadUI",
+                    order = 14, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableTextBottomLeft = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
                 enableTextBottomLeft = {
                     name = "Enable Bottom Left Text Requires ReloadUI",
                     desc = "Enable Bottom Left Text Requires ReloadUI",
-                    order = 13, width = "double",
+                    order = 15, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextBottomLeft = v
@@ -810,7 +834,7 @@ PlexusFrame.options = {
                 enableTextBottomRight = {
                     name = "Enable Bottom Right Text Requires ReloadUI",
                     desc = "Enable Bottom Right Text Requires ReloadUI",
-                    order = 14, width = "double",
+                    order = 16, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableTextBottomRight = v
@@ -820,12 +844,12 @@ PlexusFrame.options = {
                 },
                 TextHeader3 = {
                     name = "",
-                    order = 15, width = "double",
+                    order = 17, width = "double",
                     type = "header",
                 },
                 TextTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 16,
+                    order = 18,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -842,7 +866,7 @@ PlexusFrame.options = {
                 },
                 TextTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 17,
+                    order = 19,
                     width = "double",
                     type = "execute",
                     func = function()
