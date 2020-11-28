@@ -233,7 +233,7 @@ local function SetStatus(self, color, text, _, _, texture, texCoords, stack, sta
 		self.text:SetText("")
     end
 
-    if profile.showIconCountDownText and text and text ~= 0 then
+    if profile.showIconCountDownText and type(text) == "number" and text ~= 0 then
         self.cooldowntext:SetText(text)
 	else
 		self.cooldowntext:SetText("")
