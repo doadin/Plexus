@@ -10,11 +10,11 @@ local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
-local PlexusResourceBar = PlexusStatus:NewModule("PlexusResourceBar")
+local PlexusStatusResource = PlexusStatus:NewModule("PlexusStatusResource")
 
-PlexusResourceBar.menuName = "ResourceBar"
+PlexusStatusResource.menuName = "Resource"
 
-PlexusResourceBar.defaultDB = {
+PlexusStatusResource.defaultDB = {
     debug = false,
     manacolor = { r = 0, g = 0.5, b = 1, a = 1.0 },
     energycolor = { r = 1, g = 1, b = 0, a = 1.0 },
@@ -30,7 +30,7 @@ PlexusResourceBar.defaultDB = {
 --@end-retail@
     unit_resource = {
         color = { r=1, g=1, b=1, a=1 },
-        text = "ResourceBar",
+        text = "Resource",
         enable = false,
         priority = 30,
         range = false
@@ -42,65 +42,65 @@ PlexusResourceBar.defaultDB = {
     NoPets = false,
 }
 
-local resourcebar_options = {
+local resource_options = {
 --@retail@
-    ["Resource Bar Healer Only"] = {
+    ["Resource Healer Only"] = {
         type = "toggle",
-        name = "Only show Healers Bar",
+        name = "Only show for healers",
         order = 50,
-        desc = "Only show healers resource bar",
+        desc = "Only show healers resource",
         get = function ()
-            return PlexusResourceBar.db.profile.EnableForHealers
+            return PlexusStatusResource.db.profile.EnableForHealers
             end,
         set = function(_, v)
-            PlexusResourceBar.db.profile.EnableForHealers = v
-            PlexusResourceBar:UpdateAllUnits()
+            PlexusStatusResource.db.profile.EnableForHealers = v
+            PlexusStatusResource:UpdateAllUnits()
         end
     },
 --@end-retail@
-    ["Resource Bar Mana Only"] = {
+    ["Resource Mana Only"] = {
         type = "toggle",
-        name = "Only show mana Bars",
+        name = "Only show mana",
         order = 60,
-        desc = "Only show mana bars",
+        desc = "Only show mana",
         get = function ()
-            return PlexusResourceBar.db.profile.EnableOnlyMana
+            return PlexusStatusResource.db.profile.EnableOnlyMana
             end,
         set = function(_, v)
-            PlexusResourceBar.db.profile.EnableOnlyMana = v
-            PlexusResourceBar:UpdateAllUnits()
+            PlexusStatusResource.db.profile.EnableOnlyMana = v
+            PlexusStatusResource:UpdateAllUnits()
         end
     },
     ["No Pets"] = {
         type = "toggle",
         name = "Don't Show Pets",
         order = 70,
-        desc = "Only show player bars",
+        desc = "Only show for players",
         get = function ()
-            return PlexusResourceBar.db.profile.NoPets
+            return PlexusStatusResource.db.profile.NoPets
             end,
         set = function(_, v)
-            PlexusResourceBar.db.profile.NoPets = v
-            PlexusResourceBar:UpdateAllUnits()
+            PlexusStatusResource.db.profile.NoPets = v
+            PlexusStatusResource:UpdateAllUnits()
         end
     },
-    ["Resource Bar Colors"] = {
+    ["Resource Colors"] = {
         name = "Colors",
         order = 200,
         type = "group",
         dialogInline = true,
         --childGroups = "tab",
         args = {
-            ["Mana Bar Color"] = {
+            ["Mana Color"] = {
                 name = "Mana Color",
                 order = 40,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.manacolor
+                    local color = PlexusStatusResource.db.profile.manacolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.manacolor
+                    local color = PlexusStatusResource.db.profile.manacolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -108,16 +108,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Energy Bar Color"] = {
+            ["Energy Color"] = {
                 name = "Energy Color",
                 order = 50,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.energycolor
+                    local color = PlexusStatusResource.db.profile.energycolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.energycolor
+                    local color = PlexusStatusResource.db.profile.energycolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -125,16 +125,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Rage Bar Color"] = {
+            ["Rage Color"] = {
                 name = "Rage Color",
                 order = 60,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.ragecolor
+                    local color = PlexusStatusResource.db.profile.ragecolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.ragecolor
+                    local color = PlexusStatusResource.db.profile.ragecolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -143,16 +143,16 @@ local resourcebar_options = {
                 end,
             },
 --@retail@
-            ["Runic Bar Color"] = {
+            ["Runic Color"] = {
                 name = "Runic Color",
                 order = 70,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.runiccolor
+                    local color = PlexusStatusResource.db.profile.runiccolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.runiccolor
+                    local color = PlexusStatusResource.db.profile.runiccolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -160,16 +160,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Focus Bar Color"] = {
+            ["Focus Color"] = {
                 name = "Focus Color",
                 order = 80,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.focuscolor
+                    local color = PlexusStatusResource.db.profile.focuscolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.focuscolor
+                    local color = PlexusStatusResource.db.profile.focuscolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -177,16 +177,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Insanity Bar Color"] = {
+            ["Insanity Color"] = {
                 name = "Insanity Color",
                 order = 90,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.insanitycolor
+                    local color = PlexusStatusResource.db.profile.insanitycolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.insanitycolor
+                    local color = PlexusStatusResource.db.profile.insanitycolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -194,16 +194,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Fury Bar Color"] = {
+            ["Fury Color"] = {
                 name = "Fury Color",
                 order = 100,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.furycolor
+                    local color = PlexusStatusResource.db.profile.furycolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.furycolor
+                    local color = PlexusStatusResource.db.profile.furycolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -211,16 +211,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Pain Bar Color"] = {
+            ["Pain Color"] = {
                 name = "Pain Color",
                 order = 110,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.paincolor
+                    local color = PlexusStatusResource.db.profile.paincolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.paincolor
+                    local color = PlexusStatusResource.db.profile.paincolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -228,16 +228,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Maelstrom Bar Color"] = {
+            ["Maelstrom Color"] = {
                 name = "Maelstrom Color",
                 order = 120,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.maelstromcolor
+                    local color = PlexusStatusResource.db.profile.maelstromcolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.maelstromcolor
+                    local color = PlexusStatusResource.db.profile.maelstromcolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -245,16 +245,16 @@ local resourcebar_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
-            ["Lunar Bar Color"] = {
+            ["Lunar Color"] = {
                 name = "Lunar Color(Balance Druid)",
                 order = 130,
                 type = "color", hasAlpha = true,
                 get = function()
-                    local color = PlexusResourceBar.db.profile.lunarcolor
+                    local color = PlexusStatusResource.db.profile.lunarcolor
                     return color.r, color.g, color.b, color.a
                 end,
                 set = function(_, r, g, b, a)
-                    local color = PlexusResourceBar.db.profile.lunarcolor
+                    local color = PlexusStatusResource.db.profile.lunarcolor
                     color.r = r
                     color.g = g
                     color.b = b
@@ -267,35 +267,35 @@ local resourcebar_options = {
                 order = 1000,
                 name = "Reset Resource colors (Require Reload)",
                 type = "execute", width = "double",
-                func = function() PlexusResourceBar:ResetResourceColors() end,
+                func = function() PlexusStatusResource:ResetResourceColors() end,
             },
         },
     },
 }
 
-function PlexusResourceBar:ResetResourceColors() --luacheck: ignore 212
-    PlexusResourceBar.db.profile.manacolor = PlexusResourceBar.defaultDB.manacolor
-    PlexusResourceBar.db.profile.energycolor = PlexusResourceBar.defaultDB.energycolor
-    PlexusResourceBar.db.profile.ragecolor = PlexusResourceBar.defaultDB.ragecolor
-    PlexusResourceBar.db.profile.runiccolor = PlexusResourceBar.defaultDB.runiccolor
-    PlexusResourceBar.db.profile.focuscolor = PlexusResourceBar.defaultDB.focuscolor
-    PlexusResourceBar.db.profile.insanitycolor = PlexusResourceBar.defaultDB.insanitycolor
-    PlexusResourceBar.db.profile.furycolor = PlexusResourceBar.defaultDB.furycolor
-    PlexusResourceBar.db.profile.paincolor = PlexusResourceBar.defaultDB.paincolor
-    PlexusResourceBar.db.profile.maelstromcolor = PlexusResourceBar.defaultDB.maelstromcolor
-    PlexusResourceBar.db.profile.lunarcolor = PlexusResourceBar.defaultDB.lunarcolor
+function PlexusStatusResource:ResetResourceColors() --luacheck: ignore 212
+    PlexusStatusResource.db.profile.manacolor = PlexusStatusResource.defaultDB.manacolor
+    PlexusStatusResource.db.profile.energycolor = PlexusStatusResource.defaultDB.energycolor
+    PlexusStatusResource.db.profile.ragecolor = PlexusStatusResource.defaultDB.ragecolor
+    PlexusStatusResource.db.profile.runiccolor = PlexusStatusResource.defaultDB.runiccolor
+    PlexusStatusResource.db.profile.focuscolor = PlexusStatusResource.defaultDB.focuscolor
+    PlexusStatusResource.db.profile.insanitycolor = PlexusStatusResource.defaultDB.insanitycolor
+    PlexusStatusResource.db.profile.furycolor = PlexusStatusResource.defaultDB.furycolor
+    PlexusStatusResource.db.profile.paincolor = PlexusStatusResource.defaultDB.paincolor
+    PlexusStatusResource.db.profile.maelstromcolor = PlexusStatusResource.defaultDB.maelstromcolor
+    PlexusStatusResource.db.profile.lunarcolor = PlexusStatusResource.defaultDB.lunarcolor
     PlexusFrame:UpdateAllFrames()
 end
 
-function PlexusResourceBar:OnInitialize()
+function PlexusStatusResource:OnInitialize()
     self.super.OnInitialize(self)
 
-    self:RegisterStatus('unit_resource',"Resource Bar", resourcebar_options, true)
+    self:RegisterStatus('unit_resource',"Resource", resource_options, true)
     PlexusStatus.options.args['unit_resource'].args['color'] = nil
 
 end
 
-function PlexusResourceBar:OnStatusEnable(status)
+function PlexusStatusResource:OnStatusEnable(status)
     if status == "unit_resource" then
         self:RegisterEvent("UNIT_POWER_UPDATE","UpdateUnit")
         self:RegisterEvent("UNIT_MAXPOWER","UpdateUnit")
@@ -308,7 +308,7 @@ function PlexusResourceBar:OnStatusEnable(status)
     end
 end
 
-function PlexusResourceBar:OnStatusDisable(status)
+function PlexusStatusResource:OnStatusDisable(status)
     if status == "unit_resource" then
         for guid, _ in PlexusRoster:IterateRoster() do
             self.core:SendStatusLost(guid, "unit_resource")
@@ -323,9 +323,9 @@ function PlexusResourceBar:OnStatusDisable(status)
     end
 end
 
-function PlexusResourceBar:UpdateUnit(_, unitid)
+function PlexusStatusResource:UpdateUnit(_, unitid)
     if not unitid then return end
-    local NoPets = PlexusResourceBar.db.profile.NoPets
+    local NoPets = PlexusStatusResource.db.profile.NoPets
     local unitGUID = UnitGUID(unitid)
     --don't update for a unit not in group
     if not PlexusRoster:IsGUIDInGroup(unitGUID) then return end
@@ -337,14 +337,14 @@ function PlexusResourceBar:UpdateUnit(_, unitid)
 end
 
 --@retail@
-function PlexusResourceBar:ROLE_CHANGED_INFORM(event, changedName, fromName, oldRole, newRole)
+function PlexusStatusResource:ROLE_CHANGED_INFORM(event, changedName, fromName, oldRole, newRole)
     -- Catch if a unit changes role so that if a unit power doesn't change(role changed spec not changed)
     -- We will still update their frame
     local unitGUID = PlexusRoster:GetGUIDByFullName(changedName)
     local unitid = PlexusRoster:GetUnitidByGUID(unitGUID)
     self:Debug("ROLE_CHANGED_INFORM", event, changedName, fromName, oldRole, newRole)
     self:Debug("ROLE_CHANGED_INFORM",changedName, unitGUID, unitid)
-    local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
+    local EnableForHealers = PlexusStatusResource.db.profile.EnableForHealers
     if EnableForHealers then
         if newRole ~= "HEALER" then
             self.core:SendStatusLost(unitGUID, "unit_resource")
@@ -357,8 +357,8 @@ function PlexusResourceBar:ROLE_CHANGED_INFORM(event, changedName, fromName, old
 end
 --@end-retail@
 
-function PlexusResourceBar:Plexus_UnitJoined(_, _, unitid)
-    local NoPets = PlexusResourceBar.db.profile.NoPets
+function PlexusStatusResource:Plexus_UnitJoined(_, _, unitid)
+    local NoPets = PlexusStatusResource.db.profile.NoPets
     local unitGUID = UnitGUID(unitid)
     if not unitid then return end
     if (NoPets and not UnitIsPlayer(unitid)) then
@@ -368,8 +368,8 @@ function PlexusResourceBar:Plexus_UnitJoined(_, _, unitid)
     end
 end
 
-function PlexusResourceBar:UpdateAllUnits()
-    local NoPets = PlexusResourceBar.db.profile.NoPets
+function PlexusStatusResource:UpdateAllUnits()
+    local NoPets = PlexusStatusResource.db.profile.NoPets
     for _, unitid in PlexusRoster:IterateRoster() do
         local unitGUID = UnitGUID(unitid)
         if (NoPets and not UnitIsPlayer(unitid)) then
@@ -380,15 +380,15 @@ function PlexusResourceBar:UpdateAllUnits()
     end
 end
 
-function PlexusResourceBar:UpdateUnitResource(unitid)
+function PlexusStatusResource:UpdateUnitResource(unitid)
     local color
     if not unitid then return end
     --local UnitGUID = UnitGUID(unitid)
     --if not UnitGUID then return end
     local unitGUID = UnitGUID(unitid)
     local current, max = UnitPower(unitid), UnitPowerMax(unitid)
-    local priority = PlexusResourceBar.db.profile.unit_resource.priority
-    local EnableForHealers = PlexusResourceBar.db.profile.EnableForHealers
+    local priority = PlexusStatusResource.db.profile.unit_resource.priority
+    local EnableForHealers = PlexusStatusResource.db.profile.EnableForHealers
     local unitpower = UnitPowerType(unitid)
 --@retail@
     if EnableForHealers then
@@ -403,12 +403,12 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
         end
     end
 --@end-retail@
-    local NoPets = PlexusResourceBar.db.profile.NoPets
+    local NoPets = PlexusStatusResource.db.profile.NoPets
     if (NoPets and not UnitIsPlayer(unitid)) then
         self.core:SendStatusLost(unitGUID, "unit_resource")
         return
     end
-    local EnableOnlyMana = PlexusResourceBar.db.profile.EnableOnlyMana
+    local EnableOnlyMana = PlexusStatusResource.db.profile.EnableOnlyMana
     if EnableOnlyMana then
         if unitpower ~= 0 then
             self.core:SendStatusLost(unitGUID, "unit_resource")
@@ -417,27 +417,27 @@ function PlexusResourceBar:UpdateUnitResource(unitid)
     end
 
     if unitpower == 3 then
-        color = PlexusResourceBar.db.profile.energycolor
+        color = PlexusStatusResource.db.profile.energycolor
 --@retail@
     elseif unitpower == 2 then
-        color = PlexusResourceBar.db.profile.focuscolor
+        color = PlexusStatusResource.db.profile.focuscolor
     elseif unitpower == 6 then
-        color = PlexusResourceBar.db.profile.runiccolor
+        color = PlexusStatusResource.db.profile.runiccolor
     elseif unitpower == 8 then
-        color = PlexusResourceBar.db.profile.lunarcolor
+        color = PlexusStatusResource.db.profile.lunarcolor
     elseif unitpower == 11 then
-        color = PlexusResourceBar.db.profile.maelstromcolor
+        color = PlexusStatusResource.db.profile.maelstromcolor
     elseif unitpower == 13 then
-        color = PlexusResourceBar.db.profile.insanitycolor
+        color = PlexusStatusResource.db.profile.insanitycolor
     elseif unitpower == 17 then
-        color = PlexusResourceBar.db.profile.furycolor
+        color = PlexusStatusResource.db.profile.furycolor
     elseif unitpower == 18 then
-        color = PlexusResourceBar.db.profile.paincolor
+        color = PlexusStatusResource.db.profile.paincolor
 --@end-retail@
     elseif unitpower == 1 then
-        color = PlexusResourceBar.db.profile.ragecolor
+        color = PlexusStatusResource.db.profile.ragecolor
     else
-        color = PlexusResourceBar.db.profile.manacolor
+        color = PlexusStatusResource.db.profile.manacolor
     end
     self.core:SendStatusGained(
         unitGUID, "unit_resource",
