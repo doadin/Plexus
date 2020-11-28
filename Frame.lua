@@ -879,14 +879,36 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
+                enableText2 = {
+                    name = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
+                    order = 17, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableText2 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
+                enableText34 = {
+                    name = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
+                    order = 18, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enableText34 = v
+                        PlexusFrame:UpdateAllFrames()
+                        PlexusFrame:UpdateOptionsMenu()
+                    end,
+                },
                 TextHeader3 = {
                     name = "",
-                    order = 17, width = "double",
+                    order = 19, width = "double",
                     type = "header",
                 },
                 TextTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 18,
+                    order = 20,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -903,7 +925,7 @@ PlexusFrame.options = {
                 },
                 TextTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 19,
+                    order = 21,
                     width = "double",
                     type = "execute",
                     func = function()

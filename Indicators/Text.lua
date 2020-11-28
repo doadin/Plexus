@@ -17,16 +17,30 @@ local PlexusIndicatorsText = PlexusFrame:NewModule("PlexusIndicatorsText")
 local anchor = {
     -- left/right up/down
     ei_text_top = { "TOP", 0, -1 },
+    ei_text_top2 = { "TOP", 10, 1 },
+    ei_text_top3 = { "TOP", 0, -10 },
+    ei_text_top4 = { "TOP", -10, 1 },
     -- left/right up/down
     ei_text_topleft = { "TOPLEFT", 1, -1 },
+    ei_text_topleft2 = { "TOPLEFT", 10, 1 },
+    ei_text_topleft3 = { "TOPLEFT", -1, -10 },
     -- left/right up/down
     ei_text_topright = { "TOPRIGHT", -1, -1 },
+    ei_text_topright2 = { "TOPRIGHT", 1, -10 },
+    ei_text_topright3 = { "TOPRIGHT", -10, 1 },
     -- left/right up/down
     ei_text_bottom = { "BOTTOM", 0, 1 },
+    ei_text_Bottom2 = { "BOTTOM", -10, -1 },
+    ei_text_Bottom3 = { "BOTTOM", 0, 10 },
+    ei_text_Bottom4 = { "BOTTOM", 10, -1 },
     -- left/right up/down
     ei_text_bottomleft = { "BOTTOMLEFT", 1, 1 },
+    ei_text_bottomleft2 = { "BOTTOMLEFT", -1, 10 },
+    ei_text_bottomleft3 = { "BOTTOMLEFT", 10, -1 },
     -- left/right up/down
     ei_text_bottomright = { "BOTTOMRIGHT", -1, 1 },
+    ei_text_bottomright2 = { "BOTTOMRIGHT", -10, -1 },
+    ei_text_bottomright3 = { "BOTTOMRIGHT", 1, 10 },
 }
 
 local function New(frame)
@@ -165,22 +179,66 @@ function PlexusIndicatorsText:OnInitialize() --luacheck: ignore 212
     if profile.enableText3 then
         PlexusFrame:RegisterIndicator("text3", L["Center Text 3"], New, Reset, SetStatus, Clear)
     end
+
     if profile.enableTextTop then
         PlexusFrame:RegisterIndicator("ei_text_top", L["Extra Text: Top"], New, Reset, SetStatus, Clear)
     end
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("ei_text_top2",  L["Extra Text: Top 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText34 then
+        PlexusFrame:RegisterIndicator("ei_text_top3",  L["Extra Text: Top 3"],     New, Reset, SetStatus, Clear)
+        PlexusFrame:RegisterIndicator("ei_text_top4",  L["Extra Text: Top 4"],     New, Reset, SetStatus, Clear)
+    end
+
     if profile.enableTextTopLeft then
         PlexusFrame:RegisterIndicator("ei_text_topleft", L["Extra Text: Top Left"], New, Reset, SetStatus, Clear)
     end
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("ei_text_topleft2",  L["Extra Text: Top Left 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText34 then
+        PlexusFrame:RegisterIndicator("ei_text_topleft3",  L["Extra Text: Top Left 3"],     New, Reset, SetStatus, Clear)
+    end
+
     if profile.enableTextTopRight then
         PlexusFrame:RegisterIndicator("ei_text_topright", L["Extra Text: Top Right"], New, Reset, SetStatus, Clear)
     end
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("ei_text_topright2",  L["Extra Text: Top Right 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText34 then
+        PlexusFrame:RegisterIndicator("ei_text_topright3",  L["Extra Text: Top Right 3"],     New, Reset, SetStatus, Clear)
+    end
+
     if profile.enableTextBottom then
         PlexusFrame:RegisterIndicator("ei_text_bottom", L["Extra Text: Bottom"], New, Reset, SetStatus, Clear)
     end
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("ei_text_bottom2",  L["Extra Text: Bottom 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText34 then
+        PlexusFrame:RegisterIndicator("ei_text_bottom3",  L["Extra Text: Bottom 3"],     New, Reset, SetStatus, Clear)
+        PlexusFrame:RegisterIndicator("ei_text_bottom4",  L["Extra Text: Bottom 4"],     New, Reset, SetStatus, Clear)
+    end
+
     if profile.enableTextBottomLeft then
         PlexusFrame:RegisterIndicator("ei_text_bottomleft", L["Extra Text: Bottom Left"], New, Reset, SetStatus, Clear)
     end
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("ei_text_bottomleft2",  L["Extra Text: Bottom Left 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText34 then
+        PlexusFrame:RegisterIndicator("ei_text_bottomleft3",  L["Extra Text: Bottom Left 3"],     New, Reset, SetStatus, Clear)
+    end
+
     if profile.enableTextBottomRight then
         PlexusFrame:RegisterIndicator("ei_text_bottomright", L["Extra Text: Bottom Right"], New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText2 then
+        PlexusFrame:RegisterIndicator("ei_text_bottomright2",  L["Extra Text: Bottom Right 2"],     New, Reset, SetStatus, Clear)
+    end
+    if profile.enableText34 then
+        PlexusFrame:RegisterIndicator("ei_text_bottomright3",  L["Extra Text: Bottom Right 3"],     New, Reset, SetStatus, Clear)
     end
 end
