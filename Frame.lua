@@ -271,6 +271,8 @@ PlexusFrame.defaultDB = {
     enableCornerBarSeparation = true,
     enableText2 = false,
     enableText3 = false,
+    enableExtraText2 = false,
+    enableExtraText34 = false,
     enableTextTop = false,
     enableTextTopLeft = false,
     enableTextTopRight = false,
@@ -879,24 +881,24 @@ PlexusFrame.options = {
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
-                enableText2 = {
+                enableExtraText2 = {
                     name = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
                     desc = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
                     order = 17, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
-                        PlexusFrame.db.profile.enableText2 = v
+                        PlexusFrame.db.profile.enableExtraText2 = v
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,
                 },
-                enableText34 = {
-                    name = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
-                    desc = "Enable Extra Text xx 2 Indicators Requires ReloadUI",
+                enableExtraText34 = {
+                    name = "Enable Extra Text xx 3/4 Indicators Requires ReloadUI",
+                    desc = "Enable Extra Text xx 3/4 Indicators Requires ReloadUI",
                     order = 18, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
-                        PlexusFrame.db.profile.enableText34 = v
+                        PlexusFrame.db.profile.enableExtraText34 = v
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,
