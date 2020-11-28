@@ -30,9 +30,9 @@ local anchor = {
     ei_text_topright3 = { "TOPRIGHT", -10, 1 },
     -- left/right up/down
     ei_text_bottom = { "BOTTOM", 0, 1 },
-    ei_text_Bottom2 = { "BOTTOM", -10, -1 },
-    ei_text_Bottom3 = { "BOTTOM", 0, 10 },
-    ei_text_Bottom4 = { "BOTTOM", 10, -1 },
+    ei_text_bottom2 = { "BOTTOM", -10, -1 },
+    ei_text_bottom3 = { "BOTTOM", 0, 10 },
+    ei_text_bottom4 = { "BOTTOM", 10, -1 },
     -- left/right up/down
     ei_text_bottomleft = { "BOTTOMLEFT", 1, 1 },
     ei_text_bottomleft2 = { "BOTTOMLEFT", -1, 10 },
