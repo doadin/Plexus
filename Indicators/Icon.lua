@@ -77,11 +77,20 @@ local function New(frame)
     text:SetPoint("BOTTOMRIGHT", 2, -2)
 	text:SetJustifyH("RIGHT")
 	text:SetJustifyV("BOTTOM")
-	icon.text = text
+    icon.text = text
+
+    local cooldowntext = icon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    cooldowntext:SetPoint("TOPLEFT", 0, 0)
+	cooldowntext:SetJustifyH("LEFT")
+	cooldowntext:SetJustifyV("TOP")
+	icon.cooldowntext = cooldowntext
+
 	return icon
 end
 
 local function Reset(self)
+    local profile = PlexusFrame.db.profile
+
 	if not self.cooldown then
 		local cd = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
         cd:SetAllPoints(true)
@@ -97,10 +106,11 @@ local function Reset(self)
 		cd:SetScript("OnHide", function()
 			self.text:SetParent(self)
 		end)
-	end
-    local profile = PlexusFrame.db.profile
+    end
+
 	local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
-    local fontSize = profile.fontSize
+    local iconStackFontSize = profile.iconStackFontSize
+    local iconCoolDownFontSize = profile.iconCoolDownFontSize
     local iconSize
     if self.__id == "icon" then
         iconSize = profile.centerIconSize
@@ -179,10 +189,12 @@ local function Reset(self)
 	self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
 
 	self.text:SetPoint("CENTER", profile.stackOffsetX, profile.stackOffsetY)
-	self.text:SetFont(font, fontSize, "OUTLINE")
+    self.text:SetFont(font, iconStackFontSize, "OUTLINE")
+    self.cooldowntext:SetFont(font, iconCoolDownFontSize, "OUTLINE")
+
 end
 
-local function SetStatus(self, color, _, _, _, texture, texCoords, stack, start, duration)
+local function SetStatus(self, color, text, _, _, texture, texCoords, stack, start, duration)
 	local profile = PlexusFrame.db.profile
 	if not texture then return end
 
@@ -219,7 +231,13 @@ local function SetStatus(self, color, _, _, _, texture, texCoords, stack, start,
 		self.text:SetText(stack)
 	else
 		self.text:SetText("")
-	end
+    end
+
+    if profile.showIconCountDownText and text and text ~= 0 then
+        self.cooldowntext:SetText(text)
+	else
+		self.cooldowntext:SetText("")
+    end
 
 	self:Show()
 end
@@ -231,7 +249,8 @@ local function Clear(self)
 	self.texture:SetTexCoord(0, 1, 0, 1)
 
 	self.text:SetText("")
-	self.text:SetTextColor(1, 1, 1, 1)
+    self.text:SetTextColor(1, 1, 1, 1)
+    self.cooldowntext:SetText("")
 
 	self.cooldown:Hide()
 end

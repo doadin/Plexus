@@ -254,7 +254,10 @@ PlexusFrame.defaultDB = {
     stackOffsetX = 4,
     stackOffsety = -2,
     enableIconCooldown = true,
+    showIconCountDownText = false,
     enableIconStackText = true,
+    iconStackFontSize = 3,
+    iconCoolDownFontSize = 3,
     font = "Friz Quadrata TT",
     fontSize = 12,
     fontOutline = "NONE",
@@ -569,21 +572,55 @@ PlexusFrame.options = {
                     order = 6, width = "double",
                     type = "toggle",
                 },
+                IconHeader = {
+                    name = "",
+                    order = 7, width = "double",
+                    type = "header",
+                },
+                showIconCountDownText = {
+                    name = format(L["Enable %s"], L["Icon Cooldown Text"]),
+                    desc = L["Toggle icons cooldown text."],
+                    order = 8, width = "double",
+                    type = "toggle",
+                },
+                iconCoolDownFontSize = {
+                    name = L["Icon Cool Down Text Size"],
+                    desc = L["Icon Cool Down Text Size"],
+                    order = 9, width = "double",
+                    type = "range", min = 0, max = 20, step = 1,
+                    disabled = function()
+                        return not PlexusFrame.db.profile.showIconCountDownText
+                    end,
+                },
+                IconHeader0 = {
+                    name = "",
+                    order = 10, width = "double",
+                    type = "header",
+                },
                 enableIconStackText = {
                     name = format(L["Enable %s"], L["Icon Stack Text"]),
                     desc = L["Toggle icon stack count text."],
-                    order = 7, width = "double",
+                    order = 11, width = "double",
                     type = "toggle",
+                },
+                iconStackFontSize = {
+                    name = L["Icon Stack Text Size"],
+                    desc = L["Icon Stack Text Size"],
+                    order = 12, width = "double",
+                    type = "range", min = 0, max = 20, step = 1,
+                    disabled = function()
+                        return not PlexusFrame.db.profile.enableIconStackText
+                    end,
                 },
                 IconHeader1 = {
                     name = "",
-                    order = 8, width = "double",
+                    order = 13, width = "double",
                     type = "header",
                 },
                 enableIcon2 = {
                     name = "Enable Extra Icon xx 2 Indicators Requires ReloadUI",
                     desc = "Enable Extra Icon xx 2 Indicators",
-                    order = 9, width = "double",
+                    order = 14, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableIcon2 = v
@@ -594,7 +631,7 @@ PlexusFrame.options = {
                 enableIcon34 = {
                     name = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
                     desc = "Enable Extra Icon xx 3/4 Indicators Requires ReloadUI",
-                    order = 10, width = "double",
+                    order = 15, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableIcon34 = v
@@ -604,13 +641,13 @@ PlexusFrame.options = {
                 },
                 IconHeader2 = {
                     name = "",
-                    order = 11, width = "double",
+                    order = 16, width = "double",
                     type = "header",
                 },
                 enableIconBarSeparation = {
                     name = "Enable Separation of Icons and Extra Bar Requires ReloadUI",
                     desc = "Enable Separation of Icon indicators away from Extra Bar Requires ReloadUI",
-                    order = 12, width = "double",
+                    order = 17, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.enableIconBarSeparation = v
@@ -620,12 +657,12 @@ PlexusFrame.options = {
                 },
                 IconHeader3 = {
                     name = "",
-                    order = 13, width = "double",
+                    order = 18, width = "double",
                     type = "header",
                 },
                 IconTestModeEnable = {
                     name = "Icon Test Mode Enable",
-                    order = 14,
+                    order = 19,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -646,7 +683,7 @@ PlexusFrame.options = {
                 },
                 IconTestModeDisable = {
                     name = "Icon Test Mode Disable",
-                    order = 15,
+                    order = 20,
                     width = "double",
                     type = "execute",
                     func = function()
@@ -664,7 +701,7 @@ PlexusFrame.options = {
                 iconbackground = {
                     name = L["Icon Background"],
                     desc = L["Options related to icon indicators."],
-                    order = 16,
+                    order = 21,
                     type = "group", inline = true,
                     args = {
                         enableIconBackgroundColor = {
