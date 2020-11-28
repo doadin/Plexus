@@ -777,12 +777,12 @@ PlexusFrame.options = {
                     end,
                 },
                 enableTextTop = {
-                    name = "Enable Top Left Text Requires ReloadUI",
-                    desc = "Enable Top Left Text Requires ReloadUI",
+                    name = "Enable Top Text Requires ReloadUI",
+                    desc = "Enable Top Text Requires ReloadUI",
                     order = 11, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
-                        PlexusFrame.db.profile.enableTextTopLeft = v
+                        PlexusFrame.db.profile.enableTextTop = v
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,
@@ -810,12 +810,12 @@ PlexusFrame.options = {
                     end,
                 },
                 enableTextBottom = {
-                    name = "Enable Bottom Left Text Requires ReloadUI",
-                    desc = "Enable Bottom Left Text Requires ReloadUI",
+                    name = "Enable Bottom Text Requires ReloadUI",
+                    desc = "Enable Bottom Text Requires ReloadUI",
                     order = 14, width = "double",
                     type = "toggle",
                     set = function(info, v) --luacheck: ignore 212
-                        PlexusFrame.db.profile.enableTextBottomLeft = v
+                        PlexusFrame.db.profile.enableTextBottom = v
                         PlexusFrame:UpdateAllFrames()
                         PlexusFrame:UpdateOptionsMenu()
                     end,
