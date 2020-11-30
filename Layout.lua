@@ -608,6 +608,10 @@ function PlexusLayout:PostEnable()
 
     self:RegisterMessage("Plexus_EnteringCombat", "EnteringCombat")
     self:RegisterMessage("Plexus_LeavingCombat", "LeavingCombat")
+    if not Plexus:IsClassicWow() then
+        self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+        self:RegisterEvent("UNIT_TARGETABLE_CHANGED")
+    end
 end
 
 function PlexusLayout:PostDisable()
@@ -663,6 +667,20 @@ function PlexusLayout:CombatFix()
     self:Debug("CombatFix")
     self.forceRaid = false
     return self:ReloadLayout()
+end
+
+-- Maw
+function PlexusLayout:ZONE_CHANGED_NEW_AREA()
+	if C_Map.GetBestMapForUnit("player")==1543 then
+		self.Maw = true
+	end
+end
+
+function PlexusLayout:UNIT_TARGETABLE_CHANGED(_,unit)
+	if unit=="player" and self.Maw then
+		self.Maw = nil
+		self:ReloadLayout()
+	end
 end
 
 function PlexusLayout:Plexus_CheckPartyMembersUpdate()
