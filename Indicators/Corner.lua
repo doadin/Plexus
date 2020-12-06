@@ -65,7 +65,7 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
-    local cornerBorderSize = profile.cornerBorderSize
+    --local cornerBorderSize = profile.cornerBorderSize
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
     self:SetParent(self.__owner.indicators.bar)
