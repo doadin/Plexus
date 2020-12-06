@@ -288,6 +288,8 @@ PlexusFrame.defaultDB = {
     ExtraBarSide = "Bottom",
     ExtraBarBorderSize = 1,
     ExtraBarInvertColor = false,
+    ExtraBarTrackDuration = true,
+    ExtraBarDurationUpdateRate = 1.0,
     enableExtraBar = true,
     statusmap = {
         text = {
@@ -1170,33 +1172,47 @@ PlexusFrame.options = {
                     order = 6, width = "double",
                     type = "toggle",
                 },
+                ExtraBarTrackDuration = {
+                    name = L["Enable Extra Bar Duration Tracking Behaviour"],
+                    desc = L["For buffs/debuffs with a duration show the remaining duration on the extra bar"],
+                    order = 7, width = "double",
+                    type = "toggle",
+                },
+                ExtraBarDurationUpdateRate = {
+                    name = L["Extra Bar Duration Update Rate Requires ReloadUI"],
+                    desc = L["Sets the frequency in seconds at which the extra bar updates. Smaller is smoother, but more work for the UI"],
+                    order = 8, width = "double",
+                    type = "range", min = 0.01, max = 5, step = 0.01, bigStep = 0.05,
+                },
                 ExtraBarHeader2 = {
                     name = "",
-                    order = 7, width = "double",
+                    order = 9, width = "double",
                     type = "header",
                 },
                 ExtraBarTestModeEnable = {
-                    name = "Icon Test Mode Enable",
-                    order = 8,
+                    name = "Extra Bar Test Mode Enable",
+                    order = 10,
                     width = "double",
                     type = "execute",
                     func = function()
                         local color = { r = 0, g = 1, b = 0, a = 1 }
                         local value = 50
                         local maxvalue = 100
+                        local start = GetTime()
+                        local duration = 30
                         local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
                         for _, frame in pairs(PlexusFrameTest.registeredFrames) do
                             for k in pairs(frame.indicators) do
                                 if string.find(k, "ei_bar") then
-                                    frame:SetIndicator(k, color, nil, value, maxvalue)
+                                    frame:SetIndicator(k, color, nil, value, maxvalue, nil, start, duration)
                                 end
                             end
                         end
                     end,
                 },
                 ExtraBarTestModeDisable = {
-                    name = "Icon Test Mode Disable",
-                    order = 9,
+                    name = "Extra Bar Test Mode Disable",
+                    order = 11,
                     width = "double",
                     type = "execute",
                     func = function()

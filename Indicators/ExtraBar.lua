@@ -55,6 +55,24 @@ local function Reset(self) -- luacheck: ignore 432
         self:SetOrientation("HORIZONTAL")
     end
 
+    if profile.ExtraBarTrackDuration and not self.updateConfigured then
+        self.TimeSinceLastUpdate = 0
+        self.ProcessingDuration = false
+
+        local updateInterval = profile.ExtraBarDurationUpdateRate
+
+        self:SetScript("OnUpdate", function(selfInUpdate, elapsed)
+            selfInUpdate.TimeSinceLastUpdate = selfInUpdate.TimeSinceLastUpdate + elapsed;
+
+            while (selfInUpdate.ProcessingDuration and selfInUpdate.TimeSinceLastUpdate > updateInterval) do
+                selfInUpdate:SetValue(selfInUpdate:GetValue() + updateInterval)
+                selfInUpdate.TimeSinceLastUpdate = selfInUpdate.TimeSinceLastUpdate - updateInterval;
+            end
+        end)
+
+        self.updateConfigured = true
+    end
+
     if self:IsShown() then
         frame.indicators.text:SetParent(self)
         if profile.enableText2 then
@@ -67,11 +85,20 @@ local function Reset(self) -- luacheck: ignore 432
     self.bg:SetTexture(texture)
 end
 
-local function SetStatus(self, color, _, value, maxValue) -- luacheck: ignore 432
+local function SetStatus(self, color, _, value, maxValue, _, _, _, start, duration) -- luacheck: ignore 432
+	local profile = PlexusFrame.db.profile
 
-    if not value or not maxValue then return end
-    self:SetMinMaxValues(0, maxValue)
-    self:SetValue(value)
+	if profile.ExtraBarTrackDuration and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then --luacheck: ignore 631
+        self.ProcessingDuration = true
+        self.TimeSinceLastUpdate = 0
+        self:SetMinMaxValues(0, duration)
+        self:SetValue(GetTime() - start)
+	else
+        if not value or not maxValue then return end
+        self.ProcessingDuration = false
+        self:SetMinMaxValues(0, maxValue)
+        self:SetValue(value)
+	end
 
     if color then
         if PlexusFrame.db.profile.ExtraBarInvertColor then
