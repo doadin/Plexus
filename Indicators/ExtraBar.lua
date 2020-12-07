@@ -79,6 +79,15 @@ local function Reset(self) -- luacheck: ignore 432
             frame.indicators.text2:SetParent(self)
         end
         frame.indicators.icon:SetParent(self)
+        if not profile.enableCornerBarSeparation then
+            for indicator in pairs(frame.indicators) do
+                if indicator ~= "text" or indicator ~= "text2" or indicator ~= "text3" then
+                    --indicator:SetFrameLevel(indicator:GetFrameLevel()+1)
+                    indicator:SetParent(self)
+                end
+            end
+        end
+
     end
 
     self:SetStatusBarTexture(texture)
@@ -131,6 +140,14 @@ local function Clear(self) -- luacheck: ignore 432
             frame.indicators.text2:SetParent(healthBar)
         end
         frame.indicators.icon:SetParent(healthBar)
+        if not profile.enableCornerBarSeparation then
+            for indicator in pairs(frame.indicators) do
+                if indicator ~= "text" or indicator ~= "text2" or indicator ~= "text3" then
+                    --indicator:SetFrameLevel(indicator:GetFrameLevel()+1)
+                    indicator:SetParent(healthBar)
+                end
+            end
+        end
     end
     self:Hide()
     self:SetValue(0)
