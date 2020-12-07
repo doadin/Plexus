@@ -299,7 +299,7 @@ function PlexusStatusResource:OnStatusEnable(status)
     if status == "unit_resource" then
         self:RegisterEvent("UNIT_POWER_UPDATE","UpdateUnit")
         self:RegisterEvent("UNIT_MAXPOWER","UpdateUnit")
-        self:RegisterEvent("UNIT_AURA","UpdateUnit")
+        self:RegisterEvent("UNIT_DISPLAYPOWER","UpdateUnit")
         self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateAllUnits")
 --@retail@
         self:RegisterEvent("ROLE_CHANGED_INFORM")
@@ -316,7 +316,7 @@ function PlexusStatusResource:OnStatusDisable(status)
         end
         self:UnregisterEvent("UNIT_POWER_UPDATE")
         self:UnregisterEvent("UNIT_MAXPOWER")
-        self:UnregisterEvent("UNIT_AURA")
+        self:UnregisterEvent("UNIT_DISPLAYPOWER")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 --@retail@
         self:UnregisterEvent("ROLE_CHANGED_INFORM")
