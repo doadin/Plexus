@@ -665,7 +665,7 @@ PlexusFrame.options = {
                     type = "header",
                 },
                 IconTestModeEnable = {
-                    name = "Icon Test Mode Enable",
+                    name = "Icon Indicators Test Mode Enable",
                     order = 19,
                     width = "double",
                     type = "execute",
@@ -686,7 +686,7 @@ PlexusFrame.options = {
                     end,
                 },
                 IconTestModeDisable = {
-                    name = "Icon Test Mode Disable",
+                    name = "Icon Indicators Test Mode Disable",
                     order = 20,
                     width = "double",
                     type = "execute",
@@ -911,7 +911,7 @@ PlexusFrame.options = {
                     type = "header",
                 },
                 TextTestModeEnable = {
-                    name = "Icon Test Mode Enable",
+                    name = "Text Indicators Test Mode Enable",
                     order = 20,
                     width = "double",
                     type = "execute",
@@ -928,7 +928,7 @@ PlexusFrame.options = {
                     end,
                 },
                 TextTestModeDisable = {
-                    name = "Icon Test Mode Disable",
+                    name = "Text Indicators Test Mode Disable",
                     order = 21,
                     width = "double",
                     type = "execute",
@@ -1028,7 +1028,7 @@ PlexusFrame.options = {
                     type = "header",
                 },
                 CornerTestModeEnable = {
-                    name = "Icon Test Mode Enable",
+                    name = "Corner Indicators Test Mode Enable",
                     order = 9,
                     width = "double",
                     type = "execute",
@@ -1071,7 +1071,7 @@ PlexusFrame.options = {
                     end,
                 },
                 CornerTestModeDisable = {
-                    name = "Icon Test Mode Disable",
+                    name = "Corner Indicators Test Mode Disable",
                     order = 10,
                     width = "double",
                     type = "execute",
