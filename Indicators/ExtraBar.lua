@@ -82,8 +82,8 @@ local function Reset(self) -- luacheck: ignore 432
         if not profile.enableCornerBarSeparation then
             for indicator in pairs(frame.indicators) do
                 if indicator ~= "text" or indicator ~= "text2" or indicator ~= "text3" then
-                    --indicator:SetFrameLevel(indicator:GetFrameLevel()+1)
                     indicator:SetParent(self)
+                    indicator:SetFrameLevel(self.__owner.indicators.bar:GetFrameLevel() + 2)
                 end
             end
         end
