@@ -398,7 +398,7 @@ PlexusFrame.options = {
                     name = L["Frame Width"],
                     desc = L["Adjust the width of each unit's frame."],
                     order = 1, width = "double",
-                    type = "range", min = 10, max = 100, step = 1,
+                    type = "range", min = 10, max = 250, step = 1,
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.frameWidth = v
                         PlexusFrame:ResizeAllFrames()
@@ -409,7 +409,7 @@ PlexusFrame.options = {
                     name = L["Frame Height"],
                     desc = L["Adjust the height of each unit's frame."],
                     order = 2, width = "double",
-                    type = "range", min = 10, max = 100, step = 1,
+                    type = "range", min = 10, max = 250, step = 1,
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.frameHeight = v
                         PlexusFrame:ResizeAllFrames()
