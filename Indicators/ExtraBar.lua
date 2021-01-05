@@ -79,15 +79,6 @@ local function Reset(self) -- luacheck: ignore 432
             frame.indicators.text2:SetParent(self)
         end
         frame.indicators.icon:SetParent(self)
-        if not profile.enableCornerBarSeparation then
-            for indicator in pairs(frame.indicators) do
-                if indicator ~= "text" or indicator ~= "text2" or indicator ~= "text3" then
-                    indicator:SetParent(self)
-                    indicator:SetFrameLevel(self.__owner.indicators.bar:GetFrameLevel() + 2)
-                end
-            end
-        end
-
     end
 
     self:SetStatusBarTexture(texture)
