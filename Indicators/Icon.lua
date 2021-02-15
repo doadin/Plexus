@@ -125,7 +125,7 @@ local function Reset(self)
 	local frame = self.__owner
 	local r, g, b, a = self:GetBackdropBorderColor()
 
-	self:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 1)
+	self:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 2)
 	self:SetWidth(totalSize)
 	self:SetHeight(totalSize)
 

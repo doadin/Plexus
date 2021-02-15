@@ -69,7 +69,7 @@ local function Reset(self)
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
     self:SetParent(self.__owner.indicators.bar)
-    self:SetFrameLevel(self.__owner.indicators.bar:GetFrameLevel() + 1)
+    self:SetFrameLevel(self.__owner.indicators.bar:GetFrameLevel() + 3)
 
     self:ClearAllPoints()
     local point, x, y = unpack(anchor[self.__id])

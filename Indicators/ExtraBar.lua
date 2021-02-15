@@ -81,6 +81,8 @@ local function Reset(self) -- luacheck: ignore 432
         frame.indicators.icon:SetParent(self)
     end
 
+    self:SetFrameLevel(healthBar:GetFrameLevel() + 1)
+
     self:SetStatusBarTexture(texture)
     self.bg:SetTexture(texture)
 end
