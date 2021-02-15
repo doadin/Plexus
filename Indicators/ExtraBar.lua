@@ -119,7 +119,11 @@ local function SetStatus(self, color, _, value, maxValue, _, _, _, start, durati
     --    end
     --    frame.indicators.icon:SetParent(self)
     --end
-    self:Show()
+    if profile.enableExtraBar and not self:IsShown() then
+        self:Show()
+    elseif not profile.enableExtraBar and self:IsShown() then
+        self:Hide()
+    end
 
 end
 
