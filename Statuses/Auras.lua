@@ -33,6 +33,7 @@ spell_names = {
 -- All
     ["Ghost"] = GetSpellInfo(8326),
 -- Druid
+    ["Cenarion Ward"] = GetSpellInfo(102351),
     ["Lifebloom"] = GetSpellInfo(33763),
     ["Regrowth"] = GetSpellInfo(8936),
     ["Rejuvenation"] = GetSpellInfo(774),
@@ -230,6 +231,22 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     -- Druid
     ---------------------
+    [PlexusStatusAuras:StatusForSpell("Cenarion Ward", true)] = {
+        -- 33763
+        desc = format(L["Buff: %s"], spell_names["Cenarion Ward"]),
+        buff = spell_names["Cenarion Ward"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Cenarion Ward"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
+        durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
+        countColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
+        countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
+        countLow = 1,
+        countHigh = 2,
+        mine = true,
+    },
     [PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
         -- 33763
         desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
@@ -246,7 +263,6 @@ PlexusStatusAuras.defaultDB = {
         countHigh = 2,
         mine = true,
     },
-
     [PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
         -- 8936
         desc = format(L["Buff: %s"], spell_names["Regrowth"]),
