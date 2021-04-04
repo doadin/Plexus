@@ -28,7 +28,7 @@ Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 #@non-retail@
 Libs\LibHealComm-4.0\ChatThrottleLib.lua
-#@end-retail@
+#@end-non-retail@
 Libs\AceAddon-3.0\AceAddon-3.0.lua
 Libs\AceBucket-3.0\AceBucket-3.0.lua
 Libs\AceGUI-3.0\AceGUI-3.0.xml
@@ -36,9 +36,7 @@ Libs\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua
 Libs\AceConfigDialog-3.0\AceConfigDialog-3.0.lua
 Libs\AceConsole-3.0\AceConsole-3.0.lua
 Libs\AceConfigCmd-3.0\AceConfigCmd-3.0.lua
-#@non-retail@
 Libs\AceComm-3.0\AceComm-3.0.lua
-#@end-retail@
 Libs\AceDB-3.0\AceDB-3.0.lua
 Libs\AceDBOptions-3.0\AceDBOptions-3.0.lua
 Libs\AceEvent-3.0\AceEvent-3.0.lua
@@ -53,8 +51,6 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
 #@non-retail@
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
-#@end-non-retail@
-#@non-retail@
 Libs\LibClassicDurations\LibClassicDurations.xml
 #@end-non-retail@
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
