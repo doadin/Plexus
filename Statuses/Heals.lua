@@ -70,7 +70,7 @@ function PlexusStatusHeals:OnStatusEnable(status)
     if status == "alert_heals" then
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
         self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")
-        if not Plexus:IsClassicWow() then
+        if Plexus:IsRetailWow() then
             self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
         end
         if Plexus:IsClassicWow() then
@@ -101,10 +101,10 @@ function PlexusStatusHeals:OnStatusDisable(status)
     if status == "alert_heals" then
         self:UnregisterEvent("UNIT_HEALTH")
         self:UnregisterEvent("UNIT_MAXHEALTH")
-        if not Plexus:IsClassicWow() then
+        if Plexus:IsRetailWow() then
             self:UnregisterEvent("UNIT_HEAL_PREDICTION")
         end
-        if not Plexus:IsClassicWow() then
+        if Plexus:IsClassicWow() then
             --local HealComm
             assert(LibStub, "Heals Status requires LibStub")
             assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
@@ -143,7 +143,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
         local incoming = 0
-        if not Plexus:IsClassicWow() then
+        if Plexus:IsRetailWow() then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
         if Plexus:IsClassicWow() then
@@ -152,7 +152,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             incoming = myIncomingHeal or 0
         end
         if incoming > 0 then
-            if not Plexus:IsClassicWow() then
+            if Plexus:IsRetailWow() then
                 self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
             end
         end
@@ -160,7 +160,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             if Plexus:IsClassicWow() then
                 incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
-            if not Plexus:IsClassicWow() then
+            if Plexus:IsRetailWow() then
                 incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
             end
         end

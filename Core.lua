@@ -306,12 +306,16 @@ Plexus.modulePrototype = {
     registeredModules = { },
 }
 
-function Plexus:IsClassicWow() --luacheck: ignore 212
-    local gameVersion = GetBuildInfo()
-    if (gameVersion:match ("%d") == "1") then
-        return true
-    end
-    return false
+function Plexus:IsClassicWow()
+	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+end
+
+function Plexus:IsTBCWow()
+	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+end
+
+function Plexus:IsRetailWow()
+	return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 
 function Plexus.modulePrototype:OnInitialize()
@@ -481,7 +485,7 @@ function Plexus:OnInitialize()
 
     self.options.args.profile = LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
     self.options.args.profile.order = -3
-    if not Plexus:IsClassicWow() then
+    if Plexus:IsRetailWow() then
       local LibDualSpec = LibStub:GetLibrary("LibDualSpec-1.0")
       LibDualSpec:EnhanceDatabase(self.db, PLEXUS)
       LibDualSpec:EnhanceOptions(self.options.args.profile, self.db)

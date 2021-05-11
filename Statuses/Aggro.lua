@@ -19,11 +19,11 @@ local PlexusStatusAggro = Plexus:NewStatusModule("PlexusStatusAggro")
 PlexusStatusAggro.menuName = L["Aggro"]
 
 local function getthreatcolor(status)
-    if not Plexus:IsClassicWow() then
+    if Plexus:IsRetailWow() then
         local r, g, b = GetThreatStatusColor(status)
         return { r = r, g = g, b = b, a = 1 }
     end
-    if Plexus:IsClassicWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
         --function GetThreatStatusColor(status)
         --    if status == 1 then
         --        return 0, 0, 0, 0

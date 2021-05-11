@@ -28,7 +28,7 @@ local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
 
-if not Plexus:IsClassicWow() then
+if Plexus:IsRetailWow() then
 spell_names = {
 -- All
     ["Ghost"] = GetSpellInfo(8326),
@@ -162,7 +162,7 @@ function PlexusStatusAuras:CopyDefaults(settings, defaults)
 end
 
 
-if not Plexus:IsClassicWow() then
+if Plexus:IsRetailWow() then
 PlexusStatusAuras.defaultDB = {
     advancedOptions = false,
 --[[
@@ -748,6 +748,181 @@ PlexusStatusAuras.defaultDB = {
         color = { r = 1, g = 0, b = 0, a = 1 },
     },
 }
+end
+
+if Plexus:IsTBCWow() then
+    PlexusStatusAuras.defaultDB = {
+        advancedOptions = false,
+    --[[
+        ["boss_aura"] = {
+            desc = L["Boss Aura"],
+            color = { r = 1, g = 0, b = 0, a = 1 },
+            priority = 90,
+            order = 20,
+        },
+    ]]
+        ---------------------
+        -- Debuff Types
+        ---------------------
+        ["dispel_curse"] = {
+            desc = format(L["Debuff type: %s"], L["Curse"]),
+            text = DEBUFF_SYMBOL_CURSE,
+            color = { r = 0.6, g = 0, b = 1, a = 1 },
+            durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
+            durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
+            durationColorHigh = { r = 0.6, g = 0, b = 1, a = 1 },
+            dispellable = true,
+            order = 25,
+        },
+        ["dispel_disease"] = {
+            desc = format(L["Debuff type: %s"], L["Disease"]),
+            text = DEBUFF_SYMBOL_DISEASE,
+            color = { r = 0.6, g = 0.4, b = 0, a = 1 },
+            durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
+            durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
+            durationColorHigh = { r = 0.6, g = 0.4, b = 0, a = 1 },
+            dispellable = true,
+            order = 25,
+        },
+        ["dispel_magic"] = {
+            desc = format(L["Debuff type: %s"], L["Magic"]),
+            text = DEBUFF_SYMBOL_MAGIC,
+            color = { r = 0.2, g = 0.6, b = 1, a = 1 },
+            durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
+            durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
+            durationColorHigh = { r = 0.2, g = 0.6, b = 1, a = 1 },
+            dispellable = true,
+            order = 25,
+        },
+        ["dispel_poison"] = {
+            desc = format(L["Debuff type: %s"], L["Poison"]),
+            text = DEBUFF_SYMBOL_POISON,
+            color = { r = 0, g = 0.6, b = 0, a = 1 },
+            durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
+            durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
+            durationColorHigh = { r = 0, g = 0.6, b = 0, a = 1 },
+            dispellable = true,
+            order = 25,
+        },
+        ---------------------
+        -- General Debuffs
+        ---------------------
+        [PlexusStatusAuras:StatusForSpell("Ghost")] = {
+            -- 8326
+            desc = format(L["Debuff: %s"], spell_names["Ghost"]),
+            debuff = spell_names["Ghost"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Ghost"]),
+            color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+        },
+
+        ---------------------
+        -- Druid
+        ---------------------
+        [PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
+            -- 33763
+            desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
+            buff = spell_names["Lifebloom"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Lifebloom"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+            durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
+            durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
+            countColorLow = { r = 1, g = 0, b = 0, a = 1 },
+            countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
+            countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
+            countLow = 1,
+            countHigh = 2,
+            mine = true,
+        },
+        [PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
+            -- 8936
+            desc = format(L["Buff: %s"], spell_names["Regrowth"]),
+            buff = spell_names["Regrowth"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Regrowth"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+            durationColorMiddle = { r = 0.7, g = 0.49, b = 0.07, a = 1 },
+            durationColorHigh = { r = 1, g = 0.7, b = 0.1, a = 1 },
+            mine = true,
+        },
+        [PlexusStatusAuras:StatusForSpell("Rejuvenation", true)] = {
+            -- 774
+            desc = format(L["Buff: %s"], spell_names["Rejuvenation"]),
+            buff = spell_names["Rejuvenation"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Rejuvenation"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+            durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
+            durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
+            mine = true,
+        },
+
+        ---------------------
+        -- Paladin
+        ---------------------
+        [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
+            -- 25771
+            desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
+            debuff = spell_names["Forbearance"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
+            color = { r = 252, g = 0, b = 0, a = 1 },
+            durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
+            durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
+            durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+        },
+
+        ---------------------
+        -- Priest
+        ---------------------
+        [PlexusStatusAuras:StatusForSpell("Power Word: Fortitude", true)] = {
+            -- 21562
+            desc = format(L["Buff: %s"], spell_names["Power Word: Fortitude"]),
+            buff = spell_names["Power Word: Fortitude"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Fortitude"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            missing = true,
+        },
+        [PlexusStatusAuras:StatusForSpell("Power Word: Shield", true)] = {
+            -- 17
+            desc = format(L["Buff: %s"], spell_names["Power Word: Shield"]),
+            buff = spell_names["Power Word: Shield"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Shield"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+            durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
+            durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+        },
+        [PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
+            -- 33076, 41635
+            buff = spell_names["Prayer of Mending"],
+            desc = format(L["Buff: %s"], spell_names["Prayer of Mending"]),
+            text = PlexusStatusAuras:TextForSpell(spell_names["Prayer of Mending"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            mine = true,
+        },
+        [PlexusStatusAuras:StatusForSpell("Renew", true)] = {
+            -- 139
+            desc = format(L["Buff: %s"], spell_names["Renew"]),
+            buff = spell_names["Renew"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Renew"]),
+            color = { r = 0, g = 252, b = 0, a = 1 },
+            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+            durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
+            durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
+            mine = true,
+        },
+        [PlexusStatusAuras:StatusForSpell("Weakened Soul")] = {
+            -- 6788
+            desc = format(L["Debuff: %s"], spell_names["Weakened Soul"]),
+            debuff = spell_names["Weakened Soul"],
+            text = PlexusStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
+            color = { r = 1, g = 0, b = 0, a = 1 },
+            mine = true,
+        },
+        ---------------------
+        -- Shaman
+        ---------------------
+    }
 end
 
 local default_auras = {}
