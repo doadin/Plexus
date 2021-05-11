@@ -95,6 +95,48 @@ spell_names = {
 }
 end
 
+if Plexus:IsTBCWow() then
+    spell_names = {
+    -- All
+        ["Ghost"] = GetSpellInfo(8326),
+    -- Druid
+        ["Cenarion Ward"] = GetSpellInfo(102351),
+        ["Lifebloom"] = GetSpellInfo(33763),
+        ["Regrowth"] = GetSpellInfo(8936),
+        ["Rejuvenation"] = GetSpellInfo(774),
+        ["Rejuvenation (Germination)"] = GetSpellInfo(155777),
+        ["Wild Growth"] = GetSpellInfo(48438),
+    -- Monk
+        ["Enveloping Mist"] = GetSpellInfo(124682),
+        ["Essence Font"] = GetSpellInfo(191837),
+        ["Life Cocoon"] = GetSpellInfo(116849),
+        ["Renewing Mist"] = GetSpellInfo(115151),
+        ["Soothing Mist"] = GetSpellInfo(115175),
+    -- Paladin
+        ["Beacon of Faith"] = GetSpellInfo(156910),
+        ["Beacon of Light"] = GetSpellInfo(53563),
+        ["Beacon of Virtue"] = GetSpellInfo(200025),
+        ["Bestow Faith"] = GetSpellInfo(223306),
+        ["Forbearance"] = GetSpellInfo(25771),
+        ["Sacred Dawn"] = GetSpellInfo(243174),
+        ["Tyr's Deliverance"] = GetSpellInfo(200654),
+        ["Glimmer of Light"] = GetSpellInfo(287286),
+    -- Priest
+        ["Atonement"] = GetSpellInfo(214206),
+        ["Clarity of Will"] = GetSpellInfo(152118),
+        ["Guardian Spirit"] = GetSpellInfo(47788),
+        ["Light of T'uure"] = GetSpellInfo(208065),
+        ["Power Word: Fortitude"] = GetSpellInfo(21562),
+        ["Power Word: Shield"] = GetSpellInfo(17),
+        ["Prayer of Mending"] = GetSpellInfo(33076),
+        ["Renew"] = GetSpellInfo(139),
+        ["Weakened Soul"] = GetSpellInfo(6788),
+    -- Shaman
+        ["Earth Shield"] = GetSpellInfo(204288),
+        ["Riptide"] = GetSpellInfo(61295),
+    }
+end
+
 
 -- data used by aura scanning
 local buff_names = {}

@@ -324,7 +324,7 @@ PlexusStatus.options = {
 
 local creatureTypes = { L["Beast"], L["Demon"], L["Humanoid"], L["Undead"], L["Dragonkin"], L["Elemental"], L["Not specified"] }
 local PlexusClasses
-if not Plexus:IsClassicWow() then
+if Plexus:IsRetailWow() then
 PlexusClasses = {
 ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
 ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
@@ -339,7 +339,7 @@ PlexusClasses = {
 ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
 ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41}}
 end
-if Plexus:IsClassicWow() then
+if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
 PlexusClasses = {
 ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
 ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
