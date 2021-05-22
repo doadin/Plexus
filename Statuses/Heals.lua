@@ -73,7 +73,7 @@ function PlexusStatusHeals:OnStatusEnable(status)
         if Plexus:IsRetailWow() then
             self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
         end
-        if Plexus:IsClassicWow() then
+        if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
             --local HealComm
             assert(LibStub, "Heals Status requires LibStub")
             assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
@@ -104,7 +104,7 @@ function PlexusStatusHeals:OnStatusDisable(status)
         if Plexus:IsRetailWow() then
             self:UnregisterEvent("UNIT_HEAL_PREDICTION")
         end
-        if Plexus:IsClassicWow() then
+        if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
             --local HealComm
             assert(LibStub, "Heals Status requires LibStub")
             assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
@@ -146,7 +146,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         if Plexus:IsRetailWow() then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
-        if Plexus:IsClassicWow() then
+        if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
             local myGUID = UnitGUID('player')
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
             incoming = myIncomingHeal or 0
@@ -157,7 +157,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             end
         end
         if settings.ignore_self then
-            if Plexus:IsClassicWow() then
+            if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
                 incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
             if Plexus:IsRetailWow() then
