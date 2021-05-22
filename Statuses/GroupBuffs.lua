@@ -8,7 +8,7 @@ PlexusStatusGroupBuffs.options = false
 
 local spellNameList
 local spellIconList
-if not Plexus:IsClassicWow() then
+if Plexus:IsRetailWow() then
 spellNameList = {
     ["Power Word: Fortitude"] = GetSpellInfo(21562),
     ["War-Scroll of Fortitude"] = GetSpellInfo(264764),
@@ -252,6 +252,150 @@ PlexusStatusGroupBuffs.defaultDB = {
         class = "PALADIN",
     }
 }
+end
+
+if Plexus:IsTBCWow() then
+    spellNameList = {
+        ["Power Word: Fortitude"] = GetSpellInfo(1243),
+        ["Prayer of Fortitude"] = GetSpellInfo(21562),
+        ["Divine Spirit"] = GetSpellInfo(27841),
+        ["Prayer of Spirit"] = GetSpellInfo(27681),
+
+        ["Arcane Intellect"] = GetSpellInfo(1472),
+        ["Arcane Brilliance"] = GetSpellInfo(23028),
+
+        ["Battle Shout"] = GetSpellInfo(6673),
+
+        ["Blessing of Kings"] = GetSpellInfo(20217),
+        ["Greater Blessing of Kings"] = GetSpellInfo(25898),
+        ["Blessing of Might"] = GetSpellInfo(19740),
+        ["Greater Blessing of Might"] = GetSpellInfo(25782),
+        ["Blessing of Sanctuary"] = GetSpellInfo(20911),
+        ["Greater Blessing of Sanctuary"] = GetSpellInfo(25899),
+        ["Blessing of Wisdom"] = GetSpellInfo(19742),
+        ["Greater Blessing of Wisdom"] = GetSpellInfo(25894),
+
+        ["Mark of the Wild"] = GetSpellInfo(1126),
+        ["Gift of the Wild"] = GetSpellInfo(21849),
+    }
+
+    spellIconList = {
+        ["Power Word: Fortitude"] = GetSpellTexture(1243),
+        ["Prayer of Fortitude"] = GetSpellTexture(21562),
+        ["Divine Spirit"] = GetSpellTexture(27841),
+        ["Prayer of Spirit"] = GetSpellInfo(27681),
+
+        ["Arcane Intellect"] = GetSpellTexture(1472),
+        ["Arcane Brilliance"] = GetSpellInfo(23028),
+
+        ["Battle Shout"] = GetSpellTexture(6673),
+
+        ["Blessing of Kings"] = GetSpellTexture(20217),
+        ["Greater Blessing of Kings"] = GetSpellTexture(25898),
+        ["Blessing of Might"] = GetSpellTexture(19740),
+        ["Greater Blessing of Might"] = GetSpellTexture(25782),
+        ["Blessing of Sanctuary"] = GetSpellTexture(20911),
+        ["Greater Blessing of Sanctuary"] = GetSpellTexture(25899),
+        ["Blessing of Wisdom"] = GetSpellTexture(19742),
+        ["Greater Blessing of Wisdom"] = GetSpellTexture(25894),
+
+        ["Mark of the Wild"] = GetSpellTexture(1126),
+        ["Gift of the Wild"] = GetSpellTexture(21849),
+    }
+
+    PlexusStatusGroupBuffs.defaultDB = {
+        debug = false,
+        EnableClassFilter = false,
+        --alert_groupbuffs = {
+        --	class = true,
+        --	enable = true,
+        --	priority = 40,
+        --	color = { r = 1, g = 1, b = 0, a = 1 },
+        --},
+        buffGroup_Fortitude = {
+            text = spellNameList["Power Word: Fortitude"],
+            desc = "Buff Group: "..spellNameList["Power Word: Fortitude"],
+            icon = spellIconList["Power Word: Fortitude"],
+            buffs = {
+                spellNameList["Power Word: Fortitude"],
+                spellNameList["Prayer of Fortitude"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "PRIEST",
+        },
+        buffGroup_Spirit = {
+            text = spellNameList["Divine Spirit"],
+            desc = "Buff Group: "..spellNameList["Divine Spirit"],
+            icon = spellIconList["Divine Spirit"],
+            buffs = {
+                spellNameList["Divine Spirit"],
+                spellNameList["Prayer of Spirit"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "PRIEST",
+        },
+        buffGroup_Intellect = {
+            text = spellNameList["Arcane Intellect"],
+            desc = "Buff Group: "..spellNameList["Arcane Intellect"],
+            icon = spellIconList["Arcane Intellect"],
+            buffs = {
+                spellNameList["Arcane Intellect"],
+                spellNameList["Arcane Brilliance"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "MAGE",
+        },
+        buffGroup_Battle_Shout = {
+            text = spellNameList["Battle Shout"],
+            desc = "Buff Group: "..spellNameList["Battle Shout"],
+            icon = spellIconList["Battle Shout"],
+            buffs = {
+                spellNameList["Battle Shout"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "WARRIOR",
+        },
+        buffGroup_Wild = {
+            text = spellNameList["Mark of the Wild"],
+            desc = "Buff Group: "..spellNameList["Mark of the Wild"],
+            icon = spellIconList["Mark of the Wild"],
+            buffs = {
+                spellNameList["Mark of the Wild"],
+                spellNameList["Gift of the Wild"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "DRUID",
+        },
+        buffGroup_Blessing = {
+            text = "Paladin Blessings",
+            desc = "Buff Group: Paladin Blessings",
+            icon = spellIconList["Blessing of Kings"],
+            buffs = {
+                spellNameList["Blessing of Kings"],
+                spellNameList["Greater Blessing of Kings"],
+                spellNameList["Blessing of Might"],
+                spellNameList["Greater Blessing of Might"],
+                spellNameList["Blessing of Sanctuary"],
+                spellNameList["Greater Blessing of Sanctuary"],
+                spellNameList["Blessing of Wisdom"],
+                spellNameList["Greater Blessing of Wisdom"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "PALADIN",
+        }
+    }
 end
 
 local extraOptionsForStatus = {
