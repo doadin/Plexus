@@ -32,7 +32,7 @@ jobs:
       before_install: sudo apt-get update
       install:
       - sudo apt-get install curl -y
-      script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -m .pkgmeta-classic -g bc
+      script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -m .pkgmeta-classic -g bcc
 
 notifications:
  email:
