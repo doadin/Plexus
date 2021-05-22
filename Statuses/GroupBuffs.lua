@@ -261,7 +261,7 @@ if Plexus:IsTBCWow() then
         ["Divine Spirit"] = GetSpellInfo(27841),
         ["Prayer of Spirit"] = GetSpellInfo(27681),
 
-        ["Arcane Intellect"] = GetSpellInfo(1472),
+        ["Arcane Intellect"] = GetSpellInfo(1459),
         ["Arcane Brilliance"] = GetSpellInfo(23028),
 
         ["Battle Shout"] = GetSpellInfo(6673),
@@ -285,7 +285,7 @@ if Plexus:IsTBCWow() then
         ["Divine Spirit"] = GetSpellTexture(27841),
         ["Prayer of Spirit"] = GetSpellInfo(27681),
 
-        ["Arcane Intellect"] = GetSpellTexture(1472),
+        ["Arcane Intellect"] = GetSpellTexture(1459),
         ["Arcane Brilliance"] = GetSpellInfo(23028),
 
         ["Battle Shout"] = GetSpellTexture(6673),
