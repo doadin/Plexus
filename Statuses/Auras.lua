@@ -45,6 +45,7 @@ spell_names = {
     ["Life Cocoon"] = GetSpellInfo(116849),
     ["Renewing Mist"] = GetSpellInfo(115151),
     ["Soothing Mist"] = GetSpellInfo(115175),
+    ["Enveloping Breath"] = GetSpellInfo(325209),
 -- Paladin
     ["Beacon of Faith"] = GetSpellInfo(156910),
     ["Beacon of Light"] = GetSpellInfo(53563),
