@@ -107,6 +107,7 @@ if Plexus:IsTBCWow() then
         ["Rejuvenation (Germination)"] = GetSpellInfo(155777),
         ["Wild Growth"] = GetSpellInfo(48438),
     -- Monk
+        ["Enveloping Breath"] = GetSpellInfo(325209),
         ["Enveloping Mist"] = GetSpellInfo(124682),
         ["Essence Font"] = GetSpellInfo(191837),
         ["Life Cocoon"] = GetSpellInfo(116849),
@@ -353,6 +354,14 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     -- Monk
     ---------------------
+    [PlexusStatusAuras:StatusForSpell("Enveloping Breath", true)] = {
+        -- 325209
+        buff = spell_names["Enveloping Breath"],
+        desc = format(L["Buff: %s"], spell_names["Enveloping Breath"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Enveloping Breath"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
     [PlexusStatusAuras:StatusForSpell("Enveloping Mist", true)] = {
         -- 124682
         buff = spell_names["Enveloping Mist"],
