@@ -40,6 +40,7 @@ spell_names = {
     ["Rejuvenation (Germination)"] = GetSpellInfo(155777),
     ["Wild Growth"] = GetSpellInfo(48438),
 -- Monk
+    ["Enveloping Breath"] = GetSpellInfo(325209),
     ["Enveloping Mist"] = GetSpellInfo(124682),
     ["Essence Font"] = GetSpellInfo(191837),
     ["Life Cocoon"] = GetSpellInfo(116849),
@@ -107,7 +108,6 @@ if Plexus:IsTBCWow() then
         ["Rejuvenation (Germination)"] = GetSpellInfo(155777),
         ["Wild Growth"] = GetSpellInfo(48438),
     -- Monk
-        ["Enveloping Breath"] = GetSpellInfo(325209),
         ["Enveloping Mist"] = GetSpellInfo(124682),
         ["Essence Font"] = GetSpellInfo(191837),
         ["Life Cocoon"] = GetSpellInfo(116849),
