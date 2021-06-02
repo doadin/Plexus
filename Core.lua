@@ -306,15 +306,15 @@ Plexus.modulePrototype = {
     registeredModules = { },
 }
 
-function Plexus:IsClassicWow()
+function Plexus:IsClassicWow() --luacheck: ignore 212
 	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 end
 
-function Plexus:IsTBCWow()
+function Plexus:IsTBCWow() --luacheck: ignore 212
 	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 end
 
-function Plexus:IsRetailWow()
+function Plexus:IsRetailWow() --luacheck: ignore 212
 	return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 
