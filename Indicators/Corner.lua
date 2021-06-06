@@ -65,7 +65,6 @@ end
 
 local function Reset(self)
     local profile = PlexusFrame.db.profile
-    --local cornerBorderSize = profile.cornerBorderSize
     self:SetWidth(profile.cornerSize)
     self:SetHeight(profile.cornerSize)
     self:SetParent(self.__owner.indicators.bar)
@@ -74,6 +73,8 @@ local function Reset(self)
     self:ClearAllPoints()
     local point, x, y = unpack(anchor[self.__id])
     local totalSize = profile.cornerSize
+    local frameWidth = PlexusFrame.db.profile.frameWidth
+    local frameHeight = PlexusFrame.db.profile.frameHeight
     local ExtraBarSide = profile.ExtraBarSide
     local ExtraBarSize = profile.ExtraBarSize
     local enableExtraBar = profile.enableExtraBar
@@ -93,26 +94,19 @@ local function Reset(self)
     end
     if enableCornerBarSeparation then
         if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
-            y = y + ExtraBarSize * 40
+            y = y + frameWidth * ExtraBarSize
         end
         if enableExtraBar and ExtraBarSide == "Left" and (point == "LEFT" or point == "TOPLEFT" or point == "BOTTOMLEFT") then
-            x = x + ExtraBarSize * 60
+            x = x + frameHeight * ExtraBarSize
         end
         if enableExtraBar and ExtraBarSide == "Top" and (point == "TOP" or point == "TOPLEFT" or point == "TOPRIGHT") then
-            y = y - ExtraBarSize * 40
+            y = y - frameWidth * ExtraBarSize
         end
         if enableExtraBar and ExtraBarSide == "Right" and (point == "RIGHT" or point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
-            x = x - ExtraBarSize * 60
+            x = x - frameHeight * ExtraBarSize
         end
     end
     self:SetPoint( point, x, y )
-    --if cornerBorderSize == 0 then
-    --    BACKDROP.edgeFile = nil
-    --    self:SetBackdrop(BACKDROP)
-	--else
-	--	BACKDROP.edgeSize = cornerBorderSize
-	--	self:SetBackdrop(BACKDROP)
-	--end
 end
 
 local function SetStatus(self, color)

@@ -132,18 +132,13 @@ local function Reset(self)
 	self:ClearAllPoints()
 
     local point, x, y = unpack(anchor[self.__id])
+    local frameWidth = PlexusFrame.db.profile.frameWidth
+    local frameHeight = PlexusFrame.db.profile.frameHeight
     local ExtraBarSide = profile.ExtraBarSide
     local ExtraBarSize = profile.ExtraBarSize
     local enableExtraBar = profile.enableExtraBar
     local enableIconBarSeparation = profile.enableIconBarSeparation
-    ---- Do Border Spacing
-    --if x == 1 then
-    --    x = x + profile.borderSize
-    --end
-    --if x == -1 then
-    --    x = x - profile.borderSize
-    --end
-    -- Do Spacing
+
     if x == 10 then
         x = 0 + totalSize + profile.spacingSize
     end
@@ -158,16 +153,16 @@ local function Reset(self)
     end
     if enableIconBarSeparation then
         if enableExtraBar and ExtraBarSide == "Bottom" and (point == "BOTTOM" or point == "BOTTOMLEFT" or point == "BOTTOMRIGHT") then
-            y = y + ExtraBarSize * 80
+            y = y + frameWidth * ExtraBarSize
         end
         if enableExtraBar and ExtraBarSide == "Left" and (point == "LEFT" or point == "TOPLEFT" or point == "BOTTOMLEFT") then
-            x = x + ExtraBarSize * 120
+            x = x + frameHeight * ExtraBarSize
         end
         if enableExtraBar and ExtraBarSide == "Top" and (point == "TOP" or point == "TOPLEFT" or point == "TOPRIGHT") then
-            y = y - ExtraBarSize * 80
+            y = y - frameWidth * ExtraBarSize
         end
         if enableExtraBar and ExtraBarSide == "Right" and (point == "RIGHT" or point == "TOPRIGHT" or point == "BOTTOMRIGHT") then
-            x = x - ExtraBarSize * 120
+            x = x - frameHeight * ExtraBarSize
         end
     end
     self:SetPoint( point, x, y )
@@ -334,5 +329,3 @@ function PlexusIndicatorCornerIcons:OnInitialize() --luacheck: ignore 212
     end
 
 end
-
---PlexusIndicatorCornerIcons:OnEnable()
