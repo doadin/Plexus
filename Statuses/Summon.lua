@@ -204,12 +204,6 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     end
 end
 
-function PlexusStatusSummon:ClearStatus()
-    for _, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateUnit(unitid)
-    end
-end
-
 function PlexusStatusSummon:INCOMING_SUMMON_CHANGED(event, unitid)
     self:Debug("INCOMING_SUMMON_CHANGED event: ", event)
     if unitid and self.db.profile.summon_status.enable then
