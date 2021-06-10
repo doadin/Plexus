@@ -283,50 +283,24 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
 end
 
 function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luacheck: ignore 212
-    if Plexus:IsClassicWow() then
-        if not unit then return end
-        local guid = UnitGUID(unit)
-        local db = self.db.profile.alert_resurrect
-        if not PlexusRoster:IsGUIDInRaid(guid) then return end
-        local startTime = GetTime()
-        local duration = 10
-        local hasIncomingRes = UnitHasIncomingResurrection(unit)
-        if hasIncomingRes then
-            self.core:SendStatusGained(guid, "alert_resurrect",
-                db.priority,
-                nil,
-                db.color,
-                db.text,
-                nil,
-                nil,
-                "Interface\\ICONS\\Spell_holy_guardianspirit",
-                startTime,
-                duration)
-        else
-            self.core:SendStatusLost(guid, "alert_resurrect")
-        end
-    end
-    if not Plexus:IsClassicWow() then
-        if not unit then return end
-        local guid = UnitGUID(unit)
-        local db = self.db.profile.alert_resurrect
-        if not PlexusRoster:IsGUIDInRaid(guid) then return end
-        local startTime = GetTime()
-        local duration = 10
-        local hasIncomingRes = UnitHasIncomingResurrection(unit)
-        if hasIncomingRes then
-            self.core:SendStatusGained(guid, "alert_resurrect",
-                db.priority,
-                nil,
-                db.color,
-                db.text,
-                nil,
-                nil,
-                "Interface\\ICONS\\Spell_holy_guardianspirit",
-                startTime,
-                duration)
-        else
-            self.core:SendStatusLost(guid, "alert_resurrect")
-        end
+    if not unit then return end
+    local guid = UnitGUID(unit)
+    local db = self.db.profile.alert_resurrect
+    if not PlexusRoster:IsGUIDInRaid(guid) then return end
+    local startTime = GetTime()
+    local duration = 10
+    if UnitHasIncomingResurrection(unit) then
+        self.core:SendStatusGained(guid, "alert_resurrect",
+            db.priority,
+            nil,
+            db.color,
+            db.text,
+            nil,
+            nil,
+            "Interface\\ICONS\\Spell_holy_guardianspirit",
+            startTime,
+            duration)
+    else
+        self.core:SendStatusLost(guid, "alert_resurrect")
     end
 end
