@@ -254,14 +254,10 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
     for spelllistid, spelllistname in pairs(ResSpells) do --check that the spell casted is a single res
         if spellName == spelllistname then
             if eventType == "SPELL_CAST_SUCCESS" then
-                if name == spelllistname then
-                    self.core:SendStatusLost(destGUID, "alert_resurrect")
-                end
+                self.core:SendStatusLost(destGUID, "alert_resurrect")
             end
             if eventType == "SPELL_CAST_FAILED" then
-                if name == spelllistname then
-                    self.core:SendStatusLost(destGUID, "alert_resurrect")
-                end
+                self.core:SendStatusLost(destGUID, "alert_resurrect")
             end
             if eventType == "SPELL_AURA_APPLIED" then
                 local _, _, icon = GetSpellInfo(spelllistid)
