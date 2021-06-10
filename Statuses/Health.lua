@@ -11,6 +11,17 @@
 
 local _, Plexus = ...
 local L = Plexus.L
+
+local format = _G.format
+
+local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
+local UnitGUID = _G.UnitGUID
+local UnitHealth = _G.UnitHealth
+local UnitHealthMax = _G.UnitHealthMax
+local UnitIsConnected = _G.UnitIsConnected
+local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
+local UnitIsFeignDeath = _G.UnitIsFeignDeath
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusHealth = Plexus:NewStatusModule("PlexusStatusHealth", "AceTimer-3.0")
@@ -248,8 +259,6 @@ function PlexusStatusHealth:Plexus_UnitJoined(event, guid, unitid)
     end
 end
 
-local UnitGUID, UnitHealth, UnitHealthMax, UnitIsConnected, UnitIsDeadOrGhost, UnitIsFeignDeath = UnitGUID, UnitHealth, UnitHealthMax, UnitIsConnected, UnitIsDeadOrGhost, UnitIsFeignDeath
-
 function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
     self:Debug("UpdateUnit Event: ", event)
     if not unitid then
@@ -390,8 +399,6 @@ end
 
 function PlexusStatusHealth:StatusFeignDeath(guid, gained)
     local settings = self.db.profile.alert_feignDeath
-
-    if not name then return end
 
     -- return if this option isnt enabled
     if not settings.enable then return end

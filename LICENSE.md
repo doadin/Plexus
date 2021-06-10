@@ -1,4 +1,4 @@
-Copyright (c) 2019-2020 Doadin <doadinaddons@gmail.com>
+Copyright (c) 2019-2021 Doadin <doadinaddons@gmail.com>
 
 All rights reserved.
 

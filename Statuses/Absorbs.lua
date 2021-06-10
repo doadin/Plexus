@@ -12,6 +12,14 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local format = _G.format
+
+local UnitGetTotalAbsorbs = _G.UnitGetTotalAbsorbs
+local UnitGUID = _G.UnitGUID
+local UnitHealth = _G.UnitHealth
+local UnitHealthMax = _G.UnitHealthMax
+local UnitIsVisible = _G.UnitIsVisible
+
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -81,9 +89,6 @@ function PlexusStatusAbsorbs:UpdateAllUnits()
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
-
-local UnitGetTotalAbsorbs, UnitGUID, UnitHealth, UnitHealthMax, UnitIsVisible
-    = UnitGetTotalAbsorbs, UnitGUID, UnitHealth, UnitHealthMax, UnitIsVisible
 
 function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     self:Debug("UpdateUnit Event", event)

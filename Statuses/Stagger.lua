@@ -12,6 +12,12 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local format = _G.format
+local wipe = _G.wipe
+local UnitClass = _G.UnitClass
+local UnitGUID = _G.UnitGUID
+local UnitDebuff = _G.UnitDebuff
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 

@@ -11,10 +11,14 @@
 
 local _, Plexus = ...
 local L = Plexus.L
-local Roster = Plexus:GetModule("PlexusRoster")
 
-local GetLootMethod, UnitAffectingCombat, UnitIsGroupAssistant, UnitIsGroupLeader, UnitIsUnit
-    = GetLootMethod, UnitAffectingCombat, UnitIsGroupAssistant, UnitIsGroupLeader, UnitIsUnit
+local GetLootMethod = _G.GetLootMethod
+local UnitAffectingCombat = _G.UnitAffectingCombat
+local UnitIsGroupAssistant = _G.UnitIsGroupAssistant
+local UnitIsGroupLeader = _G.UnitIsGroupLeader
+local UnitIsUnit = _G.UnitIsUnit
+
+local Roster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusName = Plexus:NewStatusModule("PlexusStatusGroup")
 PlexusStatusName.menuName = L["Group"]
@@ -79,10 +83,10 @@ function PlexusStatusName:OnStatusDisable(status)
         end
     end
 
-    if not combat then
-        self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-        self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-    end
+
+    self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+    self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+
 
     if not enable then
         self:UnregisterEvent("GROUP_ROSTER_UPDATE")

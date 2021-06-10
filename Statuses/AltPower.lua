@@ -1,11 +1,17 @@
 --[[--------------------------------------------------------------------
     Plexus
     Compact party and raid unit frames.
-    Copyright (c) 2020 Doadin <doadinaddons@gmail.com>
+    Copyright (c) 2021 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
 local _, Plexus = ...
+
+local UnitGUID = _G.UnitGUID
+local UnitIsPlayer = _G.UnitIsPlayer
+local UnitPower = _G.UnitPower
+local UnitPowerMax = _G.UnitPowerMax
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 

@@ -3,13 +3,16 @@
     Compact party and raid unit frames.
     Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
     Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-    Copyright (c) 2018-2020 Doadin <doadinaddons@gmail.com>
+    Copyright (c) 2018-2021 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
 local _, Plexus = ...
+
+local CreateFrame = _G.CreateFrame
+
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = LibStub("LibSharedMedia-3.0") --luacheck: ignore 113
+local Media = _G.LibStub("LibSharedMedia-3.0") --luacheck: ignore 113
 local L = Plexus.L
 
 local PlexusIndicatorCornerIcons = PlexusFrame:NewModule("PlexusIndicatorCornerIcons")
@@ -64,7 +67,7 @@ local anchor = {
 }
 
 local function New(frame)
-	local icon = CreateFrame("Button", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
+	local icon = CreateFrame("Button", nil, frame, _G.BackdropTemplateMixin and "BackdropTemplate")
 	icon:EnableMouse(false)
 	icon:SetBackdrop(BACKDROP)
 
@@ -108,7 +111,7 @@ local function Reset(self)
 		end)
     end
 
-	local font = Media:Fetch("font", profile.font) or STANDARD_TEXT_FONT
+	local font = Media:Fetch("font", profile.font) or _G.STANDARD_TEXT_FONT
     local iconStackFontSize = profile.iconStackFontSize
     local iconCoolDownFontSize = profile.iconCoolDownFontSize
     local iconSize

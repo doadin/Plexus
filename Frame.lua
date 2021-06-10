@@ -8,10 +8,21 @@
 
 local _, Plexus = ...
 local L = Plexus.L
-local format, gsub, pairs, type = format, gsub, pairs, type
+
+local format, gsub, pairs, type = _G.format, _G.gsub, pairs, type
+
+local InCombatLockdown = _G.InCombatLockdown
+local GetTime = _G.GetTime
+local UnitExists = _G.UnitExists
+local UnitGUID = _G.UnitGUID
+local UnitInRange = _G.UnitInRange
+local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
+local UnitIsUnit = _G.UnitIsUnit
+local UnitName = _G.UnitName
+
 local PlexusStatus, PlexusStatusRange
 
-local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
+local Media = _G.LibStub:GetLibrary("LibSharedMedia-3.0")
 Media:Register("statusbar", "Gradient", "Interface\\Addons\\Plexus\\Media\\gradient32x32")
 
 local PlexusFrame = Plexus:NewModule("PlexusFrame", "AceBucket-3.0", "AceTimer-3.0")
@@ -152,12 +163,12 @@ function PlexusFrame.prototype:OnEnter()
     local unit = self.unit
     local showTooltip = PlexusFrame.db.profile.showTooltip
     if unit and UnitExists(unit) and (showTooltip == "Always" or (showTooltip == "OOC" and (not InCombatLockdown() or UnitIsDeadOrGhost(unit)))) then
-        UnitFrame_OnEnter(self)
+        _G.UnitFrame_OnEnter(self)
     end
 end
 
 function PlexusFrame.prototype:OnLeave()
-    UnitFrame_OnLeave(self)
+    _G.UnitFrame_OnLeave(self)
 end
 
 function PlexusFrame.prototype:OnShow() --luacheck: ignore 212
@@ -1348,7 +1359,7 @@ end
 
 ------------------------------------------------------------------------
 
-local SecureButton_GetModifiedUnit = SecureButton_GetModifiedUnit -- it's so slow
+local SecureButton_GetModifiedUnit = _G.SecureButton_GetModifiedUnit -- it's so slow
 
 function PlexusFrame:UpdateFrameUnits()
     for frame_name, frame in pairs(self.registeredFrames) do

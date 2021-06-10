@@ -12,6 +12,14 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local UnitGUID = _G.UnitGUID
+local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
+local UnitIsVisible = _G.UnitIsVisible
+local UnitName = _G.UnitName
+local UnitPower = _G.UnitPower
+local UnitPowerMax = _G.UnitPowerMax
+local UnitPowerType = _G.UnitPowerType
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 
@@ -88,9 +96,6 @@ function PlexusStatusMana:UpdateAllUnits()
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
-
-local UnitGUID, UnitIsDeadOrGhost, UnitIsVisible, UnitPower, UnitPowerMax, UnitPowerType
-    = UnitGUID, UnitIsDeadOrGhost, UnitIsVisible, UnitPower, UnitPowerMax, UnitPowerType
 
 local cache = {}
 

@@ -7,8 +7,11 @@
 ---------------------------------------------------------------------]]
 
 local _, Plexus = ...
-local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local L = Plexus.L
+
+local CreateFrame = _G.CreateFrame
+
+local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
 local PlexusIndicatorCornerSquares = PlexusFrame:NewModule("PlexusIndicatorCornerSquares")
 local BACKDROP = {
@@ -57,7 +60,7 @@ local anchor = {
 }
 
 local function New(frame)
-    local square = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
+    local square = CreateFrame("Frame", nil, frame, _G.BackdropTemplateMixin and "BackdropTemplate")
     square:SetBackdrop(BACKDROP)
     square:SetBackdropBorderColor(0, 0, 0, 1)
     return square

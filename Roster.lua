@@ -11,6 +11,17 @@
 
 local _, Plexus = ...
 
+local tinsert = _G.tinsert
+
+local GetInstanceInfo = _G.GetInstanceInfo
+local GetZonePVPInfo = _G.GetZonePVPInfo
+local IsInRaid = _G.IsInRaid
+local IsInGroup = _G.IsInGroup
+local UnitExists = _G.UnitExists
+local UnitName = _G.UnitName
+local UnitGUID = _G.UnitGUID
+local UnitFullName = _G.UnitFullName
+
 local PlexusRoster = Plexus:NewModule("PlexusRoster")
 
 PlexusRoster.defaultDB = {
@@ -18,10 +29,6 @@ PlexusRoster.defaultDB = {
 }
 
 ------------------------------------------------------------------------
-
-local UnitExists = UnitExists
-local UnitName = UnitName
-local UnitGUID = UnitGUID
 
 local _, my_realm = UnitFullName("player")
 
@@ -56,11 +63,11 @@ do
 
     register_unit(party_units, "player", "pet")
 
-    for i = 1, MAX_PARTY_MEMBERS do
+    for i = 1, _G.MAX_PARTY_MEMBERS do
         register_unit(party_units, "party"..i, "partypet"..i)
     end
 
-    for i = 1, MAX_RAID_MEMBERS do
+    for i = 1, _G.MAX_RAID_MEMBERS do
         register_unit(raid_units, "raid"..i, "raidpet"..i)
     end
 end

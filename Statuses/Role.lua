@@ -12,6 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local UnitAffectingCombat = _G.UnitAffectingCombat
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusRole = Plexus:NewStatusModule("PlexusStatusRole")
@@ -24,19 +26,19 @@ PlexusStatusRole.defaultDB = {
         TANK = {
             enable = true,
             hideInCombat = false,
-            text = string.utf8sub(TANK, 1, 1),
+            text = string.utf8sub(_G.TANK, 1, 1), --luacheck: ignore 143
             color = { r = 1, g = 1, b = 0, a = 1, ignore = true },
         },
         HEALER = {
             enable = true,
             hideInCombat = false,
-            text = string.utf8sub(HEALER, 1, 1),
+            text = string.utf8sub(_G.HEALER, 1, 1), --luacheck: ignore 143
             color = { r = 0, g = 1, b = 0, a = 1, ignore = true },
         },
         DAMAGER = {
             enable = false,
             hideInCombat = false,
-            text = string.utf8sub(DAMAGER, 1, 1),
+            text = string.utf8sub(_G.DAMAGER, 1, 1), --luacheck: ignore 143
             color = { r = 1, g = 0, b = 0, a = 1, ignore = true },
         },
     },
@@ -140,32 +142,60 @@ function PlexusStatusRole:OnStatusEnable(status)
     if status ~= "role" then return end
     self:Debug("OnStatusEnable", status)
 
-    self:RegisterEvent("ROLE_CHANGED_INFORM", "UpdateAllUnits")
-    self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
-    self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
-    self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
+    if not Plexus:IsClassicWow() then
+        self:RegisterEvent("ROLE_CHANGED_INFORM", "UpdateAllUnits")
+        self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
+        self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
+        self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
 
-    self:RegisterMessage("Plexus_PartyTransition", "UpdateAllUnits")
-    self:RegisterMessage("Plexus_RosterUpdate", "UpdateAllUnits")
-    self:RegisterMessage("Plexus_UnitJoined", "UpdateAllUnits")
-    self:RegisterMessage("Plexus_UnitChanged", "UpdateAllUnits")
-    self:RegisterMessage("Plexus_UnitLeft", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_PartyTransition", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_RosterUpdate", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitJoined", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitChanged", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitLeft", "UpdateAllUnits")
+    end
+
+    if Plexus:IsClassicWow() then
+        self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateAllUnits")
+        self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllUnits")
+        self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
+
+        self:RegisterMessage("Plexus_PartyTransition", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_RosterUpdate", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitJoined", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitChanged", "UpdateAllUnits")
+        self:RegisterMessage("Plexus_UnitLeft", "UpdateAllUnits")
+    end
 end
 
 function PlexusStatusRole:OnStatusDisable(status)
     if status ~= "role" then return end
     self:Debug("OnStatusDisable", status)
 
-    self:UnregisterEvent("ROLE_CHANGED_INFORM")
-    self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-    self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-    self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+    if not Plexus:IsClassicWow() then
+        self:UnregisterEvent("ROLE_CHANGED_INFORM")
+        self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+        self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+        self:UnregisterEvent("GROUP_ROSTER_UPDATE")
 
-    self:UnregisterMessage("Plexus_PartyTransition")
-    self:UnregisterMessage("Plexus_RosterUpdate")
-    self:UnregisterMessage("Plexus_UnitJoined")
-    self:UnregisterMessage("Plexus_UnitChanged")
-    self:UnregisterMessage("Plexus_UnitLeft")
+        self:UnregisterMessage("Plexus_PartyTransition")
+        self:UnregisterMessage("Plexus_RosterUpdate")
+        self:UnregisterMessage("Plexus_UnitJoined")
+        self:UnregisterMessage("Plexus_UnitChanged")
+        self:UnregisterMessage("Plexus_UnitLeft")
+    end
+
+    if Plexus:IsClassicWow() then
+        self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+        self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+        self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+
+        self:UnregisterMessage("Plexus_PartyTransition")
+        self:UnregisterMessage("Plexus_RosterUpdate")
+        self:UnregisterMessage("Plexus_UnitJoined")
+        self:UnregisterMessage("Plexus_UnitChanged")
+        self:UnregisterMessage("Plexus_UnitLeft")
+    end
 
     self.core:SendStatusLostAllUnits("role")
 end
@@ -180,9 +210,10 @@ end
 function PlexusStatusRole:UpdateUnit(event, unit, guid)
     local role
     if Plexus.IsClassicWow() then
-        role = "None"
+        local LibClassicSpecs = _G.LibStub("LibClassicSpecs")
+        role = LibClassicSpecs.Role
     else
-        role = UnitGroupRolesAssigned(unit) or "NONE"
+        role = _G.UnitGroupRolesAssigned(unit) or "NONE"
     end
     self:Debug("UpdateUnit", event, unit, role)
 

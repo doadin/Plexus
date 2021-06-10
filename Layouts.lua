@@ -8,6 +8,11 @@
 
 local _, Plexus = ...
 local L = Plexus.L
+
+local C_Map = _G.C_Map
+local GetNumGroupMembers = _G.GetNumGroupMembers
+local GetRaidRosterInfo = _G.GetRaidRosterInfo
+
 local Layout = Plexus:GetModule("PlexusLayout")
 local Roster = Plexus:GetModule("PlexusRoster")
 
@@ -103,7 +108,7 @@ local Layouts = {
         name = L["By Name"],
         defaults = {
             sortMethod = "NAME",
-            unitsPerColumn = 5;NOREPEAT,
+            unitsPerColumn = 5;NOREPEAT, --luacheck: ignore
             maxColumns = 8,
         },
         [1] = {
@@ -114,7 +119,7 @@ local Layouts = {
         name = L["By Name With Pets"],
         defaults = {
             sortMethod = "NAME",
-            unitsPerColumn = 5;NOREPEAT,
+            unitsPerColumn = 5;NOREPEAT, --luacheck: ignore
             maxColumns = 8,
         },
         [1] = {
@@ -123,7 +128,7 @@ local Layouts = {
     }
 }
 --@debug@
-PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
+_G.PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
 --@end-debug@
 
 --------------------------------------------------------------------------------
@@ -235,7 +240,7 @@ function Manager:GetGroupFilter()
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
     local curMapID = C_Map.GetBestMapForUnit("player")
-    local MAX_RAID_GROUPS = MAX_RAID_GROUPS or 8 --luacheck: ignore 111
+    local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
     for i = 1, MAX_RAID_GROUPS do
         hideGroup[i] = ""

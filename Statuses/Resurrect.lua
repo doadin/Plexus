@@ -12,7 +12,17 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local GetTime = _G.GetTime
+
+local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
+local GetSpellInfo = _G.GetSpellInfo
 local UnitCastingInfo = _G.UnitCastingInfo
+local UnitGUID = _G.UnitGUID
+local UnitHasIncomingResurrection = _G.UnitHasIncomingResurrection
+local UnitIsDead = _G.UnitIsDead
+local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
+local UnitIsGhost = _G.UnitIsGhost
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusResurrect = Plexus:NewStatusModule("PlexusStatusResurrect", "AceTimer-3.0")

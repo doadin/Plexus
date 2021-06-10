@@ -13,6 +13,13 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local GetSpellInfo = _G.GetSpellInfo
+local IsSpellInRange = _G.IsSpellInRange
+local UnitClass = _G.UnitClass
+local UnitInRange = _G.UnitInRange
+local UnitIsDead = _G.UnitIsDead
+local UnitIsUnit = _G.UnitIsUnit
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusRange = Plexus:NewStatusModule("PlexusStatusRange", "AceTimer-3.0")
@@ -94,9 +101,6 @@ do
         resSpell = GetSpellInfo(20707)  -- Soulstone
     end
 end
-
-local IsSpellInRange, UnitInRange, UnitIsDead, UnitIsUnit
-    = IsSpellInRange, UnitInRange, UnitIsDead, UnitIsUnit
 
 local function GroupRangeCheck(_, unit)
     if UnitIsUnit(unit, "player") then

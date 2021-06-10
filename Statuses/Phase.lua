@@ -12,6 +12,9 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local UnitGUID = _G.UnitGUID
+local UnitPhaseReason = _G.UnitGUID
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
@@ -206,13 +209,13 @@ function PlexusStatusPhase:UpdateUnit(unitid)
     local guid = UnitGUID(unitid)
     local reason = UnitPhaseReason(unitid)
     local key
-	if reason == Enum.PhaseReason.WarMode then
+	if reason == _G.Enum.PhaseReason.WarMode then
 		key = "WAR_MODE"
-	elseif reason == Enum.PhaseReason.ChromieTime then
+	elseif reason == _G.Enum.PhaseReason.ChromieTime then
 		key = "CHROMIE_TIME"
-	elseif reason == Enum.PhaseReason.Phasing then
+	elseif reason == _G.Enum.PhaseReason.Phasing then
 		key = "PHASING"
-	elseif reason == Enum.PhaseReason.Sharding then
+	elseif reason == _G.Enum.PhaseReason.Sharding then
 		key = "SHARDING"
     elseif not reason then
         key = "NORMAL"

@@ -12,6 +12,10 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local C_IncomingSummon = _G.C_IncomingSummon
+local GetTime = _G.GetTime
+local UnitGUID = _G.UnitGUID
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusSummon = Plexus:NewStatusModule("PlexusStatusSummon", "AceTimer-3.0")
