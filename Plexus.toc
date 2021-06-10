@@ -71,7 +71,6 @@ Roster.lua
 Layout.lua
 Layouts.lua
 Frame.lua
-ProfileSwitcher.lua
 Status.lua
 Help.lua
 
