@@ -8,38 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up source download tools
-      run: |
-        echo "Update package lists."
-        sudo apt-get update
-        echo "Install base packages."
-        sudo apt-get install -y subversion
-    - name: Install and run Luacheck
-      run: |
-        sudo apt-get install luarocks
-        luarocks install --local luacheck
-        /home/runner/.luarocks/bin/luacheck . --no-color -q
+      - name: Checkout addon
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 100
+      - name: Run luacheck
+        uses: BigWigsMods/actions/luacheck@master
+        with:
+          args: -q
 
-    - name: Create Retail Package
-      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z
-      env:
-        CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        GITHUB_OAUTH: ${{ secrets.OAUTH }}
+      - name: Package Retail
+        uses: BigWigsMods/packager@master
+        with:
+            args: -g retail -d
 
-    - uses: actions/upload-artifact@master
-      with:
-        name: Plexus-PR
-        path: .release/
+      - name: Package Classic
+        uses: BigWigsMods/packager@master
+        with:
+            args: -g classic -m .pkgmeta-classic -d
 
-    - name: Create Classic Package
-      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z -g 1.13.3 -m .pkgmeta-classic
-      env:
-        CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        GITHUB_OAUTH: ${{ secrets.OAUTH }}
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: Plexus-PR-classic
-        path: .release/
+      - name: Package BC Classic
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g bcc -m .pkgmeta-classic -d
 

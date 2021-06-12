@@ -28,10 +28,10 @@ externals:
    Libs/UTF8: https://repos.curseforge.com/wow/utf8/trunk
    Libs/LibHealComm-4.0:
      url: https://github.com/doadin/LibHealComm-4.0.git
-     tag: master
+     tag: main
    Libs/LibDeflate:
      url: https://github.com/doadin/LibDeflate.git
-     tag: master
+     tag: main
    Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
 
 ignore:

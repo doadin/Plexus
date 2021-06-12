@@ -28,7 +28,7 @@ externals:
    Libs/UTF8: https://repos.curseforge.com/wow/utf8/trunk
    Libs/LibDeflate:
      url: https://github.com/doadin/LibDeflate.git
-     tag: master
+     tag: main
 
 ignore:
   - .luacheckrc

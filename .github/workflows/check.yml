@@ -3,17 +3,19 @@ name: CI-LuaCheck
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Install and run Luacheck
-      run: |
-        sudo apt-get install luarocks
-        luarocks install --local luacheck
-        /home/runner/.luarocks/bin/luacheck . --no-color -q
+      - name: Checkout addon
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 100
+
+      - name: Run luacheck
+        uses: BigWigsMods/actions/luacheck@master
+        with:
+          args: -q
