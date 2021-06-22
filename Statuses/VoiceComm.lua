@@ -38,7 +38,7 @@ function PlexusStatusVoiceComm:OnStatusEnable(status)
     if status == "alert_voice" then
         self:RegisterEvent("VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED")
         --self:RegisterEvent("VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED")
-        self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")
+        --self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")
     end
 end
 
@@ -46,13 +46,18 @@ function PlexusStatusVoiceComm:OnStatusDisable(status)
     if status == "alert_voice" then
         self:UnregisterEvent("VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED")
         --self:UnregisterEvent("VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED")
-        self:UnregisterMessage("Plexus_RosterUpdated")
+        --self:UnregisterMessage("Plexus_RosterUpdated")
         self.core:SendStatusLostAllUnits("alert_voice")
     end
 end
 
 function PlexusStatusVoiceComm:VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED(_, memberID, channelID, isSpeaking)
-    local guid = C_VoiceChat.GetMemberGUID(memberID, channelID)
+    local guid
+    if memberID and channelID then
+        guid = C_VoiceChat.GetMemberGUID(memberID, channelID)
+    else
+        return
+    end
     local settings = self.db.profile.alert_voice
 
     if isSpeaking then
