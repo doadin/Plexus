@@ -121,3 +121,4 @@ Statuses\Summon.lua
 #@end-retail@
 Statuses\Target.lua
 Statuses\Vehicle.lua
+Statuses\VoiceComm.lua
