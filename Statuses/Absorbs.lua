@@ -109,6 +109,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
             elseif amount > 999 then
                 text = format("%.1fk", amount / 1000)
             end
+            if not settings.text then return end
             self.core:SendStatusGained(guid, "alert_absorbs",
                 settings.priority,
                 nil,
