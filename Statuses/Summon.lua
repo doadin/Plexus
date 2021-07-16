@@ -196,13 +196,17 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     local settings = self.db.profile.summon_status
     local start = GetTime()
 
-    if key == 1 then -- pending
-        self:GainStatus(guid, key, settings, start)
-    elseif key == 2 then -- accepted
-        self:GainStatus(guid, key, settings, start)
-    elseif key == 3 then -- declined
-        self:GainStatus(guid, key, settings, start)
-    elseif key == 0 then -- no summon
+    if key == 0 then key = "SUMMON_STATUS_NONE" end
+    if key == 1 then key = "SUMMON_STATUS_PENDING" end
+    if key == 2 then key = "SUMMON_STATUS_ACCEPTED" end
+    if key == 3 then key = "SUMMON_STATUS_DECLINED" end
+    if key == "SUMMON_STATUS_PENDING" then
+        self:GainStatus(guid, key, settings)
+    elseif key == "SUMMON_STATUS_ACCEPTED" then
+        self:GainStatus(guid, key, settings)
+    elseif key == "SUMMON_STATUS_DECLINED" then
+        self:GainStatus(guid, key, settings)
+    elseif key == "SUMMON_STATUS_NONE" then
         self.core:SendStatusLost(guid, "summon_status")
     end
     --self.timer = self:ScheduleRepeatingTimer("UpdateAllUnits", 10)
