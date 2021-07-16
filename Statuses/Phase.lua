@@ -13,7 +13,7 @@ local _, Plexus = ...
 local L = Plexus.L
 
 local UnitGUID = _G.UnitGUID
-local UnitPhaseReason = _G.UnitGUID
+local UnitPhaseReason = _G.UnitPhaseReason
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
