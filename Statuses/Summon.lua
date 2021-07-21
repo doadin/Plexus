@@ -201,11 +201,11 @@ function PlexusStatusSummon:UpdateUnit(unitid)
     if key == 2 then key = "SUMMON_STATUS_ACCEPTED" end
     if key == 3 then key = "SUMMON_STATUS_DECLINED" end
     if key == "SUMMON_STATUS_PENDING" then
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, key, settings, start)
     elseif key == "SUMMON_STATUS_ACCEPTED" then
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, key, settings, start)
     elseif key == "SUMMON_STATUS_DECLINED" then
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, key, settings, start)
     elseif key == "SUMMON_STATUS_NONE" then
         self.core:SendStatusLost(guid, "summon_status")
     end
