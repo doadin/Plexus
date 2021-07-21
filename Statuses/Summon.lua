@@ -174,13 +174,13 @@ function PlexusStatusSummon:UpdateAllUnits()
     --for every units that doesnt have a summon clear summon
     --if no units have summon cancel timer
     --local unithassummon
-    for _, unitid in PlexusRoster:IterateRoster() do
+    for guid, unitid in PlexusRoster:IterateRoster() do
         --if C_IncomingSummon.HasIncomingSummon(unitid) then
         --    unithassummon = true
         --    return
         --end
         if not C_IncomingSummon.HasIncomingSummon(unitid) then
-            self.core:SendStatusLost(unitid, "summon_status")
+            self.core:SendStatusLost(guid, "summon_status")
             --unithassummon = false
         end
     end
