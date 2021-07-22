@@ -228,10 +228,10 @@ function PlexusStatusHealth:CLEU()
     local _, eventType, _, _, _, _, _, destGUID, _, _, _, _, _, _ = CombatLogGetCurrentEventInfo()
     --self:Debug("Unit Died: ", sourceGUID)
     if eventType == "UNIT_DIED" then
-        --if not PlexusRoster:IsGUIDInGroup(sourceGUID) then
-        --    --print(sourceGUID)
-        --    return
-        --end
+        if not PlexusRoster:IsGUIDInGroup(destGUID) then
+            --print(sourceGUID)
+            return
+        end
         --print("timestamp: ", timestamp, "eventType: ", eventType, "sourceGUID: ", sourceGUID, "sourceName: ", sourceName, "destGUID: ", destGUID, "spellId: ", spellId, "spellName: ", spellName)
         self:StatusDeath(destGUID, true)
     end
