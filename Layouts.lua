@@ -239,6 +239,7 @@ function Manager:GetGroupFilter()
 
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
+    local _, instType, diffIndex = GetInstanceInfo()
     local curMapID = C_Map.GetBestMapForUnit("player")
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
@@ -250,7 +251,14 @@ function Manager:GetGroupFilter()
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local mapID = C_Map.GetBestMapForUnit("raid" .. i)
 
-        if (showOffline or online) and (showWrongZone or curMapID == mapID) then
+	if showWrongZone == "MYTHICFIXED" then
+	    if diffIndex == 16 and subgroup < 5 then
+		hideGroup[subgroup] = nil
+	    elseif diffIndex ~= 16 then
+		hideGroup[subgroup] = nil
+	    end
+	end
+	if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or curMapID == mapID) then
             hideGroup[subgroup] = nil
         end
 
