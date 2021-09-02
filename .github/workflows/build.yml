@@ -4,27 +4,35 @@ on:
   push:
     tags:
       - '*'
+    paths-ignore:
+      - '.github/**'
+
+env:
+  CF_API_KEY: ${{ secrets.CF_API_KEY }}
+  GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up source download tools
-      run: |
-        echo "Update package lists."
-        sudo apt-get update
-        echo "Install base packages."
-        sudo apt-get install -y subversion
-    - name: Create Retail Package
-      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash  -s -- -d
-      env:
-        CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        GITHUB_OAUTH: ${{ secrets.OAUTH }}
 
-    - name: Create Classic Package
-      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -g 1.13.3 -m .pkgmeta-classic
-      env:
-        CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        GITHUB_OAUTH: ${{ secrets.OAUTH }}
+    steps:
+      - name: Checkout addon
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 100
+
+      - name: Package Retail
+        uses: BigWigsMods/packager@master
+        with:
+            args: -g retail
+
+      - name: Package Classic
+        uses: BigWigsMods/packager@master
+        with:
+            args: -g classic -m .pkgmeta-classic
+
+      - name: Package BC Classic
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g bcc -m .pkgmeta-classic

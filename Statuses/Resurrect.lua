@@ -12,7 +12,17 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local GetTime = _G.GetTime
+
+local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
+local GetSpellInfo = _G.GetSpellInfo
 local UnitCastingInfo = _G.UnitCastingInfo
+local UnitGUID = _G.UnitGUID
+local UnitHasIncomingResurrection = _G.UnitHasIncomingResurrection
+local UnitIsDead = _G.UnitIsDead
+local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
+local UnitIsGhost = _G.UnitIsGhost
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusResurrect = Plexus:NewStatusModule("PlexusStatusResurrect", "AceTimer-3.0")
@@ -254,14 +264,10 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
     for spelllistid, spelllistname in pairs(ResSpells) do --check that the spell casted is a single res
         if spellName == spelllistname then
             if eventType == "SPELL_CAST_SUCCESS" then
-                if name == spelllistname then
-                    self.core:SendStatusLost(destGUID, "alert_resurrect")
-                end
+                self.core:SendStatusLost(destGUID, "alert_resurrect")
             end
             if eventType == "SPELL_CAST_FAILED" then
-                if name == spelllistname then
-                    self.core:SendStatusLost(destGUID, "alert_resurrect")
-                end
+                self.core:SendStatusLost(destGUID, "alert_resurrect")
             end
             if eventType == "SPELL_AURA_APPLIED" then
                 local _, _, icon = GetSpellInfo(spelllistid)
@@ -287,50 +293,24 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
 end
 
 function PlexusStatusResurrect:INCOMING_RESURRECT_CHANGED(event, unit) --luacheck: ignore 212
-    if Plexus:IsClassicWow() then
-        if not unit then return end
-        local guid = UnitGUID(unit)
-        local db = self.db.profile.alert_resurrect
-        if not PlexusRoster:IsGUIDInRaid(guid) then return end
-        local startTime = GetTime()
-        local duration = 10
-        local hasIncomingRes = UnitHasIncomingResurrection(unit)
-        if hasIncomingRes then
-            self.core:SendStatusGained(guid, "alert_resurrect",
-                db.priority,
-                nil,
-                db.color,
-                db.text,
-                nil,
-                nil,
-                "Interface\\ICONS\\Spell_holy_guardianspirit",
-                startTime,
-                duration)
-        else
-            self.core:SendStatusLost(guid, "alert_resurrect")
-        end
-    end
-    if not Plexus:IsClassicWow() then
-        if not unit then return end
-        local guid = UnitGUID(unit)
-        local db = self.db.profile.alert_resurrect
-        if not PlexusRoster:IsGUIDInRaid(guid) then return end
-        local startTime = GetTime()
-        local duration = 10
-        local hasIncomingRes = UnitHasIncomingResurrection(unit)
-        if hasIncomingRes then
-            self.core:SendStatusGained(guid, "alert_resurrect",
-                db.priority,
-                nil,
-                db.color,
-                db.text,
-                nil,
-                nil,
-                "Interface\\ICONS\\Spell_holy_guardianspirit",
-                startTime,
-                duration)
-        else
-            self.core:SendStatusLost(guid, "alert_resurrect")
-        end
+    if not unit then return end
+    local guid = UnitGUID(unit)
+    local db = self.db.profile.alert_resurrect
+    if not PlexusRoster:IsGUIDInRaid(guid) then return end
+    local startTime = GetTime()
+    local duration = 10
+    if UnitHasIncomingResurrection(unit) then
+        self.core:SendStatusGained(guid, "alert_resurrect",
+            db.priority,
+            nil,
+            db.color,
+            db.text,
+            nil,
+            nil,
+            "Interface\\ICONS\\Spell_holy_guardianspirit",
+            startTime,
+            duration)
+    else
+        self.core:SendStatusLost(guid, "alert_resurrect")
     end
 end

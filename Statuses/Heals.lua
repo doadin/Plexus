@@ -12,6 +12,15 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local format = _G.format
+
+local UnitGetIncomingHeals = _G.UnitGetIncomingHeals
+local UnitGUID = _G.UnitGUID
+local UnitHealth = _G.UnitHealth
+local UnitHealthMax = _G.UnitHealthMax
+local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
+local UnitIsVisible = _G.UnitIsVisible
+
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -75,9 +84,9 @@ function PlexusStatusHeals:OnStatusEnable(status)
         end
         if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
             --local HealComm
-            assert(LibStub, "Heals Status requires LibStub")
-            assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
-            HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
+            assert(_G.LibStub, "Heals Status requires LibStub")
+            assert(_G.LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
+            HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             local function HealComm_Heal_Update()
                 self:UpdateAllUnits()
             end
@@ -106,9 +115,9 @@ function PlexusStatusHeals:OnStatusDisable(status)
         end
         if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
             --local HealComm
-            assert(LibStub, "Heals Status requires LibStub")
-            assert(LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
-            HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
+            assert(_G.LibStub, "Heals Status requires LibStub")
+            assert(_G.LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
+            HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
 
             HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
             HealComm.UnregisterCallback(self, 'HealComm_HealUpdated')
@@ -130,9 +139,6 @@ function PlexusStatusHeals:UpdateAllUnits()
         self:UpdateUnit("UpdateAllUnits", unit)
     end
 end
-
-local UnitGetIncomingHeals, UnitGUID, UnitHealth, UnitHealthMax, UnitIsDeadOrGhost, UnitIsVisible
-    = UnitGetIncomingHeals, UnitGUID, UnitHealth, UnitHealthMax, UnitIsDeadOrGhost, UnitIsVisible
 
 function PlexusStatusHeals:UpdateUnit(event, unit)
     self:Debug("UpdateUnit Event: ", event)

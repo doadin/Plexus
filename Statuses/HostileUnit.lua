@@ -1,4 +1,10 @@
-local PlexusStatusHostileUnit = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusHostileUnit")
+local _, Plexus = ...
+--local L = Plexus.L
+
+local UnitCanAttack = _G.UnitCanAttack
+local UnitGUID = _G.UnitGUID
+
+local PlexusStatusHostileUnit = Plexus:NewStatusModule("PlexusStatusHostileUnit")
 PlexusStatusHostileUnit.menuName = "HostileUnit"
 
 PlexusStatusHostileUnit.defaultDB = {

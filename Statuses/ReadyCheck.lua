@@ -12,6 +12,9 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local GetReadyCheckStatus = _G.GetReadyCheckStatus
+local UnitGUID = _G.UnitGUID
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusReadyCheck = Plexus:NewStatusModule("PlexusStatusReadyCheck", "AceTimer-3.0")

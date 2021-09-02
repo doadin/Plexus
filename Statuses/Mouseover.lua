@@ -11,6 +11,10 @@
 
 local _, Plexus = ...
 local L = Plexus.L
+
+local CreateFrame = _G.CreateFrame
+local UnitGUID = _G.UnitGUID
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusMouseover = Plexus:NewStatusModule("PlexusStatusMouseover")

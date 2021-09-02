@@ -3,7 +3,7 @@
     Compact party and raid unit frames.
     Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
     Copyright (c) 2009-2018 Phanx <addons@phanx.net>
-    Copyright (c) 2018-2020 Doadin <doadinaddons@gmail.com>
+    Copyright (c) 2018-2021 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
     AFK.lua
@@ -12,6 +12,10 @@
 
 local _, Plexus = ...
 local L = Plexus.L
+
+local UnitGUID = _G.UnitGUID
+local UnitIsAFK = _G.UnitIsAFK
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusAFK = Plexus:NewStatusModule("PlexusStatusAFK")

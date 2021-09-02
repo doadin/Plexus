@@ -13,6 +13,9 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local UnitExists = _G.UnitExists
+local UnitGUID = _G.UnitGUID
+
 local currentTarget, currentFocus
 
 local PlexusStatusTarget = Plexus:NewStatusModule("PlexusStatusTarget")

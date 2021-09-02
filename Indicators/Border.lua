@@ -20,7 +20,7 @@ PlexusFrame:RegisterIndicator("border", L["Border"],
     -- New
     function(frame)
         if not Plexus:IsClassicWow() then
-            Mixin(frame, BackdropTemplateMixin)
+            _G.Mixin(frame, _G.BackdropTemplateMixin)
         end
         frame:SetBackdrop(BACKDROP)
         return {}

@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
     Plexus
     Compact party and raid unit frames.
-    Copyright (c) 2018-2020 Doadin <doadinaddons@gmail.com>
+    Copyright (c) 2018-2021 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
     GroupNumber.lua
@@ -10,6 +10,10 @@
 
 local _, Plexus = ...
 local L = Plexus.L
+
+local UnitInRaid = _G.UnitInRaid
+local GetRaidRosterInfo = _G.GetRaidRosterInfo
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 

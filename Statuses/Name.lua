@@ -12,6 +12,18 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local UnitClass = _G.UnitClass
+local UnitExists = _G.UnitExists
+local UnitGUID = _G.UnitGUID
+local UnitHasVehicleUI
+if Plexus:IsRetailWow() then
+    UnitHasVehicleUI = _G.UnitHasVehicleUI
+end
+local UnitOnTaxi
+if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
+    UnitOnTaxi = _G.UnitOnTaxi
+end
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusName = Plexus:NewStatusModule("PlexusStatusName")
@@ -176,7 +188,7 @@ local nameOptions = {
 }
 
 local classIconCoords = {}
-for class, t in pairs(CLASS_ICON_TCOORDS) do
+for class, t in pairs(_G.CLASS_ICON_TCOORDS) do
     local offset, left, right, bottom, top = 0.025, unpack(t)
     classIconCoords[class] = {
         left   = left   + offset,

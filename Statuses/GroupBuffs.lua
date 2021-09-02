@@ -1,7 +1,13 @@
 local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
+
+local GetSpellInfo = _G.GetSpellInfo
+local GetSpellTexture = _G.GetSpellTexture
+local InCombatLockdown = _G.InCombatLockdown
+
 local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
-    = UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
+    = _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsVisible, _G.UnitIsDead, _G.UnitIsGhost
+
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 PlexusStatusGroupBuffs.options = false

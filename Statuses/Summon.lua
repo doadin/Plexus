@@ -12,6 +12,10 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local C_IncomingSummon = _G.C_IncomingSummon
+local GetTime = _G.GetTime
+local UnitGUID = _G.UnitGUID
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusSummon = Plexus:NewStatusModule("PlexusStatusSummon", "AceTimer-3.0")
@@ -125,38 +129,26 @@ function PlexusStatusSummon:OnStatusEnable(status)
     if status ~= "summon_status" then return end
 
     self:RegisterEvent("INCOMING_SUMMON_CHANGED")
-    self:RegisterEvent("PLAYER_ENTERING_WORLD", "GroupChanged")
-    self:RegisterEvent("PARTY_LEADER_CHANGED", "GroupChanged")
-    self:RegisterEvent("GROUP_ROSTER_UPDATE", "GroupChanged")
-    self:RegisterMessage("Plexus_PartyTransition", "GroupChanged")
-    self:RegisterMessage("Plexus_UnitJoined")
+    self:RegisterEvent("LOADING_SCREEN_DISABLED", "UpdateAllUnits")
 end
 
 function PlexusStatusSummon:OnStatusDisable(status)
     if status ~= "summon_status" then return end
 
     self:UnregisterEvent("INCOMING_SUMMON_CHANGED")
-    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-    self:UnregisterEvent("PARTY_LEADER_CHANGED")
-    self:UnregisterEvent("GROUP_ROSTER_UPDATE")
-    self:UnregisterMessage("Plexus_PartyTransition")
-    self:UnregisterMessage("Plexus_UnitJoined")
+    self:UnregisterEvent("LOADING_SCREEN_DISABLED")
 
-    self:StopTimer("ClearStatus")
     self.core:SendStatusLostAllUnits("summon_status")
 end
 
-function PlexusStatusSummon:GainStatus(guid, key, settings)
+function PlexusStatusSummon:GainStatus(guid, key, settings, start)
     local status = summonstatus[key]
     local duration
-    local StartTime = GetTime()
     if key == "SUMMON_STATUS_PENDING" then
         duration = 120
     elseif key == "SUMMON_STATUS_ACCEPTED" then
-        StartTime = nil
         duration = PlexusStatusSummon.db.profile.summon_status.delay
     elseif key == "SUMMON_STATUS_DECLINED" then
-        StartTime = nil
         duration = PlexusStatusSummon.db.profile.summon_status.delay
     end
     self.core:SendStatusGained(guid, "summon_status",
@@ -167,7 +159,7 @@ function PlexusStatusSummon:GainStatus(guid, key, settings)
         nil,
         nil,
         status.icon,
-        StartTime,
+        start,
         duration,
         nil,
         {left = 0.25, right = 0.85, top = 0.25, bottom = 0.85}
@@ -178,48 +170,50 @@ end
 --better {left = 0.3, right = 0.7, top = 0.3, bottom = 0.7}
 
 function PlexusStatusSummon:UpdateAllUnits()
-    for _, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateUnit(unitid)
+    -- As long as a unit has a summon keep checking
+    --for every units that doesnt have a summon clear summon
+    --if no units have summon cancel timer
+    --local unithassummon
+    for guid, unitid in PlexusRoster:IterateRoster() do
+        --if C_IncomingSummon.HasIncomingSummon(unitid) then
+        --    unithassummon = true
+        --    return
+        --end
+        if not C_IncomingSummon.HasIncomingSummon(unitid) then
+            self.core:SendStatusLost(guid, "summon_status")
+            --unithassummon = false
+        end
     end
+    --if not unithassummon then
+    --    self.CancelAllTimers()
+    --end
 end
 
 function PlexusStatusSummon:UpdateUnit(unitid)
     local guid = UnitGUID(unitid)
     local key = C_IncomingSummon.IncomingSummonStatus(unitid)
+    --if not C_IncomingSummon.HasIncomingSummon(unitid) then self.core:SendStatusLost(guid, "summon_status") end
+    local settings = self.db.profile.summon_status
+    local start = GetTime()
+
     if key == 0 then key = "SUMMON_STATUS_NONE" end
     if key == 1 then key = "SUMMON_STATUS_PENDING" end
     if key == 2 then key = "SUMMON_STATUS_ACCEPTED" end
     if key == 3 then key = "SUMMON_STATUS_DECLINED" end
     if key == "SUMMON_STATUS_PENDING" then
-        local settings = self.db.profile.summon_status
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, key, settings, start)
     elseif key == "SUMMON_STATUS_ACCEPTED" then
-        local settings = self.db.profile.summon_status
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, key, settings, start)
     elseif key == "SUMMON_STATUS_DECLINED" then
-        local settings = self.db.profile.summon_status
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, key, settings, start)
     elseif key == "SUMMON_STATUS_NONE" then
         self.core:SendStatusLost(guid, "summon_status")
     end
+    --self.timer = self:ScheduleRepeatingTimer("UpdateAllUnits", 10)
 end
 
 function PlexusStatusSummon:INCOMING_SUMMON_CHANGED(event, unitid)
     self:Debug("INCOMING_SUMMON_CHANGED event: ", event)
-    if unitid and self.db.profile.summon_status.enable then
-        self:UpdateUnit(unitid)
-    end
-end
-
-function PlexusStatusSummon:GroupChanged()
-    if self.db.profile.summon_status.enable then
-        self:UpdateAllUnits()
-    end
-end
-
-function PlexusStatusSummon:Plexus_UnitJoined(event, guid, unitid)
-    self:Debug("Plexus_UnitJoined event: ", event)
-    self:Debug("Plexus_UnitJoined guid: ", guid)
     if unitid and self.db.profile.summon_status.enable then
         self:UpdateUnit(unitid)
     end

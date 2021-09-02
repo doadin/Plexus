@@ -10,7 +10,7 @@
     Contributors: brubru777, Devfool, Matisk, NoGynGz, Pettigrow, Strigx, trasher
 ----------------------------------------------------------------------]]
 
-if GetLocale() ~= "frFR" then return end
+if _G.GetLocale() ~= "frFR" then return end
 
 local _, Plexus = ...
 local L = { }

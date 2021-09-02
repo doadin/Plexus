@@ -1,11 +1,28 @@
 --[[--------------------------------------------------------------------
     Plexus
     Compact party and raid unit frames.
-    Copyright (c) 2020 Doadin <doadinaddons@gmail.com>
+    Copyright (c) 2021 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
 local _, Plexus = ...
+
+local UnitGUID = _G.UnitGUID
+local UnitIsPlayer = _G.UnitIsPlayer
+local UnitPower = _G.UnitPower
+local UnitPowerMax = _G.UnitPowerMax
+local UnitPowerType = _G.UnitPowerType
+local GetNumGroupMembers = _G.GetNumGroupMembers
+local GetNumSubgroupMembers = _G.GetNumSubgroupMembers
+local GetSpecialization
+local GetSpecializationInfo
+local UnitGroupRolesAssigned
+if Plexus:IsRetailWow() then
+    GetSpecialization = _G.GetSpecialization
+    GetSpecializationInfo = _G.GetSpecializationInfo
+    UnitGroupRolesAssigned = _G.UnitGroupRolesAssigned
+end
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
@@ -385,26 +402,21 @@ end
 function PlexusStatusResource:UpdateUnitResource(unitid)
     local color
     if not unitid then return end
-    --local UnitGUID = UnitGUID(unitid)
-    --if not UnitGUID then return end
     local unitGUID = UnitGUID(unitid)
     local current, max = UnitPower(unitid), UnitPowerMax(unitid)
     local priority = PlexusStatusResource.db.profile.unit_resource.priority
     local EnableForHealers = PlexusStatusResource.db.profile.EnableForHealers
     local unitpower = UnitPowerType(unitid)
---@retail@
-    if EnableForHealers then
-        local members = GetNumGroupMembers();
-        local subGroupMembers = GetNumSubgroupMembers()
-        local currentSpec = GetSpecialization()
-        local currentSpecRole = currentSpec and select(5, GetSpecializationInfo(currentSpec)) or "None"
-        if ((members ~= 0 or subGroupMembers ~= 0) and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
-        (UnitGUID("player") == UnitGUID(unitid) and currentSpecRole ~= "HEALER") then
-            self.core:SendStatusLost(unitGUID, "unit_resource")
-            return
+    if Plexus:IsRetailWow() then
+        if EnableForHealers then
+            local currentSpecRole = GetSpecialization and select(5, GetSpecializationInfo(GetSpecialization())) or "None"
+            if ((GetNumGroupMembers() ~= 0 or GetNumSubgroupMembers() ~= 0) and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
+            (UnitGUID("player") == UnitGUID(unitid) and currentSpecRole ~= "HEALER") then
+                self.core:SendStatusLost(unitGUID, "unit_resource")
+                return
+            end
         end
     end
---@end-retail@
     local NoPets = PlexusStatusResource.db.profile.NoPets
     if (NoPets and not UnitIsPlayer(unitid)) then
         self.core:SendStatusLost(unitGUID, "unit_resource")

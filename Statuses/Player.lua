@@ -1,6 +1,9 @@
-local PlexusStatusPlayer
+local _, Plexus = ...
+--local L = Plexus.L
 
-PlexusStatusPlayer = Plexus:GetModule("PlexusStatus"):NewModule("PlexusStatusPlayer")
+local UnitGUID = _G.UnitGUID
+
+local PlexusStatusPlayer = Plexus:NewStatusModule("PlexusStatusPlayer")
 PlexusStatusPlayer.menuName = "Player"
 
 PlexusStatusPlayer.defaultDB = {

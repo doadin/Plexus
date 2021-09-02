@@ -7,13 +7,35 @@
 ----------------------------------------------------------------------]]
 
 local PLEXUS, Plexus = ...
-local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0")
-local LibDeflate = LibStub:GetLibrary('LibDeflate')
-local AceGUI = LibStub:GetLibrary("AceGUI-3.0")
-local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
-local format, strfind, strlen, tostring, type , tcopy = format, strfind, strlen, tostring, type, CopyTable
 
-_G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+local format = _G.format
+local strfind = _G.strfind
+local strjoin = _G.strjoin
+local strlen = _G.strlen
+local strlower = _G.strlower
+local strmatch = _G.strmatch
+local strtrim = _G.strtrim
+local strupper = _G.strupper
+local tinsert = _G.tinsert
+
+local CreateFrame = _G.CreateFrame
+local GetAddOnMetadata = _G.GetAddOnMetadata
+local InCombatLockdown = _G.InCombatLockdown
+local IsAddOnLoaded = _G.IsAddOnLoaded
+local StaticPopup_Show = _G.StaticPopup_Show
+local tostringall = _G.tostringall
+local WOW_PROJECT_ID = _G.WOW_PROJECT_ID
+local WOW_PROJECT_CLASSIC = _G.WOW_PROJECT_CLASSIC
+local WOW_PROJECT_BURNING_CRUSADE_CLASSIC = _G.WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+local WOW_PROJECT_MAINLINE = _G.WOW_PROJECT_MAINLINE
+
+local LDBIcon = _G.LibStub:GetLibrary("LibDBIcon-1.0")
+local LibDeflate = _G.LibStub:GetLibrary('LibDeflate')
+local AceGUI = _G.LibStub:GetLibrary("AceGUI-3.0")
+local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
+local tostring, type , tcopy = tostring, type, _G.CopyTable
+
+_G.Plexus = _G.LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
 _G.Grid = _G.Plexus
 end
@@ -477,27 +499,27 @@ Plexus:SetDefaultModuleLibraries("AceEvent-3.0")
 ------------------------------------------------------------------------
 
 function Plexus:OnInitialize()
-    self.db = LibStub:GetLibrary("AceDB-3.0"):New("PlexusDB", self.defaultDB, true)
+    self.db = _G.LibStub:GetLibrary("AceDB-3.0"):New("PlexusDB", self.defaultDB, true)
 
     self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileEnable")
     self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileEnable")
     self.db.RegisterCallback(self, "OnProfileReset", "OnProfileEnable")
 
-    self.options.args.profile = LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
+    self.options.args.profile = _G.LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
     self.options.args.profile.order = -3
     if Plexus:IsRetailWow() then
-      local LibDualSpec = LibStub:GetLibrary("LibDualSpec-1.0")
+      local LibDualSpec = _G.LibStub:GetLibrary("LibDualSpec-1.0")
       LibDualSpec:EnhanceDatabase(self.db, PLEXUS)
       LibDualSpec:EnhanceOptions(self.options.args.profile, self.db)
     end
 
-    LibStub:GetLibrary("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
+    _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
 
     --
     --	Broker launcher
     --
 
-    local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1", true)
+    local DataBroker = _G.LibStub:GetLibrary("LibDataBroker-1.1", true)
     if DataBroker then
         self.Broker = DataBroker:NewDataObject(PLEXUS, {
             type = "launcher",
@@ -508,7 +530,7 @@ function Plexus:OnInitialize()
                 elseif not InCombatLockdown() then
                     local PlexusLayout = Plexus:GetModule("PlexusLayout")
                     PlexusLayout.db.profile.lock = not PlexusLayout.db.profile.lock
-                    LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
+                    _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
                     PlexusLayout:UpdateTabVisibility()
                 end
             end,
@@ -584,8 +606,8 @@ function Plexus:OnProfileEnable()
 end
 
 function Plexus:SetupOptions()
-    local Command = LibStub:GetLibrary("AceConfigCmd-3.0")
-    local Dialog = LibStub:GetLibrary("AceConfigDialog-3.0")
+    local Command = _G.LibStub:GetLibrary("AceConfigCmd-3.0")
+    local Dialog = _G.LibStub:GetLibrary("AceConfigDialog-3.0")
 
     ---------------------------------------------------------------------
     --	Standalone options
@@ -624,7 +646,7 @@ function Plexus:SetupOptions()
         end
     end)
 
-    InterfaceOptionsFrame:HookScript("OnShow", function()
+    _G.InterfaceOptionsFrame:HookScript("OnShow", function()
         Dialog:Close(PLEXUS)
     end)
 
@@ -672,15 +694,15 @@ end
 
 function Plexus:ToggleOptions()
     if self.db.profile.standaloneOptions then
-        local Dialog = LibStub:GetLibrary("AceConfigDialog-3.0")
+        local Dialog = _G.LibStub:GetLibrary("AceConfigDialog-3.0")
         if Dialog.OpenFrames[PLEXUS] then
             Dialog:Close(PLEXUS)
         else
             Dialog:Open(PLEXUS)
         end
     else
-        InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
-        InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
+        _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
+        _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
     end
 end
 

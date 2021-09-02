@@ -12,6 +12,14 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local GetThreatStatusColor
+if Plexus:IsRetailWow() then
+    GetThreatStatusColor = _G.GetThreatStatusColor
+end
+local UnitGUID = _G.UnitGUID
+local UnitIsVisible = _G.UnitIsVisible
+local UnitThreatSituation = _G.UnitThreatSituation
+
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
@@ -24,31 +32,15 @@ local function getthreatcolor(status)
         return { r = r, g = g, b = b, a = 1 }
     end
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
-        --function GetThreatStatusColor(status)
-        --    if status == 1 then
-        --        return 0, 0, 0, 0
-        --    end
-        --    if status == 2 then
-        --        return 255, 255, 0, 1
-        --    end
-        --    if status == 3 then
-        --        return 1, 0, 0, 1
-        --    end
-        --end
         if status == 1 then
-            --return 0, 0, 0, 0
             return { r = 0, g = 0, b = 0, a = 0 }
         end
         if status == 2 then
-            --return 255, 255, 0, 1
             return { r = 255, g = 255, b = 0, a = 1 }
         end
         if status == 3 then
-            --return 1, 0, 0, 1
             return { r = 1, g = 0, b = 0, a = 1 }
         end
-        --local r, g, b, a = GetThreatStatusColor(status)
-        --return { r = r, g = g, b = b, a = a }
     end
 end
 
