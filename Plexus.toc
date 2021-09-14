@@ -26,9 +26,6 @@
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
-#@non-retail@
-Libs\LibHealComm-4.0\ChatThrottleLib.lua
-#@end-non-retail@
 Libs\AceAddon-3.0\AceAddon-3.0.lua
 Libs\AceBucket-3.0\AceBucket-3.0.lua
 Libs\AceGUI-3.0\AceGUI-3.0.xml
@@ -49,6 +46,7 @@ Libs\LibDeflate\LibDeflate.lua
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
 #@version-classic@
+Libs\LibHealComm-4.0\ChatThrottleLib.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
 #@end-version-classic@
 #@non-retail@
