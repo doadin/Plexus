@@ -16,4 +16,5 @@ artifacts:
 
 build_script:
   - curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmeta
-  - curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g 1.13.4
+  - curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g classic
+  - curl -s https://raw.githubusercontent.com/doadin/packager/master/release.sh | bash -s -- -m .pkgmetaclassic -g bcc

@@ -35,4 +35,4 @@ jobs:
       - name: Package BC Classic
         uses: BigWigsMods/packager@master
         with:
-          args: -g bcc -m .pkgmeta-classic
+          args: -g bcc -m .pkgmeta-tbc
