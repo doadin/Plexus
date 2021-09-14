@@ -48,8 +48,10 @@ Libs\LibDeflate\LibDeflate.lua
 #@retail@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
-#@non-retail@
+#@version-classic@
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
+#@end-version-classic@
+#@non-retail@
 Libs\LibClassicDurations\LibClassicDurations.xml
 #@end-non-retail@
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
