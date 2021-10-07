@@ -49,6 +49,10 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 Libs\LibHealComm-4.0\ChatThrottleLib.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
 #@end-version-classic@
+#@version-bcc@
+Libs\LibHealComm-4.0\ChatThrottleLib.lua
+Libs\LibHealComm-4.0\LibHealComm-4.0.lua
+#@end-version-bcc@
 #@non-retail@
 Libs\LibClassicDurations\LibClassicDurations.xml
 #@end-non-retail@
