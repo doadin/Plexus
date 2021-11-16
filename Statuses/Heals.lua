@@ -153,12 +153,10 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             incoming = UnitGetIncomingHeals(unit) or 0
         end
         if Plexus:IsClassicWow() then
-            local myGUID = UnitGUID('player')
-            local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
+            local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1)
             incoming = (incoming + myIncomingHeal) or 0
         end
         if Plexus:IsTBCWow() then
-            local myGUID = UnitGUID('player')
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1) + (UnitGetIncomingHeals(unit) or 0)
             incoming = myIncomingHeal or 0
         end
@@ -172,7 +170,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
                 incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
             if Plexus:IsTBCWow() then
-                incoming = incoming - ((HealComm:GetOthersHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) - (UnitGetIncomingHeals(unit, "player") or 0))
+                incoming = (HealComm:GetOthersHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) + (UnitGetIncomingHeals(unit) - (UnitGetIncomingHeals(unit, "player") or 0))
             end
             if Plexus:IsRetailWow() then
                 incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
