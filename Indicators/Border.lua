@@ -19,9 +19,7 @@ local BACKDROP = {
 PlexusFrame:RegisterIndicator("border", L["Border"],
     -- New
     function(frame)
-        if not Plexus:IsClassicWow() then
-            _G.Mixin(frame, _G.BackdropTemplateMixin)
-        end
+        _G.Mixin(frame, _G.BackdropTemplateMixin)
         frame:SetBackdrop(BACKDROP)
         return {}
     end,
