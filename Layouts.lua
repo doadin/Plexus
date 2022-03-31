@@ -56,6 +56,34 @@ local Layouts = {
         },
         -- additional groups added/removed dynamically
     },
+    ByGroupRole = {
+        name = L["By Group & Role"],
+        defaults = {
+            groupBy = DEFAULT_ROLE,
+            groupingOrder = DEFAULT_ROLE_ORDER,
+            sortMethod = "NAME",
+            unitsPerColumn = 5,
+            maxColumns = 1,
+        },
+        [1] = {
+            groupFilter = "1",
+        },
+        -- additional groups added/removed dynamically
+    },
+    ByGroupRolePets = {
+        name = L["By Group & Role With Pets"],
+        defaults = {
+            groupBy = DEFAULT_ROLE,
+            groupingOrder = DEFAULT_ROLE_ORDER,
+            sortMethod = "NAME",
+            unitsPerColumn = 5,
+            maxColumns = 1,
+        },
+        [1] = {
+            groupFilter = "1",
+        },
+        -- additional groups added/removed dynamically
+    },
     ByClass = {
         name = L["By Class"],
         defaults = {
@@ -125,7 +153,7 @@ local Layouts = {
         [1] = {
             groupFilter = "1", -- updated dynamically
         },
-    }
+    },
 }
 --@debug@
 _G.PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
@@ -313,6 +341,8 @@ function Manager:UpdateLayouts(event)
     -- Update group layout (always split)
     UpdateSplitGroups(Layouts.ByGroup, groupFilter, numGroups, false)
     UpdateSplitGroups(Layouts.ByGroupPets, groupFilter, numGroups, true)
+    UpdateSplitGroups(Layouts.ByGroupRole, groupFilter, numGroups, false)
+    UpdateSplitGroups(Layouts.ByGroupRolePets, groupFilter, numGroups, true)
     UpdateSplitGroups(Layouts.ByName, groupFilter, numGroups, false)
     UpdateSplitGroups(Layouts.ByNamePets, groupFilter, numGroups, true)
 
