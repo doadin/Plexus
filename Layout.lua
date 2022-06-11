@@ -157,7 +157,9 @@ end
 local initialConfigSnippet = [[
    RegisterUnitWatch(self)
    self:SetAttribute("*type1", "target")
-   self:SetAttribute("toggleForVehicle", true)
+   self:SetAttribute("useparent-toggleForVehicle", true)
+   self:SetAttribute("useparent-allowVehicleTarget", true)
+   self:SetAttribute("useparent-unitsuffix", true)
 
    local header = self:GetParent()
    if header:GetAttribute("unitsuffix") == "pet" then
