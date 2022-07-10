@@ -191,7 +191,7 @@ function PlexusStatusResurrect:UNIT_SPELLCAST_START(event, source, destGUID, cas
     for spelllistid, _ in pairs(ResSpells) do
         if spellid == spelllistid then
             for guid, unit in PlexusRoster:IterateRoster() do
-                if not destGUID == guid then return end
+                if destGUID ~= guid then return end
                 if UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit) then
                     local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(sourceguid)
                     local _, _, icon = GetSpellInfo(spellid)
