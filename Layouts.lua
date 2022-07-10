@@ -9,7 +9,6 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local C_Map = _G.C_Map
 local GetNumGroupMembers = _G.GetNumGroupMembers
 local GetRaidRosterInfo = _G.GetRaidRosterInfo
 
