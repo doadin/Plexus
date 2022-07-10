@@ -213,19 +213,14 @@ function PlexusStatusPhase:UpdateUnit(unitid)
     local settings = self.db.profile.phase_status
     local key
 	if reason == _G.Enum.PhaseReason.WarMode then
-		key = "WAR_MODE"
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, "WAR_MODE", settings)
 	elseif reason == _G.Enum.PhaseReason.ChromieTime then
-		key = "CHROMIE_TIME"
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, "CHROMIE_TIME", settings)
 	elseif reason == _G.Enum.PhaseReason.Phasing then
-		key = "PHASING"
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, "PHASING", settings)
 	elseif reason == _G.Enum.PhaseReason.Sharding then
-		key = "SHARDING"
-        self:GainStatus(guid, key, settings)
+        self:GainStatus(guid, "SHARDING", settings)
     elseif not reason then
-        key = "NORMAL"
 		self.core:SendStatusLost(guid, "phase_status")
 	end
 end
