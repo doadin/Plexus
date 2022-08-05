@@ -97,7 +97,7 @@ spell_names = {
 }
 end
 
-if Plexus:IsTBCWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
     spell_names = {
 -- All
     ["Ghost"] = GetSpellInfo(8326),
@@ -788,7 +788,7 @@ PlexusStatusAuras.defaultDB = {
 }
 end
 
-if Plexus:IsTBCWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
     PlexusStatusAuras.defaultDB = {
         advancedOptions = false,
     --[[
