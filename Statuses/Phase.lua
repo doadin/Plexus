@@ -211,7 +211,6 @@ function PlexusStatusPhase:UpdateUnit(unitid)
     local guid = UnitGUID(unitid)
     local reason = UnitPhaseReason(unitid)
     local settings = self.db.profile.phase_status
-    local key
 	if reason == _G.Enum.PhaseReason.WarMode then
         self:GainStatus(guid, "WAR_MODE", settings)
 	elseif reason == _G.Enum.PhaseReason.ChromieTime then
