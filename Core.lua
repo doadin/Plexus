@@ -333,7 +333,11 @@ function Plexus:IsClassicWow() --luacheck: ignore 212
 end
 
 function Plexus:IsTBCWow() --luacheck: ignore 212
-	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
+end
+
+function Plexus:IsWrathWow() --luacheck: ignore 212
+	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == 2
 end
 
 function Plexus:IsRetailWow() --luacheck: ignore 212
