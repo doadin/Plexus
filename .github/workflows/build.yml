@@ -36,3 +36,8 @@ jobs:
         uses: BigWigsMods/packager@master
         with:
           args: -g bcc -m .pkgmeta-tbc
+
+      - name: Package Wrath Classic
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g wrath -m .pkgmeta-wrath
