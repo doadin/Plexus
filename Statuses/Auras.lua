@@ -1659,6 +1659,45 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Curse   = IsPlayerSpell(475)
         end
     end
+    if Plexus:IsWrathWow() then
+        if PLAYER_CLASS == "DRUID" then
+            --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
+            --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
+            --  8946    Cure Poison         Balance, Feral, Guardian, Restoration    Poison
+            PlayerCanDispel.Curse   = IsPlayerSpell(2782)
+            PlayerCanDispel.Poison  = IsPlayerSpell(2893) or IsPlayerSpell(8946)
+
+        elseif PLAYER_CLASS == "PALADIN" then
+            --   4987   Cleanse           Holy                        Disease, Poison, Magic
+            --   1152   Purify            Protection, Retribution     Disease, Poison
+            PlayerCanDispel.Disease = IsPlayerSpell(4987) or IsPlayerSpell(1152)
+            PlayerCanDispel.Magic   = IsPlayerSpell(4987)
+            PlayerCanDispel.Poison  = IsPlayerSpell(4987) or IsPlayerSpell(1152)
+
+        elseif PLAYER_CLASS == "PRIEST" then
+            --    552   Abolish Disease   Shadow                      Disease
+            --    528   Cure Disease      Shadow                      Disease
+            --    527   Dispel Magic      Shadow                      Magic
+            PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(988)
+
+        elseif PLAYER_CLASS == "SHAMAN" then
+            --  8166    Poison Cleansing Totem      Restoration                 Poison
+            --  8170    Disease Cleansing Totem     Restoration                 Disease
+            --  526     Cure Poison                 Restoration                 Poison
+            --  2870    Cure Disease                Restoration                 Disease
+            PlayerCanDispel.Disease = IsPlayerSpell(526) or IsPlayerSpell(8170)
+            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(8170)
+
+        elseif PLAYER_CLASS == "WARLOCK" then
+            --  19505   Devour Magic (Felhunter)
+            PlayerCanDispel.Magic   = IsSpellKnown(19505, true)
+
+        elseif PLAYER_CLASS == "MAGE" then
+            -- 475   Remove Curse       Fire, Arcane, Frost        Curse
+            PlayerCanDispel.Curse   = IsPlayerSpell(475)
+        end
+    end
 end
 
 -- Unit Aura Driver
