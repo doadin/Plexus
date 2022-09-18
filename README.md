@@ -1,4 +1,4 @@
-**Plexus** [![Build Status](https://travis-ci.com/doadin/Plexus.svg?branch=master)](https://travis-ci.com/doadin/Plexus)
+**Plexus** [![CI-LuaCheck](https://github.com/doadin/Plexus/actions/workflows/check.yml/badge.svg)](https://github.com/doadin/Plexus/actions/workflows/check.yml)
 
 The compact plexus of units lets you select a group member quickly, while keeping a good overview of the whole group. Plexus is designed to show you only what you need to know, and not overload you with irrelevant information. It is highly configurable, letting you choose exactly what is shown, and how it's shown. There are also many plugins that add even more features!
 
