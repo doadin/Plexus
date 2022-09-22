@@ -154,9 +154,9 @@ local Layouts = {
         },
     },
 }
---@debug@
+--[==[@debug@
 _G.PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
---@end-debug@
+--@end-debug@]==]
 
 --------------------------------------------------------------------------------
 
@@ -178,13 +178,13 @@ end
 --------------------------------------------------------------------------------
 
 local function AddPetGroup(t, groupFilter, numGroups)
---@debug@
+--[==[@debug@
     assert(t == nil or type(t) == "table")
     assert(type(groupFilter) == "string")
     assert(string.len(groupFilter) > 0 and string.len(groupFilter) % 2 == 1)
     assert(type(numGroups) == "number")
     assert(numGroups == (1 + string.len(groupFilter)) / 2)
---@end-debug@
+--@end-debug@]==]
     t = t or {}
     t.groupFilter = groupFilter
     t.maxColumns = numGroups
@@ -199,13 +199,13 @@ end
 
 
 local function UpdateSplitGroups(layout, groupFilter, numGroups, showPets)
---@debug@
+--[==[@debug@
     assert(type(layout) == "table")
     assert(type(groupFilter) == "string")
     assert(string.len(groupFilter) > 0 and string.len(groupFilter) % 2 == 1)
     assert(type(numGroups) == "number")
     assert(numGroups == (1 + string.len(groupFilter)) / 2)
---@end-debug@
+--@end-debug@]==]
 
     for i = 1, numGroups do
         local t = layout[i] or {}
@@ -235,13 +235,13 @@ end
 
 
 local function UpdateMergedGroups(layout, groupFilter, numGroups, showPets)
---@debug@
+--[==[@debug@
     assert(type(layout) == "table")
     assert(type(groupFilter) == "string")
     assert(string.len(groupFilter) > 0 and string.len(groupFilter) % 2 == 1)
     assert(type(numGroups) == "number")
     assert(numGroups == (1 + string.len(groupFilter)) / 2)
---@end-debug@
+--@end-debug@]==]
 
     layout[1].groupFilter = groupFilter
     layout[1].maxColumns = numGroups
@@ -268,6 +268,8 @@ function Manager:GetGroupFilter()
     local showWrongZone = Layout:ShowWrongZone()
     local _, _, diffIndex = _G.GetInstanceInfo()
     local curMapID = _G.C_Map.GetBestMapForUnit("player")
+    local curMapInfo = {}
+    curMapInfo = _G.C_Map.GetMapInfo(curMapID)
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
     for i = 1, MAX_RAID_GROUPS do
@@ -277,6 +279,8 @@ function Manager:GetGroupFilter()
     for i = 1, GetNumGroupMembers() do
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local mapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
+	local mapInfo = {}
+	mapInfo = _G.C_Map.GetMapInfo(mapID)
 
         if showWrongZone == "MYTHICFIXED" then
             if diffIndex == 16 and subgroup < 5 then
@@ -285,7 +289,7 @@ function Manager:GetGroupFilter()
                 hideGroup[subgroup] = nil
             end
         end
-        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or curMapID == mapID) then
+        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or curMapInfo.parentMapID == mapInfo.parentMapID) then
             hideGroup[subgroup] = nil
         end
     end
@@ -295,10 +299,10 @@ function Manager:GetGroupFilter()
         if not hideGroup[i] then
             groupFilter = groupFilter .. "," .. i
             numGroups = numGroups + 1
---@debug@
+--[==[@debug@
         else
             self:Debug("Group", i, "hidden:", hideGroup[i])
---@end-debug@
+--@end-debug@]==]
         end
     end
     return groupFilter:sub(2), numGroups
