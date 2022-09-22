@@ -280,7 +280,7 @@ function Manager:GetGroupFilter()
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local mapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
 	local mapInfo = {}
-	mapInfo = _G.C_Map.GetMapInfo(mapID)
+	mapInfo = mapID and _G.C_Map.GetMapInfo(mapID)
 
         if showWrongZone == "MYTHICFIXED" then
             if diffIndex == 16 and subgroup < 5 then
@@ -289,7 +289,7 @@ function Manager:GetGroupFilter()
                 hideGroup[subgroup] = nil
             end
         end
-        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or curMapInfo.parentMapID == mapInfo.parentMapID) then
+        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or mapInfo and curMapInfo.parentMapID == mapInfo.parentMapID) then
             hideGroup[subgroup] = nil
         end
     end
