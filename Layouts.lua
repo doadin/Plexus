@@ -268,7 +268,7 @@ function Manager:GetGroupFilter()
     local showWrongZone = Layout:ShowWrongZone()
     local _, _, diffIndex = _G.GetInstanceInfo()
     local curMapID = _G.C_Map.GetBestMapForUnit("player")
-    local curMapInfo = _G.C_Map.GetMapInfo(curMapID)
+    local curMapInfo = curMapID and _G.C_Map.GetMapInfo(curMapID)
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
     for i = 1, MAX_RAID_GROUPS do
