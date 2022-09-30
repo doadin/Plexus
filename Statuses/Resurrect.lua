@@ -198,10 +198,13 @@ function PlexusStatusResurrect:UNIT_SPELLCAST_START(event, source, destGUID, cas
                     if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
                     if not startTimeMS then startTimeMS = GetTime() end
                     if not endTimeMS then endTimeMS = startTimeMS + 10 end
-                    local duration = ((endTimeMS - startTimeMS))
+                    local duration = endTimeMS - startTimeMS
                     --combat res does not work with above math.
+                    if spellid == (8342 or 22999 or 54732 or 164729 or 265116) then
+                        duration = 4
+                    end
                     if duration <= 0 then
-                        duration = ((endTimeMS - startTimeMS))
+                        duration = 1
                     end
                     self.core:SendStatusGained(guid, "alert_resurrect",
                     db.priority,
