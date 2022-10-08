@@ -152,26 +152,26 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         if Plexus:IsRetailWow() then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
-        if Plexus:IsClassicWow() then
+        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1)
             incoming = (incoming + myIncomingHeal) or 0
         end
-        if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-            local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1) + (UnitGetIncomingHeals(unit) or 0)
-            incoming = myIncomingHeal or 0
-        end
+        --if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+        --    local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1) + (UnitGetIncomingHeals(unit) or 0)
+        --    incoming = myIncomingHeal or 0
+        --end
         if incoming > 0 then
             if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
                 self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
             end
         end
         if settings.ignore_self then
-            if Plexus:IsClassicWow() then
+            if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
                 incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
-            if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-                incoming = (HealComm:GetOthersHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) + (UnitGetIncomingHeals(unit) - (UnitGetIncomingHeals(unit, "player") or 0))
-            end
+            --if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+            --    incoming = (HealComm:GetOthersHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) + (UnitGetIncomingHeals(unit) - (UnitGetIncomingHeals(unit, "player") or 0))
+            --end
             if Plexus:IsRetailWow() then
                 incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
             end

@@ -1686,8 +1686,10 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --  8170    Disease Cleansing Totem     Restoration                 Disease
             --  526     Cure Poison                 Restoration                 Poison
             --  2870    Cure Disease                Restoration                 Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(526) or IsPlayerSpell(8170)
-            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(8170)
+            --  51886   Cleanse Spirit                                          Poison, Disease, Curse
+            PlayerCanDispel.Disease = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
+            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
+            PlayerCanDispel.Curse   = IsPlayerSpell(51886)
 
         elseif PLAYER_CLASS == "WARLOCK" then
             --  19505   Devour Magic (Felhunter)
