@@ -287,7 +287,7 @@ function Manager:GetGroupFilter()
                 hideGroup[subgroup] = nil
             end
         end
-        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or mapInfo and curMapInfo.parentMapID == mapInfo.parentMapID) then
+        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or mapInfo and curMapInfo and curMapInfo.parentMapID == mapInfo.parentMapID) then
             hideGroup[subgroup] = nil
         end
     end
