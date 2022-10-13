@@ -18,6 +18,7 @@ local format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring,
 local GetSpellInfo = _G.GetSpellInfo
 local IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
     = _G.IsPlayerSpell, _G.IsSpellKnown, _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsVisible
+local GetAuraDataByAuraInstanceID, ForEachAura = _G.C_UnitAuras.GetAuraDataByAuraInstanceID, _G.AuraUtil.ForEachAura
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -1573,8 +1574,8 @@ function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
 	if Plexus:IsRetailWow() then
 	    local unitauraInfo = {}
-	    AuraUtil.ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-	    AuraUtil.ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+	    ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+	    ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
 	    self:ScanUnitAurasByInfo(unitid, unitauraInfo, guid)
 	else
 	    self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
@@ -1585,8 +1586,8 @@ end
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
     if Plexus:IsRetailWow() then
 	local unitauraInfo = {}
-	AuraUtil.ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-	AuraUtil.ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+	ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+	ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
 	self:ScanUnitAurasByInfo(unitid, unitauraInfo, guid)
     else
         self:ScanUnitAuras(event, unitid, guid)
@@ -2365,8 +2366,8 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras, guid)
     if updatedAuras.isFullUpdate then
 	for guid, unit in PlexusRoster:IterateRoster() do
 	    local unitauraInfo = {}
-	    AuraUtil.ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-	    AuraUtil.ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+	    ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+	    ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
 	    self:ScanUnitAurasByInfo(unit, unitauraInfo, guid)
 	end
     else
@@ -2378,7 +2379,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras, guid)
 	if updatedAuras.updatedAuraInstanceIDs then
 	   for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
 	       local updatedAuraInfo = {}
-	       updatedAuraInfo[auraInstanceID] = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+	       updatedAuraInfo[auraInstanceID] = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
 	       self:ScanUnitAurasByInfo(unit, updatedAuraInfo[auraInstanceID], guid)
 	   end
 	end
@@ -2392,7 +2393,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras, guid)
     if UnitExists(unit) and UnitAuraInstanceID[unit] then
         local aurainstanceinfo = {}
 	for instanceID in pairs(UnitAuraInstanceID[unit]) do
-	    aurainstanceinfo = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, instanceID)
+	    aurainstanceinfo = GetAuraDataByAuraInstanceID(unit, instanceID)
 	    local name, icon, count, duration, expirationTime, caster, isStealable = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.charges, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.isStealable
 	    local debuffType = aurainstanceinfo.isHelpful and "HELPFUL" or aurainstanceinfo.isHarmful and "HARMFUL"
 
