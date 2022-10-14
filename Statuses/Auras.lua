@@ -2380,7 +2380,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras, guid)
 	   for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
 	       local updatedAuraInfo = {}
 	       updatedAuraInfo[auraInstanceID] = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-	       self:ScanUnitAurasByInfo(unit, updatedAuraInfo[auraInstanceID], guid)
+	       if updatedAuraInfo then
+	          self:ScanUnitAurasByInfo(unit, updatedAuraInfo[auraInstanceID], guid)
+	       end
 	   end
 	end
 	if updatedAuras.removedAuraInstanceIDs then
