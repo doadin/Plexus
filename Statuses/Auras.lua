@@ -1070,7 +1070,7 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    if Plexus.IsRetailWow() and tocversion >= 100000 then
+    if Plexus:IsRetailWow() and tocversion >= 100000 then
         self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
     else
         self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
@@ -1582,7 +1582,7 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if Plexus.IsRetailWow() and tocversion >= 100000 then
+        if Plexus:IsRetailWow() and tocversion >= 100000 then
             local unitauraInfo = {}
             ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
             ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
@@ -1594,7 +1594,7 @@ function PlexusStatusAuras:UpdateAllUnitAuras()
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if Plexus.IsRetailWow() and tocversion >= 100000 then
+    if Plexus:IsRetailWow() and tocversion >= 100000 then
         local unitauraInfo = {}
         ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
         ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
@@ -1605,7 +1605,7 @@ function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
-    if Plexus.IsRetailWow() then
+    if Plexus:IsRetailWow() then
         if PLAYER_CLASS == "DRUID" then
             --  88423   Nature's Cure       Restoration                Curse, Poison, Magic
             --   2782   Remove Corruption   Balance, Feral, Guardian   Curse, Poison
@@ -1658,7 +1658,7 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
         end
     end
-    if Plexus.IsClassicWow() or Plexus.IsTBCWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
         if PLAYER_CLASS == "DRUID" then
             --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
             --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
