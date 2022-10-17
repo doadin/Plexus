@@ -2059,11 +2059,11 @@ function PlexusStatusAuras:UnitGainedPlayerBuff(guid, class, name, rank, icon, c
     settings.icon = icon
 
     if settings.enable and not settings.missing then -- and settings[class] ~= false then -- ##DELETE
-	local start = expirationTime and (expirationTime - duration)
+        local start = expirationTime and (expirationTime - duration)
         local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
         local text, color = self:StatusTextColor(settings, count, timeLeft)
-	if duration and expirationTime and duration > 0 and expirationTime > 0 then
-	    self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+        if duration and expirationTime and duration > 0 and expirationTime > 0 then
+            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
         end
         self.core:SendStatusGained(guid,
             status,
@@ -2079,7 +2079,7 @@ function PlexusStatusAuras:UnitGainedPlayerBuff(guid, class, name, rank, icon, c
             count,
             ICON_TEX_COORDS)
     else
-	self.core:SendStatusLost(guid, status)
+        self.core:SendStatusLost(guid, status)
     end
 end
 
@@ -2292,8 +2292,8 @@ function PlexusStatusAuras:UpdateAuraScanList()
 
                 if isBuff then
                     if settings.mine then
-			self:Debug("Added to player_buff_names")
-			player_buff_names[name] = status
+                        self:Debug("Added to player_buff_names")
+                        player_buff_names[name] = status
                     else
                         self:Debug("Added to buff_names")
                         buff_names[name] = status
@@ -2522,8 +2522,8 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
                 self:UnitGainedBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
             end
 
-	    -- scan for buffs cast by the player
-	    if player_buff_names[name] and caster == "player" then
+            -- scan for buffs cast by the player
+            if player_buff_names[name] and caster == "player" then
                 player_buff_names_seen[name] = true
                 self:UnitGainedPlayerBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
             end
