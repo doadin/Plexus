@@ -654,9 +654,16 @@ function Plexus:SetupOptions()
         end
     end)
 
-    _G.InterfaceOptionsFrame:HookScript("OnShow", function()
-        Dialog:Close(PLEXUS)
-    end)
+    local version, build, date, tocversion = GetBuildInfo()
+    if Plexus:IsRetailWow() and tocversion >= 100000 then
+        _G.SettingsPanel:HookScript("OnShow", function()
+            Dialog:Close(PLEXUS)
+        end)
+    else
+        _G.InterfaceOptionsFrame:HookScript("OnShow", function()
+            Dialog:Close(PLEXUS)
+        end)
+    end
 
     ---------------------------------------------------------------------
     --	Interface Options frame integrated options
