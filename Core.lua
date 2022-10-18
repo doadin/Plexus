@@ -709,8 +709,13 @@ function Plexus:ToggleOptions()
             Dialog:Open(PLEXUS)
         end
     else
-        _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
-        _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
+        local version, build, date, tocversion = GetBuildInfo()
+        if tocversion >= 100000 then
+            Settings.OpenToCategory(self.optionsPanels[2])
+        else
+            _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
+            _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
+        end
     end
 end
 

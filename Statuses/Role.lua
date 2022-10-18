@@ -209,7 +209,7 @@ end
 
 function PlexusStatusRole:UpdateUnit(event, unit, guid)
     local role
-    if Plexus.IsClassicWow() then
+    if Plexus:IsClassicWow() then
         local LibClassicSpecs = _G.LibStub("LibClassicSpecs")
         role = LibClassicSpecs.Role
     else

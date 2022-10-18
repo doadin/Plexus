@@ -38,7 +38,7 @@ function PlexusStatusVehicle:OnStatusEnable(status)
     if status == "alert_vehicleui" then return end
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
-    if not Plexus.IsClassicWow() then
+    if not Plexus:IsClassicWow() then
         self:RegisterEvent("UNIT_ENTERED_VEHICLE", "UpdateUnit")
         self:RegisterEvent("UNIT_EXITED_VEHICLE", "UpdateUnit")
     end
@@ -50,7 +50,7 @@ function PlexusStatusVehicle:OnStatusDisable(status)
     if status ~= "alert_vehicleui" then return end
 
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-    if not Plexus.IsClassicWow() then
+    if not Plexus:IsClassicWow() then
         self:UnregisterEvent("UNIT_ENTERED_VEHICLE")
         self:UnregisterEvent("UNIT_EXITED_VEHICLE")
     end
