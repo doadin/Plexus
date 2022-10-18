@@ -58,17 +58,17 @@ function PlexusStatusHostileUnit:Update(unitid)
         return
     end
 
-    local plexusName = UnitGUID(unitid);
-    local hostile = UnitCanAttack("player", unitid);
+    local plexusName = UnitGUID(unitid)
+    local hostile = UnitCanAttack("player", unitid)
 
     if hostile then
         self.core:SendStatusGained(plexusName, "unitIsHostile",
-                    settings.unitIsHostile.priority,
-                    nil, --"Interface\\Icons\\Spell_Shadow_ShadowWordDominate"
-                    settings.unitIsHostile.color,
-                    settings.unitIsHostile.text,
-                    nil,
-                    "Interface\\Icons\\Spell_Shadow_ShadowWordDominate"
+            settings.unitIsHostile.priority,
+            nil, --"Interface\\Icons\\Spell_Shadow_ShadowWordDominate"
+            settings.unitIsHostile.color,
+            settings.unitIsHostile.text,
+            nil,
+            "Interface\\Icons\\Spell_Shadow_ShadowWordDominate"
         )
     else
         self.core:SendStatusLost(plexusName, "unitIsHostile")
