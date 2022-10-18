@@ -36,15 +36,6 @@ PlexusStatusResource.defaultDB = {
     manacolor = { r = 0, g = 0.5, b = 1, a = 1.0 },
     energycolor = { r = 1, g = 1, b = 0, a = 1.0 },
     ragecolor = { r = 1, g = 0, b = 0, a = 1.0 },
---@retail@
-    runiccolor = { r = 0, g = 0.8, b = 0.8, a = 1.0 },
-    focuscolor = { r = 1, g = 0.50, b = 0.25, a = 1.0 };
-    insanitycolor = { r = 0.40, g = 0, b = 0.80, a = 1.0 };
-    furycolor = { r = 0.788, g = 0.259, b = 0.992, a = 1.0 };
-    paincolor = { r = 255/255, g = 156/255, b = 0, a = 1.0 };
-    maelstromcolor = { r = 0.00, g = 0.50, b = 1.00, a = 1.0 };
-    lunarcolor = { r = 0.30, g = 0.52, b = 0.90, a = 1.0 };
---@end-retail@
     unit_resource = {
         color = { r=1, g=1, b=1, a=1 },
         text = "Resource",
@@ -52,29 +43,21 @@ PlexusStatusResource.defaultDB = {
         priority = 30,
         range = false
     },
---@retail@
-    EnableForHealers = false,
---@end-retail@
     EnableOnlyMana = false,
     NoPets = false,
 }
+if Plexus:IsRetailWow() then
+    PlexusStatusResource.defaultDB.runiccolor = { r = 0, g = 0.8, b = 0.8, a = 1.0 }
+    PlexusStatusResource.defaultDB.focuscolor = { r = 1, g = 0.50, b = 0.25, a = 1.0 }
+    PlexusStatusResource.defaultDB.insanitycolor = { r = 0.40, g = 0, b = 0.80, a = 1.0 }
+    PlexusStatusResource.defaultDB.furycolor = { r = 0.788, g = 0.259, b = 0.992, a = 1.0 }
+    PlexusStatusResource.defaultDB.paincolor = { r = 255/255, g = 156/255, b = 0, a = 1.0 }
+    PlexusStatusResource.defaultDB.maelstromcolor = { r = 0.00, g = 0.50, b = 1.00, a = 1.0 }
+    PlexusStatusResource.defaultDB.lunarcolor = { r = 0.30, g = 0.52, b = 0.90, a = 1.0 }
+    PlexusStatusResource.defaultDB.EnableForHealers = false
+end
 
 local resource_options = {
---@retail@
-    ["Resource Healer Only"] = {
-        type = "toggle",
-        name = "Only show for healers",
-        order = 50,
-        desc = "Only show healers resource",
-        get = function ()
-            return PlexusStatusResource.db.profile.EnableForHealers
-            end,
-        set = function(_, v)
-            PlexusStatusResource.db.profile.EnableForHealers = v
-            PlexusStatusResource:UpdateAllUnits()
-        end
-    },
---@end-retail@
     ["Resource Mana Only"] = {
         type = "toggle",
         name = "Only show mana",
@@ -159,127 +142,6 @@ local resource_options = {
                     PlexusFrame:UpdateAllFrames()
                 end,
             },
---@retail@
-            ["Runic Color"] = {
-                name = "Runic Color",
-                order = 70,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.runiccolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.runiccolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
-            ["Focus Color"] = {
-                name = "Focus Color",
-                order = 80,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.focuscolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.focuscolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
-            ["Insanity Color"] = {
-                name = "Insanity Color",
-                order = 90,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.insanitycolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.insanitycolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
-            ["Fury Color"] = {
-                name = "Fury Color",
-                order = 100,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.furycolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.furycolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
-            ["Pain Color"] = {
-                name = "Pain Color",
-                order = 110,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.paincolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.paincolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
-            ["Maelstrom Color"] = {
-                name = "Maelstrom Color",
-                order = 120,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.maelstromcolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.maelstromcolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
-            ["Lunar Color"] = {
-                name = "Lunar Color(Balance Druid)",
-                order = 130,
-                type = "color", hasAlpha = true,
-                get = function()
-                    local color = PlexusStatusResource.db.profile.lunarcolor
-                    return color.r, color.g, color.b, color.a
-                end,
-                set = function(_, r, g, b, a)
-                    local color = PlexusStatusResource.db.profile.lunarcolor
-                    color.r = r
-                    color.g = g
-                    color.b = b
-                    color.a = a or 1
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            },
---@end-retail@
             ["Reset"] = {
                 order = 1000,
                 name = "Reset Resource colors (Require Reload)",
@@ -289,6 +151,140 @@ local resource_options = {
         },
     },
 }
+if Plexus:IsRetailWow() then
+    resource_options["Resource Healer Only"] = {
+        type = "toggle",
+        name = "Only show for healers",
+        order = 50,
+        desc = "Only show healers resource",
+        get = function ()
+            return PlexusStatusResource.db.profile.EnableForHealers
+            end,
+        set = function(_, v)
+            PlexusStatusResource.db.profile.EnableForHealers = v
+            PlexusStatusResource:UpdateAllUnits()
+        end
+    }
+    resource_options["Runic Color"] = {
+        name = "Runic Color",
+        order = 70,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.runiccolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.runiccolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+    resource_options["Focus Color"] = {
+        name = "Focus Color",
+        order = 80,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.focuscolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.focuscolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+    resource_options["Insanity Color"] = {
+        name = "Insanity Color",
+        order = 90,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.insanitycolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.insanitycolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+    resource_options["Fury Color"] = {
+        name = "Fury Color",
+        order = 100,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.furycolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.furycolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+    resource_options["Pain Color"] = {
+        name = "Pain Color",
+        order = 110,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.paincolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.paincolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+    resource_options["Maelstrom Color"] = {
+        name = "Maelstrom Color",
+        order = 120,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.maelstromcolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.maelstromcolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+    resource_options["Lunar Color"] = {
+        name = "Lunar Color(Balance Druid)",
+        order = 130,
+        type = "color", hasAlpha = true,
+        get = function()
+            local color = PlexusStatusResource.db.profile.lunarcolor
+            return color.r, color.g, color.b, color.a
+        end,
+        set = function(_, r, g, b, a)
+            local color = PlexusStatusResource.db.profile.lunarcolor
+            color.r = r
+            color.g = g
+            color.b = b
+            color.a = a or 1
+            PlexusFrame:UpdateAllFrames()
+        end,
+    }
+end
 
 function PlexusStatusResource:ResetResourceColors() --luacheck: ignore 212
     PlexusStatusResource.db.profile.manacolor = PlexusStatusResource.defaultDB.manacolor
@@ -318,9 +314,9 @@ function PlexusStatusResource:OnStatusEnable(status)
         self:RegisterEvent("UNIT_MAXPOWER","UpdateUnit")
         self:RegisterEvent("UNIT_DISPLAYPOWER","UpdateUnit")
         self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateAllUnits")
---@retail@
-        self:RegisterEvent("ROLE_CHANGED_INFORM")
---@end-retail@
+        if Plexus:IsRetailWow() then
+            self:RegisterEvent("ROLE_CHANGED_INFORM")
+        end
         self:RegisterMessage("Plexus_UnitJoined")
         self:UpdateAllUnits()
     end
@@ -335,9 +331,9 @@ function PlexusStatusResource:OnStatusDisable(status)
         self:UnregisterEvent("UNIT_MAXPOWER")
         self:UnregisterEvent("UNIT_DISPLAYPOWER")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
---@retail@
-        self:UnregisterEvent("ROLE_CHANGED_INFORM")
---@end-retail@
+        if Plexus:IsRetailWow() then
+            self:UnregisterEvent("ROLE_CHANGED_INFORM")
+        end
         self:UnregisterMessage("Plexus_UnitJoined")
     end
 end
@@ -355,10 +351,10 @@ function PlexusStatusResource:UpdateUnit(_, unitid)
     end
 end
 
---@retail@
 function PlexusStatusResource:ROLE_CHANGED_INFORM(event, changedName, fromName, oldRole, newRole)
     -- Catch if a unit changes role so that if a unit power doesn't change(role changed spec not changed)
     -- We will still update their frame
+    if not Plexus:IsRetailWow() then return end
     local unitGUID = PlexusRoster:GetGUIDByFullName(changedName)
     local unitid = PlexusRoster:GetUnitidByGUID(unitGUID)
     self:Debug("ROLE_CHANGED_INFORM", event, changedName, fromName, oldRole, newRole)
@@ -374,7 +370,6 @@ function PlexusStatusResource:ROLE_CHANGED_INFORM(event, changedName, fromName, 
     if not unitid then return end
     self:UpdateUnitResource(unitid)
 end
---@end-retail@
 
 function PlexusStatusResource:Plexus_UnitJoined(_, _, unitid)
     local NoPets = PlexusStatusResource.db.profile.NoPets
@@ -430,29 +425,38 @@ function PlexusStatusResource:UpdateUnitResource(unitid)
         end
     end
 
-    if unitpower == 3 then
-        color = PlexusStatusResource.db.profile.energycolor
---@retail@
-    elseif unitpower == 2 then
-        color = PlexusStatusResource.db.profile.focuscolor
-    elseif unitpower == 6 then
-        color = PlexusStatusResource.db.profile.runiccolor
-    elseif unitpower == 8 then
-        color = PlexusStatusResource.db.profile.lunarcolor
-    elseif unitpower == 11 then
-        color = PlexusStatusResource.db.profile.maelstromcolor
-    elseif unitpower == 13 then
-        color = PlexusStatusResource.db.profile.insanitycolor
-    elseif unitpower == 17 then
-        color = PlexusStatusResource.db.profile.furycolor
-    elseif unitpower == 18 then
-        color = PlexusStatusResource.db.profile.paincolor
---@end-retail@
-    elseif unitpower == 1 then
-        color = PlexusStatusResource.db.profile.ragecolor
+    if Plexus:IsRetailWow() then
+        if unitpower == 3 then
+            color = PlexusStatusResource.db.profile.energycolor
+        elseif unitpower == 2 then
+            color = PlexusStatusResource.db.profile.focuscolor
+        elseif unitpower == 6 then
+            color = PlexusStatusResource.db.profile.runiccolor
+        elseif unitpower == 8 then
+            color = PlexusStatusResource.db.profile.lunarcolor
+        elseif unitpower == 11 then
+            color = PlexusStatusResource.db.profile.maelstromcolor
+        elseif unitpower == 13 then
+            color = PlexusStatusResource.db.profile.insanitycolor
+        elseif unitpower == 17 then
+            color = PlexusStatusResource.db.profile.furycolor
+        elseif unitpower == 18 then
+            color = PlexusStatusResource.db.profile.paincolor
+        elseif unitpower == 1 then
+            color = PlexusStatusResource.db.profile.ragecolor
+        else
+            color = PlexusStatusResource.db.profile.manacolor
+        end
     else
-        color = PlexusStatusResource.db.profile.manacolor
+        if unitpower == 3 then
+            color = PlexusStatusResource.db.profile.energycolor
+        elseif unitpower == 1 then
+            color = PlexusStatusResource.db.profile.ragecolor
+        else
+            color = PlexusStatusResource.db.profile.manacolor
+        end
     end
+
     self.core:SendStatusGained(
         unitGUID, "unit_resource",
         priority,
