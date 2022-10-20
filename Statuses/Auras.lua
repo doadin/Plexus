@@ -2406,6 +2406,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras, guid)
     if UnitExists(unit) and UnitAuraInstanceID[unit] then
         local aurainstanceinfo = {}
         for instanceID in pairs(UnitAuraInstanceID[unit]) do
+            if not instanceID then
+                return
+            end
             aurainstanceinfo = GetAuraDataByAuraInstanceID(unit, instanceID)
             local name, icon, count, duration, expirationTime, caster, isStealable = aurainstanceinfo.name, aurainstanceinfo.icon, aurainstanceinfo.applications, aurainstanceinfo.duration, aurainstanceinfo.expirationTime, aurainstanceinfo.sourceUnit, aurainstanceinfo.isStealable
             local debuffType = aurainstanceinfo.isHelpful and "HELPFUL" or aurainstanceinfo.isHarmful and "HARMFUL"
