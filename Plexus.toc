@@ -46,6 +46,9 @@ Libs\LibDeflate\LibDeflate.lua
 #@retail@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
+#@version-wrath@
+Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
+#@end-version-wrath@
 #@non-retail@
 Libs\LibHealComm-4.0\ChatThrottleLib.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua

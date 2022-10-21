@@ -515,10 +515,10 @@ function Plexus:OnInitialize()
 
     self.options.args.profile = _G.LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
     self.options.args.profile.order = -3
-    if Plexus:IsRetailWow() then
-      local LibDualSpec = _G.LibStub:GetLibrary("LibDualSpec-1.0")
-      LibDualSpec:EnhanceDatabase(self.db, PLEXUS)
-      LibDualSpec:EnhanceOptions(self.options.args.profile, self.db)
+    if Plexus:IsRetailWow() or Plexus:IsWrathWow() then
+        local LibDualSpec = _G.LibStub:GetLibrary("LibDualSpec-1.0")
+        LibDualSpec:EnhanceDatabase(self.db, PLEXUS)
+        LibDualSpec:EnhanceOptions(self.options.args.profile, self.db)
     end
 
     _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
