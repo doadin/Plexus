@@ -2428,7 +2428,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 buffsChanged = true
             end
         end
-    end    
+    end
 
     if unitAuraUpdateInfo.removedAuraInstanceIDs ~= nil then
         for _, auraInstanceID in ipairs(unitAuraUpdateInfo.removedAuraInstanceIDs) do
@@ -2545,7 +2545,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             end
         end
     end
-    
+
     -- handle lost buffs
     for name in pairs(buff_names) do
         if not buff_names_seen[name] then
