@@ -1584,8 +1584,8 @@ function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
         if Plexus:IsRetailWow() and tocversion >= 100000 then
             local unitauraInfo = {}
-            ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
-            ForEachAura(unitid, "HARMFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
+            ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+            ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
             self:ScanUnitAurasByInfo(unitid, unitauraInfo, guid)
         else
             self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
@@ -1596,8 +1596,8 @@ end
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
     if Plexus:IsRetailWow() and tocversion >= 100000 then
         local unitauraInfo = {}
-        ForEachAura(unitid, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
-        ForEachAura(unitid, "HARMFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
+        ForEachAura(unitid, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+        ForEachAura(unitid, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
         self:ScanUnitAurasByInfo(unitid, unitauraInfo, guid)
     else
         self:ScanUnitAuras(event, unitid, guid)
@@ -2386,8 +2386,8 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras, guid)
     if updatedAuras.isFullUpdate then
         for guid, unit in PlexusRoster:IterateRoster() do
             local unitauraInfo = {}
-                ForEachAura(unit, "HELPFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
-                ForEachAura(unit, "HARMFUL", nil, function(aura) if unitauraInfo[aura.auraInstanceID] then unitauraInfo[aura.auraInstanceID] = aura end end)
+                ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+                ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
             self:ScanUnitAurasByInfo(unit, unitauraInfo, guid)
         end
     else
