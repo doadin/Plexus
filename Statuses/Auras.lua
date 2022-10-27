@@ -2336,14 +2336,14 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
     if event == "UpdateUnitAura" then
         local function HandleAura(aura)
-            local type = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
-            if type == AuraUtil.AuraUpdateChangedType.Debuff then
+            local auraType = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
+            if auraType == AuraUtil.AuraUpdateChangedType.Debuff then
                 self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
-            elseif type == AuraUtil.AuraUpdateChangedType.Buff then
+            elseif auraType == AuraUtil.AuraUpdateChangedType.Buff then
                 self.unitAuras[unitid]["buffs"][aura.auraInstanceID] = aura
                 buffsChanged = true
-            elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
+            elseif auraType == AuraUtil.AuraUpdateChangedType.Dispel then
                 self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
                 self.unitAuras[unitid]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
