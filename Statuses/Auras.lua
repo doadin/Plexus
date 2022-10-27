@@ -38,6 +38,7 @@ if tocversion >= 100000 then
         PlexusStatusAuras.unitAuras = {}
         GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
         ForEachAura = AuraUtil.ForEachAura
+        ProcessAura = AuraUtil.ProcessAura
     end
 end
 
@@ -2335,7 +2336,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
     if event == "UpdateUnitAura" then
         local function HandleAura(aura)
-            local type = AuraUtil.ProcessAura(aura, true, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
+            local type = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
             if type == AuraUtil.AuraUpdateChangedType.Debuff then
                 self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
@@ -2363,7 +2364,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             end
 
             local function HandleAura(aura)
-                local type = AuraUtil.ProcessAura(aura, true, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
+                local type = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
                 if type == AuraUtil.AuraUpdateChangedType.Debuff then
                     self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
@@ -2384,7 +2385,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     else
         if unitAuraUpdateInfo.addedAuras ~= nil then
             for _, aura in pairs(unitAuraUpdateInfo.addedAuras) do
-                local type = AuraUtil.ProcessAura(aura, true, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
+                local type = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
                 if type == AuraUtil.AuraUpdateChangedType.Debuff then
                     self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
