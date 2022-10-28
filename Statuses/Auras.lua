@@ -2383,9 +2383,8 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
                     self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
-                    --TODO
-                    --self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                    --dispelChanged = true
+                    self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
+                    dispelChanged = true
                 end
             end
 
