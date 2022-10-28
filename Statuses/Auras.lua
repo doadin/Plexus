@@ -2324,9 +2324,16 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     end
     self:Debug("UNIT_AURA", unit, guid)
 
+    if PlexusStatusAuras.unitAuras[unit] == nil then
+        PlexusStatusAuras.unitAuras[unit] = {}
+        PlexusStatusAuras.unitAuras[unit]["buffs"] = {}
+        PlexusStatusAuras.unitAuras[unit]["debuffs"] = {}
+        PlexusStatusAuras.unitAuras[unit]["dispels"] = {}
+    end
+
     local debuffsChanged = false
     local buffsChanged = false
-    local dispelsChanged = false
+    local dispelChanged = false
 
     for _, auras in pairs(self.durationAuras) do
         if auras[guid] then
@@ -2338,11 +2345,12 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     if unitAuraUpdateInfo == "UpdateUnitAura" then
         local function HandleAura(aura)
             local type = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
+            local auraInstanceID = aura.auraInstanceID
             if type == AuraUtil.AuraUpdateChangedType.Debuff then
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
             elseif type == AuraUtil.AuraUpdateChangedType.Buff then
-                self.unitAuras[unit]["buffs"][aura.auraInstanceID] = aura
+                self.unitAuras[unit]["buffs"][auraInstanceID] = aura
                 buffsChanged = true
             elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
@@ -2357,31 +2365,32 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
     if unitAuraUpdateInfo.isFullUpdate ~= nil then
         for guid, unitid in PlexusRoster:IterateRoster() do
-            if PlexusStatusAuras.unitAuras[unitid] == nil then
-                PlexusStatusAuras.unitAuras[unitid] = {}
-                PlexusStatusAuras.unitAuras[unitid]["buffs"] = {}
-                PlexusStatusAuras.unitAuras[unitid]["debuffs"] = {}
-                PlexusStatusAuras.unitAuras[unitid]["dispels"] = {}
+            if PlexusStatusAuras.unitAuras[unit] == nil then
+                PlexusStatusAuras.unitAuras[unit] = {}
+                PlexusStatusAuras.unitAuras[unit]["buffs"] = {}
+                PlexusStatusAuras.unitAuras[unit]["debuffs"] = {}
+                PlexusStatusAuras.unitAuras[unit]["dispels"] = {}
             end
 
             local function HandleAura(aura)
                 local type = ProcessAura(aura, false, false, false, false) -- aura, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs
                 if type == AuraUtil.AuraUpdateChangedType.Debuff then
-                    self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
+                    self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
                 elseif type == AuraUtil.AuraUpdateChangedType.Buff then
-                    self.unitAuras[unitid]["buffs"][aura.auraInstanceID] = aura
+                    self.unitAuras[unit]["buffs"][aura.auraInstanceID] = aura
                     buffsChanged = true
                 elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
-                    self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
+                    self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
-                    self.unitAuras[unitid]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                    dispelChanged = true
+                    --TODO
+                    --self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
+                    --dispelChanged = true
                 end
             end
 
-            ForEachAura(unitid, "HELPFUL", nil, HandleAura, true)
-            ForEachAura(unitid, "HARMFUL", nil, HandleAura, true)
+            ForEachAura(unit, "HELPFUL", nil, HandleAura, true)
+            ForEachAura(unit, "HARMFUL", nil, HandleAura, true)
         end
     end
 
@@ -2397,8 +2406,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
-                self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                dispelChanged = true
+                --TODO
+                --self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
+                --dispelChanged = true
             end
         end
     end
@@ -2416,7 +2426,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 for _, tbl in pairs(self.unitAuras[unit]["dispels"]) do
                     if tbl[auraInstanceID] ~= nil then
                         tbl[auraInstanceID] = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-                        dispelsChanged = true
+                        dispelChanged = true
                         break
                     end
                 end
@@ -2499,7 +2509,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
         end
     end
 
-    if dispelsChanged then
+    if dispelChanged then
         -- elseif so that a named debuff doesn't trigger the type status
         for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Curse"]) do
             if auraInstanceID ~= nil then
