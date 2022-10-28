@@ -2309,13 +2309,6 @@ function PlexusStatusAuras:UpdateAuraScanList()
     end
 end
 
--- temp tables
-local buff_names_seen = {}
-local player_buff_names_seen = {}
-local debuff_names_seen = {}
-local player_debuff_names_seen = {}
-local debuff_types_seen = {}
-
 function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid)
     if string.find(unit, "nameplate") then return end
     if not guid then guid = UnitGUID(unit) end
@@ -2354,6 +2347,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
+                if self.unitAuras[unit]["dispels"][aura.dispelName] == nil then
+                    self.unitAuras[unit]["dispels"][aura.dispelName] = {}
+                end
                 self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
                 dispelsChanged = true
             end
@@ -2382,6 +2378,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
                     self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
+                    if self.unitAuras[unitid]["dispels"][aura.dispelName] == nil then
+                        self.unitAuras[unitid]["dispels"][aura.dispelName] = {}
+                    end
                     self.unitAuras[unitid]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
                     dispelsChanged = true
                 end
@@ -2404,6 +2403,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             elseif type == AuraUtil.AuraUpdateChangedType.Dispel then
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
+                if self.unitAuras[unit]["dispels"][aura.dispelName] == nil then
+                    self.unitAuras[unit]["dispels"][aura.dispelName] = {}
+                end
                 self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
                 dispelsChanged = true
             end
@@ -2441,19 +2443,32 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     if unitAuraUpdateInfo.removedAuraInstanceIDs ~= nil then
         for _, auraInstanceID in ipairs(unitAuraUpdateInfo.removedAuraInstanceIDs) do
             if self.unitAuras[unit]["debuffs"][auraInstanceID] ~= nil then
+                -- handle lost debuffs
+                local name, caster = self.unitAuras[unit]["debuffs"][auraInstanceID].name, self.unitAuras[unit]["debuffs"][auraInstanceID].sourceUnit
+                if caster == "player" then
+                    self:UnitLostPlayerDebuff(guid, _, name)
+                else
+                    self:UnitLostDebuff(guid, _, name)
+                end
                 self.unitAuras[unit]["debuffs"][auraInstanceID] = nil
-                debuffsChanged = true
 
                 for _, tbl in pairs(self.unitAuras[unit]["dispels"]) do
                     if tbl[auraInstanceID] ~= nil then
+                        local debuffType = tbl[auraInstanceID].dispelName
+                        self:UnitLostDebuffType(guid, _, debuffType)
                         tbl[auraInstanceID] = nil
-                        dispelsChanged = true
                         break
                     end
                 end
             elseif self.unitAuras[unit]["buffs"][auraInstanceID] ~= nil then
+                -- handle lost buffs
+                local name, caster = self.unitAuras[unit]["buffs"][auraInstanceID].name, self.unitAuras[unit]["buffs"][auraInstanceID].sourceUnit
+                if caster == "player" then
+                    self:UnitLostPlayerBuff(guid, _, name)
+                else
+                    self:UnitLostBuff(guid, _, name)
+                end
                 self.unitAuras[unit]["buffs"][auraInstanceID] = nil
-                buffsChanged = true
             end
         end
     end
@@ -2466,14 +2481,11 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
 
                 if debuff_names[name] then
-                    debuff_names_seen[name] = true
                     self:UnitGainedDebuff(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
                 elseif player_debuff_names[name] and casterUnit == "player" then
-                    player_debuff_names_seen[name] = true
                     self:UnitGainedPlayerDebuff(guid, _, name, _, icon, count, debuffType, duration, expirationTime, _, _)
                 elseif debuff_types[debuffType] then
                     -- elseif so that a named debuff doesn't trigger the type status
-                    debuff_types_seen[debuffType] = true
                     self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
                 end
             end
@@ -2493,13 +2505,11 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
                 -- scan for buffs
                 if buff_names[name] then
-                    buff_names_seen[name] = true
                     self:UnitGainedBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
                 end
 
                 -- scan for buffs cast by the player
                 if player_buff_names[name] and caster == "player" then
-                    player_buff_names_seen[name] = true
                     self:UnitGainedPlayerBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
                 end
             end
@@ -2508,95 +2518,65 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
     if dispelsChanged then
         -- elseif so that a named debuff doesn't trigger the type status
-        for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Curse"]) do
-            if auraInstanceID ~= nil then
-                local tbl = self.unitAuras[unit]["dispels"]["Curse"][auraInstanceID]
-                local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
+        if self.unitAuras[unit]["dispels"]["Curse"] ~= nil then
+            for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Curse"]) do
+                if auraInstanceID ~= nil then
+                    local tbl = self.unitAuras[unit]["dispels"]["Curse"][auraInstanceID]
+                    local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
 
-                if debuff_types[debuffType] then
-                    debuff_types_seen[debuffType] = true
-                    self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    if debuff_types[debuffType] then
+                        self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    end
                 end
             end
         end
-        for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Disease"]) do
-            if auraInstanceID ~= nil then
-                local tbl = self.unitAuras[unit]["dispels"]["Disease"][auraInstanceID]
-                local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
+        if self.unitAuras[unit]["dispels"]["Disease"] ~= nil then
+            for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Disease"]) do
+                if auraInstanceID ~= nil then
+                    local tbl = self.unitAuras[unit]["dispels"]["Disease"][auraInstanceID]
+                    local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
 
-                if debuff_types[debuffType] then
-                    debuff_types_seen[debuffType] = true
-                    self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    if debuff_types[debuffType] then
+                        self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    end
                 end
             end
         end
-        for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Magic"]) do
-            if auraInstanceID ~= nil then
-                local tbl = self.unitAuras[unit]["dispels"]["Magic"][auraInstanceID]
-                local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
+        if self.unitAuras[unit]["dispels"]["Magic"] ~= nil then
+            for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Magic"]) do
+                if auraInstanceID ~= nil then
+                    local tbl = self.unitAuras[unit]["dispels"]["Magic"][auraInstanceID]
+                    local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
 
-                if debuff_types[debuffType] then
-                    debuff_types_seen[debuffType] = true
-                    self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    if debuff_types[debuffType] then
+                        self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    end
                 end
             end
         end
-        for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Poison"]) do
-            if auraInstanceID ~= nil then
-                local tbl = self.unitAuras[unit]["dispels"]["Poison"][auraInstanceID]
-                local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
+        if self.unitAuras[unit]["dispels"]["Poison"] ~= nil then
+            for auraInstanceID in pairs(self.unitAuras[unit]["dispels"]["Poison"]) do
+                if auraInstanceID ~= nil then
+                    local tbl = self.unitAuras[unit]["dispels"]["Poison"][auraInstanceID]
+                    local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = tbl.name, tbl.icon, tbl.applications, tbl.dispelName, tbl.duration, tbl.expirationTime, tbl.sourceUnit, tbl.isStealable, false, tbl.spellId, tbl.canApplyAura, tbl.isBossAura, tbl.isFromPlayerorPlayerPet
 
-                if debuff_types[debuffType] then
-                    debuff_types_seen[debuffType] = true
-                    self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    if debuff_types[debuffType] then
+                        self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+                    end
                 end
             end
         end
     end
 
-    -- handle lost buffs
-    for name in pairs(buff_names) do
-        if not buff_names_seen[name] then
-            self:UnitLostBuff(guid, _, name)
-        else
-            buff_names_seen[name] = nil
-        end
-    end
-
-    for name in pairs(player_buff_names) do
-        if not player_buff_names_seen[name] then
-            self:UnitLostPlayerBuff(guid, _, name)
-        else
-            player_buff_names_seen[name] = nil
-        end
-    end
-
-    -- handle lost debuffs
-    for name in pairs(debuff_names) do
-        if not debuff_names_seen[name] then
-            self:UnitLostDebuff(guid, _, name)
-        else
-            debuff_names_seen[name] = nil
-        end
-    end
-
-    for name in pairs(player_debuff_names) do
-        if not player_debuff_names_seen[name] then
-            self:UnitLostPlayerDebuff(guid, _, name)
-        else
-            player_debuff_names_seen[name] = nil
-        end
-    end
-
-    for debuffType in pairs(debuff_types) do
-        if not debuff_types_seen[debuffType] then
-            self:UnitLostDebuffType(guid, _, debuffType)
-        else
-            debuff_types_seen[debuffType] = nil
-        end
-    end
     self:ResetDurationTimer(self:HasActiveDurations())
 end
+
+-- temp tables
+local buff_names_seen = {}
+local player_buff_names_seen = {}
+local debuff_names_seen = {}
+local player_debuff_names_seen = {}
+local debuff_types_seen = {}
 
 function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 212
     if not guid then guid = UnitGUID(unit) end
