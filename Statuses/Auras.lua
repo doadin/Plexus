@@ -2324,6 +2324,13 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     end
     self:Debug("UNIT_AURA", unit, guid)
 
+    if PlexusStatusAuras.unitAuras[unit] == nil then
+        PlexusStatusAuras.unitAuras[unit] = {}
+        PlexusStatusAuras.unitAuras[unit]["buffs"] = {}
+        PlexusStatusAuras.unitAuras[unit]["debuffs"] = {}
+        PlexusStatusAuras.unitAuras[unit]["dispels"] = {}
+    end
+
     local debuffsChanged = false
     local buffsChanged = false
     local dispelsChanged = false
@@ -2348,7 +2355,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
                 self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                dispelChanged = true
+                dispelsChanged = true
             end
         end
         ForEachAura(unit, "HELPFUL", nil, HandleAura, true)
@@ -2376,7 +2383,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                     self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
                     debuffsChanged = true
                     self.unitAuras[unitid]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                    dispelChanged = true
+                    dispelsChanged = true
                 end
             end
 
@@ -2398,7 +2405,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 self.unitAuras[unit]["debuffs"][aura.auraInstanceID] = aura
                 debuffsChanged = true
                 self.unitAuras[unit]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                dispelChanged = true
+                dispelsChanged = true
             end
         end
     end
@@ -2429,7 +2436,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 buffsChanged = true
             end
         end
-    end    
+    end
 
     if unitAuraUpdateInfo.removedAuraInstanceIDs ~= nil then
         for _, auraInstanceID in ipairs(unitAuraUpdateInfo.removedAuraInstanceIDs) do
@@ -2440,7 +2447,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 for _, tbl in pairs(self.unitAuras[unit]["dispels"]) do
                     if tbl[auraInstanceID] ~= nil then
                         tbl[auraInstanceID] = nil
-                        dispelChanged = true
+                        dispelsChanged = true
                         break
                     end
                 end
@@ -2546,7 +2553,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             end
         end
     end
-    
+
     -- handle lost buffs
     for name in pairs(buff_names) do
         if not buff_names_seen[name] then
