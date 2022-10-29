@@ -2317,11 +2317,8 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid)
-    if not string.find(unit, "raid") and not string.find(unit, "player") and not string.find(unit, "party") then
-        return
-    end
     if not guid then guid = UnitGUID(unit) end
-    if not PlexusRoster:IsGUIDInRaid(guid) then
+    if not PlexusRoster:IsGUIDInRaid(guid) and not PlexusRoster:IsGUIDInRaid(UnitGUID(unit)) then
         return
     end
     --self:Debug("UNIT_AURA", unit, guid)
@@ -2333,7 +2330,14 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
         PlexusStatusAuras.unitAuras[unit]["dispels"] = {}
     end
 
-    if unitAuraUpdateInfo == "UpdateUnitAura" then
+    if unitAuraUpdateInfo.isFullUpdate ~= nil or unitAuraUpdateInfo == "UpdateUnitAura" then
+        if PlexusStatusAuras.unitAuras[unit] == nil then
+            PlexusStatusAuras.unitAuras[unit] = {}
+            PlexusStatusAuras.unitAuras[unit]["buffs"] = {}
+            PlexusStatusAuras.unitAuras[unit]["debuffs"] = {}
+            PlexusStatusAuras.unitAuras[unit]["dispels"] = {}
+        end
+
         local function HandleAura(aura)
             if aura.isHarmful then
                 if debuff_names[aura.name] and self.unitAuras[unit]["debuffs"][aura.auraInstanceID] == nil then
@@ -2373,6 +2377,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
         ForEachAura(unit, "HARMFUL", nil, HandleAura, true)
     end
 
+    --[[
     if unitAuraUpdateInfo.isFullUpdate ~= nil then
         for guid, unitid in PlexusRoster:IterateRoster() do
             if PlexusStatusAuras.unitAuras[unitid] == nil then
@@ -2382,7 +2387,6 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 PlexusStatusAuras.unitAuras[unitid]["dispels"] = {}
             end
 
-        --[[
             local function HandleAura(aura)
                 if aura.isHarmful then
                     if debuff_names[aura.name] and self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] == nil then
@@ -2420,10 +2424,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             end
             ForEachAura(unitid, "HELPFUL", nil, HandleAura, true)
             ForEachAura(unitid, "HARMFUL", nil, HandleAura, true)
-        ]]
         end
     end
-
+    ]]
     if unitAuraUpdateInfo.addedAuras ~= nil then
         for _, aura in pairs(unitAuraUpdateInfo.addedAuras) do
             if aura.isHarmful then
