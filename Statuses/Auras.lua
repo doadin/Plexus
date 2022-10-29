@@ -2379,7 +2379,6 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 PlexusStatusAuras.unitAuras[unitid]["dispels"] = {}
             end
 
-        --[[
             local function HandleAura(aura)
                 if aura.isHarmful then
                     if debuff_names[aura.name] and self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] == nil then
@@ -2417,7 +2416,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
             end
             ForEachAura(unitid, "HELPFUL", nil, HandleAura, true)
             ForEachAura(unitid, "HARMFUL", nil, HandleAura, true)
-        ]]
+
         end
     end
 
