@@ -2317,11 +2317,8 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid)
-    if not string.find(unit, "raid") and not string.find(unit, "player") and not string.find(unit, "party") then
-        return
-    end
     if not guid then guid = UnitGUID(unit) end
-    if not PlexusRoster:IsGUIDInRaid(guid) then
+    if not PlexusRoster:IsGUIDInRaid(guid) and not PlexusRoster:IsGUIDInRaid(UnitGUID(unit))  then
         return
     end
     --self:Debug("UNIT_AURA", unit, guid)
