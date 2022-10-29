@@ -2317,14 +2317,14 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid)
-    if not string.find(unit, "raid") and not string.find(unit, "player") then
+    if not string.find(unit, "raid") and not string.find(unit, "player") and not string.find(unit, "party") then
         return
     end
     if not guid then guid = UnitGUID(unit) end
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
     end
-    self:Debug("UNIT_AURA", unit, guid)
+    --self:Debug("UNIT_AURA", unit, guid)
 
     if PlexusStatusAuras.unitAuras[unit] == nil then
         PlexusStatusAuras.unitAuras[unit] = {}
@@ -2515,9 +2515,23 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 local aura = self.unitAuras[unit]["debuffs"][auraInstanceID]
                 local name, caster = aura.name, aura.sourceUnit
                 if player_debuff_names[name] and caster == "player" then
+                    for _, auras in pairs(self.durationAuras) do
+                        if auras[guid] then
+                            durationAuraPool:put(auras[guid])
+                            auras[guid] = nil
+                        end
+                    end
+
                     self:UnitLostPlayerDebuff(guid, _, name)
                     self:Debug("remove playerdebuff", name, auraInstanceID)
                 else
+                    for _, auras in pairs(self.durationAuras) do
+                        if auras[guid] then
+                            durationAuraPool:put(auras[guid])
+                            auras[guid] = nil
+                        end
+                    end
+
                     self:UnitLostDebuff(guid, _, name)
                     self:Debug("remove debuff", name, auraInstanceID)
                 end
@@ -2525,6 +2539,13 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
                 for _, tbl in pairs(self.unitAuras[unit]["dispels"]) do
                     if tbl[auraInstanceID] ~= nil then
+                        for _, auras in pairs(self.durationAuras) do
+                            if auras[guid] then
+                                durationAuraPool:put(auras[guid])
+                                auras[guid] = nil
+                            end
+                        end
+
                         local debuffType = tbl[auraInstanceID].dispelName
                         tbl[auraInstanceID] = nil
                         self:UnitLostDebuffType(guid, _, debuffType)
@@ -2537,19 +2558,27 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 local aura = self.unitAuras[unit]["buffs"][auraInstanceID]
                 local name, caster = aura.name, aura.sourceUnit
                 if player_buff_names[name] and caster == "player" then
+                    for _, auras in pairs(self.durationAuras) do
+                        if auras[guid] then
+                            durationAuraPool:put(auras[guid])
+                            auras[guid] = nil
+                        end
+                    end
+
                     self:UnitLostPlayerBuff(guid, _, name)
                     self:Debug("remove playerbuff", name, auraInstanceID)
                 else
+                    for _, auras in pairs(self.durationAuras) do
+                        if auras[guid] then
+                            durationAuraPool:put(auras[guid])
+                            auras[guid] = nil
+                        end
+                    end
+
                     self:UnitLostBuff(guid, _, name)
                     self:Debug("remove buff", name, auraInstanceID)
                 end
                 self.unitAuras[unit]["buffs"][auraInstanceID] = nil
-            end
-            for _, auras in pairs(self.durationAuras) do
-                if auras[guid] then
-                    durationAuraPool:put(auras[guid])
-                    auras[guid] = nil
-                end
             end
         end
     end
