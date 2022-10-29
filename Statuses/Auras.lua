@@ -2310,7 +2310,7 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid)
-    if string.find(unit, "nameplate") then return end
+    --if string.find(unit, "nameplate") then return end
     if not guid then guid = UnitGUID(unit) end
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
@@ -2446,9 +2446,9 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 -- handle lost debuffs
                 local name, caster = self.unitAuras[unit]["debuffs"][auraInstanceID].name, self.unitAuras[unit]["debuffs"][auraInstanceID].sourceUnit
                 if caster == "player" then
-                    self:UnitLostPlayerDebuff(guid, _, name)
+                    self:UnitLostPlayerDebuff(unit, _, name)
                 else
-                    self:UnitLostDebuff(guid, _, name)
+                    self:UnitLostDebuff(unit, _, name)
                 end
                 self.unitAuras[unit]["debuffs"][auraInstanceID] = nil
 
