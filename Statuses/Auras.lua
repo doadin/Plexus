@@ -2464,42 +2464,40 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 local oldDebuffType = self.unitAuras[unit]["debuffs"][auraInstanceID].debuffType
                 if newAura ~= nil then
                     newAura.debuffType = oldDebuffType
-                end
-
-                self.unitAuras[unit]["debuffs"][auraInstanceID] = newAura
-                if newAura.sourceUnit == "player" then
-                    self:UnitGainedPlayerDebuff(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, _, _)
-                    self:Debug("update playerdebuff", newAura.name, auraInstanceID)
-                else
-                    self:UnitGainedDebuff(guid, _, newAura.name, _, newAura.icon, newAura.applications, newAura.dispelName, newAura.duration, newAura.expirationTime, newAura.sourceUnit, newAura.isStealable, false, newAura.spellId, newAura.canApplyAura, newAura.isBossAura, newAura.isFromPlayerOrPlayerPet)
-                    self:Debug("update debuff", newAura.name, auraInstanceID)
-                end
-                for _, tbl in pairs(self.unitAuras[unit]["dispels"]) do
-                    if tbl[auraInstanceID] ~= nil then
-                        local aura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-                        tbl[auraInstanceID] = aura
-                        self:UnitGainedDebuffType(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable, false, aura.spellId, aura.canApplyAura, aura.isBossAura, aura.isFromPlayerOrPlayerPet)
-                        self:Debug("update dispellable", aura.name, auraInstanceID)
-                        break
+                    self.unitAuras[unit]["debuffs"][auraInstanceID] = newAura
+                    if player_debuff_names[newAura.name] and newAura.sourceUnit == "player" then
+                        self:UnitGainedPlayerDebuff(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, _, _)
+                        self:Debug("update playerdebuff", newAura.name, auraInstanceID)
+                    else
+                        self:UnitGainedDebuff(guid, _, newAura.name, _, newAura.icon, newAura.applications, newAura.dispelName, newAura.duration, newAura.expirationTime, newAura.sourceUnit, newAura.isStealable, false, newAura.spellId, newAura.canApplyAura, newAura.isBossAura, newAura.isFromPlayerOrPlayerPet)
+                        self:Debug("update debuff", newAura.name, auraInstanceID)
+                    end
+                    for _, tbl in pairs(self.unitAuras[unit]["dispels"]) do
+                        if tbl[auraInstanceID] ~= nil then
+                            local aura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+                            tbl[auraInstanceID] = aura
+                            self:UnitGainedDebuffType(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable, false, aura.spellId, aura.canApplyAura, aura.isBossAura, aura.isFromPlayerOrPlayerPet)
+                            self:Debug("update dispellable", aura.name, auraInstanceID)
+                            break
+                        end
                     end
                 end
             elseif self.unitAuras[unit]["buffs"][auraInstanceID] ~= nil then
                 local newAura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
                 if newAura ~= nil then
                     newAura.isBuff = true
-                end
-
-                self.unitAuras[unit]["buffs"][auraInstanceID] = newAura
-                if newAura.sourceUnit == "player" then
-                    -- scan for buffs cast by the player
-                    local class = UnitClass(newAura.sourceUnit)
-                    self:UnitGainedPlayerBuff(guid, class, newAura.name, _, newAura.icon, newAura.applications, newAura.dispelName, newAura.duration, newAura.expirationTime, newAura.sourceUnit, newAura.isStealable)
-                    self:Debug("update playerbuff", newAura.name, auraInstanceID)
-                else
-                    -- scan for buffs
-                    local class = UnitClass(newAura.sourceUnit)
-                    self:UnitGainedBuff(guid, class, newAura.name, _, newAura.icon, newAura.applications, newAura.dispelName, newAura.duration, newAura.expirationTime, newAura.sourceUnit, newAura.isStealable)
-                    self:Debug("update buff", newAura.name, auraInstanceID)
+                    self.unitAuras[unit]["buffs"][auraInstanceID] = newAura
+                    if player_buff_names[newAura.name] and newAura.sourceUnit == "player" then
+                        -- scan for buffs cast by the player
+                        local class = UnitClass(newAura.sourceUnit)
+                        self:UnitGainedPlayerBuff(guid, class, newAura.name, _, newAura.icon, newAura.applications, newAura.dispelName, newAura.duration, newAura.expirationTime, newAura.sourceUnit, newAura.isStealable)
+                        self:Debug("update playerbuff", newAura.name, auraInstanceID)
+                    else
+                        -- scan for buffs
+                        local class = UnitClass(newAura.sourceUnit)
+                        self:UnitGainedBuff(guid, class, newAura.name, _, newAura.icon, newAura.applications, newAura.dispelName, newAura.duration, newAura.expirationTime, newAura.sourceUnit, newAura.isStealable)
+                        self:Debug("update buff", newAura.name, auraInstanceID)
+                    end
                 end
             end
         end
@@ -2511,11 +2509,12 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 -- handle lost debuffs
                 local aura = self.unitAuras[unit]["debuffs"][auraInstanceID]
                 local name, caster = aura.name, aura.sourceUnit
-                self:Debug("remove debuff", name, auraInstanceID)
-                if caster == "player" then
+                if player_debuff_names[name] and caster == "player" then
                     self:UnitLostPlayerDebuff(guid, _, name)
+                    self:Debug("remove playerdebuff", name, auraInstanceID)
                 else
                     self:UnitLostDebuff(guid, _, name)
+                    self:Debug("remove debuff", name, auraInstanceID)
                 end
                 self.unitAuras[unit]["debuffs"][auraInstanceID] = nil
 
@@ -2532,7 +2531,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
                 -- handle lost buffs
                 local aura = self.unitAuras[unit]["buffs"][auraInstanceID]
                 local name, caster = aura.name, aura.sourceUnit
-                if caster == "player" then
+                if player_buff_names[name] and caster == "player" then
                     self:UnitLostPlayerBuff(guid, _, name)
                     self:Debug("remove playerbuff", name, auraInstanceID)
                 else
