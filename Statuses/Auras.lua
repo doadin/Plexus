@@ -2407,8 +2407,8 @@ function PlexusStatusAuras:updateAuraInfo(unit, guid)
                         self:UnitLostPlayerBuff(guid, _, name)
                         self:Debug("force remove playerbuff", unit, name, aura.auraInstanceID)
                     end
-                    if self.unitAuras[unit][auraInstanceID] then
-                        self.unitAuras[unit][auraInstanceID] = nil
+                    if self.unitAuras[unit][instanceID] then
+                        self.unitAuras[unit][instanceID] = nil
                     end
                 end
             elseif aura.isHarmful then
@@ -2444,8 +2444,8 @@ function PlexusStatusAuras:updateAuraInfo(unit, guid)
                         self:Debug("force remove dispellable", unit, name, aura.auraInstanceID, debuffType)
                     end
 
-                    if self.unitAuras[unit][auraInstanceID] then
-                        self.unitAuras[unit][auraInstanceID] = nil
+                    if self.unitAuras[unit][instanceID] then
+                        self.unitAuras[unit][instanceID] = nil
                     end
                 end
             end
