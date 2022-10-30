@@ -2374,7 +2374,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     if unitAuraUpdateInfo.isFullUpdate or unitAuraUpdateInfo == "UpdateUnitAura" then
         self:Debug("FullUpdate or UpdateUnitAura")
         if unitAuraUpdateInfo.isFullUpdate then
-            wipe(self.unitAuras[unit])
+            self.unitAuras[unit] = {}
             self:Debug("unit table reset in FullUpdate:", unit)
         end
         local unitauraInfo = {}
@@ -2410,33 +2410,35 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
     if unitAuraUpdateInfo.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(unitAuraUpdateInfo.removedAuraInstanceIDs) do
-            if auraInstanceID and self.unitAuras[unit][auraInstanceID] ~= nil then
-                local aura = self.unitAuras[unit][auraInstanceID]
-                if aura and aura.isHelpful then
-                    local name, caster = aura.name, aura.sourceUnit
-                    if buff_names[name] then
-                        self:UnitLostBuff(guid, _, name)
-                        self:Debug("remove buff", name, auraInstanceID)
-                    end
+            if self.unitAuras[unit] then
+                if auraInstanceID and self.unitAuras[unit][auraInstanceID] then
+                    local aura = self.unitAuras[unit][auraInstanceID]
+                    if aura and aura.isHelpful then
+                        local name, caster = aura.name, aura.sourceUnit
+                        if buff_names[name] then
+                            self:UnitLostBuff(guid, _, name)
+                            self:Debug("remove buff", name, auraInstanceID)
+                        end
 
-                    if player_buff_names[name] and caster == "player" then
-                        self:UnitLostPlayerBuff(guid, _, name)
-                        self:Debug("remove playerbuff", name, auraInstanceID)
+                        if player_buff_names[name] and caster == "player" then
+                            self:UnitLostPlayerBuff(guid, _, name)
+                            self:Debug("remove playerbuff", name, auraInstanceID)
+                        end
+                    elseif aura and aura.isHarmful then
+                        local name, debuffType, caster = aura.name, aura.dispelName, aura.sourceUnit
+                        if debuff_names[name] then
+                            self:UnitLostDebuff(guid, _, name)
+                            self:Debug("remove debuff", name, auraInstanceID)
+                        elseif player_debuff_names[name] and caster == "player" then
+                            self:UnitLostPlayerDebuff(guid, _, name)
+                            self:Debug("remove playerdebuff", name, auraInstanceID)
+                        elseif debuff_types[debuffType] then
+                            self:UnitLostDebuffType(guid, _, debuffType)
+                            self:Debug("remove dispellable", debuffType, auraInstanceID)
+                        end
                     end
-                elseif aura and aura.isHarmful then
-                    local name, debuffType, caster = aura.name, aura.dispelName, aura.sourceUnit
-                    if debuff_names[name] then
-                        self:UnitLostDebuff(guid, _, name)
-                        self:Debug("remove debuff", name, auraInstanceID)
-                    elseif player_debuff_names[name] and caster == "player" then
-                        self:UnitLostPlayerDebuff(guid, _, name)
-                        self:Debug("remove playerdebuff", name, auraInstanceID)
-                    elseif debuff_types[debuffType] then
-                        self:UnitLostDebuffType(guid, _, debuffType)
-                        self:Debug("remove dispellable", debuffType, auraInstanceID)
-                    end
+                    self.unitAuras[unit][auraInstanceID] = nil
                 end
-                self.unitAuras[unit][auraInstanceID] = nil
             end
         end
     end
