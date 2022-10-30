@@ -32,7 +32,7 @@ local spell_names
 local GetAuraDataByAuraInstanceID
 local ForEachAura
 
-local version, build, date, tocversion = GetBuildInfo()
+local tocversion = select(4, GetBuildInfo())
 if tocversion >= 100000 then
     if Plexus:IsRetailWow() then
         PlexusStatusAuras.unitAuras = {}
@@ -2374,8 +2374,8 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
     if unitAuraUpdateInfo.isFullUpdate or unitAuraUpdateInfo == "UpdateUnitAura" then
         self:Debug("FullUpdate or UpdateUnitAura")
         if unitAuraUpdateInfo.isFullUpdate then
-            self.unitAuras[unit] = nil
-            self:Debug("unit table reset in FullUpdate")
+            wipe(self.unitAuras[unit])
+            self:Debug("unit table reset in FullUpdate:", unit)
         end
         local unitauraInfo = {}
         ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
@@ -2401,7 +2401,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
     if unitAuraUpdateInfo.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(unitAuraUpdateInfo.updatedAuraInstanceIDs) do
-            if self.unitAuras[unit][auraInstanceID] then
+            if self.unitAuras[unit] and self.unitAuras[unit][auraInstanceID] then
                 local newAura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
                 self.unitAuras[unit][auraInstanceID] = newAura
             end
