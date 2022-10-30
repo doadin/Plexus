@@ -2318,7 +2318,7 @@ end
 
 function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid)
     if not guid then guid = UnitGUID(unit) end
-    if not PlexusRoster:IsGUIDInRaid(guid) and not PlexusRoster:IsGUIDInRaid(UnitGUID(unit))  then
+    if not PlexusRoster:IsGUIDInRaid(guid) and not PlexusRoster:IsGUIDInRaid(UnitGUID(unit)) then
         return
     end
     --self:Debug("UNIT_AURA", unit, guid)
@@ -2330,7 +2330,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
         PlexusStatusAuras.unitAuras[unit]["dispels"] = {}
     end
 
-    if unitAuraUpdateInfo == "UpdateUnitAura" then
+    if unitAuraUpdateInfo.isFullUpdate ~= nil or unitAuraUpdateInfo == "UpdateUnitAura" then
         local function HandleAura(aura)
             if aura.isHarmful then
                 if debuff_names[aura.name] and self.unitAuras[unit]["debuffs"][aura.auraInstanceID] == nil then
@@ -2368,56 +2368,6 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
         end
         ForEachAura(unit, "HELPFUL", nil, HandleAura, true)
         ForEachAura(unit, "HARMFUL", nil, HandleAura, true)
-    end
-
-    if unitAuraUpdateInfo.isFullUpdate ~= nil then
-        for guid, unitid in PlexusRoster:IterateRoster() do
-            if PlexusStatusAuras.unitAuras[unitid] == nil then
-                PlexusStatusAuras.unitAuras[unitid] = {}
-                PlexusStatusAuras.unitAuras[unitid]["buffs"] = {}
-                PlexusStatusAuras.unitAuras[unitid]["debuffs"] = {}
-                PlexusStatusAuras.unitAuras[unitid]["dispels"] = {}
-            end
-
-            local function HandleAura(aura)
-                if aura.isHarmful then
-                    if debuff_names[aura.name] and self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] == nil then
-                        self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
-                        self:UnitGainedDebuff(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable, false, aura.spellId, aura.canApplyAura, aura.isBossAura, aura.isFromPlayerOrPlayerPet)
-                        self:Debug("full update debuff", unitid, aura.name, aura.auraInstanceID)
-                    elseif player_debuff_names[aura.name] and aura.sourceUnit == "player" and self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] == nil then
-                        self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
-                        self:UnitGainedPlayerDebuff(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, _, _)
-                        self:Debug("full update playerdebuff", unitid, aura.name, aura.auraInstanceID)
-                    elseif debuff_types[aura.dispelName] and self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] == nil then
-                        if self.unitAuras[unitid]["dispels"][aura.dispelName] == nil then
-                            self.unitAuras[unitid]["dispels"][aura.dispelName] = {}
-                        end
-                        self.unitAuras[unitid]["debuffs"][aura.auraInstanceID] = aura
-                        self.unitAuras[unitid]["dispels"][aura.dispelName][aura.auraInstanceID] = aura
-                        self:UnitGainedDebuffType(guid, _, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable, false, aura.spellId, aura.canApplyAura, aura.isBossAura, aura.isFromPlayerOrPlayerPet)
-                        self:Debug("full update dispellable", unitid, aura.name, aura.auraInstanceID, aura.dispelName)
-                    end
-                elseif aura.isHelpful then
-                    -- scan for buffs
-                    if buff_names[aura.name] and self.unitAuras[unitid]["buffs"][aura.auraInstanceID] == nil then
-                        local class = aura.sourceUnit and UnitClass(aura.sourceUnit)
-                        self.unitAuras[unitid]["buffs"][aura.auraInstanceID] = aura
-                        self:UnitGainedBuff(guid, class, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable)
-                        self:Debug("full update buff", unitid, aura.name, aura.auraInstanceID)
-                    -- scan for buffs cast by the player
-                    elseif player_buff_names[aura.name] and aura.sourceUnit == "player" and self.unitAuras[unitid]["buffs"][aura.auraInstanceID] == nil then
-                        local class = aura.sourceUnit and UnitClass(aura.sourceUnit)
-                        self.unitAuras[unitid]["buffs"][aura.auraInstanceID] = aura
-                        self:UnitGainedPlayerBuff(guid, class, aura.name, _, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable)
-                        self:Debug("full update playerbuff", unitid, aura.name, aura.auraInstanceID)
-                    end
-                end
-            end
-            ForEachAura(unitid, "HELPFUL", nil, HandleAura, true)
-            ForEachAura(unitid, "HARMFUL", nil, HandleAura, true)
-
-        end
     end
 
     if unitAuraUpdateInfo.addedAuras ~= nil then
