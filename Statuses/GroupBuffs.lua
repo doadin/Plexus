@@ -17,24 +17,26 @@ local spellIconList
 if Plexus:IsRetailWow() then
 spellNameList = {
     ["Power Word: Fortitude"] = GetSpellInfo(21562),
-    ["War-Scroll of Fortitude"] = GetSpellInfo(264764),
 
     ["Arcane Intellect"] = GetSpellInfo(1459),
-    ["War-Scroll of Intellect"] = GetSpellInfo(264760),
+
+    ["Mark of the Wild"] = GetSpellInfo(1126),
 
     ["Battle Shout"] = GetSpellInfo(6673),
-    ["War-Scroll of Battle"] = GetSpellInfo(264761),
+
+    ["Blessing of the Bronze"] = GetSpellInfo(381748),
 }
 
 spellIconList = {
     ["Power Word: Fortitude"] = GetSpellTexture(21562),
-    ["War-Scroll of Fortitude"] = GetSpellTexture(264764),
 
     ["Arcane Intellect"] = GetSpellTexture(1459),
-    ["War-Scroll of Intellect"] = GetSpellTexture(264760),
+
+    ["Mark of the Wild"] = GetSpellTexture(1126),
 
     ["Battle Shout"] = GetSpellTexture(6673),
-    ["War-Scroll of Battle"] = GetSpellTexture(264761),
+
+    ["Blessing of the Bronze"] = GetSpellTexture(381748),
 }
 
 PlexusStatusGroupBuffs.defaultDB = {
@@ -52,7 +54,6 @@ PlexusStatusGroupBuffs.defaultDB = {
         icon = spellIconList["Power Word: Fortitude"],
         buffs = {
             spellNameList["Power Word: Fortitude"],
-            spellNameList["War-Scroll of Fortitude"]
         },
         enable = true,
         color = { r = 0, g = 0, b = 1, a = 1 },
@@ -66,12 +67,24 @@ PlexusStatusGroupBuffs.defaultDB = {
         icon = spellIconList["Arcane Intellect"],
         buffs = {
             spellNameList["Arcane Intellect"],
-            spellNameList["War-Scroll of Intellect"]
         },
         enable = true,
         color = { r = 0, g = 0, b = 1, a = 1 },
         priority = 99,
         class = "MAGE",
+        hidden = true,
+    },
+    buffGroup_Wild = {
+        text = spellNameList["Mark of the Wild"],
+        desc = "Buff Group: "..spellNameList["Mark of the Wild"],
+        icon = spellIconList["Mark of the Wild"],
+        buffs = {
+            spellNameList["Mark of the Wild"],
+        },
+        enable = true,
+        color = { r = 0, g = 0, b = 1, a = 1 },
+        priority = 99,
+        class = "DRUID",
         hidden = true,
     },
     buffGroup_Battle_Shout = {
@@ -80,12 +93,24 @@ PlexusStatusGroupBuffs.defaultDB = {
         icon = spellIconList["Battle Shout"],
         buffs = {
             spellNameList["Battle Shout"],
-            spellNameList["War-Scroll of Battle"]
         },
         enable = true,
         color = { r = 0, g = 0, b = 1, a = 1 },
         priority = 99,
         class = "WARRIOR",
+        hidden = true,
+    },
+    buffGroup_Bronze = {
+        text = spellNameList["Blessing of the Bronze"],
+        desc = "Buff Group: "..spellNameList["Blessing of the Bronze"],
+        icon = spellIconList["Blessing of the Bronze"],
+        buffs = {
+            spellNameList["Blessing of the Bronze"],
+        },
+        enable = true,
+        color = { r = 0, g = 0, b = 1, a = 1 },
+        priority = 99,
+        class = "EVOKER",
         hidden = true,
     }
 }
@@ -429,7 +454,7 @@ end
 function PlexusStatusGroupBuffs:Plexus_UnitJoined(event, guid, unit) --luacheck: ignore 212
     --self:RegisterMessage("Plexus_UnitJoined", guid, roster.unitid[guid])
     --self:Debug("Plexus_UnitJoined", unit)
-    self:UpdateUnit(event, unit, guid)
+    self:UpdateUnit(event, unit, _, guid)
 end
 
 function PlexusStatusGroupBuffs:RegisterStatuses()
@@ -483,11 +508,11 @@ end
 function PlexusStatusGroupBuffs:UpdateAllUnits()
     --self:Debug("UpdateAllUnits")
     for guid, unit in PlexusRoster:IterateRoster() do
-        self:UpdateUnit("UpdateAllUnits",unit, guid)
+        self:UpdateUnit("UpdateAllUnits", unit, _, guid)
     end
 end
 
-function PlexusStatusGroupBuffs:UpdateUnit(event, unit, guid)
+function PlexusStatusGroupBuffs:UpdateUnit(event, unit, _, guid)
     if not guid then guid = UnitGUID(unit) end
     for status in self:ConfiguredStatusIterator() do
         self:ShowMissingBuffs(event, unit, status, guid)
