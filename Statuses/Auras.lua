@@ -32,13 +32,10 @@ local spell_names
 local GetAuraDataByAuraInstanceID
 local ForEachAura
 
-local tocversion = select(4, GetBuildInfo())
-if tocversion >= 100000 then
-    if Plexus:IsRetailWow() then
-        PlexusStatusAuras.unitAuras = {}
-        GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-        ForEachAura = AuraUtil.ForEachAura
-    end
+if Plexus:IsRetailWow() then
+    PlexusStatusAuras.unitAuras = {}
+    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = AuraUtil.ForEachAura
 end
 
 if Plexus:IsRetailWow() then
@@ -1124,7 +1121,7 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    if Plexus:IsRetailWow() and tocversion >= 100000 then
+    if Plexus:IsRetailWow() then
         self:RegisterMessage("Plexus_UnitChanged")
         self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
         self:RegisterEvent("PLAYER_ENTERING_WORLD", "InitAuras")
@@ -1148,7 +1145,7 @@ function PlexusStatusAuras:OnStatusDisable(status)
     if self:EnabledStatusCount() == 0 then
         self:UnregisterMessage("Plexus_UnitJoined")
         self:UnregisterEvent("UNIT_AURA")
-        if Plexus:IsRetailWow() and tocversion >= 100000 then
+        if Plexus:IsRetailWow() then
             self:UnregisterEvent("PLAYER_ENTERING_WORLD")
             self:UnregisterMessage("Plexus_UnitChanged")
         end
@@ -1642,7 +1639,7 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if Plexus:IsRetailWow() and tocversion >= 100000 then
+        if Plexus:IsRetailWow() then
             self:UpdateUnitAuras(_, unitid, "UpdateUnitAura", guid)
         else
             self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
@@ -1651,7 +1648,7 @@ function PlexusStatusAuras:UpdateAllUnitAuras()
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if Plexus:IsRetailWow() and tocversion >= 100000 then
+    if Plexus:IsRetailWow() 100000 then
         self:UpdateUnitAuras(_, unitid, "UpdateUnitAura", guid)
     else
         self:ScanUnitAuras(event, unitid, guid)
@@ -1670,6 +1667,15 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Curse   = IsPlayerSpell(88423) or IsPlayerSpell(2782)
             PlayerCanDispel.Magic   = IsPlayerSpell(88423)
             PlayerCanDispel.Poison  = IsPlayerSpell(88423) or IsPlayerSpell(2782)
+
+        elseif PLAYER_CLASS == "EVOKER" then
+            --	360823	Maturalize          Preservation                Poison, Magic
+            --	365585	Expunge             Devastation                 Poison
+            --	374251	Cauterizing Flame   Devastation, Preservation   Curse, Disease, Poison
+            PlayerCanDispel.Curse   = IsPlayerSpell(374251)
+            PlayerCanDispel.Disease = IsPlayerSpell(374251)
+            PlayerCanDispel.Magic   = IsPlayerSpell(360823)
+            PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
 
         elseif PLAYER_CLASS == "MONK" then
              -- 115450   Detox             Mistweaver                  Disease, Poison, Magic
@@ -1705,15 +1711,6 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
         elseif PLAYER_CLASS == "MAGE" then
             -- 475   Remove Curse       Fire, Arcane, Frost        Curse
             PlayerCanDispel.Curse   = IsPlayerSpell(475)
-        end
-        if tocversion >= 100000 and PLAYER_CLASS == "EVOKER" then
-            --	360823	Maturalize			Preservation					Poison, Magic
-            --	365585	Expunge				Devastation						Poison
-            --	374251	Cauterizing Flame	Devastation, Preservation		Curse, Disease, Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(374251)
-            PlayerCanDispel.Disease = IsPlayerSpell(374251)
-            PlayerCanDispel.Magic   = IsPlayerSpell(360823)
-            PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
         end
     end
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
