@@ -1648,7 +1648,7 @@ function PlexusStatusAuras:UpdateAllUnitAuras()
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if Plexus:IsRetailWow() 100000 then
+    if Plexus:IsRetailWow() then
         self:UpdateUnitAuras(_, unitid, "UpdateUnitAura", guid)
     else
         self:ScanUnitAuras(event, unitid, guid)
