@@ -361,9 +361,6 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Reversion"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Reversion"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Echo", true)] = {
@@ -372,9 +369,6 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Echo"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Echo"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Temporal Anomaly", true)] = {
@@ -383,9 +377,6 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Temporal Anomaly"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Temporal Anomaly"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Rewind", true)] = {
@@ -394,9 +385,6 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Rewind"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Rewind"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
 
