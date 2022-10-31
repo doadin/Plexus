@@ -1127,6 +1127,7 @@ function PlexusStatusAuras:OnStatusEnable(status)
     if Plexus:IsRetailWow() and tocversion >= 100000 then
         self:RegisterMessage("Plexus_UnitChanged")
         self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
+        self:RegisterEvent("PLAYER_ENTERING_WORLD", "InitAuras")
     else
         self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
     end
@@ -1148,6 +1149,7 @@ function PlexusStatusAuras:OnStatusDisable(status)
         self:UnregisterMessage("Plexus_UnitJoined")
         self:UnregisterEvent("UNIT_AURA")
         if Plexus:IsRetailWow() and tocversion >= 100000 then
+            self:UnregisterEvent("PLAYER_ENTERING_WORLD")
             self:UnregisterMessage("Plexus_UnitChanged")
         end
     end
@@ -2369,6 +2371,34 @@ function PlexusStatusAuras:UpdateAuraScanList()
     end
 end
 
+function PlexusStatusAuras:InitAuras(event, isLogin, isReload)
+    if not isLogin and not isReload then
+        for guid, unitid in PlexusRoster:IterateRoster() do
+            for name in pairs(buff_names) do
+                self:UnitLostBuff(guid, _, name)
+            end
+
+            for name in pairs(player_buff_names) do
+                self:UnitLostPlayerBuff(guid, _, name)
+            end
+
+            for name in pairs(debuff_names) do
+                self:UnitLostDebuff(guid, _, name)
+            end
+
+            for name in pairs(player_debuff_names) do
+                self:UnitLostPlayerDebuff(guid, _, name)
+            end
+
+            for debuffType in pairs(debuff_types) do
+                self:UnitLostDebuffType(guid, _, debuffType)
+            end
+
+            self:updateAuraInfo(unitid, guid)
+        end
+    end
+end
+
 function PlexusStatusAuras:updateAuraInfo(unit, guid)
     if unit and self.unitAuras[unit] then
         for instanceID in pairs(self.unitAuras[unit]) do
@@ -2536,7 +2566,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, unitAuraUpdateInfo, guid
 
                         if debuff_types[debuffType] then
                             self:UnitLostDebuffType(guid, _, debuffType)
-                            self:Debug("remove dispellable", debuffType, auraInstanceID)
+                            self:Debug("remove dispellable", name, debuffType, auraInstanceID)
                         end
                     end
                     self.unitAuras[unit][auraInstanceID] = nil
