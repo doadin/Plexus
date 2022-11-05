@@ -34,8 +34,8 @@ local ForEachAura
 
 if Plexus:IsRetailWow() then
     PlexusStatusAuras.unitAuras = {}
-    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = AuraUtil.ForEachAura
+    GetAuraDataByAuraInstanceID = _G.C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = _G.AuraUtil.ForEachAura
 end
 
 if Plexus:IsRetailWow() then
