@@ -1648,11 +1648,12 @@ end
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
     if Plexus:IsRetailWow() then
         if PLAYER_CLASS == "DRUID" then
-            --  88423   Nature's Cure       Restoration                Curse, Poison, Magic
-            --   2782   Remove Corruption   Balance, Feral, Guardian   Curse, Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(88423) or IsPlayerSpell(2782)
+            --  88423   Nature's Cure                Restoration                Magic
+            --  392378  Improved Nature's Cure       Restoration                Curse, Poison, Magic
+            --  2782    Remove Corruption            Balance, Feral, Guardian   Curse, Poison
+            PlayerCanDispel.Curse   = IsPlayerSpell(392378) or IsPlayerSpell(2782)
             PlayerCanDispel.Magic   = IsPlayerSpell(88423)
-            PlayerCanDispel.Poison  = IsPlayerSpell(88423) or IsPlayerSpell(2782)
+            PlayerCanDispel.Poison  = IsPlayerSpell(392378) or IsPlayerSpell(2782)
 
         elseif PLAYER_CLASS == "EVOKER" then
             --	360823	Naturalize          Preservation                Poison, Magic
@@ -1664,29 +1665,33 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
 
         elseif PLAYER_CLASS == "MONK" then
-             -- 115450   Detox             Mistweaver                  Disease, Poison, Magic
-             -- 218164   Detox             Brewmaster, Windwalker      Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(115450) or IsPlayerSpell(218164)
+            -- 115450   Detox             Mistweaver                  Magic
+            -- 388874   Improved Detox    Mistweaver                  Disease, Poison, Magic
+            -- 218164   Detox             Brewmaster, Windwalker      Disease, Poison
+            PlayerCanDispel.Disease = IsPlayerSpell(388874) or IsPlayerSpell(218164)
             PlayerCanDispel.Magic   = IsPlayerSpell(115450)
-            PlayerCanDispel.Poison  = IsPlayerSpell(115450) or IsPlayerSpell(218164)
+            PlayerCanDispel.Poison  = IsPlayerSpell(388874) or IsPlayerSpell(218164)
 
         elseif PLAYER_CLASS == "PALADIN" then
-            --   4987   Cleanse           Holy                        Disease, Poison, Magic
-            -- 213644   Cleanse Toxins    Protection, Retribution     Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(4987) or IsPlayerSpell(213644)
+            --   4987     Cleanse           Holy                        Magic
+            --   393024   Improved Cleanse  Holy                        Disease, Poison, Magic
+            --   213644   Cleanse Toxins    Protection, Retribution     Disease, Poison
+            PlayerCanDispel.Disease = IsPlayerSpell(393024) or IsPlayerSpell(213644)
             PlayerCanDispel.Magic   = IsPlayerSpell(4987)
-            PlayerCanDispel.Poison  = IsPlayerSpell(4987) or IsPlayerSpell(213644)
+            PlayerCanDispel.Poison  = IsPlayerSpell(393024) or IsPlayerSpell(213644)
 
         elseif PLAYER_CLASS == "PRIEST" then
-            --    527   Purify            Discipline, Holy            Disease, Magic
-            -- 213634   Purify Disease    Shadow                      Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(527) or IsPlayerSpell(213634)
+            -- 527       Purify            Discipline, Holy            Magic
+            -- 390632    Improved Purify   Discipline, Holy            Disease, Magic
+            -- 213634    Purify Disease    Shadow                      Disease
+            PlayerCanDispel.Disease = IsPlayerSpell(390632) or IsPlayerSpell(213634)
             PlayerCanDispel.Magic   = IsPlayerSpell(527)
 
         elseif PLAYER_CLASS == "SHAMAN" then
-            --  77130   Purify Spirit      Restoration                 Curse, Magic
+            --  77130   Purify Spirit      Restoration                 Magic
+            --  383016  Purify Spirit      Restoration                 Curse, Magic
             --  51886   Cleanse Spirit     Elemental, Enhancement      Curse
-            PlayerCanDispel.Curse   = IsPlayerSpell(77130) or IsPlayerSpell(51886)
+            PlayerCanDispel.Curse   = IsPlayerSpell(383016) or IsPlayerSpell(51886)
             PlayerCanDispel.Magic   = IsPlayerSpell(77130)
 
         elseif PLAYER_CLASS == "WARLOCK" then
