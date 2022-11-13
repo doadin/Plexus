@@ -40,6 +40,11 @@ spell_names = {
     ["Rejuvenation"] = GetSpellInfo(774),
     ["Rejuvenation (Germination)"] = GetSpellInfo(155777),
     ["Wild Growth"] = GetSpellInfo(48438),
+-- Evoker
+    ["Reversion"] = GetSpellInfo(366155),
+    ["Echo"] = GetSpellInfo(364343),
+    ["Temporal Anomaly"] = GetSpellInfo(373862),
+    ["Rewind"] = GetSpellInfo(363534),
 -- Monk
     ["Enveloping Breath"] = GetSpellInfo(325209),
     ["Enveloping Mist"] = GetSpellInfo(124682),
@@ -335,6 +340,54 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 0.56, g = 0.85, b = 0.62, a = 1 },
         durationColorMiddle = { r = 0.39, g = 0.55, b = 0.42, a = 1 },
         durationColorHigh = { r = 0.27, g = 0.37, b = 0.29, a = 1 },
+        mine = true,
+    },
+
+    ---------------------
+    -- Evoker
+    ---------------------
+    [PlexusStatusAuras:StatusForSpell("Reversion", true)] = {
+        -- 366155
+        desc = format(L["Buff: %s"], spell_names["Reversion"]),
+        buff = spell_names["Reversion"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Reversion"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Echo", true)] = {
+        -- 364343
+        desc = format(L["Buff: %s"], spell_names["Echo"]),
+        buff = spell_names["Echo"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Echo"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Temporal Anomaly", true)] = {
+        -- 373862
+        desc = format(L["Buff: %s"], spell_names["Temporal Anomaly"]),
+        buff = spell_names["Temporal Anomaly"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Temporal Anomaly"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Rewind", true)] = {
+        -- 363534
+        desc = format(L["Buff: %s"], spell_names["Rewind"]),
+        buff = spell_names["Rewind"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Rewind"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
 
@@ -1623,6 +1676,15 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
         elseif PLAYER_CLASS == "MAGE" then
             -- 475   Remove Curse       Fire, Arcane, Frost        Curse
             PlayerCanDispel.Curse   = IsPlayerSpell(475)
+
+        elseif PLAYER_CLASS == "EVOKER" then
+            --	360823	Maturalize			Preservation					Poison, Magic
+            --	365585	Expunge				Devastation						Poison
+            --	374251	Cauterizing Flame	Devastation, Preservation		Curse, Disease, Poison
+            PlayerCanDispel.Curse   = IsPlayerSpell(374251)
+            PlayerCanDispel.Disease = IsPlayerSpell(374251)
+            PlayerCanDispel.Magic   = IsPlayerSpell(360823)
+            PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
         end
     end
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
