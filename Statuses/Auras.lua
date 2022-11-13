@@ -29,6 +29,14 @@ local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
 
+local GetAuraDataByAuraInstanceID
+local ForEachAura
+
+if Plexus:IsRetailWow() then
+    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = AuraUtil.ForEachAura
+end
+
 if Plexus:IsRetailWow() then
 spell_names = {
 -- All
@@ -1112,7 +1120,11 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
+    if Plexus:IsRetailWow() then
+        self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
+    else
+        self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
+    end
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     --self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
 
@@ -1620,12 +1632,20 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
-        self:ScanUnitAuras("UpdateAllUnitAuras", unitid, nil, nil, guid)
+        if Plexus:IsRetailWow() then
+            self:UpdateUnitAuras(_, unitid, {isFullUpdate = true})
+        else
+            self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
+        end
     end
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    self:ScanUnitAuras(event, unitid, nil, nil, guid)
+    if Plexus:IsRetailWow() then
+        self:UpdateUnitAuras(_, unitid, {isFullUpdate = true})
+    else
+        self:ScanUnitAuras(event, unitid, guid)
+    end
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
@@ -1801,6 +1821,9 @@ end
 -- * As of WoW 8.0, UnitAura no longer accepts a name, only an index, so we
 --   now necessarily iterate over all buffs on the unit. The above information
 --   is preserved for historical interest.
+-- * As of WoW 9.2 and 10.0 an event UNIT_AURA now has instance ID for each aura
+--   No longer needs to scan every auras. UNIT_AURA has the parameter table that
+--   contains several aura informations
 
 -- durationAuras[status][guid] = { <aura properties> }
 PlexusStatusAuras.durationAuras = {}
@@ -2339,6 +2362,186 @@ function PlexusStatusAuras:UpdateAuraScanList()
     end
 end
 
+local unitAuras
+function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras)
+    local guid
+    if not unit then
+        return
+    end
+    if not unitAuras then
+        unitAuras = {}
+    end
+    if not guid then guid = UnitGUID(unit) end
+    if not PlexusRoster:IsGUIDInRaid(guid) then
+        return
+    end
+    --self:Debug("UNIT_AURA", unit, guid)
+
+    for _, auras in pairs(self.durationAuras) do
+        if auras[guid] then
+            durationAuraPool:put(auras[guid])
+            auras[guid] = nil
+        end
+    end
+
+    -- Reset any auras that no longer exist
+    --for unitID,auraInstanceIDTable in pairs(unitAuras) do
+    if unitAuras[unit] then
+        for id, info in pairs(unitAuras[unit]) do
+            local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, info.auraInstanceID)
+            if UnitAuraInfo == nil then
+                local sourceUnit
+                if not info.sourceUnit then
+                    sourceUnit = "nameplate"
+                else
+                    sourceUnit = info.sourceUnit
+                end
+                if sourceUnit then
+                    if info.isHelpful and player_buff_names[info.name] and sourceUnit == "player" then
+                        PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,info.name)
+                    end
+                    if info.isHelpful and buff_names[info.name] then
+                        PlexusStatusAuras:UnitLostBuff(guid,nil,info.name)
+                    end
+                    if info.isHarmful and player_debuff_names[info.name] and sourceUnit == "player" then
+                        PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,info.name)
+                    end
+                    if info.isHarmful and debuff_names[info.name] then
+                        PlexusStatusAuras:UnitLostDebuff(guid,nil,info.name)
+                    end
+                    if info.isHarmful and debuff_types[info.dispelName] then
+                        PlexusStatusAuras:UnitLostDebuffType(guid,nil,info.dispelName)
+                    end
+                end
+                unitAuras[unit][info.auraInstanceID] = nil
+            end
+        end
+    end
+
+    -- Full Update
+    if (updatedAuras and updatedAuras.isFullUpdate) or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
+        local unitauraInfo = {}
+        ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+        ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+        local numFullUpdateAuras = 0
+        for _ in pairs(unitauraInfo) do
+            numFullUpdateAuras = numFullUpdateAuras + 1
+        end
+        if numFullUpdateAuras > 0 then
+            unitAuras[unit] = {}
+            for _, v in pairs(unitauraInfo) do
+                if not v.sourceUnit then
+                    local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, v.auraInstanceID)
+                    if UnitAuraInfo and UnitAuraInfo.sourceUnit then
+                        v.sourceUnit = UnitAuraInfo.sourceUnit
+                    end
+                end
+                unitAuras[unit][v.auraInstanceID] = v
+            end
+        end
+    end
+
+    if updatedAuras and updatedAuras.addedAuras then
+        for _, aura in pairs(updatedAuras.addedAuras) do
+            if not aura.sourceUnit then
+                local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, aura.auraInstanceID)
+                if UnitAuraInfo and UnitAuraInfo.sourceUnit then
+                    aura.sourceUnit = UnitAuraInfo.sourceUnit
+                end
+            end
+            if not unitAuras[unit] then
+                unitAuras[unit] = {}
+            end
+            unitAuras[unit][aura.auraInstanceID] = aura
+       end
+    end
+
+    if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
+        for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
+            local oldSourceUnit = unitAuras[unit] and unitAuras[unit][auraInstanceID] and unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
+            local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+            if auraTable then
+                if not unitAuras[unit] then
+                    unitAuras[unit] = {}
+                end
+                unitAuras[unit][auraInstanceID] = auraTable
+                if not auraTable.sourceUnit and oldSourceUnit then
+                    auraTable.sourceUnit = oldSourceUnit
+                end
+            end
+        end
+    end
+
+    if updatedAuras and updatedAuras.removedAuraInstanceIDs then
+        for _, auraInstanceIDTable in ipairs(updatedAuras.removedAuraInstanceIDs) do
+            if unitAuras[unit] and unitAuras[unit][auraInstanceIDTable] then
+                local UnitAuraInfo = unitAuras[unit][auraInstanceIDTable]
+                local sourceUnit = UnitAuraInfo and UnitAuraInfo.sourceUnit
+                if UnitAuraInfo and not UnitAuraInfo.sourceUnit or not sourceUnit then
+                    sourceUnit = "nameplate"
+                end
+                if UnitAuraInfo.sourceUnit or sourceUnit then
+                    if UnitAuraInfo.isHelpful and UnitAuraInfo.sourceUnit == "player"  then
+                        PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,UnitAuraInfo.name)
+                    end
+                    if UnitAuraInfo.isHelpful then
+                        PlexusStatusAuras:UnitLostBuff(guid,nil,UnitAuraInfo.name)
+                    end
+                    if UnitAuraInfo.isHarmful and UnitAuraInfo.sourceUnit == "player"  then
+                        PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,UnitAuraInfo.name)
+                    end
+                    if UnitAuraInfo.isHarmful then
+                        PlexusStatusAuras:UnitLostDebuff(guid,nil,UnitAuraInfo.name)
+                    end
+                    if UnitAuraInfo.isHarmful and debuff_types[UnitAuraInfo.dispelName] then
+                        PlexusStatusAuras:UnitLostDebuffType(guid,nil,UnitAuraInfo.dispelName)
+                    end
+                end
+                unitAuras[unit][auraInstanceIDTable] = nil
+            end
+        end
+    end
+
+    --for unitID,auraInstanceIDTable in pairs(unitAuras) do
+    if unitAuras[unit] then
+        for id, info in pairs(unitAuras[unit]) do
+            local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, info.auraInstanceID)
+            local sourceUnit = UnitAuraInfo and UnitAuraInfo.sourceUnit
+            if not info.sourceUnit or not sourceUnit then
+                sourceUnit = "nameplate"
+            end
+            if info.sourceUnit or sourceUnit then
+                if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
+                    PlexusStatusAuras:UnitGainedPlayerBuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
+                end
+                if info.isHelpful and buff_names[info.name] then
+                    PlexusStatusAuras:UnitGainedBuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
+                end
+                if info.isHarmful and player_debuff_names[info.name] and info.sourceUnit == "player" then
+                    PlexusStatusAuras:UnitGainedPlayerDebuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
+                end
+                if info.isHarmful and debuff_names[info.name] then
+                    PlexusStatusAuras:UnitGainedDebuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
+                end
+                if info.isHarmful and debuff_types[info.dispelName] then
+                    PlexusStatusAuras:UnitGainedDebuffType(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable,nil,info.spellId,nil,info.isBossAura,nil)
+                end
+            end
+        end
+
+        local numAuras = 0
+        for _ in pairs(unitAuras[unit]) do
+            numAuras = numAuras + 1
+        end
+        if numAuras == 0 then
+            unitAuras[unit] = nil
+        end
+
+    end
+
+    self:ResetDurationTimer(self:HasActiveDurations())
+end
+
 -- temp tables
 local buff_names_seen = {}
 local player_buff_names_seen = {}
@@ -2346,7 +2549,7 @@ local debuff_names_seen = {}
 local player_debuff_names_seen = {}
 local debuff_types_seen = {}
 
-function PlexusStatusAuras:ScanUnitAuras(event, unit, isFullUpdate, updatedAuras, guid) --luacheck: ignore 212
+function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 212
     if not guid then guid = UnitGUID(unit) end
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
