@@ -29,15 +29,6 @@ local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
 
-local GetAuraDataByAuraInstanceID
-local ForEachAura
-
-if Plexus:IsRetailWow() then
-    PlexusStatusAuras.unitAuras = {}
-    GetAuraDataByAuraInstanceID = _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = _G.AuraUtil.ForEachAura
-end
-
 if Plexus:IsRetailWow() then
 spell_names = {
 -- All
@@ -361,6 +352,9 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Reversion"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Reversion"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Echo", true)] = {
@@ -369,6 +363,9 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Echo"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Echo"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Temporal Anomaly", true)] = {
@@ -377,6 +374,9 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Temporal Anomaly"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Temporal Anomaly"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Rewind", true)] = {
@@ -385,6 +385,9 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Rewind"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Rewind"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
 
@@ -1109,12 +1112,7 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    if Plexus:IsRetailWow() then
-        self:RegisterMessage("Plexus_UnitChanged")
-        self:RegisterEvent("UNIT_AURA", "UpdateUnitAuraInfo")
-    else
-        self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
-    end
+    self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     --self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
 
@@ -1132,9 +1130,6 @@ function PlexusStatusAuras:OnStatusDisable(status)
     if self:EnabledStatusCount() == 0 then
         self:UnregisterMessage("Plexus_UnitJoined")
         self:UnregisterEvent("UNIT_AURA")
-        if Plexus:IsRetailWow() then
-            self:UnregisterMessage("Plexus_UnitChanged")
-        end
     end
 end
 
@@ -1625,24 +1620,12 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if Plexus:IsRetailWow() then
-            self:UpdateUnitAuraInfo(_, unitid, "UpdateUnitAura", guid)
-        else
-            self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
-        end
+        self:ScanUnitAuras("UpdateAllUnitAuras", unitid, nil, nil, guid)
     end
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if Plexus:IsRetailWow() then
-        self:UpdateUnitAuraInfo(_, unitid, "UpdateUnitAura", guid) -- individual unit update can't solve other units which is moved by raid leader
-    else
-        self:ScanUnitAuras(event, unitid, guid)
-    end
-end
-
-function PlexusStatusAuras:Plexus_UnitChanged(_, guid, unitid)
-    self:UpdateUnitAuraInfo(_, unitid, "UpdateUnitAura", guid)
+    self:ScanUnitAuras(event, unitid, nil, nil, guid)
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
@@ -1654,15 +1637,6 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Curse   = IsPlayerSpell(392378) or IsPlayerSpell(2782)
             PlayerCanDispel.Magic   = IsPlayerSpell(88423)
             PlayerCanDispel.Poison  = IsPlayerSpell(392378) or IsPlayerSpell(2782)
-
-        elseif PLAYER_CLASS == "EVOKER" then
-            --	360823	Naturalize          Preservation                Poison, Magic
-            --	365585	Expunge             Devastation                 Poison
-            --	374251	Cauterizing Flame   Devastation, Preservation   Curse, Disease, Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(374251)
-            PlayerCanDispel.Disease = IsPlayerSpell(374251)
-            PlayerCanDispel.Magic   = IsPlayerSpell(360823)
-            PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
 
         elseif PLAYER_CLASS == "MONK" then
             -- 115450   Detox             Mistweaver                  Magic
@@ -1702,6 +1676,15 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
         elseif PLAYER_CLASS == "MAGE" then
             -- 475   Remove Curse       Fire, Arcane, Frost        Curse
             PlayerCanDispel.Curse   = IsPlayerSpell(475)
+
+        elseif PLAYER_CLASS == "EVOKER" then
+            --	360823	Maturalize			Preservation					Poison, Magic
+            --	365585	Expunge				Devastation						Poison
+            --	374251	Cauterizing Flame	Devastation, Preservation		Curse, Disease, Poison
+            PlayerCanDispel.Curse   = IsPlayerSpell(374251)
+            PlayerCanDispel.Disease = IsPlayerSpell(374251)
+            PlayerCanDispel.Magic   = IsPlayerSpell(360823)
+            PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
         end
     end
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
@@ -1818,9 +1801,6 @@ end
 -- * As of WoW 8.0, UnitAura no longer accepts a name, only an index, so we
 --   now necessarily iterate over all buffs on the unit. The above information
 --   is preserved for historical interest.
--- * As of WoW 9.2 and 10.0 an event UNIT_AURA now has instance ID for each aura
---   No longer needs to scan every auras. UNIT_AURA has the parameter table that
---   contains several aura informations
 
 -- durationAuras[status][guid] = { <aura properties> }
 PlexusStatusAuras.durationAuras = {}
@@ -2003,7 +1983,7 @@ end
 
 function PlexusStatusAuras:RefreshActiveDurations()
 
-    --self:Debug("RefreshActiveDurations", GetTime())
+    self:Debug("RefreshActiveDurations", GetTime())
 
     for status, guids in pairs(self.durationAuras) do
         local settings = self.db.profile[status]
@@ -2366,183 +2346,7 @@ local debuff_names_seen = {}
 local player_debuff_names_seen = {}
 local debuff_types_seen = {}
 
-function PlexusStatusAuras:updateUnitAura(unit, guid)
-    if unit and self.unitAuras[unit] then
-        for instanceID in pairs(self.unitAuras[unit]) do
-            local aura = self.unitAuras[unit][instanceID]
-            if not aura then return end
-
-            if aura.isHelpful then
-                local name, icon, count, debuffType, duration, expirationTime, caster, isStealable = aura.name, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable
-
-                local class
-                if type(caster) == "string" then
-                    class = UnitClass(caster)
-                end
-
-                -- scan for buffs
-                if buff_names[name] then
-                    buff_names_seen[name] = true
-                    if UnitIsVisible(unit) then
-                        self:UnitGainedBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-                    else
-                        self:UnitLostBuff(guid, _, name)
-                    end
-                end
-
-                -- scan for buffs cast by the player
-                if player_buff_names[name] and caster == "player" then
-                    player_buff_names_seen[name] = true
-                    if UnitIsVisible(unit) then
-                        self:UnitGainedPlayerBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-                    else
-                        self:UnitLostPlayerBuff(guid, _, name)
-                    end
-                end
-            elseif aura.isHarmful then
-                local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, spellID, canApply, isBossAura, isCastByPlayer = aura.name, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable, aura.spellId, aura.canApplyAura, aura.isBossAura, aura.isFromPlayerOrPlayerPet
-
-                if debuff_names[name] then
-                    debuff_names_seen[name] = true
-                    if UnitIsVisible(unit) then
-                        self:UnitGainedDebuff(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, false, spellID, canApply, isBossAura, isCastByPlayer)
-                    else
-                        self:UnitLostDebuff(guid, _, name)
-                    end
-                elseif player_debuff_names[name] and casterUnit == "player" then
-                    player_debuff_names_seen[name] = true
-                    if UnitIsVisible(unit) then
-                        self:UnitGainedPlayerDebuff(guid, _, name, _, icon, count, debuffType, duration, expirationTime, _, _)
-                    else
-                        self:UnitLostPlayerDebuff(guid, _, name)
-                    end
-                elseif debuff_types[debuffType] then
-                    -- elseif so that a named debuff doesn't trigger the type status
-                    debuff_types_seen[debuffType] = true
-                    if UnitIsVisible(unit) then
-                        self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, false, spellID, canApply, isBossAura, isCastByPlayer)
-                    else
-                        self:UnitLostDebuffType(guid, _, debuffType)
-                    end
-                end
-            end
-        end
-    else
-        return
-    end
-
-    -- handle lost buffs
-    for name in pairs(buff_names) do
-        if not buff_names_seen[name] then
-            self:UnitLostBuff(guid, _, name)
-        else
-            buff_names_seen[name] = nil
-        end
-    end
-
-    for name in pairs(player_buff_names) do
-        if not player_buff_names_seen[name] then
-            self:UnitLostPlayerBuff(guid, _, name)
-        else
-            player_buff_names_seen[name] = nil
-        end
-    end
-
-    -- handle lost debuffs
-    for name in pairs(debuff_names) do
-        if not debuff_names_seen[name] then
-            self:UnitLostDebuff(guid, _, name)
-        else
-            debuff_names_seen[name] = nil
-        end
-    end
-
-    for name in pairs(player_debuff_names) do
-        if not player_debuff_names_seen[name] then
-            self:UnitLostPlayerDebuff(guid, _, name)
-        else
-            player_debuff_names_seen[name] = nil
-        end
-    end
-
-    for debuffType in pairs(debuff_types) do
-        if not debuff_types_seen[debuffType] then
-            self:UnitLostDebuffType(guid, _, debuffType)
-        else
-            debuff_types_seen[debuffType] = nil
-        end
-    end
-end
-
-function PlexusStatusAuras:UpdateUnitAuraInfo(_, unit, unitAuraUpdateInfo, guid)
-    if not guid then guid = UnitGUID(unit) end
-    if not PlexusRoster:IsGUIDInRaid(guid) then
-        return
-    end
-    if not self.unitAuras[unit] then
-        self.unitAuras[unit] = {}
-    end
-
-    --self:Debug("UNIT_AURA", unit, guid)
-
-    for _, auras in pairs(self.durationAuras) do
-        if auras[guid] then
-            durationAuraPool:put(auras[guid])
-            auras[guid] = nil
-        end
-    end
-
-    if unitAuraUpdateInfo.isFullUpdate or unitAuraUpdateInfo == "UpdateUnitAura" or (not unitAuraUpdateInfo.isFullUpdate and (not unitAuraUpdateInfo.addedAuras and not unitAuraUpdateInfo.updatedAuraInstanceIDs and not unitAuraUpdateInfo.removedAuraInstanceIDs)) then
-        self:Debug("FullUpdate or UpdateUnitAura:", unit)
-        local unitauraInfo = {}
-        ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-        ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-
-        self.unitAuras[unit] = {} 
-        for _, v in pairs(unitauraInfo) do
-            self.unitAuras[unit][v.auraInstanceID] = v
-        end
-    end
-
-    if unitAuraUpdateInfo.addedAuras then
-        for _, aura in pairs(unitAuraUpdateInfo.addedAuras) do
-            self.unitAuras[unit][aura.auraInstanceID] = aura
-        end
-    end
-
-    if unitAuraUpdateInfo.updatedAuraInstanceIDs then
-        for _, auraInstanceID in ipairs(unitAuraUpdateInfo.updatedAuraInstanceIDs) do
-            if auraInstanceID then
-                if self.unitAuras[unit][auraInstanceID] then
-                    local newAura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-                    if newAura then
-                        self.unitAuras[unit][auraInstanceID] = newAura
-                    end
-                else
-                    local aura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-                    if aura then
-                        self.unitAuras[unit][auraInstanceID] = aura
-                    end
-                end
-            end
-        end
-    end
-
-    if unitAuraUpdateInfo.removedAuraInstanceIDs then
-        for _, auraInstanceID in ipairs(unitAuraUpdateInfo.removedAuraInstanceIDs) do
-            if self.unitAuras[unit] then
-                if auraInstanceID and self.unitAuras[unit][auraInstanceID] then
-                    self.unitAuras[unit][auraInstanceID] = nil
-                end
-            end
-        end
-    end
-
-    self:updateUnitAura(unit, guid)
-    self:ResetDurationTimer(self:HasActiveDurations())
-end
-
-function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 212
+function PlexusStatusAuras:ScanUnitAuras(event, unit, isFullUpdate, updatedAuras, guid) --luacheck: ignore 212
     if not guid then guid = UnitGUID(unit) end
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
