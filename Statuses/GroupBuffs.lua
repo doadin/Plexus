@@ -8,6 +8,14 @@ local InCombatLockdown = _G.InCombatLockdown
 local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
     = _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsVisible, _G.UnitIsDead, _G.UnitIsGhost
 
+local GetAuraDataByAuraInstanceID
+local ForEachAura
+
+if Plexus:IsRetailWow() then
+    GetAuraDataByAuraInstanceID = _G.C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = _G.AuraUtil.ForEachAura
+end
+
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 PlexusStatusGroupBuffs.options = false
@@ -512,14 +520,116 @@ function PlexusStatusGroupBuffs:UpdateAllUnits()
     end
 end
 
-function PlexusStatusGroupBuffs:UpdateUnit(event, unit, _, guid)
+function PlexusStatusGroupBuffs:UpdateUnit(event, unit, updatedAuras, guid)
     if not guid then guid = UnitGUID(unit) end
-    for status in self:ConfiguredStatusIterator() do
-        self:ShowMissingBuffs(event, unit, status, guid)
+    if Plexus:IsRetailWow() then
+        for status in self:ConfiguredStatusIterator() do
+            self:ShowMissingBuffs_Retail(event, unit, updatedAuras, status, guid)
+        end
+    else
+        for status in self:ConfiguredStatusIterator() do
+            self:ShowMissingBuffs_Classic(event, unit, status, guid)
+        end
     end
 end
 
-function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
+local unitAuras = {}
+function PlexusStatusGroupBuffs:ShowMissingBuffs_Retail(event, unit, updatedAuras, status, guid)
+    self:Debug("UpdateUnit Event: ", event)
+    self:Debug("UpdateUnit Unit: ", unit)
+    self:Debug("UpdateUnit GUID: ", guid)
+    if not unit then return end
+    if unit == "nameplate1" or unit == "target" then return end
+    if not status then return end
+    if not guid then return end
+    if not PlexusRoster:IsGUIDInRaid(guid) then return end
+    if not UnitIsPlayer(unit) then return end
+    local settings = self.db.profile[status]
+    local BuffClass = settings.class
+    local EnableClassFilter = self.db.profile.EnableClassFilter
+    local _, englishClass= UnitClass("player")
+
+    if not settings.enable then
+        self.core:SendStatusLostAllUnits(status)
+        return
+    end
+
+    if UnitIsDead(unit) or UnitIsGhost(unit) then
+        self.core:SendStatusLost(guid, status)
+        return
+    end
+
+    if EnableClassFilter then
+        if BuffClass ~= englishClass then
+            --self:Debug("Class Filter is on, we are not the class")
+            self.core:SendStatusLost(guid, status)
+            return
+        end
+    end
+
+    local buffs_name = {}
+    for _, buff in pairs(settings.buffs) do
+        buffs_name[buff] = true
+    end
+    
+    -- Full Update
+    if (updatedAuras and updatedAuras.isFullUpdate) or event == "UpdateAllUnits" or event == "Plexus_UnitJoined" or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
+        local unitauraInfo = {}
+        ForEachAura(unit, "HELPFUL", nil, function(aura)
+            if buffs_name[aura.name] then
+                unitAuras[unit] = aura.auraInstanceID
+            end
+        end, true)
+    end
+
+    if updatedAuras and updatedAuras.addedAuras then
+        for _, aura in pairs(updatedAuras.addedAuras) do
+            if buffs_name[aura.name] then
+                unitAuras[unit] = aura.auraInstanceID
+            end
+        end
+    end
+
+    if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
+        for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
+            local aura = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+            if aura then
+                if buffs_name[aura.name] then
+                    unitAuras[unit] = aura.auraInstanceID
+                end
+            end
+        end
+    end
+
+    if updatedAuras and updatedAuras.removedAuraInstanceIDs then
+        for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
+            if unitAuras[unit] == auraInstanceID then
+                unitAuras[unit] = nil
+            end
+        end
+    end
+
+    if UnitIsVisible(unit) and unitAuras[unit] ~= nil then
+        self.core:SendStatusLost(guid, status)
+        return
+    end
+
+    local icon = settings.icon
+
+    self.core:SendStatusGained(
+        guid,
+        status,
+        settings.priority,
+        nil,
+        settings.color,
+        settings.text,
+        nil,
+        nil,
+        icon
+    )
+end
+
+function PlexusStatusGroupBuffs:ShowMissingBuffs_Classic(event, unit, status, guid)
     self:Debug("UpdateUnit Event: ", event)
     self:Debug("UpdateUnit Unit: ", unit)
     self:Debug("UpdateUnit GUID: ", guid)
