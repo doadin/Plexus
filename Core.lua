@@ -18,6 +18,7 @@ local strtrim = _G.strtrim
 local strupper = _G.strupper
 local tinsert = _G.tinsert
 
+local GetBuildInfo = _G.GetBuildInfo
 local CreateFrame = _G.CreateFrame
 local GetAddOnMetadata = _G.GetAddOnMetadata
 local InCombatLockdown = _G.InCombatLockdown
@@ -654,7 +655,7 @@ function Plexus:SetupOptions()
         end
     end)
 
-    local version, build, date, tocversion = GetBuildInfo()
+    local tocversion = select(4,GetBuildInfo())
     if Plexus:IsRetailWow() and tocversion >= 100000 then
         _G.SettingsPanel:HookScript("OnShow", function()
             Dialog:Close(PLEXUS)
@@ -716,7 +717,7 @@ function Plexus:ToggleOptions()
             Dialog:Open(PLEXUS)
         end
     else
-        local version, build, date, tocversion = GetBuildInfo()
+        local tocversion = select(4,GetBuildInfo())
         if tocversion >= 100000 then
             Settings.OpenToCategory(self.optionsPanels[2])
         else
