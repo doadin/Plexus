@@ -33,8 +33,8 @@ local GetAuraDataByAuraInstanceID
 local ForEachAura
 
 if Plexus:IsRetailWow() then
-    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = AuraUtil.ForEachAura
+    GetAuraDataByAuraInstanceID = _G.C_UnitAuras.GetAuraDataByAuraInstanceID
+    ForEachAura = _G.AuraUtil.ForEachAura
 end
 
 if Plexus:IsRetailWow() then
@@ -2363,15 +2363,15 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 local unitAuras
-function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras)
-    local guid
+function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit, updatedAuras
     if not unit then
         return
     end
+    local guid = UnitGUID(unit)
     if not unitAuras then
         unitAuras = {}
     end
-    if not guid then guid = UnitGUID(unit) end
+
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
     end
@@ -2387,7 +2387,8 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras)
     -- Reset any auras that no longer exist
     --for unitID,auraInstanceIDTable in pairs(unitAuras) do
     if unitAuras[unit] then
-        for id, info in pairs(unitAuras[unit]) do
+        --id, info
+        for _, info in pairs(unitAuras[unit]) do
             local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, info.auraInstanceID)
             if UnitAuraInfo == nil then
                 local sourceUnit
@@ -2504,7 +2505,8 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras)
 
     --for unitID,auraInstanceIDTable in pairs(unitAuras) do
     if unitAuras[unit] then
-        for id, info in pairs(unitAuras[unit]) do
+        --id, info
+        for _, info in pairs(unitAuras[unit]) do
             local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, info.auraInstanceID)
             local sourceUnit = UnitAuraInfo and UnitAuraInfo.sourceUnit
             if not info.sourceUnit or not sourceUnit then
