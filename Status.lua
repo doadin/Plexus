@@ -342,7 +342,9 @@ if Plexus:IsRetailWow() then
         ["DEMONHUNTER"] = {["r"] = 0.64,["g"] = 0.19,["b"] = 0.79,},
         ["WARRIOR"] = {["r"] = 0.78,["g"] = 0.61,["b"] = 0.43,},
         ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
-        ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41}}
+        ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41},
+        ["EVOKER"] = {["r"] = 0.20,["g"] = 0.58,["b"] = 0.50,},
+    }
 end
 if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
     PlexusClasses = {
