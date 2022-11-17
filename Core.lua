@@ -198,14 +198,14 @@ Plexus.options = {
                 },
                 import = {
                     name = L["Import Profile"],
-                    order = 3,
+                    order = 5,
                     width = "double",
                     type = "execute",
                     func = function() Plexus:ImportProfile() end,
                 },
                 export = {
                     name = L["Export Profile"],
-                    order = 4,
+                    order = 6,
                     width = "double",
                     type = "execute",
                     func = function() Plexus:ExportProfile() end,
@@ -347,6 +347,38 @@ end
 
 function Plexus:IsRetailWow() --luacheck: ignore 212
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+end
+
+if Plexus:IsRetailWow() then
+    Plexus.defaultDB.profile.hideBlizzardParty = false
+    Plexus.defaultDB.profile.hideBlizzardRaid = false
+
+    Plexus.options.args.general.args.hideBlizzardParty = {
+        name = L["Hide Blizzard Party Frames"],
+        desc = L["Enable or Disable Showing Blizzard Party Frames. Requires ReloadUI!"],
+        order = 3,
+        width = "double",
+        type = "toggle",
+        get = function()
+            return Plexus.db.profile.hideBlizzardParty
+        end,
+        set = function(info, value) --luacheck: ignore 212
+            Plexus.db.profile.hideBlizzardParty = value
+        end,
+    }
+    Plexus.options.args.general.args.hideBlizzardRaid = {
+        name = L["Hide Blizzard Raid Frames"],
+        desc = L["Enable or Disable Showing Blizzard Raid Frames. Requires ReloadUI!"],
+        order = 4,
+        width = "double",
+        type = "toggle",
+        get = function()
+            return Plexus.db.profile.hideBlizzardRaid
+        end,
+        set = function(info, value) --luacheck: ignore 212
+            Plexus.db.profile.hideBlizzardRaid = value
+        end,
+    }
 end
 
 function Plexus.modulePrototype:OnInitialize()
@@ -569,6 +601,9 @@ function Plexus:OnInitialize()
 
     -- to catch mysteriously late-loading modules
     self:RegisterEvent("ADDON_LOADED")
+
+    self:UpdateBlizzardFrames()
+
 end
 
 function Plexus:OnEnable()
@@ -804,6 +839,88 @@ function Plexus:ResetModules()
 end
 
 ------------------------------------------------------------------------
+
+-- Hide blizzard raid & party frames
+do
+    local hiddenFrame
+
+    local function rehide(self)
+        if not InCombatLockdown() then self:Hide() end
+    end
+
+    local function unregister(f)
+        if f then f:UnregisterAllEvents() end
+    end
+
+    local function hideFrame(frame)
+        if frame then
+            UnregisterUnitWatch(frame)
+            frame:Hide()
+            frame:UnregisterAllEvents()
+            frame:SetParent(hiddenFrame)
+            frame:HookScript("OnShow", rehide)
+            unregister(frame.healthbar)
+            unregister(frame.manabar)
+            unregister(frame.powerBarAlt)
+            unregister(frame.spellbar)
+        end
+    end
+
+    -- party frames
+    local function HidePartyFrames()
+        hiddenFrame = hiddenFrame or CreateFrame('Frame')
+        hiddenFrame:Hide()
+        if PartyFrame then
+            hideFrame(PartyFrame)
+            for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+                hideFrame(frame)
+                hideFrame(frame.HealthBar)
+                hideFrame(frame.ManaBar)
+            end
+            PartyFrame.PartyMemberFramePool:ReleaseAll()
+        end
+        hideFrame(CompactPartyFrame)
+        UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
+    end
+
+    -- raid frames
+    local function HideRaidFrames()
+        if not CompactRaidFrameManager then return end
+        local function HideFrames()
+            CompactRaidFrameManager:SetAlpha(0)
+            CompactRaidFrameManager:UnregisterAllEvents()
+            CompactRaidFrameContainer:UnregisterAllEvents()
+            if not InCombatLockdown() then
+                CompactRaidFrameManager:Hide()
+                local shown = CompactRaidFrameManager_GetSetting('IsShown')
+                if shown and shown ~= '0' then
+                    CompactRaidFrameManager_SetSetting('IsShown', '0')
+                end
+            end
+        end
+        hiddenFrame = hiddenFrame or CreateFrame('Frame')
+        hiddenFrame:Hide()
+        hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
+        CompactRaidFrameManager:HookScript('OnShow', HideFrames)
+        CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
+        HideFrames()
+    end
+
+    -- Only for dragonflight, for classic compactRaidFrames addon is disabled from options
+    function Plexus:UpdateBlizzardFrames()
+        if Plexus:IsRetailWow() then
+            local hideBlizzardParty = self.db.profile.hideBlizzardParty
+            local hideBlizzardRaid = self.db.profile.hideBlizzardRaid
+            if hideBlizzardRaid then
+                HideRaidFrames()
+            end
+            if hideBlizzardParty then
+                HidePartyFrames()
+            end
+        end
+        self.UpdateBlizzardFrames = nil
+    end
+end
 
 function Plexus:PLAYER_ENTERING_WORLD()
     -- this is needed for zoning while in combat
