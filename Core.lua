@@ -334,19 +334,19 @@ Plexus.modulePrototype = {
 }
 
 function Plexus:IsClassicWow() --luacheck: ignore 212
-	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 end
 
 function Plexus:IsTBCWow() --luacheck: ignore 212
-	return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
+    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
 end
 
 function Plexus:IsWrathWow() --luacheck: ignore 212
-	return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
+    return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
 end
 
 function Plexus:IsRetailWow() --luacheck: ignore 212
-	return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 
 function Plexus.modulePrototype:OnInitialize()
