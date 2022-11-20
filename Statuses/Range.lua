@@ -99,6 +99,8 @@ do
         resSpell = GetSpellInfo(2008)   -- Ancestral Spirit
     elseif class == "WARLOCK" then
         resSpell = GetSpellInfo(20707)  -- Soulstone
+    elseif class == "EVOKER" then
+        resSpell = GetSpellInfo(361227)  -- Return
     end
 end
 
