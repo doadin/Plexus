@@ -90,6 +90,7 @@ local ResSpells = {
     [50769]  = GetSpellInfo(50769),  -- Revive (Druid)
     [20484]  = GetSpellInfo(20484),  -- Rebirth (Druid)
     --[982]    = GetSpellInfo(982),    -- Revive Pet (Hunter)
+    [361227] = GetSpellInfo(361227), -- Return (Evoker)
     -- Items
     [8342]   = GetSpellInfo(8342),   -- Defibrillate (Goblin Jumper Cables)
     [22999]  = GetSpellInfo(22999),  -- Defibrillate (Goblin Jumper Cables XL)
@@ -98,12 +99,6 @@ local ResSpells = {
     [265116] = GetSpellInfo(265116), -- Defibrillate (Unstable Temporal Time Shifter)
     [199119] = GetSpellInfo(199119), -- Failure Detection Aura (Failure Detection Pylon) -- NEEDS CHECK
     [187777] = GetSpellInfo(187777), -- Reawaken (Brazier of Awakening)
-    -- massSpells
-    --[212056] = GetSpellInfo(212056), -- Absolution (Holy Paladin)
-    --[212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
-    --[212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
-    --[212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
-    --[212040] = GetSpellInfo(212040), -- Revitalize (Restoration Druid)
     -- pening souslstone ank etc
     [160029] = GetSpellInfo(160029), -- Resurrecting aka pending
     --[27740] = GetSpellInfo(27740), -- Reincarnation
@@ -117,7 +112,8 @@ local MassResSpells = {
     [212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
     [212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
     [212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
-    [212040] = GetSpellInfo(212040) -- Revitalize (Restoration Druid)
+    [212040] = GetSpellInfo(212040), -- Revitalize (Restoration Druid)
+    [361178] = GetSpellInfo(361178)  -- Mass Return (Preservation Evoker)
 }
 
 ------------------------------------------------------------------------
