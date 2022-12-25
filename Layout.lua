@@ -575,7 +575,6 @@ PlexusLayout.options = {
                         HIDE     = L["Always hide wrong zone groups"],
                         RAIDINST = L["Hide when in raid instance"],
                         MYTHIC   = L["Hide when in mythic raid instance"],
-                        MYTHICFIXED   = L["Always show 4 groups only in mythic raid"],
                     },
                     set = function(info, v) --luacheck: ignore 212
                         PlexusLayout.db.profile.showWrongZone = v
@@ -737,16 +736,13 @@ function PlexusLayout:ShowWrongZone()
     -- Show groups in wrong zone
     if self.db.profile.showWrongZone == "ALL" then
         -- Always show groups in wrong zone
-        showWrongZone = "ALL"
+        showWrongZone = true
     elseif self.db.profile.showWrongZone == "MYTHIC" and not mythicIDS[diffIndex] then
         -- Show groups in wrong zone when not in Mythic raid instance
-        showWrongZone = "MYTHIC"
-    elseif self.db.profile.showWrongZone == "MYTHICFIXED" and not mythicIDS[diffIndex] then
-        -- Show groups in wrong zone when not in Mythic raid instance
-        showWrongZone = "MYTHICFIXED"
+        showWrongZone = true
     elseif self.db.profile.showWrongZone == "RAIDINST" and instType ~= "raid" then
         -- Show groups in wrong zone when not in raid instance
-        showWrongZone = "RAIDINST"
+        showWrongZone = true
     end
 
     return showWrongZone
