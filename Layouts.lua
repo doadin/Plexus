@@ -266,7 +266,6 @@ function Manager:GetGroupFilter()
 
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
-    local _, _, diffIndex = _G.GetInstanceInfo()
     local curMapID = _G.C_Map.GetBestMapForUnit("player")
     local curMapInfo = curMapID and _G.C_Map.GetMapInfo(curMapID)
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
@@ -281,9 +280,9 @@ function Manager:GetGroupFilter()
         local mapInfo = mapID and _G.C_Map.GetMapInfo(mapID)
 
         if showWrongZone == "MYTHICFIXED" then
-            if diffIndex == 16 and subgroup < 5 then
+            if maxPlayers == 20 and subgroup < 5 then
                 hideGroup[subgroup] = nil
-            elseif diffIndex ~= 16 then
+            elseif maxPlayers ~= 20 then
                 hideGroup[subgroup] = nil
             end
         end
