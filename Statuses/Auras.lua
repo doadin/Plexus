@@ -2385,28 +2385,30 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     end
 
     -- Reset any auras that no longer exist
-    --for unitID,auraInstanceIDTable in pairs(unitAuras) do
-    if unitAuras[unit] then
-        --id, info
-        for _, info in pairs(unitAuras[unit]) do
-            local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, info.auraInstanceID)
-            if UnitAuraInfo == nil then
-                if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
-                    PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,info.name)
+    for unitID in pairs(unitAuras) do
+        if unitAuras[unitID] then
+           --id, info
+            for _, info in pairs(unitAuras[unitID]) do
+                local UnitAuraInfo = GetAuraDataByAuraInstanceID(unitID, info.auraInstanceID)
+                if UnitAuraInfo == nil then
+                    --print("found stray aura: ", info.name .. " on ", unitID)
+                    --if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
+                        PlexusStatusAuras:UnitLostPlayerBuff(UnitGUID(unitID),nil,info.name)
+                    --end
+                    --if info.isHelpful and buff_names[info.name] then
+                        PlexusStatusAuras:UnitLostBuff(UnitGUID(unitID),nil,info.name)
+                    --end
+                    --if info.isHarmful and player_debuff_names[info.name] and info.sourceUnit == "player" then
+                        PlexusStatusAuras:UnitLostPlayerDebuff(UnitGUID(unitID),nil,info.name)
+                    --end
+                    --if info.isHarmful and debuff_names[info.name] then
+                        PlexusStatusAuras:UnitLostDebuff(UnitGUID(unitID),nil,info.name)
+                    --end
+                    --if info.isHarmful and debuff_types[info.dispelName] then
+                        PlexusStatusAuras:UnitLostDebuffType(UnitGUID(unitID),nil,info.dispelName)
+                    --end
+                    unitAuras[unitID][info.auraInstanceID] = nil
                 end
-                if info.isHelpful and buff_names[info.name] then
-                    PlexusStatusAuras:UnitLostBuff(guid,nil,info.name)
-                end
-                if info.isHarmful and player_debuff_names[info.name] and info.sourceUnit == "player" then
-                    PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,info.name)
-                end
-                if info.isHarmful and debuff_names[info.name] then
-                    PlexusStatusAuras:UnitLostDebuff(guid,nil,info.name)
-                end
-                if info.isHarmful and debuff_types[info.dispelName] then
-                    PlexusStatusAuras:UnitLostDebuffType(guid,nil,info.dispelName)
-                end
-                unitAuras[unit][info.auraInstanceID] = nil
             end
         end
     end
@@ -2439,7 +2441,6 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
 
     if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
-            local oldSourceUnit = unitAuras[unit] and unitAuras[unit][auraInstanceID] and unitAuras[unit][auraInstanceID].sourceUnit and unitAuras[unit][auraInstanceID].sourceUnit
             local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
             if auraTable then
                 if buff_names[auraTable.name] or player_buff_names[auraTable.name] or debuff_names[auraTable.name] or player_debuff_names[auraTable.name] or debuff_types[auraTable.dispelName] then
@@ -2447,9 +2448,6 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
                         unitAuras[unit] = {}
                     end
                     unitAuras[unit][auraInstanceID] = auraTable
-                    if not auraTable.sourceUnit and oldSourceUnit then
-                        auraTable.sourceUnit = oldSourceUnit
-                    end
                 end
             end
         end
