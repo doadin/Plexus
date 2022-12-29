@@ -81,6 +81,7 @@ spell_names = {
     ["Weakened Soul"] = GetSpellInfo(6788),
 -- Shaman
     ["Earth Shield"] = GetSpellInfo(204288),
+    ["Water Shield"] = GetSpellInfo(52127),
     ["Riptide"] = GetSpellInfo(61295),
 }
 end
@@ -642,6 +643,13 @@ PlexusStatusAuras.defaultDB = {
         desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
         buff = spell_names["Earth Shield"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Earth Shield"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+    },
+    [PlexusStatusAuras:StatusForSpell("Water Shield", true)] = {
+        -- 52127
+        desc = format(L["Buff: %s"], spell_names["Water Shield"]),
+        buff = spell_names["Water Shield"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Water Shield"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
     },
     [PlexusStatusAuras:StatusForSpell("Riptide", true)] = {
