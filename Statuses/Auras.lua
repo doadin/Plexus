@@ -50,9 +50,7 @@ spell_names = {
     ["Wild Growth"] = GetSpellInfo(48438),
 -- Evoker
     ["Reversion"] = GetSpellInfo(366155),
-    ["Echo: Reversion"] = GetSpellInfo(367364),
     ["Dream Breath"] = GetSpellInfo(382614),
-    ["Echo: Dream Breath"] = GetSpellInfo(355941),
     ["Echo"] = GetSpellInfo(364343),
     ["Temporal Anomaly"] = GetSpellInfo(373862),
     ["Rewind"] = GetSpellInfo(363534),
@@ -369,33 +367,11 @@ PlexusStatusAuras.defaultDB = {
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
     },
-    [PlexusStatusAuras:StatusForSpell("Echo: Reversion", true)] = {
-        -- 367364
-        desc = format(L["Buff: %s"], spell_names["Echo: Reversion"]),
-        buff = spell_names["Echo: Reversion"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Echo: Reversion"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
-        mine = true,
-    },
     [PlexusStatusAuras:StatusForSpell("Dream Breath", true)] = {
         -- 367364
         desc = format(L["Buff: %s"], spell_names["Dream Breath"]),
         buff = spell_names["Dream Breath"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Dream Breath"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
-        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
-        mine = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Echo: Dream Breath", true)] = {
-        -- 367364
-        desc = format(L["Buff: %s"], spell_names["Echo: Dream Breath"]),
-        buff = spell_names["Echo: Dream Breath"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Echo: Dream Breath"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
@@ -2464,16 +2440,6 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
             if not unitAuras[unit] then
                 unitAuras[unit] = {}
             end
-            --["Reversion"] = GetSpellInfo(366155),
-            --["Echo: Reversion"] = GetSpellInfo(367364),
-            --["Dream Breath"] = GetSpellInfo(382614),
-            --["Echo: Dream Breath"] = GetSpellInfo(355941),
-            if v.spellId == 367364 then
-                v.name = "Echo: Reversion"
-            end
-            if v.spellId == 355941 or 376788 then
-                v.name = "Echo: Dream Breath"
-            end
             if buff_names[v.name] or player_buff_names[v.name] or debuff_names[v.name] or player_debuff_names[v.name] or debuff_types[v.dispelName] then
                 unitAuras[unit][v.auraInstanceID] = v
             end
@@ -2482,12 +2448,6 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
 
     if updatedAuras and updatedAuras.addedAuras then
         for _, aura in pairs(updatedAuras.addedAuras) do
-            if aura.spellId == 367364 then
-                aura.name = "Echo: Reversion"
-            end
-            if aura.spellId == 355941 or 376788 then
-                aura.name = "Echo: Dream Breath"
-            end
             if buff_names[aura.name] or player_buff_names[aura.name] or debuff_names[aura.name] or player_debuff_names[aura.name] or debuff_types[aura.dispelName] then
                 if not unitAuras[unit] then
                     unitAuras[unit] = {}
@@ -2500,12 +2460,6 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
             local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-            if auraTable and auraTable.spellId == 367364 then
-                auraTable.name = "Echo: Reversion"
-            end
-            if auraTable and auraTable.spellId == 355941 or auraTable and auraTable.spellId == 376788 then
-                auraTable.name = "Echo: Dream Breath"
-            end
             if auraTable then
                 if buff_names[auraTable.name] or player_buff_names[auraTable.name] or debuff_names[auraTable.name] or player_debuff_names[auraTable.name] or debuff_types[auraTable.dispelName] then
                     if not unitAuras[unit] then
