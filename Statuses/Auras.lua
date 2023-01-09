@@ -2429,7 +2429,7 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     end
 
     -- Reset any auras that no longer exist
-    if unitAuras[unit] and not (updatedAuras and updatedAuras.removedAuraInstanceIDs) then
+    if unitAuras[unit] then
        --id, info
         for _, info in pairs(unitAuras[unit]) do
             local UnitAuraInfo = GetAuraDataByAuraInstanceID(unit, info.auraInstanceID)
