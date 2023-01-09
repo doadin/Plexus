@@ -614,7 +614,7 @@ function PlexusLayout:PostEnable()
     self:LoadLayout(self.db.profile.layout or self.db.profile.layouts["raid"])
     -- position and scale frame
     self:RestorePosition()
-    self.frame:SetScale(self.db.profile.scale)
+    self:Scale()
 
     self:RegisterMessage("Plexus_ReloadLayout", "PartyTypeChanged")
     self:RegisterMessage("Plexus_PartyTransition", "PartyTypeChanged")
