@@ -52,6 +52,8 @@ PlexusStatusAggro.defaultDB = {
         priority = 75,
         range = false,
         threat = false,
+        onlyastank = false,
+        hideontanks = false,
         threatcolors = {
             [1] = getthreatcolor(1),
             [2] = getthreatcolor(2),
@@ -140,10 +142,34 @@ local aggroOptions = {
         type = "toggle",
         name = L["Threat levels"],
         desc = L["Show more detailed threat levels."],
-        width = "full",
+        order = 102,
         get = function() return PlexusStatusAggro.db.profile.alert_aggro.threat end,
         set = function()
             PlexusStatusAggro.db.profile.alert_aggro.threat = not PlexusStatusAggro.db.profile.alert_aggro.threat
+            PlexusStatusAggro.UpdateAllUnits(PlexusStatusAggro)
+            setupmenu()
+        end,
+    },
+    onlyastank = {
+        type = "toggle",
+        name = L["Only as Tank"],
+        desc = L["Only show when you're a Tank."],
+        order = 100,
+        get = function() return PlexusStatusAggro.db.profile.alert_aggro.onlyastank end,
+        set = function()
+            PlexusStatusAggro.db.profile.alert_aggro.onlyastank = not PlexusStatusAggro.db.profile.alert_aggro.onlyastank
+            PlexusStatusAggro.UpdateAllUnits(PlexusStatusAggro)
+            setupmenu()
+        end,
+    },
+    hideontanks = {
+        type = "toggle",
+        name = L["Hide on Tanks"],
+        desc = L["Hide threat status of Tanks."],
+        order = 101,
+        get = function() return PlexusStatusAggro.db.profile.alert_aggro.hideontanks end,
+        set = function()
+            PlexusStatusAggro.db.profile.alert_aggro.hideontanks = not PlexusStatusAggro.db.profile.alert_aggro.hideontanks
             PlexusStatusAggro.UpdateAllUnits(PlexusStatusAggro)
             setupmenu()
         end,
@@ -158,6 +184,7 @@ end
 function PlexusStatusAggro:OnStatusEnable(status)
     if status == "alert_aggro" then
         self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", "UpdateUnit")
+        self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "UpdateAllUnits")
         self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
         self:UpdateAllUnits()
     end
@@ -166,6 +193,7 @@ end
 function PlexusStatusAggro:OnStatusDisable(status)
     if status == "alert_aggro" then
         self:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
+        self:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
         self:UnregisterEvent("PLAYER_ENTERING_WORLD")
         self.core:SendStatusLostAllUnits("alert_aggro")
     end
@@ -193,21 +221,19 @@ function PlexusStatusAggro:UpdateUnit(event, unit, guid)
     end
     if not guid or not PlexusRoster:IsGUIDInRaid(guid) then return end -- sometimes unit can be nil or invalid, wtf?
 
-    local status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
-
-
     local settings = self.db.profile.alert_aggro
     local threat = settings.threat
+    local onlyastank = settings.onlyastank
+    local hideontanks = settings.hideontanks
+    local status = UnitIsVisible(unit) and UnitThreatSituation(unit) or 0
 
-    if status and ((threat and (status > 0)) or (status > 1)) then
-        PlexusStatusAggro.core:SendStatusGained(guid, "alert_aggro",
-            settings.priority,
-            settings.range,
+    if  (not onlyastank or UnitGroupRolesAssigned("player") == 'TANK')
+    and (not hideontanks or UnitGroupRolesAssigned(unit) ~= 'TANK')
+    and status and ((threat and (status > 0)) or (status > 1)) then
+        PlexusStatusAggro.core:SendStatusGained(guid, "alert_aggro", settings.priority, settings.range,
             (threat and settings.threatcolors[status] or settings.color),
             (threat and settings.threattexts[status] or settings.text),
-            nil,
-            nil,
-            settings.icon)
+                                                nil, nil, settings.icon)
     else
         PlexusStatusAggro.core:SendStatusLost(guid, "alert_aggro")
     end
