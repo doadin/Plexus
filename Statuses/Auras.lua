@@ -1727,7 +1727,7 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
 
         elseif PLAYER_CLASS == "SHAMAN" then
             --  77130   Purify Spirit           Restoration                            Magic
-            --  383016  Improved Purify Spirit  Restoration, Elemental, Enhancement    Curse, Magic
+            --  383016  Improved Purify Spirit  Restoration                            Curse, Magic
             --  51886   Cleanse Spirit          Elemental, Enhancement                 Curse
             --  383013  Poison Cleansing Totem  Restoration, Elemental, Enhancement    Poison
             PlayerCanDispel.Curse   = IsPlayerSpell(383016) or IsPlayerSpell(51886)
