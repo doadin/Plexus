@@ -276,8 +276,14 @@ function Manager:GetGroupFilter()
     for i = 1, GetNumGroupMembers() do
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local mapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
+        local GcurMapID
+        local GmapID
 
-        if (showOffline or online) and (showWrongZone or curMapID == mapID) then
+        if curMapID and mapID then
+            GcurMapID = _G.C_Map.GetMapGroupID(curMapID)
+            GmapID = _G.C_Map.GetMapGroupID(mapID)
+        end
+        if (showOffline or online) and (showWrongZone or GcurMapID == GmapID) then
             hideGroup[subgroup] = nil
         end
     end

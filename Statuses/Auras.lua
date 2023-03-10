@@ -1726,10 +1726,10 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Magic   = IsPlayerSpell(527)
 
         elseif PLAYER_CLASS == "SHAMAN" then
-            --  77130   Purify Spirit               Restoration                             Magic
-            --  383016  Improved Purify Spirit      Restoration                             Curse
-            --  51886   Cleanse Spirit              Elemental, Enhancement                  Curse
-            --  383013  Poison Cleansing Totem      Restoration, Elemental, Enhancement     Poison
+            --  77130   Purify Spirit           Restoration                            Magic
+            --  383016  Improved Purify Spirit  Restoration                            Curse, Magic
+            --  51886   Cleanse Spirit          Elemental, Enhancement                 Curse
+            --  383013  Poison Cleansing Totem  Restoration, Elemental, Enhancement    Poison
             PlayerCanDispel.Curse   = IsPlayerSpell(383016) or IsPlayerSpell(51886)
             PlayerCanDispel.Magic   = IsPlayerSpell(77130)
             PlayerCanDispel.Poison  = IsPlayerSpell(383013)
@@ -2458,7 +2458,7 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     end
 
     -- Full Update
-    if (updatedAuras and updatedAuras.isFullUpdate) or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
+    if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
         local unitauraInfo = {}
         ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
         ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
