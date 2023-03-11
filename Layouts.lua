@@ -267,6 +267,7 @@ function Manager:GetGroupFilter()
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
     local curMapID = _G.C_Map.GetBestMapForUnit("player")
+    local instanceType = select(2, _G.IsInInstance())
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
     for i = 1, MAX_RAID_GROUPS do
@@ -284,6 +285,10 @@ function Manager:GetGroupFilter()
             GmapID = _G.C_Map.GetMapGroupID(mapID)
         end
         if (showOffline or online) and (showWrongZone or GcurMapID == GmapID) then
+            hideGroup[subgroup] = nil
+        elseif (showOffline or online) and (showWrongZone and instanceType ~= "raid") or curMapID == mapID then
+            hideGroup[subgroup] = nil
+        elseif (showOffline or online) and showWrongZone and instanceType == "raid" and not mapID then
             hideGroup[subgroup] = nil
         end
     end
