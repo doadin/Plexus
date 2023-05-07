@@ -25,6 +25,9 @@
 ## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, UTF8
 ## SavedVariables: PlexusDB
 
+## AddonCompartmentFunc: PlexusOnAddonCompartmentClick
+## IconTexture: Interface\AddOns\Plexus\Media\icon
+
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\AceAddon-3.0\AceAddon-3.0.lua
