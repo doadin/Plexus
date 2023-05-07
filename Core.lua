@@ -176,12 +176,15 @@ Plexus.options = {
                     end,
                     set = function(info, value) --luacheck: ignore 212
                         Plexus.db.profile.minimap.hide = not value
-                        if value then
-                            LDBIcon:Show(PLEXUS)
-                        else
-                            LDBIcon:Hide(PLEXUS)
+                        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+                            if value then
+                                LDBIcon:Show(PLEXUS)
+                            else
+                                LDBIcon:Hide(PLEXUS)
+                            end
                         end
-                    end
+                    end,
+                    hidden = Plexus:IsRetailWow(),
                 },
                 standaloneOptions = {
                     name = L["Standalone options"],
@@ -587,11 +590,24 @@ function Plexus:OnInitialize()
         })
     end
 
-    LDBIcon:Register(PLEXUS, self.Broker, self.db.profile.minimap)
-    if self.db.profile.minimap.hide then
-        LDBIcon:Hide(PLEXUS)
-    else
-        LDBIcon:Show(PLEXUS)
+    function PlexusOnAddonCompartmentClick(addon, button)
+        if button == "RightButton" then
+            Plexus:ToggleOptions()
+        elseif not InCombatLockdown() then
+            local PlexusLayout = Plexus:GetModule("PlexusLayout")
+            PlexusLayout.db.profile.lock = not PlexusLayout.db.profile.lock
+            _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
+            PlexusLayout:UpdateTabVisibility()
+        end
+    end
+
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+        LDBIcon:Register(PLEXUS, self.Broker, self.db.profile.minimap)
+        if self.db.profile.minimap.hide then
+            LDBIcon:Hide(PLEXUS)
+        else
+            LDBIcon:Show(PLEXUS)
+        end
     end
 
     self:SetDebuggingEnabled("Plexus")
@@ -637,12 +653,14 @@ end
 function Plexus:OnProfileEnable()
     self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-    if LDBIcon then
-        LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
-        if self.db.profile.minimap.hide then
-            LDBIcon:Hide(PLEXUS)
-        else
-            LDBIcon:Show(PLEXUS)
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+        if LDBIcon then
+            LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
+            if self.db.profile.minimap.hide then
+                LDBIcon:Hide(PLEXUS)
+            else
+                LDBIcon:Show(PLEXUS)
+            end
         end
     end
 
