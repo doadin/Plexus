@@ -40,6 +40,22 @@ local AceGUI = _G.LibStub:GetLibrary("AceGUI-3.0")
 local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
 local tostring, type , tcopy = tostring, type, _G.CopyTable
 
+function Plexus:IsClassicWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+end
+
+function Plexus:IsTBCWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
+end
+
+function Plexus:IsWrathWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
+end
+
+function Plexus:IsRetailWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+end
+
 _G.Plexus = _G.LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
 _G.Grid = _G.Plexus
@@ -335,22 +351,6 @@ Plexus.modulePrototype = {
     Debug = Plexus.Debug,
     registeredModules = { },
 }
-
-function Plexus:IsClassicWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-end
-
-function Plexus:IsTBCWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
-end
-
-function Plexus:IsWrathWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
-end
-
-function Plexus:IsRetailWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-end
 
 if Plexus:IsRetailWow() then
     Plexus.defaultDB.profile.hideBlizzardParty = false
