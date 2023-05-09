@@ -20,7 +20,7 @@ local tinsert = _G.tinsert
 
 local GetBuildInfo = _G.GetBuildInfo
 local CreateFrame = _G.CreateFrame
-local GetAddOnMetadata = _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
+local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
 local InCombatLockdown = _G.InCombatLockdown
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local StaticPopup_Show = _G.StaticPopup_Show
