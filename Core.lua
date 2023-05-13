@@ -18,7 +18,7 @@ local strtrim = _G.strtrim
 local strupper = _G.strupper
 local tinsert = _G.tinsert
 
-local GetBuildInfo = _G.GetBuildInfo
+--local GetBuildInfo = _G.GetBuildInfo
 local CreateFrame = _G.CreateFrame
 local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
 local InCombatLockdown = _G.InCombatLockdown
@@ -590,7 +590,7 @@ function Plexus:OnInitialize()
         })
     end
 
-    function PlexusOnAddonCompartmentClick(addon, button)
+    function _G.PlexusOnAddonCompartmentClick(_, button)
         if button == "RightButton" then
             Plexus:ToggleOptions()
         elseif not InCombatLockdown() then
@@ -708,8 +708,7 @@ function Plexus:SetupOptions()
         end
     end)
 
-    local tocversion = select(4,GetBuildInfo())
-    if Plexus:IsRetailWow() and tocversion >= 100000 then
+    if Plexus:IsRetailWow() then
         _G.SettingsPanel:HookScript("OnShow", function()
             Dialog:Close(PLEXUS)
         end)
@@ -770,9 +769,8 @@ function Plexus:ToggleOptions()
             Dialog:Open(PLEXUS)
         end
     else
-        local tocversion = select(4,GetBuildInfo())
-        if tocversion >= 100000 then
-            Settings.OpenToCategory(self.optionsPanels[2])
+        if Plexus:IsRetailWow() then
+            _G.Settings.OpenToCategory(self.optionsPanels[2])
         else
             _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
             _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
@@ -872,7 +870,7 @@ do
 
     local function hideFrame(frame)
         if frame then
-            UnregisterUnitWatch(frame)
+            _G.UnregisterUnitWatch(frame)
             frame:Hide()
             frame:UnregisterAllEvents()
             frame:SetParent(hiddenFrame)
@@ -888,39 +886,39 @@ do
     local function HidePartyFrames()
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
-        if PartyFrame then
-            hideFrame(PartyFrame)
-            for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+        if _G.PartyFrame then
+            hideFrame(_G.PartyFrame)
+            for frame in _G.PartyFrame.PartyMemberFramePool:EnumerateActive() do
                 hideFrame(frame)
                 hideFrame(frame.HealthBar)
                 hideFrame(frame.ManaBar)
             end
-            PartyFrame.PartyMemberFramePool:ReleaseAll()
+            _G.PartyFrame.PartyMemberFramePool:ReleaseAll()
         end
-        hideFrame(CompactPartyFrame)
-        UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
+        hideFrame(_G.CompactPartyFrame)
+        _G.UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
     end
 
     -- raid frames
     local function HideRaidFrames()
-        if not CompactRaidFrameManager then return end
+        if not _G.CompactRaidFrameManager then return end
         local function HideFrames()
-            CompactRaidFrameManager:SetAlpha(0)
-            CompactRaidFrameManager:UnregisterAllEvents()
-            CompactRaidFrameContainer:UnregisterAllEvents()
+            _G.CompactRaidFrameManager:SetAlpha(0)
+            _G.CompactRaidFrameManager:UnregisterAllEvents()
+            _G.CompactRaidFrameContainer:UnregisterAllEvents()
             if not InCombatLockdown() then
-                CompactRaidFrameManager:Hide()
-                local shown = CompactRaidFrameManager_GetSetting('IsShown')
+                _G.CompactRaidFrameManager:Hide()
+                local shown = _G.CompactRaidFrameManager_GetSetting('IsShown')
                 if shown and shown ~= '0' then
-                    CompactRaidFrameManager_SetSetting('IsShown', '0')
+                    _G.CompactRaidFrameManager_SetSetting('IsShown', '0')
                 end
             end
         end
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
-        hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
-        CompactRaidFrameManager:HookScript('OnShow', HideFrames)
-        CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
+        _G.hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
+        _G.CompactRaidFrameManager:HookScript('OnShow', HideFrames)
+        _G.CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
         HideFrames()
     end
 
