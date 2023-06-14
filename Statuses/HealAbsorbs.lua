@@ -33,7 +33,7 @@ PlexusStatusAbsorbs.defaultDB = {
         enable = true,
         priority = 40,
         color = { r = 1, g = 0, b = 0, a = 1 },
-        text = "+%s",
+        text = "-%s",
         minimumValue = 0.05,
     },
 }
