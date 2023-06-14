@@ -102,6 +102,9 @@ Statuses\Auras.lua
 Statuses\Group.lua
 Statuses\GroupBuffs.lua
 Statuses\GroupNumber.lua
+#@retail@
+Statuses\HealAbsorbs.lua
+#@end-retail@
 Statuses\Heals.lua
 Statuses\Health.lua
 Statuses\HostileUnit.lua
