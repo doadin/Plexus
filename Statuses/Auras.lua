@@ -2436,8 +2436,20 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     -- Full Update
     if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
         local unitauraInfo = {}
-        ForEachAura(unit, "HELPFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
-        ForEachAura(unit, "HARMFUL", nil, function(aura) unitauraInfo[aura.auraInstanceID] = aura end, true)
+        ForEachAura(unit, "HELPFUL", nil,
+            function(aura)
+                if aura and aura.auraInstanceID then
+                    unitauraInfo[aura.auraInstanceID] = aura
+                end
+            end,
+        true)
+        ForEachAura(unit, "HARMFUL", nil,
+            function(aura)
+                if aura and aura.auraInstanceID then
+                    unitauraInfo[aura.auraInstanceID] = aura
+                end
+            end,
+        true)
         if unitAuras[guid] then
             for _, info in pairs(unitAuras[guid]) do
                 if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
