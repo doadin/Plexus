@@ -1,5 +1,5 @@
-## Interface: 100005
-## Interface-Retail: 100005
+## Interface: 100100
+## Interface-Retail: 100100
 ## Interface-Classic: 11403
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30401
@@ -24,6 +24,9 @@
 
 ## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, UTF8
 ## SavedVariables: PlexusDB
+
+## AddonCompartmentFunc: PlexusOnAddonCompartmentClick
+## IconTexture: Interface\AddOns\Plexus\Media\icon
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
@@ -99,6 +102,9 @@ Statuses\Auras.lua
 Statuses\Group.lua
 Statuses\GroupBuffs.lua
 Statuses\GroupNumber.lua
+#@retail@
+Statuses\HealAbsorbs.lua
+#@end-retail@
 Statuses\Heals.lua
 Statuses\Health.lua
 Statuses\HostileUnit.lua

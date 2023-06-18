@@ -18,9 +18,9 @@ local strtrim = _G.strtrim
 local strupper = _G.strupper
 local tinsert = _G.tinsert
 
-local GetBuildInfo = _G.GetBuildInfo
+--local GetBuildInfo = _G.GetBuildInfo
 local CreateFrame = _G.CreateFrame
-local GetAddOnMetadata = _G.GetAddOnMetadata
+local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
 local InCombatLockdown = _G.InCombatLockdown
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local StaticPopup_Show = _G.StaticPopup_Show
@@ -39,6 +39,22 @@ local LibDeflate = _G.LibStub:GetLibrary('LibDeflate')
 local AceGUI = _G.LibStub:GetLibrary("AceGUI-3.0")
 local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
 local tostring, type , tcopy = tostring, type, _G.CopyTable
+
+function Plexus:IsClassicWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+end
+
+function Plexus:IsTBCWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
+end
+
+function Plexus:IsWrathWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
+end
+
+function Plexus:IsRetailWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+end
 
 _G.Plexus = _G.LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if not (IsAddOnLoaded("Grid")) then
@@ -176,12 +192,15 @@ Plexus.options = {
                     end,
                     set = function(info, value) --luacheck: ignore 212
                         Plexus.db.profile.minimap.hide = not value
-                        if value then
-                            LDBIcon:Show(PLEXUS)
-                        else
-                            LDBIcon:Hide(PLEXUS)
+                        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+                            if value then
+                                LDBIcon:Show(PLEXUS)
+                            else
+                                LDBIcon:Hide(PLEXUS)
+                            end
                         end
-                    end
+                    end,
+                    hidden = Plexus:IsRetailWow(),
                 },
                 standaloneOptions = {
                     name = L["Standalone options"],
@@ -332,22 +351,6 @@ Plexus.modulePrototype = {
     Debug = Plexus.Debug,
     registeredModules = { },
 }
-
-function Plexus:IsClassicWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-end
-
-function Plexus:IsTBCWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
-end
-
-function Plexus:IsWrathWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
-end
-
-function Plexus:IsRetailWow() --luacheck: ignore 212
-    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-end
 
 if Plexus:IsRetailWow() then
     Plexus.defaultDB.profile.hideBlizzardParty = false
@@ -587,11 +590,24 @@ function Plexus:OnInitialize()
         })
     end
 
-    LDBIcon:Register(PLEXUS, self.Broker, self.db.profile.minimap)
-    if self.db.profile.minimap.hide then
-        LDBIcon:Hide(PLEXUS)
-    else
-        LDBIcon:Show(PLEXUS)
+    function _G.PlexusOnAddonCompartmentClick(_, button)
+        if button == "RightButton" then
+            Plexus:ToggleOptions()
+        elseif not InCombatLockdown() then
+            local PlexusLayout = Plexus:GetModule("PlexusLayout")
+            PlexusLayout.db.profile.lock = not PlexusLayout.db.profile.lock
+            _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
+            PlexusLayout:UpdateTabVisibility()
+        end
+    end
+
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+        LDBIcon:Register(PLEXUS, self.Broker, self.db.profile.minimap)
+        if self.db.profile.minimap.hide then
+            LDBIcon:Hide(PLEXUS)
+        else
+            LDBIcon:Show(PLEXUS)
+        end
     end
 
     self:SetDebuggingEnabled("Plexus")
@@ -637,12 +653,14 @@ end
 function Plexus:OnProfileEnable()
     self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-    if LDBIcon then
-        LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
-        if self.db.profile.minimap.hide then
-            LDBIcon:Hide(PLEXUS)
-        else
-            LDBIcon:Show(PLEXUS)
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+        if LDBIcon then
+            LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
+            if self.db.profile.minimap.hide then
+                LDBIcon:Hide(PLEXUS)
+            else
+                LDBIcon:Show(PLEXUS)
+            end
         end
     end
 
@@ -690,8 +708,7 @@ function Plexus:SetupOptions()
         end
     end)
 
-    local tocversion = select(4,GetBuildInfo())
-    if Plexus:IsRetailWow() and tocversion >= 100000 then
+    if Plexus:IsRetailWow() then
         _G.SettingsPanel:HookScript("OnShow", function()
             Dialog:Close(PLEXUS)
         end)
@@ -752,9 +769,8 @@ function Plexus:ToggleOptions()
             Dialog:Open(PLEXUS)
         end
     else
-        local tocversion = select(4,GetBuildInfo())
-        if tocversion >= 100000 then
-            Settings.OpenToCategory(self.optionsPanels[2])
+        if Plexus:IsRetailWow() then
+            _G.Settings.OpenToCategory(self.optionsPanels[2])
         else
             _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
             _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
@@ -854,7 +870,7 @@ do
 
     local function hideFrame(frame)
         if frame then
-            UnregisterUnitWatch(frame)
+            _G.UnregisterUnitWatch(frame)
             frame:Hide()
             frame:UnregisterAllEvents()
             frame:SetParent(hiddenFrame)
@@ -870,39 +886,39 @@ do
     local function HidePartyFrames()
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
-        if PartyFrame then
-            hideFrame(PartyFrame)
-            for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+        if _G.PartyFrame then
+            hideFrame(_G.PartyFrame)
+            for frame in _G.PartyFrame.PartyMemberFramePool:EnumerateActive() do
                 hideFrame(frame)
                 hideFrame(frame.HealthBar)
                 hideFrame(frame.ManaBar)
             end
-            PartyFrame.PartyMemberFramePool:ReleaseAll()
+            _G.PartyFrame.PartyMemberFramePool:ReleaseAll()
         end
-        hideFrame(CompactPartyFrame)
-        UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
+        hideFrame(_G.CompactPartyFrame)
+        _G.UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
     end
 
     -- raid frames
     local function HideRaidFrames()
-        if not CompactRaidFrameManager then return end
+        if not _G.CompactRaidFrameManager then return end
         local function HideFrames()
-            CompactRaidFrameManager:SetAlpha(0)
-            CompactRaidFrameManager:UnregisterAllEvents()
-            CompactRaidFrameContainer:UnregisterAllEvents()
+            _G.CompactRaidFrameManager:SetAlpha(0)
+            _G.CompactRaidFrameManager:UnregisterAllEvents()
+            _G.CompactRaidFrameContainer:UnregisterAllEvents()
             if not InCombatLockdown() then
-                CompactRaidFrameManager:Hide()
-                local shown = CompactRaidFrameManager_GetSetting('IsShown')
+                _G.CompactRaidFrameManager:Hide()
+                local shown = _G.CompactRaidFrameManager_GetSetting('IsShown')
                 if shown and shown ~= '0' then
-                    CompactRaidFrameManager_SetSetting('IsShown', '0')
+                    _G.CompactRaidFrameManager_SetSetting('IsShown', '0')
                 end
             end
         end
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
-        hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
-        CompactRaidFrameManager:HookScript('OnShow', HideFrames)
-        CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
+        _G.hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
+        _G.CompactRaidFrameManager:HookScript('OnShow', HideFrames)
+        _G.CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
         HideFrames()
     end
 
