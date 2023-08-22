@@ -22,7 +22,7 @@
 ## X-Website: https://wow.curseforge.com/projects/plexus/
 ## X-Curse-Project-ID: 338710
 
-## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, UTF8
+## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, NickTag-1.0, UTF8
 ## SavedVariables: PlexusDB
 
 ## AddonCompartmentFunc: PlexusOnAddonCompartmentClick
@@ -46,6 +46,7 @@ Libs\AceTimer-3.0\AceTimer-3.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 Libs\LibDeflate\LibDeflate.lua
+Libs\NickTag-1.0\NickTag-1.0.lua
 #@retail@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@

@@ -57,6 +57,10 @@ function Plexus:IsRetailWow() --luacheck: ignore 212
 end
 
 _G.Plexus = _G.LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+if _G.NickTag then
+    _G.LibStub("NickTag-1.0"):Embed(_G.Plexus)
+    _G.Plexus:NickTagSetCache(_G.Plexus.nick_tag_cache)
+end
 if not (IsAddOnLoaded("Grid")) then
 _G.Grid = _G.Plexus
 end
