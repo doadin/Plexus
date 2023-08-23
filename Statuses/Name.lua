@@ -349,6 +349,9 @@ function PlexusStatusName:UpdateUnit(event, guid)
             name = PlexusRoster:GetNameByGUID(guid)
             self:Debug("blank")
         end
+        if name == nil then
+            name = PlexusRoster:GetNameByGUID(guid)
+        end
     end
 
     self.core:SendStatusGained(guid, "unit_name",
