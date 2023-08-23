@@ -59,6 +59,9 @@ end
 _G.Plexus = _G.LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if _G.NickTag then
     _G.LibStub("NickTag-1.0"):Embed(_G.Plexus)
+    if not _G.Plexus.nick_tag_cache then
+        _G.Plexus.nick_tag_cache = {}
+    end
     _G.Plexus:NickTagSetCache(_G.Plexus.nick_tag_cache)
 end
 if not (IsAddOnLoaded("Grid")) then
