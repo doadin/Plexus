@@ -22,7 +22,7 @@ externals:
    Libs/LibDBIcon-1.0: https://repos.curseforge.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
    Libs/LibDualSpec-1.0: https://repos.curseforge.com/wow/libdualspec-1-0
    Libs/NickTag-1.0: 
-     url: https://github.com/Tercioo/NickTag-1.0.git
+     url: https://github.com/doadin/NickTag-1.0.git
      tag: master
    Libs/LibSharedMedia-3.0: https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
    Libs/LibStub:
