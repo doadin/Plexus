@@ -41,6 +41,7 @@ Libs\AceDB-3.0\AceDB-3.0.lua
 Libs\AceDBOptions-3.0\AceDBOptions-3.0.lua
 Libs\AceEvent-3.0\AceEvent-3.0.lua
 Libs\AceHook-3.0\AceHook-3.0.lua
+Libs\AceLocale-3.0\AceLocale-3.0.lua
 Libs\AceSerializer-3.0\AceSerializer-3.0.lua
 Libs\AceTimer-3.0\AceTimer-3.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
