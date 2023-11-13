@@ -189,12 +189,10 @@ function PlexusStatusResurrect:UNIT_SPELLCAST_START(event, source, destGUID, cas
             for guid, unit in PlexusRoster:IterateRoster() do
                 if destGUID ~= guid then return end
                 if UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit) then
-                    local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(sourceguid)
-                    local _, _, icon = GetSpellInfo(spellid)
-                    if not icon then icon = "Interface\\ICONS\\Spell_Shadow_Soulgem" end
-                    if not startTimeMS then startTimeMS = GetTime() end
-                    if not endTimeMS then endTimeMS = startTimeMS + 10 end
-                    local duration = endTimeMS - startTimeMS
+                    local casterUnitID = PlexusRoster:GetUnitidByGUID(sourceguid)
+                    local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(casterUnitID)
+                    local icon = spellid and select(3,GetSpellInfo(spellid)) or "Interface\\ICONS\\Spell_Shadow_Soulgem"
+                    local duration = (endTimeMS and startTimeMS and (endTimeMS - startTimeMS) / 1000) or 10
                     --combat res does not work with above math.
                     if spellid == (8342 or 22999 or 54732 or 164729 or 265116) then
                         duration = 4
@@ -225,7 +223,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
         return
     end
     --Dead Players Cant Cast
-    if (not UnitIsDead(sourceGUID) or not UnitIsGhost(sourceGUID) or not UnitIsDeadOrGhost(sourceGUID)) then
+    if sourceGUID and (not UnitIsDead(sourceGUID) or not UnitIsGhost(sourceGUID) or not UnitIsDeadOrGhost(sourceGUID)) then
         self.core:SendStatusLost(sourceGUID, "alert_resurrect")
     end
     local db = self.db.profile.alert_resurrect
@@ -235,10 +233,10 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                 for guid, unit in PlexusRoster:IterateRoster() do
                     if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit)) then
                         local startTime = GetTime()
-                        local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(sourceName)
-                        local duration = ((endTimeMS - startTimeMS) / 1000)
-                        local _, _, icon = GetSpellInfo(spellId)
-                        if not icon then icon = "Interface\\ICONS\\Spell_holy_guardianspirit" end
+                        local casterUnitID = PlexusRoster:GetUnitidByGUID(sourceGUID)
+                        local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(casterUnitID)
+                        local duration = (endTimeMS and startTimeMS and (endTimeMS - startTimeMS) / 1000) or 10
+                        local icon = spellId and select(3,GetSpellInfo(spellId)) or "Interface\\ICONS\\Spell_holy_guardianspirit"
                         self.core:SendStatusGained(guid, "alert_resurrect",
                         db.priority,
                         nil,
@@ -269,8 +267,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                 self.core:SendStatusLost(destGUID, "alert_resurrect")
             end
             if eventType == "SPELL_AURA_APPLIED" then
-                local _, _, icon = GetSpellInfo(spelllistid)
-                if not icon then icon = "Interface\\ICONS\\Spell_holy_guardianspirit" end
+                local icon = spelllistid and select(3,GetSpellInfo(spelllistid)) or "Interface\\ICONS\\Spell_holy_guardianspirit"
                 if not timestamp then timestamp = GetTime() end
                 local startTime = GetTime()
                 self.core:SendStatusGained(destGUID, "alert_resurrect",
