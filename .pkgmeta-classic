@@ -36,7 +36,6 @@ externals:
    Libs/LibDeflate:
      url: https://github.com/doadin/LibDeflate.git
      tag: main
-   Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
 
 ignore:
   - .luacheckrc
