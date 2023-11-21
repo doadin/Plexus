@@ -33,7 +33,6 @@ externals:
    Libs/LibDeflate:
      url: https://github.com/doadin/LibDeflate.git
      tag: main
-   Libs/LibClassicDurations: https://repos.curseforge.com/wow/libclassicdurations
    Libs/LibHealComm-4.0:
      url: https://github.com/doadin/LibHealComm-4.0.git
      tag: main

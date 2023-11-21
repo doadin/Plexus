@@ -59,9 +59,6 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 Libs\LibHealComm-4.0\ChatThrottleLib.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
 #@end-non-retail@
-#@version-classic@
-Libs\LibClassicDurations\LibClassicDurations.xml
-#@end-version-classic@
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua
