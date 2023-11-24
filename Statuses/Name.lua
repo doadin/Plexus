@@ -39,6 +39,7 @@ PlexusStatusName.defaultDB = {
         class = true,
         translate = false,
         translatemark = false,
+        usenicktag = false,
     },
 }
 
@@ -184,6 +185,56 @@ local nameOptions = {
             PlexusStatusName.db.profile.unit_name.translatemark = not PlexusStatusName.db.profile.unit_name.translatemark
             PlexusStatusName:UpdateAllUnits()
         end,
+    },
+    usenicktag = {
+        name = "Use NickTag",
+        desc = "Use nickTag aka nick names for unit names.",
+        order = 1002,
+        type = "toggle", width = "double",
+        get = function()
+            return PlexusStatusName.db.profile.unit_name.usenicktag
+        end,
+        set = function()
+            PlexusStatusName.db.profile.unit_name.usenicktag = not PlexusStatusName.db.profile.unit_name.usenicktag
+            PlexusStatusName:UpdateAllUnits()
+        end,
+        hidden = function ()
+            if _G.NickTag then
+                return false
+            else
+                return true
+            end
+        end,
+    },
+    setnicktag = {
+        name = "Set NickTag",
+        desc = "Set NickTag aka your nickname.",
+        order = 1003,
+        type = "input", width = "double",
+        get = function()
+            return PlexusStatusName.db.profile.unit_name.setnicktag
+        end,
+        set = function(_, v)
+            local accepted, errortext = Plexus:SetNickname(v)
+            if (not accepted) then
+                DEFAULT_CHAT_FRAME:AddMessage("Error Setting NickTag: |cffFF0000" .. errortext .. "|r")
+                Plexus:ResetPlayerPersona()
+                --Plexus:SendPersona()
+                PlexusStatusName:UpdateAllUnits()
+            end
+            if (accepted) then
+                PlexusStatusName.db.profile.unit_name.setnicktag  = v
+                Plexus:SetNickname(v)
+                PlexusStatusName:UpdateAllUnits()
+            end
+        end,
+        hidden = function ()
+            if _G.NickTag then
+                return false
+            else
+                return true
+            end
+        end,
     }
 }
 
@@ -218,6 +269,9 @@ function PlexusStatusName:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitLeft", "UpdateUnit")
 
     self:RegisterMessage("Plexus_ColorsChanged", "UpdateAllUnits")
+    if _G.NickTag then
+        _G.NickTag.RegisterCallback(self, 'NickTag_Update', "UpdateAllUnits")
+    end
 
     self:UpdateAllUnits()
 end
@@ -283,6 +337,20 @@ function PlexusStatusName:UpdateUnit(event, guid)
         if not settings.translatemark then
             self:Debug("Translate without mark")
             name = Translate(name)
+        end
+    end
+
+    if settings.usenicktag then
+        self:Debug("Use NickTag Enabled")
+        name = Plexus:GetNickname(UnitName(unitid), nil, true)
+        self:Debug(name)
+        if name == "" then
+            Plexus:ResetPlayerPersona()
+            name = PlexusRoster:GetNameByGUID(guid)
+            self:Debug("blank")
+        end
+        if name == nil then
+            name = PlexusRoster:GetNameByGUID(guid)
         end
     end
 

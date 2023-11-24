@@ -1,8 +1,8 @@
-## Interface: 100100
-## Interface-Retail: 100100
-## Interface-Classic: 11403
+## Interface: 100200
+## Interface-Retail: 100200
+## Interface-Classic: 11404
 ## Interface-BCC: 20504
-## Interface-Wrath: 30401
+## Interface-Wrath: 30403
 ## Version: @project-version@
 
 ## Title: Plexus
@@ -22,7 +22,7 @@
 ## X-Website: https://wow.curseforge.com/projects/plexus/
 ## X-Curse-Project-ID: 338710
 
-## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, UTF8
+## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, NickTag-1.0, UTF8
 ## SavedVariables: PlexusDB
 
 ## AddonCompartmentFunc: PlexusOnAddonCompartmentClick
@@ -32,6 +32,7 @@ Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\AceAddon-3.0\AceAddon-3.0.lua
 Libs\AceBucket-3.0\AceBucket-3.0.lua
+Libs\AceComm-3.0\AceComm-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua
 Libs\AceConfigDialog-3.0\AceConfigDialog-3.0.lua
@@ -41,11 +42,13 @@ Libs\AceDB-3.0\AceDB-3.0.lua
 Libs\AceDBOptions-3.0\AceDBOptions-3.0.lua
 Libs\AceEvent-3.0\AceEvent-3.0.lua
 Libs\AceHook-3.0\AceHook-3.0.lua
+Libs\AceLocale-3.0\AceLocale-3.0.lua
 Libs\AceSerializer-3.0\AceSerializer-3.0.lua
 Libs\AceTimer-3.0\AceTimer-3.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 Libs\LibDeflate\LibDeflate.lua
+Libs\NickTag-1.0\NickTag-1.0.lua
 #@retail@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-retail@
@@ -56,9 +59,6 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 Libs\LibHealComm-4.0\ChatThrottleLib.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.lua
 #@end-non-retail@
-#@version-classic@
-Libs\LibClassicDurations\LibClassicDurations.xml
-#@end-version-classic@
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua

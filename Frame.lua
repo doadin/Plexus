@@ -140,7 +140,13 @@ function PlexusFrame:InitializeFrame(frame)
     frame:SetNormalTexture("")
     frame:SetHighlightTexture("")
 
-    frame:RegisterForClicks("AnyUp")
+    if _G.Clique then
+        local direction = _G.Clique.db.char.downclick and "AnyDown" or "AnyUp"
+        frame:RegisterForClicks(direction)
+    else
+        local direction = PlexusFrame.db.profile.clickUPDOWN and PlexusFrame.db.profile.clickUPDOWN or "AnyUp"
+        frame:RegisterForClicks(direction)
+    end
 
     frame:HookScript("OnEnter", frame.OnEnter)
     frame:HookScript("OnLeave", frame.OnLeave)
@@ -248,6 +254,7 @@ PlexusFrame.defaultDB = {
     borderSize = 1,
     showTooltip = "OOC",
     rightClickMenu = true,
+    clickUPDOWN = "AnyUp",
     orientation = "VERTICAL",
     textorientation = "VERTICAL",
     throttleUpdates = false,
@@ -460,10 +467,20 @@ PlexusFrame.options = {
                         end
                     end,
                 },
+                clickUPDOWN = {
+                    name = L["Register frame clicks to happen on (Requires Reloading UI)"],
+                    desc = L["When clicking a bind will trigger on up or down."],
+                    order = 7, width = "double",
+                    type = "select",
+                    values = {
+                        AnyUp = "AnyUp",
+                        AnyDown = "AnyDown"
+                    },
+                },
                 orientation = {
                     name = L["Orientation of Frame"],
                     desc = L["Set frame orientation."],
-                    order = 7, width = "double",
+                    order = 8, width = "double",
                     type = "select",
                     values = {
                         VERTICAL = L["Vertical"],
@@ -474,7 +491,7 @@ PlexusFrame.options = {
                     name = L["Throttle Updates"],
                     desc = L["Throttle updates on group changes. This option may cause delays in updating frames, so you should only enable it if you're experiencing temporary freezes or lockups when people join or leave your group."],
                     type = "toggle",
-                    order = 8, width = "double",
+                    order = 9, width = "double",
                     set = function(info, v) --luacheck: ignore 212
                         PlexusFrame.db.profile.throttleUpdates = v
                         if v then
