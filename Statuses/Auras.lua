@@ -2679,14 +2679,6 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
     end
-    local LibClassicDurations
-    if Plexus:IsClassicWow() then
-        LibClassicDurations = _G.LibStub:GetLibrary("LibClassicDurations", true)
-    end
-    if LibClassicDurations then
-        LibClassicDurations:Register("Plexus")
-        UnitAura = LibClassicDurations.UnitAuraWrapper
-    end
 
     self:Debug("UNIT_AURA", unit, guid)
 
