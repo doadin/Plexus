@@ -8,6 +8,11 @@ local InCombatLockdown = _G.InCombatLockdown
 local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
     = _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsVisible, _G.UnitIsDead, _G.UnitIsGhost
 
+local UnitInPartyIsAI
+if Plexus:IsRetailWow() then
+    UnitInPartyIsAI = _G.UnitInPartyIsAI
+end
+
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 PlexusStatusGroupBuffs.options = false
@@ -526,7 +531,7 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     if not unit then return end
     if not status then return end
     if not guid then return end
-    if not UnitIsPlayer(unit) then return end
+    if (not UnitIsPlayer(unit) or (Plexus:IsRetailWow() and not UnitInPartyIsAI(unit))) then return end
     local settings = self.db.profile[status]
     local BuffClass = settings.class
     local EnableClassFilter = self.db.profile.EnableClassFilter
