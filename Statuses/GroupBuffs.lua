@@ -513,14 +513,18 @@ end
 function PlexusStatusGroupBuffs:UpdateAllUnits()
     --self:Debug("UpdateAllUnits")
     for guid, unit in PlexusRoster:IterateRoster() do
-        self:UpdateUnit("UpdateAllUnits", unit, _, guid)
+        if (UnitIsPlayer(unit) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unit))) then
+            self:UpdateUnit("UpdateAllUnits", unit, _, guid)
+        end
     end
 end
 
 function PlexusStatusGroupBuffs:UpdateUnit(event, unit, _, guid)
     if not guid then guid = UnitGUID(unit) end
-    for status in self:ConfiguredStatusIterator() do
-        self:ShowMissingBuffs(event, unit, status, guid)
+    if (UnitIsPlayer(unit) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unit))) then
+        for status in self:ConfiguredStatusIterator() do
+            self:ShowMissingBuffs(event, unit, status, guid)
+        end
     end
 end
 
@@ -531,7 +535,6 @@ function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
     if not unit then return end
     if not status then return end
     if not guid then return end
-    if (not UnitIsPlayer(unit) or (Plexus:IsRetailWow() and not UnitInPartyIsAI(unit))) then return end
     local settings = self.db.profile[status]
     local BuffClass = settings.class
     local EnableClassFilter = self.db.profile.EnableClassFilter
