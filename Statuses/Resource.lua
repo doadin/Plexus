@@ -346,7 +346,7 @@ function PlexusStatusResource:UpdateUnit(_, unitid)
     local unitGUID = UnitGUID(unitid)
     --don't update for a unit not in group
     if not PlexusRoster:IsGUIDInGroup(unitGUID) then return end
-    if (NoPets and (not UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and not UnitInPartyIsAI(unitid)))) then
+    if (NoPets and not (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) ) then
         self.core:SendStatusLost(unitGUID, "unit_resource")
     else
         self:UpdateUnitResource(unitid)
@@ -377,7 +377,7 @@ function PlexusStatusResource:Plexus_UnitJoined(_, _, unitid)
     local NoPets = PlexusStatusResource.db.profile.NoPets
     local unitGUID = UnitGUID(unitid)
     if not unitid then return end
-    if (NoPets and (not UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and not UnitInPartyIsAI(unitid)))) then
+    if (NoPets and not (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) ) then
         self.core:SendStatusLost(unitGUID, "unit_resource")
     else
         self:UpdateUnitResource(unitid)
@@ -388,7 +388,7 @@ function PlexusStatusResource:UpdateAllUnits()
     local NoPets = PlexusStatusResource.db.profile.NoPets
     for _, unitid in PlexusRoster:IterateRoster() do
         local unitGUID = UnitGUID(unitid)
-        if (NoPets and (not UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and not UnitInPartyIsAI(unitid)))) then
+        if (NoPets and not (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) ) then
             self.core:SendStatusLost(unitGUID, "unit_resource")
         else
             self:UpdateUnitResource(unitid)
@@ -415,7 +415,7 @@ function PlexusStatusResource:UpdateUnitResource(unitid)
         end
     end
     local NoPets = PlexusStatusResource.db.profile.NoPets
-    if (NoPets and (not UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and not UnitInPartyIsAI(unitid)))) then
+    if (NoPets and not (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) ) then
         self.core:SendStatusLost(unitGUID, "unit_resource")
         return
     end
