@@ -375,8 +375,15 @@ PlexusFrame.defaultDB = {
         },
         ei_bar_barone = {
             unit_resource = true,
-        }
+        },
     },
+    enablePrivateAura = true,
+    enablePrivateAuraCountdownFrame = false,
+    enablePrivateAuraCountdownNumbers = false,
+    PrivateAuraWidth = 10,
+    PrivateAuraHeight = 10,
+    PrivateAuraOffsetX = 0,
+    PrivateAuraOffsetY = 0,
 }
 
 ------------------------------------------------------------------------
@@ -1256,6 +1263,126 @@ PlexusFrame.options = {
                 },
             },
         },
+        privateaura = {
+            name = L["Private Aura Options"],
+            desc = L["Private Aura Options."],
+            order = 7,
+            type = "group",
+            disabled = not Plexus:IsRetailWow(),
+            args = {
+                enablePrivateAura = {
+                    name = "Enable Private Aura",
+                    desc = "Enable/disable Private Aura.",
+                    order = 1, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enablePrivateAura = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                enablePrivateAuraCountdownFrame = {
+                    name = "Enable Private Aura Countdown Frame",
+                    desc = "Enable/disable Private Aura Countdown Frame.",
+                    order = 2, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enablePrivateAuraCountdownFrame = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                enablePrivateAuraCountdownNumbers = {
+                    name = "Enable Private Aura Countdown Numbers",
+                    desc = "Enable/disable Private Aura Countdown Numbers.",
+                    order = 3, width = "double",
+                    type = "toggle",
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.enablePrivateAuraCountdownNumbers = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                PrivateAuraWidth = {
+                    name = "Icon Width",
+                    desc = "Adjust the size of the Private Aura icon.",
+                    order = 4, width = "double",
+                    type = "range", min = 5, max = 100, step = 1,
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.PrivateAuraWidth = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                PrivateAuraHeight = {
+                    name = "Icon Height",
+                    desc = "Adjust the size of the Private Aura icon.",
+                    order = 5, width = "double",
+                    type = "range", min = 5, max = 100, step = 1,
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.PrivateAuraHeight = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                PrivateAuraOffsetX = {
+                    name = "Icon Possition left/right",
+                    desc = "Adjust the possition of the Private Aura icon.",
+                    order = 6, width = "double",
+                    type = "range", min = -250, max = 250, step = 1,
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.PrivateAuraOffsetX = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                PrivateAuraOffsetY = {
+                    name = "Icon Possition Up/Down",
+                    desc = "Adjust the possition of the Private Aura icon.",
+                    order = 7, width = "double",
+                    type = "range", min = -250, max = 250, step = 1,
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.PrivateAuraOffsetY = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                },
+                PrivateAuraTestModeEnable = {
+                    name = "Private Aura Test Mode Enable/Refresh Possition",
+                    order = 8,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for frameName, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            if frame.unit then
+                                local testFrame = frameName .. "_PrivateAuras_Test"
+                                if not _G[testFrame] then
+                                    local PAFTest = CreateFrame('Frame', frameName .. "_PrivateAuras_Test", frame.indicators.bar)
+                                    PAFTest:SetPoint("CENTER", frame.indicators.bar, "CENTER", PlexusFrame.db.profile.PrivateAuraOffsetX,PlexusFrame.db.profile.PrivateAuraOffsetY)
+                                    PAFTest:SetSize(PlexusFrame.db.profile.PrivateAuraWidth, PlexusFrame.db.profile.PrivateAuraHeight)
+                                    PAFTest.texture = PAFTest:CreateTexture()
+                                    PAFTest.texture:SetAllPoints(PAFTest)
+                                    PAFTest.texture:SetTexture(134532)
+                                else
+                                    _G[testFrame]:SetPoint("CENTER", frame.indicators.bar, "CENTER", PlexusFrame.db.profile.PrivateAuraOffsetX,PlexusFrame.db.profile.PrivateAuraOffsetY)
+                                    _G[testFrame]:SetSize(PlexusFrame.db.profile.PrivateAuraWidth, PlexusFrame.db.profile.PrivateAuraHeight)
+                                    _G[testFrame].texture:SetTexture(134532)
+                                end
+                            end
+                        end
+                    end,
+                },
+                PrivateAuraTestModeDisable = {
+                    name = "Private Aura Test Mode Disable",
+                    order = 9,
+                    width = "double",
+                    type = "execute",
+                    func = function()
+                        local PlexusFrameTest = Plexus:GetModule("PlexusFrame")
+                        for frameName, frame in pairs(PlexusFrameTest.registeredFrames) do
+                            if frame.unit then
+                                local testFrame = frameName .. "_PrivateAuras_Test"
+                                _G[testFrame].texture:SetTexture()
+                            end
+                        end
+                    end,
+                },
+            },
+        },
     },
 }
 
@@ -1379,6 +1506,7 @@ end
 local SecureButton_GetModifiedUnit = _G.SecureButton_GetModifiedUnit -- it's so slow
 
 function PlexusFrame:UpdateFrameUnits()
+    local settings = self.db.profile
     for frame_name, frame in pairs(self.registeredFrames) do
         if frame:IsVisible() then
             local old_unit = frame.unit
@@ -1386,6 +1514,56 @@ function PlexusFrame:UpdateFrameUnits()
             local unitid = SecureButton_GetModifiedUnit(frame)
                   unitid = unitid and gsub(unitid, "petpet", "pet") -- http://forums.wowace.com/showpost.php?p=307619&postcount=3174
             local guid = unitid and UnitGUID(unitid) or nil
+
+            --Start Priavte Aura
+            if Plexus:IsRetailWow() and settings.enablePrivateAura then
+                if frame and frame.anchorID then
+                    C_UnitAuras.RemovePrivateAuraAnchor(frame.anchorID)
+                    frame.anchorID = nil
+                end
+                local PAF = CreateFrame('Frame', '$parent_PrivateAuras', frame.indicators.bar)
+                PAF:SetPoint("CENTER")
+                PAF:SetSize(settings.PrivateAuraWidth, settings.PrivateAuraHeight)
+                --PAFTest.texture:SetTexture(134532)
+                --PAF.Background = PAF:CreateTexture(nil, "BACKGROUND")
+                --PAF.Background:SetAllPoints(PAF)
+                --PAF.Background:SetColorTexture(0.5, 0, 1)
+                local auraAnchor = {
+                    durationAnchor =
+                    {
+                        point = "CENTER",
+                        relativeTo = PAF, --frame.Duration
+                        relativePoint = "CENTER",
+                        offsetX = settings.PrivateAuraOffsetX,
+                        offsetY = settings.PrivateAuraOffsetY,
+                    };
+                    unitToken = unitid,
+                    auraIndex = 1, --frame.auraIndex
+                    parent = PAF,
+                    showCountdownFrame = settings.enablePrivateAuraCountdownFrame,
+                    showCountdownNumbers = settings.enablePrivateAuraCountdownNumbers,
+                    iconInfo =
+                    {
+                        iconAnchor = {
+                            point = "CENTER",
+                            relativeTo = PAF,
+                            relativePoint = "CENTER",
+                            offsetX = settings.PrivateAuraOffsetX,
+                            offsetY = settings.PrivateAuraOffsetY,
+                        },
+                        iconWidth = settings.PrivateAuraWidth, --frame.indicators.icon:GetWidth()
+                        iconHeight = settings.PrivateAuraHeight, --frame.indicators.icon:GetHeight()
+                    };
+                }
+                frame.anchorID = C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
+            end
+            if Plexus:IsRetailWow() and not settings.enablePrivateAura then
+                if frame and frame.anchorID then
+                    C_UnitAuras.RemovePrivateAuraAnchor(frame.anchorID)
+                    frame.anchorID = nil
+                end
+            end
+            --End Priavte Aura
 
             if old_unit ~= unitid or old_guid ~= guid then
                 self:Debug("Updating", frame_name, "to", unitid, guid, "was", old_unit, old_guid)
