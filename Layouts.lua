@@ -266,8 +266,7 @@ function Manager:GetGroupFilter()
 
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
-    local curMapID = _G.C_Map.GetBestMapForUnit("player")
-    local instanceType = select(2, _G.IsInInstance())
+    local playerMapID = _G.C_Map.GetBestMapForUnit("player")
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
     for i = 1, MAX_RAID_GROUPS do
@@ -276,19 +275,14 @@ function Manager:GetGroupFilter()
 
     for i = 1, GetNumGroupMembers() do
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
-        local mapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
-        local GcurMapID
-        local GmapID
-
-        if curMapID and mapID then
-            GcurMapID = _G.C_Map.GetMapGroupID(curMapID)
-            GmapID = _G.C_Map.GetMapGroupID(mapID)
+        local raidMemberMapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
+        local playerMapGroupID
+        local raidMemberMapGroupID
+        if playerMapID and raidMemberMapID then
+            playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
+            raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
         end
-        if (showOffline or online) and (showWrongZone or GcurMapID == GmapID) then
-            hideGroup[subgroup] = nil
-        elseif (showOffline or online) and (showWrongZone and instanceType ~= "raid") or curMapID == mapID then
-            hideGroup[subgroup] = nil
-        elseif (showOffline or online) and showWrongZone and instanceType == "raid" and not mapID then
+        if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
             hideGroup[subgroup] = nil
         end
     end
