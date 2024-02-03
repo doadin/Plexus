@@ -12,6 +12,11 @@ local UnitIsPlayer = _G.UnitIsPlayer
 local UnitPower = _G.UnitPower
 local UnitPowerMax = _G.UnitPowerMax
 
+local UnitInPartyIsAI
+if Plexus:IsRetailWow() then
+    UnitInPartyIsAI = _G.UnitInPartyIsAI
+end
+
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 
@@ -66,10 +71,10 @@ function PlexusAltPower:UpdateUnit(_, unitid)
     local unitGUID = UnitGUID(unitid)
     --don't update for a unit not in group
     if not PlexusRoster:IsGUIDInGroup(unitGUID) then return end
-    if (not UnitIsPlayer(unitid)) then
-        self.core:SendStatusLost(unitGUID, "unit_altpower")
-    else
+    if (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) then
         self:UpdateUnitResource(unitid)
+    else
+        self.core:SendStatusLost(unitGUID, "unit_altpower")
     end
 end
 
@@ -77,10 +82,10 @@ function PlexusAltPower:Plexus_UnitJoined(_, _, unitid)
     if not PlexusAltPower.db.profile.unit_altpower.enable then return end
     local unitGUID = UnitGUID(unitid)
     if not unitid then return end
-    if (not UnitIsPlayer(unitid)) then
-        self.core:SendStatusLost(unitGUID, "unit_altpower")
-    else
+    if (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) then
         self:UpdateUnitResource(unitid)
+    else
+        self.core:SendStatusLost(unitGUID, "unit_altpower")
     end
 end
 
@@ -88,10 +93,10 @@ function PlexusAltPower:UpdateAllUnits()
     if not PlexusAltPower.db.profile.unit_altpower.enable then return end
     for _, unitid in PlexusRoster:IterateRoster() do
         local unitGUID = UnitGUID(unitid)
-        if (not UnitIsPlayer(unitid)) then
-            self.core:SendStatusLost(unitGUID, "unit_altpower")
-        else
+        if (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) then
             self:UpdateUnitResource(unitid)
+        else
+            self.core:SendStatusLost(unitGUID, "unit_altpower")
         end
     end
 end

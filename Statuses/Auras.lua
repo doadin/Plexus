@@ -67,13 +67,14 @@ spell_names = {
     ["Renewing Mist"] = GetSpellInfo(115151),
     ["Soothing Mist"] = GetSpellInfo(115175),
 -- Paladin
+    ["Barrier of Faith"] = GetSpellInfo(148039),
     ["Beacon of Faith"] = GetSpellInfo(156910),
     ["Beacon of Light"] = GetSpellInfo(53563),
     ["Beacon of Virtue"] = GetSpellInfo(200025),
     ["Bestow Faith"] = GetSpellInfo(223306),
     ["Forbearance"] = GetSpellInfo(25771),
     ["Sacred Dawn"] = GetSpellInfo(243174),
-    ["Tyr's Deliverance"] = GetSpellInfo(200654),
+    ["Tyr's Deliverance"] = GetSpellInfo(200652),
     ["Glimmer of Light"] = GetSpellInfo(287286),
 -- Priest
     ["Atonement"] = GetSpellInfo(214206),
@@ -526,6 +527,19 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     -- Paladin
     ---------------------
+    [PlexusStatusAuras:StatusForSpell("Barrier of Faith", true)] = {
+        -- 156910
+        desc = format(L["Buff: %s"], spell_names["Barrier of Faith"]),
+        buff = spell_names["Barrier of Faith"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Barrier of Faith"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.49, g = 0.49, b = 0, a = 1 },
+        durationColorHigh = { r = 0.7, g = 0.7, b = 0, a = 1 },
+        durationLow = 5,
+        durationHigh = 10,
+        mine = true,
+    },
     [PlexusStatusAuras:StatusForSpell("Beacon of Faith", true)] = {
         -- 156910
         desc = format(L["Buff: %s"], spell_names["Beacon of Faith"]),
@@ -597,7 +611,7 @@ PlexusStatusAuras.defaultDB = {
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
-        -- 200654
+        -- 200652
         desc = format(L["Buff: %s"], spell_names["Tyr's Deliverance"]),
         buff = spell_names["Tyr's Deliverance"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
@@ -2664,14 +2678,6 @@ function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 2
     if not guid then guid = UnitGUID(unit) end
     if not PlexusRoster:IsGUIDInRaid(guid) then
         return
-    end
-    local LibClassicDurations
-    if Plexus:IsClassicWow() then
-        LibClassicDurations = _G.LibStub:GetLibrary("LibClassicDurations", true)
-    end
-    if LibClassicDurations then
-        LibClassicDurations:Register("Plexus")
-        UnitAura = LibClassicDurations.UnitAuraWrapper
     end
 
     self:Debug("UNIT_AURA", unit, guid)
