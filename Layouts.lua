@@ -284,7 +284,9 @@ function Manager:GetGroupFilter()
             GcurMapID = _G.C_Map.GetMapGroupID(curMapID)
             GmapID = _G.C_Map.GetMapGroupID(mapID)
         end
-        if (showOffline or online) and (showWrongZone or GcurMapID == GmapID) then
+        if instanceType == "none" then
+            hideGroup[subgroup] = nil
+        elseif (showOffline or online) and (showWrongZone or GcurMapID == GmapID) then
             hideGroup[subgroup] = nil
         elseif (showOffline or online) and (showWrongZone and instanceType ~= "raid") or curMapID == mapID then
             hideGroup[subgroup] = nil
