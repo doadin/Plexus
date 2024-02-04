@@ -11,6 +11,8 @@ local L = Plexus.L
 
 local format, gsub, pairs, type = _G.format, _G.gsub, pairs, type
 
+local C_UnitAuras = _G.C_UnitAuras
+local CreateFrame = _G.CreateFrame
 local InCombatLockdown = _G.InCombatLockdown
 local GetTime = _G.GetTime
 local UnitExists = _G.UnitExists
