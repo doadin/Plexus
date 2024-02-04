@@ -17,6 +17,7 @@ local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
 local UnitClass = _G.UnitClass
 local UnitExists = _G.UnitExists
 local UnitGUID = _G.UnitGUID
+local UnitName = _G.UnitName
 local UnitHasVehicleUI
 if Plexus:IsRetailWow() then
     UnitHasVehicleUI = _G.UnitHasVehicleUI
