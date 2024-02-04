@@ -19,6 +19,7 @@ end
 local UnitGUID = _G.UnitGUID
 local UnitIsVisible = _G.UnitIsVisible
 local UnitThreatSituation = _G.UnitThreatSituation
+local UnitGroupRolesAssigned = _G.UnitGroupRolesAssigned
 
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
