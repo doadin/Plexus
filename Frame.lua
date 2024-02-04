@@ -1359,10 +1359,12 @@ PlexusFrame.options = {
                                     PAFTest.texture = PAFTest:CreateTexture()
                                     PAFTest.texture:SetAllPoints(PAFTest)
                                     PAFTest.texture:SetTexture(134532)
+                                    PAFTest:Show()
                                 else
                                     _G[testFrame]:SetPoint("CENTER", frame.indicators.bar, "CENTER", PlexusFrame.db.profile.PrivateAuraOffsetX,PlexusFrame.db.profile.PrivateAuraOffsetY)
                                     _G[testFrame]:SetSize(PlexusFrame.db.profile.PrivateAuraWidth, PlexusFrame.db.profile.PrivateAuraHeight)
                                     _G[testFrame].texture:SetTexture(134532)
+                                    _G[testFrame]:Show()
                                 end
                             end
                         end
@@ -1379,6 +1381,7 @@ PlexusFrame.options = {
                             if frame.unit then
                                 local testFrame = frameName .. "_PrivateAuras_Test"
                                 _G[testFrame].texture:SetTexture()
+                                _G[testFrame]:Hide()
                             end
                         end
                     end,
@@ -1518,37 +1521,30 @@ function PlexusFrame:UpdateFrameUnits()
             local guid = unitid and UnitGUID(unitid) or nil
 
             --Start Priavte Aura
-            if Plexus:IsRetailWow() and settings.enablePrivateAura then
+            if Plexus:IsRetailWow() and settings.enablePrivateAura and guid then
                 if frame and frame.anchorID then
                     C_UnitAuras.RemovePrivateAuraAnchor(frame.anchorID)
                     frame.anchorID = nil
                 end
-                local PAF = CreateFrame('Frame', '$parent_PrivateAuras', frame.indicators.bar)
-                PAF:SetPoint("CENTER")
-                PAF:SetSize(settings.PrivateAuraWidth, settings.PrivateAuraHeight)
-                --PAFTest.texture:SetTexture(134532)
-                --PAF.Background = PAF:CreateTexture(nil, "BACKGROUND")
-                --PAF.Background:SetAllPoints(PAF)
-                --PAF.Background:SetColorTexture(0.5, 0, 1)
                 local auraAnchor = {
                     durationAnchor =
                     {
                         point = "CENTER",
-                        relativeTo = PAF, --frame.Duration
+                        relativeTo = frame.indicators.bar, --frame.Duration
                         relativePoint = "CENTER",
                         offsetX = settings.PrivateAuraOffsetX,
                         offsetY = settings.PrivateAuraOffsetY,
                     };
                     unitToken = unitid,
                     auraIndex = 1, --frame.auraIndex
-                    parent = PAF,
+                    parent = frame.indicators.bar,
                     showCountdownFrame = settings.enablePrivateAuraCountdownFrame,
                     showCountdownNumbers = settings.enablePrivateAuraCountdownNumbers,
                     iconInfo =
                     {
                         iconAnchor = {
                             point = "CENTER",
-                            relativeTo = PAF,
+                            relativeTo = frame.indicators.bar,
                             relativePoint = "CENTER",
                             offsetX = settings.PrivateAuraOffsetX,
                             offsetY = settings.PrivateAuraOffsetY,
