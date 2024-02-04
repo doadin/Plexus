@@ -12,6 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+local DEFAULT_CHAT_FRAME = _G.DEFAULT_CHAT_FRAME
+local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
 local UnitClass = _G.UnitClass
 local UnitExists = _G.UnitExists
 local UnitGUID = _G.UnitGUID
@@ -239,7 +241,7 @@ local nameOptions = {
 }
 
 local classIconCoords = {}
-for class, t in pairs(_G.CLASS_ICON_TCOORDS) do
+for class, t in pairs(CLASS_ICON_TCOORDS) do
     local offset, left, right, bottom, top = 0.025, unpack(t)
     classIconCoords[class] = {
         left   = left   + offset,
