@@ -1801,28 +1801,28 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
             },
         }
         if indicator == "text2" then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableText2 end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableText2 end
         end
         if indicator == "text3" then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableText3 end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableText3 end
         end
         if indicator == "tooltip" then
-            menu[indicator].disabled = function() return true end
+            menu[indicator].hidden = function() return true end
         end
         if (string.find(name, "Indicator") and string.find(name, "2")) then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableCorner2 end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableCorner2 end
         end
         if (string.find(name, "Indicator") and (string.find(name, "3") or string.find(name, "4"))) then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableCorner34 end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableCorner34 end
         end
         if (string.find(indicator, "ei_icon") and string.find(indicator, "2")) then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableIcon2 end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableIcon2 end
         end
         if (string.find(indicator, "ei_icon") and (string.find(indicator, "3") or string.find(indicator, "4"))) then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableIcon34 end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableIcon34 end
         end
         if indicator == "ei_bar_barone" then
-            menu[indicator].disabled = function() return not PlexusFrame.db.profile.enableExtraBar end
+            menu[indicator].hidden = function() return not PlexusFrame.db.profile.enableExtraBar end
         end
     end
 
