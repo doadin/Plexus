@@ -110,8 +110,6 @@ local function GroupRangeCheck(_, unit)
         return true
     elseif resSpell and UnitIsDead(unit) and not UnitIsDead("player") then
         return IsSpellInRange(resSpell, unit) == 1
-    elseif class == "EVOKER" then
-        return IsSpellInRange(GetSpellInfo(361469), unit) == 1
     else
         local inRange, checkedRange = UnitInRange(unit)
         if checkedRange then
