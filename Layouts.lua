@@ -271,7 +271,13 @@ function Manager:GetGroupFilter()
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
 
     for i = 1, MAX_RAID_GROUPS do
-        hideGroup[i] = ""
+        -- In world BG zones such as wintergrasp
+        -- GetNumGroupMembers when solo returns 0
+        if GetNumGroupMembers() == 0 and groupType == "bg" then
+            hideGroup[i] = nil
+        else
+            hideGroup[i] = ""
+        end
     end
 
     for i = 1, GetNumGroupMembers() do
