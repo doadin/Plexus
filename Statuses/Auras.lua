@@ -29,13 +29,8 @@ local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
 
-local GetAuraDataByAuraInstanceID
-local ForEachAura
-
-if Plexus:IsRetailWow() then
-    GetAuraDataByAuraInstanceID = _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = _G.AuraUtil.ForEachAura
-end
+local GetAuraDataByAuraInstanceID = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = _G.AuraUtil and _G.AuraUtil.ForEachAura
 
 if Plexus:IsRetailWow() then
 spell_names = {
@@ -1214,9 +1209,10 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    if Plexus:IsRetailWow() then
+    if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
         self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
-    else
+    end
+    if Plexus:IsWrathWow() then
         self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
     end
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
@@ -1726,8 +1722,8 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if Plexus:IsRetailWow() then
-            self:UpdateUnitAuras(_, unitid, {isFullUpdate = true})
+        if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
+            self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
         else
             self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
         end
@@ -1735,8 +1731,8 @@ function PlexusStatusAuras:UpdateAllUnitAuras()
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if Plexus:IsRetailWow() then
-        self:UpdateUnitAuras(_, unitid, {isFullUpdate = true})
+    if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
+        self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
     else
         self:ScanUnitAuras(event, unitid, guid)
     end
@@ -2459,7 +2455,7 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 local unitAuras
-function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit, updatedAuras
+function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, unit, updatedAuras
     if not unit then
         return
     end
@@ -2486,20 +2482,35 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     -- Full Update
     if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
         local unitauraInfo = {}
-        ForEachAura(unit, "HELPFUL", nil,
-            function(aura)
-                if aura and aura.auraInstanceID then
-                    unitauraInfo[aura.auraInstanceID] = aura
+        if (AuraUtil.ForEachAura) then
+            ForEachAura(unit, "HELPFUL", nil,
+                function(aura)
+                    if aura and aura.auraInstanceID then
+                        unitauraInfo[aura.auraInstanceID] = aura
+                    end
+                end,
+            true)
+            ForEachAura(unit, "HARMFUL", nil,
+                function(aura)
+                    if aura and aura.auraInstanceID then
+                        unitauraInfo[aura.auraInstanceID] = aura
+                    end
+                end,
+            true)
+        else
+            for i = 0, 40 do
+                local auraData = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
+                if auraData then
+                    unitauraInfo[auraData.auraInstanceID] = auraData
                 end
-            end,
-        true)
-        ForEachAura(unit, "HARMFUL", nil,
-            function(aura)
-                if aura and aura.auraInstanceID then
-                    unitauraInfo[aura.auraInstanceID] = aura
+            end
+            for i = 0, 40 do
+                local auraData = C_UnitAuras.GetAuraDataByIndex(unit, i, "HARMFUL")
+                if auraData then
+                    unitauraInfo[auraData.auraInstanceID] = auraData
                 end
-            end,
-        true)
+            end
+        end
         if unitAuras[guid] then
             for _, info in pairs(unitAuras[guid]) do
                 if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
