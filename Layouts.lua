@@ -284,12 +284,14 @@ function Manager:GetGroupFilter()
         local raidMemberMapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
         local playerMapGroupID
         local raidMemberMapGroupID
-        if playerMapID and raidMemberMapID then
-            playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
-            raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
-        end
-        if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
-            hideGroup[subgroup] = nil
+        if raidMemberMapID then
+            if playerMapID then
+                playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
+                raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
+            end
+            if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
+                hideGroup[subgroup] = nil
+            end
         end
     end
 
