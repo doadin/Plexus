@@ -288,8 +288,16 @@ function Manager:GetGroupFilter()
             playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
             raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
         end
-        if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
-            hideGroup[subgroup] = nil
+        if playerMapGroupID and raidMemberMapGroupID then
+            if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
+                hideGroup[subgroup] = nil
+            end
+        else
+            if playerMapID and raidMemberMapID then
+                if (showOffline or online) and (showWrongZone or playerMapID == raidMemberMapID) then
+                    hideGroup[subgroup] = nil
+                end
+            end
         end
     end
 
