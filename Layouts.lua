@@ -268,6 +268,7 @@ function Manager:GetGroupFilter()
     local showWrongZone = Layout:ShowWrongZone()
     local playerMapID = _G.C_Map.GetBestMapForUnit("player")
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
+    local MAX_RAID_MEMBERS = _G.MAX_RAID_MEMBERS or 40
 
     for i = 1, MAX_RAID_GROUPS do
         -- In world BG zones such as wintergrasp
@@ -279,7 +280,9 @@ function Manager:GetGroupFilter()
         end
     end
 
-    for i = 1, GetNumGroupMembers() do
+    --discouraged to use GetNumGroupMembers
+    for i = 1, MAX_RAID_MEMBERS do
+        --name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML, combatRole
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local raidMemberMapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
         local playerMapGroupID
@@ -292,12 +295,12 @@ function Manager:GetGroupFilter()
             if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
                 hideGroup[subgroup] = nil
             end
-        else
-            if playerMapID and raidMemberMapID then
-                if (showOffline or online) and (showWrongZone or playerMapID == raidMemberMapID) then
-                    hideGroup[subgroup] = nil
-                end
+        elseif playerMapID and raidMemberMapID then
+            if (showOffline or online) and (showWrongZone or playerMapID == raidMemberMapID) then
+                hideGroup[subgroup] = nil
             end
+        else
+            hideGroup[subgroup] = nil
         end
     end
 
