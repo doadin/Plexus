@@ -260,7 +260,9 @@ function Manager:GetGroupFilter()
     local groupType, maxPlayers = Roster:GetPartyState()
     self:Debug("groupType", groupType, "maxPlayers", maxPlayers)
 
-    if groupType ~= "raid" and groupType ~= "bg" then
+    -- GetNumGroupMembers when solo returns 0 even in world BG zones such as wintergrasp
+    -- Therefore even in BG if GetNumGroupMembers == 0 return 1
+    if groupType ~= "raid" and groupType ~= "bg" or (groupType == "bg" and GetNumGroupMembers() == 0) then
         return "1", 1
     end
 
@@ -271,13 +273,7 @@ function Manager:GetGroupFilter()
     local MAX_RAID_MEMBERS = _G.MAX_RAID_MEMBERS or 40
 
     for i = 1, MAX_RAID_GROUPS do
-        -- In world BG zones such as wintergrasp
-        -- GetNumGroupMembers when solo returns 0
-        if GetNumGroupMembers() == 0 and groupType == "bg" then
-            hideGroup[i] = nil
-        else
-            hideGroup[i] = ""
-        end
+        hideGroup[i] = ""
     end
 
     --discouraged to use GetNumGroupMembers
@@ -299,8 +295,11 @@ function Manager:GetGroupFilter()
             if (showOffline or online) and (showWrongZone or playerMapID == raidMemberMapID) then
                 hideGroup[subgroup] = nil
             end
+        -- if we cant get zone info for a unit just show the group
         else
-            hideGroup[subgroup] = nil
+            if (showOffline or online) then
+                hideGroup[subgroup] = nil
+            end
         end
     end
 
