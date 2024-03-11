@@ -260,7 +260,9 @@ function Manager:GetGroupFilter()
     local groupType, maxPlayers = Roster:GetPartyState()
     self:Debug("groupType", groupType, "maxPlayers", maxPlayers)
 
-    if groupType ~= "raid" and groupType ~= "bg" then
+    -- GetNumGroupMembers when solo returns 0 even in world BG zones such as wintergrasp
+    -- Therefore even in BG if GetNumGroupMembers == 0 return 1
+    if groupType ~= "raid" and groupType ~= "bg" or (groupType == "bg" and GetNumGroupMembers() == 0) then
         return "1", 1
     end
 
@@ -268,28 +270,34 @@ function Manager:GetGroupFilter()
     local showWrongZone = Layout:ShowWrongZone()
     local playerMapID = _G.C_Map.GetBestMapForUnit("player")
     local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
+    local MAX_RAID_MEMBERS = _G.MAX_RAID_MEMBERS or 40
 
     for i = 1, MAX_RAID_GROUPS do
-        -- In world BG zones such as wintergrasp
-        -- GetNumGroupMembers when solo returns 0
-        if GetNumGroupMembers() == 0 and groupType == "bg" then
-            hideGroup[i] = nil
-        else
-            hideGroup[i] = ""
-        end
+        hideGroup[i] = ""
     end
 
-    for i = 1, GetNumGroupMembers() do
+    --discouraged to use GetNumGroupMembers
+    for i = 1, MAX_RAID_MEMBERS do
+        --name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML, combatRole
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
         local raidMemberMapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
         local playerMapGroupID
         local raidMemberMapGroupID
-        if raidMemberMapID then
-            if playerMapID then
-                playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
-                raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
-            end
+        if playerMapID and raidMemberMapID then
+            playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
+            raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
+        end
+        if playerMapGroupID and raidMemberMapGroupID then
             if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
+                hideGroup[subgroup] = nil
+            end
+        elseif playerMapID and raidMemberMapID then
+            if (showOffline or online) and (showWrongZone or playerMapID == raidMemberMapID) then
+                hideGroup[subgroup] = nil
+            end
+        -- if we cant get zone info for a unit just show the group
+        else
+            if (showOffline or online) then
                 hideGroup[subgroup] = nil
             end
         end
