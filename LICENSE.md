@@ -1,4 +1,8 @@
-Copyright (c) 2019-2021 Doadin <doadinaddons@gmail.com>
+Copyright (c) 2006-2009 Maia, Pastamancer (Kyle Smith)
+
+Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+
+Copyright (c) 2019-2024 Doadin <doadinaddons@gmail.com>
 
 All rights reserved.
 
