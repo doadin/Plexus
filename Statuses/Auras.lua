@@ -113,7 +113,7 @@ spell_names = {
 }
 end
 
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
     spell_names = {
 -- All
     ["Ghost"] = GetSpellInfo(8326),
@@ -938,7 +938,7 @@ PlexusStatusAuras.defaultDB = {
 }
 end
 
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
     PlexusStatusAuras.defaultDB = {
         advancedOptions = false,
     --[[
@@ -1838,7 +1838,7 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             PlayerCanDispel.Curse   = IsPlayerSpell(475)
         end
     end
-    if Plexus:IsWrathWow() then
+    if Plexus:IsWrathWow() or Plexus:IsCataWow() then
         if PLAYER_CLASS == "DRUID" then
             --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
             --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
