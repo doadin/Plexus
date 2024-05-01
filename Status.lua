@@ -358,7 +358,7 @@ if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
         ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
         ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41}}
 end
-if Plexus:IsWrathWow() then
+if Plexus:IsWrathWow() or Plexus:IsCataWow() then
     PlexusClasses = {
         ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
         ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
