@@ -205,7 +205,7 @@ Plexus.options = {
                     end,
                     set = function(info, value) --luacheck: ignore 212
                         Plexus.db.profile.minimap.hide = not value
-                        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+                        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
                             if value then
                                 LDBIcon:Show(PLEXUS)
                             else
