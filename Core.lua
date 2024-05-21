@@ -614,7 +614,7 @@ function Plexus:OnInitialize()
         end
     end
 
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         LDBIcon:Register(PLEXUS, self.Broker, self.db.profile.minimap)
         if self.db.profile.minimap.hide then
             LDBIcon:Hide(PLEXUS)
@@ -666,7 +666,7 @@ end
 function Plexus:OnProfileEnable()
     self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         if LDBIcon then
             LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
             if self.db.profile.minimap.hide then
