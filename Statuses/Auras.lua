@@ -1806,15 +1806,15 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --    528   Cure Disease      Shadow                      Disease
             --    527   Dispel Magic      Shadow                      Magic
             PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(988)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527)
 
         elseif PLAYER_CLASS == "SHAMAN" then
             --  8166    Poison Cleansing Totem      Restoration                 Poison
             --  8170    Disease Cleansing Totem     Restoration                 Disease
             --  526     Cure Poison                 Restoration                 Poison
             --  2870    Cure Disease                Restoration                 Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(8170) or IsPlayerSpell(2870)
-            PlayerCanDispel.Poison  = IsPlayerSpell(8166) or IsPlayerSpell(526)
+            PlayerCanDispel.Disease = IsPlayerSpell(2870)
+            PlayerCanDispel.Poison  = IsPlayerSpell(526)
 
         elseif PLAYER_CLASS == "WARLOCK" then
             --  19505   Devour Magic (Felhunter)
@@ -1845,16 +1845,15 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --    528   Cure Disease      Shadow                      Disease
             --    527   Dispel Magic      Shadow                      Magic
             PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(988)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527)
 
         elseif PLAYER_CLASS == "SHAMAN" then
             --  8166    Poison Cleansing Totem      Restoration                 Poison
             --  8170    Disease Cleansing Totem     Restoration                 Disease
             --  526     Cure Poison                 Restoration                 Poison
             --  2870    Cure Disease                Restoration                 Disease
-            --  51886   Cleanse Spirit                                          Poison, Disease, Curse
-            PlayerCanDispel.Disease = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
-            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
+            PlayerCanDispel.Disease = IsPlayerSpell(2870) or IsPlayerSpell(526) or IsPlayerSpell(51886)
+            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(51886)
             PlayerCanDispel.Curse   = IsPlayerSpell(51886)
 
         elseif PLAYER_CLASS == "WARLOCK" then
@@ -1872,21 +1871,22 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
             --  8946    Cure Poison         Balance, Feral, Guardian, Restoration    Poison
             PlayerCanDispel.Curse   = IsPlayerSpell(2782)
-            PlayerCanDispel.Magic   = IsPlayerSpell(2782)
+            PlayerCanDispel.Magic   = IsPlayerSpell(88423)
+            PlayerCanDispel.Poison  = IsPlayerSpell(2782)
 
         elseif PLAYER_CLASS == "PALADIN" then
             --   4987   Cleanse           Holy                        Disease, Poison, Magic
             --   1152   Purify            Protection, Retribution     Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(4987) or IsPlayerSpell(1152)
-            PlayerCanDispel.Magic   = IsPlayerSpell(4987)
-            PlayerCanDispel.Poison  = IsPlayerSpell(4987) or IsPlayerSpell(1152)
+            PlayerCanDispel.Disease = IsPlayerSpell(4987)
+            PlayerCanDispel.Magic   = IsPlayerSpell(53551)
+            PlayerCanDispel.Poison  = IsPlayerSpell(4987)
 
         elseif PLAYER_CLASS == "PRIEST" then
             --    552   Abolish Disease   Shadow                      Disease
             --    528   Cure Disease      Shadow                      Disease
             --    527   Dispel Magic      Shadow                      Magic
-            PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(988)
+            PlayerCanDispel.Disease = IsPlayerSpell(528)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(33167)
 
         elseif PLAYER_CLASS == "SHAMAN" then
             --  8166    Poison Cleansing Totem      Restoration                 Poison
@@ -1894,9 +1894,8 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --  526     Cure Poison                 Restoration                 Poison
             --  2870    Cure Disease                Restoration                 Disease
             --  51886   Cleanse Spirit                                          Poison, Disease, Curse
-            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
             PlayerCanDispel.Curse   = IsPlayerSpell(51886)
-            PlayerCanDispel.Magic   = IsPlayerSpell(51886)
+            PlayerCanDispel.Magic   = IsPlayerSpell(77130)
 
         elseif PLAYER_CLASS == "WARLOCK" then
             --  19505   Devour Magic (Felhunter)
