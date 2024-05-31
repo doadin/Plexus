@@ -30,9 +30,6 @@ externals:
       url: https://repos.curseforge.com/wow/libstub/trunk
       tag: 1.0
    Libs/UTF8: https://repos.curseforge.com/wow/utf8/trunk
-   Libs/LibHealComm-4.0:
-     url: https://github.com/doadin/LibHealComm-4.0.git
-     tag: main
    Libs/LibDeflate:
      url: https://github.com/doadin/LibDeflate.git
      tag: main

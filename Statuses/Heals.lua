@@ -83,24 +83,21 @@ function PlexusStatusHeals:OnStatusEnable(status)
             self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
         end
         if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
-            --local HealComm
-            assert(_G.LibStub, "Heals Status requires LibStub")
-            assert(_G.LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
             HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
-            local function HealComm_Heal_Update()
-                self:UpdateAllUnits()
+            if HealComm then
+                local function HealComm_Heal_Update()
+                    self:UpdateAllUnits()
+                end
+                local function HealComm_Modified()
+                    self:UpdateAllUnits()
+                end
+                HealComm.RegisterCallback(self, 'HealComm_HealStarted', HealComm_Heal_Update)
+                HealComm.RegisterCallback(self, 'HealComm_HealUpdated', HealComm_Heal_Update)
+                HealComm.RegisterCallback(self, 'HealComm_HealDelayed', HealComm_Heal_Update)
+                HealComm.RegisterCallback(self, 'HealComm_HealStopped', HealComm_Heal_Update)
+                HealComm.RegisterCallback(self, 'HealComm_ModifierChanged', HealComm_Modified)
+                HealComm.RegisterCallback(self, 'HealComm_GUIDDisappeared', HealComm_Modified)
             end
-
-            local function HealComm_Modified()
-                self:UpdateAllUnits()
-            end
-
-            HealComm.RegisterCallback(self, 'HealComm_HealStarted', HealComm_Heal_Update)
-            HealComm.RegisterCallback(self, 'HealComm_HealUpdated', HealComm_Heal_Update)
-            HealComm.RegisterCallback(self, 'HealComm_HealDelayed', HealComm_Heal_Update)
-            HealComm.RegisterCallback(self, 'HealComm_HealStopped', HealComm_Heal_Update)
-            HealComm.RegisterCallback(self, 'HealComm_ModifierChanged', HealComm_Modified)
-            HealComm.RegisterCallback(self, 'HealComm_GUIDDisappeared', HealComm_Modified)
         end
         self:UpdateAllUnits()
     end
@@ -114,17 +111,15 @@ function PlexusStatusHeals:OnStatusDisable(status)
             self:UnregisterEvent("UNIT_HEAL_PREDICTION")
         end
         if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
-            --local HealComm
-            assert(_G.LibStub, "Heals Status requires LibStub")
-            assert(_G.LibStub:GetLibrary("LibHealComm-4.0", true), "Heals Status requires LibHealComm-4.0(which should be included)")
             HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
-
-            HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
-            HealComm.UnregisterCallback(self, 'HealComm_HealUpdated')
-            HealComm.UnregisterCallback(self, 'HealComm_HealDelayed')
-            HealComm.UnregisterCallback(self, 'HealComm_HealStopped')
-            HealComm.UnregisterCallback(self, 'HealComm_ModifierChanged')
-            HealComm.UnregisterCallback(self, 'HealComm_GUIDDisappeared')
+            if HealComm then
+                HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
+                HealComm.UnregisterCallback(self, 'HealComm_HealUpdated')
+                HealComm.UnregisterCallback(self, 'HealComm_HealDelayed')
+                HealComm.UnregisterCallback(self, 'HealComm_HealStopped')
+                HealComm.UnregisterCallback(self, 'HealComm_ModifierChanged')
+                HealComm.UnregisterCallback(self, 'HealComm_GUIDDisappeared')
+            end
         end
         self.core:SendStatusLostAllUnits("alert_heals")
     end
@@ -149,30 +144,23 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
         local incoming = 0
-        if Plexus:IsRetailWow() then
+        if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
-        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+        if HealComm and (not Plexus:IsRetailWow()) then
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1)
             incoming = (incoming + myIncomingHeal) or 0
         end
-        --if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-        --    local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1) + (UnitGetIncomingHeals(unit) or 0)
-        --    incoming = myIncomingHeal or 0
+        --if incoming > 0 then
+        --    if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+        --        self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
+        --    end
         --end
-        if incoming > 0 then
-            if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-                self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
-            end
-        end
         if settings.ignore_self then
-            if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+            if HealComm and (not Plexus:IsRetailWow()) then
                 incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
-            --if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-            --    incoming = (HealComm:GetOthersHealAmount(guid, HealComm.OVERTIME_AND_BOMB_HEALS) or 0) + (UnitGetIncomingHeals(unit) - (UnitGetIncomingHeals(unit, "player") or 0))
-            --end
-            if Plexus:IsRetailWow() then
+            if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) then
                 incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
             end
         end
