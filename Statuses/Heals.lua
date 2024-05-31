@@ -79,10 +79,8 @@ function PlexusStatusHeals:OnStatusEnable(status)
     if status == "alert_heals" then
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
         self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")
-        if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
-            self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
-        end
-        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+        self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
+        if not Plexus:IsRetailWow() then
             HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             if HealComm then
                 local function HealComm_Heal_Update()
@@ -107,10 +105,8 @@ function PlexusStatusHeals:OnStatusDisable(status)
     if status == "alert_heals" then
         self:UnregisterEvent("UNIT_HEALTH")
         self:UnregisterEvent("UNIT_MAXHEALTH")
-        if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
-            self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-        end
-        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+        self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+        if not Plexus:IsRetailWow() then
             HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             if HealComm then
                 HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
