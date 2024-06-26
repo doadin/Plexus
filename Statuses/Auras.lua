@@ -2600,7 +2600,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, u
             if auraTable and auraTable.spellId == 376788 then
                 auraTable.name = "Echo: Dream Breath"
             end
-            if auraTable then
+            if not auraTable then
                 local old = unitAuras[guid] and unitAuras[guid][auraInstanceID]
                 if unitAuras[guid] and unitAuras[guid][auraInstanceID] then
                     if old.isHelpful and player_buff_names[old.name] and old.sourceUnit == "player" then
@@ -2618,8 +2618,10 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, u
                     if old.isHarmful and debuff_types[old.dispelName] then
                         PlexusStatusAuras:UnitLostDebuffType(guid,nil,old.dispelName)
                     end
-                    unitAuras[guid][old.auraInstanceID] = nil
+                    unitAuras[guid][auraInstanceID] = nil
                 end
+            end
+            if auraTable then
                 if buff_names[auraTable.name] or player_buff_names[auraTable.name] or debuff_names[auraTable.name] or player_debuff_names[auraTable.name] or debuff_types[auraTable.dispelName] then
                     if not unitAuras[guid] then
                         unitAuras[guid] = {}
