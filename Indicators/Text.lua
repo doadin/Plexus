@@ -86,7 +86,7 @@ local function Reset(self)
     if self.__id == "text" then
         if profile.textorientation == "HORIZONTAL" then
             self:SetJustifyH("LEFT")
-            self:SetJustifyV("CENTER")
+            self:SetJustifyV("MIDDLE")
             self:SetPoint("TOPLEFT", 2, -2)
             self:SetPoint("BOTTOMLEFT", 2, 2)
             if profile.enableText2 then
@@ -96,7 +96,7 @@ local function Reset(self)
             end
         else
             self:SetJustifyH("CENTER")
-            self:SetJustifyV("CENTER")
+            self:SetJustifyV("MIDDLE")
             self:SetPoint("TOPLEFT", 2, -2)
             self:SetPoint("TOPRIGHT", -2, -2)
             if profile.enableText2 then
@@ -108,7 +108,7 @@ local function Reset(self)
     elseif self.__id == "text2" then
         if profile.textorientation == "HORIZONTAL" then
             self:SetJustifyH("RIGHT")
-            self:SetJustifyV("CENTER")
+            self:SetJustifyV("MIDDLE")
             self:SetPoint("TOPRIGHT", -2, -2)
             self:SetPoint("BOTTOMRIGHT", -2, 2)
             if profile.enableText3 then
@@ -118,7 +118,7 @@ local function Reset(self)
             end
         else
             self:SetJustifyH("CENTER")
-            self:SetJustifyV("CENTER")
+            self:SetJustifyV("MIDDLE")
             self:SetPoint("BOTTOMLEFT", 2, -2)
             self:SetPoint("BOTTOMRIGHT", -2, -2)
             if profile.enableText3 then
@@ -130,13 +130,13 @@ local function Reset(self)
     elseif self.__id == "text3" then
         if profile.textorientation == "HORIZONTAL" then
             self:SetJustifyH("RIGHT")
-            self:SetJustifyV("CENTER")
+            self:SetJustifyV("MIDDLE")
             self:SetPoint("TOPRIGHT", -2, -2)
             self:SetPoint("BOTTOMRIGHT", -2, 2)
             self:SetPoint("LEFT", bar, "CENTER")
         else
             self:SetJustifyH("CENTER")
-            self:SetJustifyV("CENTER")
+            self:SetJustifyV("MIDDLE")
             self:SetPoint("BOTTOMLEFT", 2, -2)
             self:SetPoint("BOTTOMRIGHT", -2, -2)
             self:SetPoint("TOP", bar, "CENTER")

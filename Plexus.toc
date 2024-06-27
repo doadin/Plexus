@@ -1,8 +1,9 @@
-## Interface: 100205
-## Interface-Retail: 100205
-## Interface-Classic: 11501
+## Interface: 100207
+## Interface-Retail: 100207
+## Interface-Classic: 11502
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30403
+## Interface-Cata: 40400
 ## Version: @project-version@
 
 ## Title: Plexus
@@ -22,7 +23,7 @@
 ## X-Website: https://wow.curseforge.com/projects/plexus/
 ## X-Curse-Project-ID: 338710
 
-## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, NickTag-1.0, UTF8
+## OptionalDeps: Clique, Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, NickTag-1.0, UTF8, LibHealComm-4.0
 ## SavedVariables: PlexusDB
 
 ## AddonCompartmentFunc: PlexusOnAddonCompartmentClick
@@ -55,10 +56,9 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@version-wrath@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-version-wrath@
-#@non-retail@
-Libs\LibHealComm-4.0\ChatThrottleLib.lua
-Libs\LibHealComm-4.0\LibHealComm-4.0.lua
-#@end-non-retail@
+#@version-cata@
+Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
+#@end-version-cata@
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua

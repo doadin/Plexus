@@ -199,11 +199,11 @@ function PlexusStatusHealth:PostEnable()
 
     self:RegisterEvent("UNIT_AURA", "UpdateUnit")
     self:RegisterEvent("UNIT_CONNECTION", "UpdateUnit")
-    if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
+    if Plexus:IsRetailWow() or Plexus:IsClassicWow() or Plexus:IsCataWow() then
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
     end
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "CLEU")
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         self:RegisterEvent("UNIT_HEALTH_FREQUENT", "UpdateUnit")
     end
     self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")

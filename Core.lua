@@ -29,10 +29,12 @@ local WOW_PROJECT_ID = _G.WOW_PROJECT_ID
 local WOW_PROJECT_CLASSIC = _G.WOW_PROJECT_CLASSIC
 local WOW_PROJECT_BURNING_CRUSADE_CLASSIC = _G.WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 local WOW_PROJECT_WRATH_CLASSIC = _G.WOW_PROJECT_WRATH_CLASSIC
+local WOW_PROJECT_CATACLYSM_CLASSIC = _G.WOW_PROJECT_CATACLYSM_CLASSIC
 local WOW_PROJECT_MAINLINE = _G.WOW_PROJECT_MAINLINE
 local LE_EXPANSION_LEVEL_CURRENT = _G.LE_EXPANSION_LEVEL_CURRENT
 local LE_EXPANSION_BURNING_CRUSADE = _G. LE_EXPANSION_BURNING_CRUSADE
 local LE_EXPANSION_WRATH_OF_THE_LICH_KING = _G.LE_EXPANSION_WRATH_OF_THE_LICH_KING
+local LE_EXPANSION_CATACLYSM = _G.LE_EXPANSION_CATACLYSM
 
 local LDBIcon = _G.LibStub:GetLibrary("LibDBIcon-1.0")
 local LibDeflate = _G.LibStub:GetLibrary('LibDeflate')
@@ -50,6 +52,10 @@ end
 
 function Plexus:IsWrathWow() --luacheck: ignore 212
     return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
+end
+
+function Plexus:IsCataWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_CATACLYSM
 end
 
 function Plexus:IsRetailWow() --luacheck: ignore 212
@@ -199,7 +205,7 @@ Plexus.options = {
                     end,
                     set = function(info, value) --luacheck: ignore 212
                         Plexus.db.profile.minimap.hide = not value
-                        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+                        if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
                             if value then
                                 LDBIcon:Show(PLEXUS)
                             else
@@ -608,7 +614,7 @@ function Plexus:OnInitialize()
         end
     end
 
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         LDBIcon:Register(PLEXUS, self.Broker, self.db.profile.minimap)
         if self.db.profile.minimap.hide then
             LDBIcon:Hide(PLEXUS)
@@ -660,7 +666,7 @@ end
 function Plexus:OnProfileEnable()
     self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         if LDBIcon then
             LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
             if self.db.profile.minimap.hide then

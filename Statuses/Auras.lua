@@ -113,7 +113,7 @@ spell_names = {
 }
 end
 
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
     spell_names = {
 -- All
     ["Ghost"] = GetSpellInfo(8326),
@@ -938,7 +938,7 @@ PlexusStatusAuras.defaultDB = {
 }
 end
 
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
     PlexusStatusAuras.defaultDB = {
         advancedOptions = false,
     --[[
@@ -1209,12 +1209,7 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
-        self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
-    end
-    if Plexus:IsWrathWow() then
-        self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
-    end
+    self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     --self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
 
@@ -1722,20 +1717,12 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     for guid, unitid in PlexusRoster:IterateRoster() do
-        if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
-            self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
-        else
-            self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
-        end
+        self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
     end
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if Plexus:IsRetailWow() or Plexus:IsClassicWow() then
-        self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
-    else
-        self:ScanUnitAuras(event, unitid, guid)
-    end
+    self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
@@ -1819,15 +1806,15 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --    528   Cure Disease      Shadow                      Disease
             --    527   Dispel Magic      Shadow                      Magic
             PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(988)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527)
 
         elseif PLAYER_CLASS == "SHAMAN" then
             --  8166    Poison Cleansing Totem      Restoration                 Poison
             --  8170    Disease Cleansing Totem     Restoration                 Disease
             --  526     Cure Poison                 Restoration                 Poison
             --  2870    Cure Disease                Restoration                 Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(8170) or IsPlayerSpell(2870)
-            PlayerCanDispel.Poison  = IsPlayerSpell(8166) or IsPlayerSpell(526)
+            PlayerCanDispel.Disease = IsPlayerSpell(2870)
+            PlayerCanDispel.Poison  = IsPlayerSpell(526)
 
         elseif PLAYER_CLASS == "WARLOCK" then
             --  19505   Devour Magic (Felhunter)
@@ -1858,7 +1845,48 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --    528   Cure Disease      Shadow                      Disease
             --    527   Dispel Magic      Shadow                      Magic
             PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(988)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527)
+
+        elseif PLAYER_CLASS == "SHAMAN" then
+            --  8166    Poison Cleansing Totem      Restoration                 Poison
+            --  8170    Disease Cleansing Totem     Restoration                 Disease
+            --  526     Cure Poison                 Restoration                 Poison
+            --  2870    Cure Disease                Restoration                 Disease
+            PlayerCanDispel.Disease = IsPlayerSpell(2870) or IsPlayerSpell(526) or IsPlayerSpell(51886)
+            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(51886)
+            PlayerCanDispel.Curse   = IsPlayerSpell(51886)
+
+        elseif PLAYER_CLASS == "WARLOCK" then
+            --  19505   Devour Magic (Felhunter)
+            PlayerCanDispel.Magic   = IsSpellKnown(19505, true)
+
+        elseif PLAYER_CLASS == "MAGE" then
+            -- 475   Remove Curse       Fire, Arcane, Frost        Curse
+            PlayerCanDispel.Curse   = IsPlayerSpell(475)
+        end
+    end
+    if Plexus:IsCataWow() then
+        if PLAYER_CLASS == "DRUID" then
+            --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
+            --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
+            --  8946    Cure Poison         Balance, Feral, Guardian, Restoration    Poison
+            PlayerCanDispel.Curse   = IsPlayerSpell(2782)
+            PlayerCanDispel.Magic   = IsPlayerSpell(88423)
+            PlayerCanDispel.Poison  = IsPlayerSpell(2782)
+
+        elseif PLAYER_CLASS == "PALADIN" then
+            --   4987   Cleanse           Holy                        Disease, Poison, Magic
+            --   1152   Purify            Protection, Retribution     Disease, Poison
+            PlayerCanDispel.Disease = IsPlayerSpell(4987)
+            PlayerCanDispel.Magic   = IsPlayerSpell(53551)
+            PlayerCanDispel.Poison  = IsPlayerSpell(4987)
+
+        elseif PLAYER_CLASS == "PRIEST" then
+            --    552   Abolish Disease   Shadow                      Disease
+            --    528   Cure Disease      Shadow                      Disease
+            --    527   Dispel Magic      Shadow                      Magic
+            PlayerCanDispel.Disease = IsPlayerSpell(528)
+            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(33167)
 
         elseif PLAYER_CLASS == "SHAMAN" then
             --  8166    Poison Cleansing Totem      Restoration                 Poison
@@ -1866,9 +1894,8 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --  526     Cure Poison                 Restoration                 Poison
             --  2870    Cure Disease                Restoration                 Disease
             --  51886   Cleanse Spirit                                          Poison, Disease, Curse
-            PlayerCanDispel.Disease = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
-            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(8170) or IsPlayerSpell(51886)
             PlayerCanDispel.Curse   = IsPlayerSpell(51886)
+            PlayerCanDispel.Magic   = IsPlayerSpell(77130)
 
         elseif PLAYER_CLASS == "WARLOCK" then
             --  19505   Devour Magic (Felhunter)
@@ -2573,7 +2600,7 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, u
             if auraTable and auraTable.spellId == 376788 then
                 auraTable.name = "Echo: Dream Breath"
             end
-            if auraTable then
+            if not auraTable then
                 local old = unitAuras[guid] and unitAuras[guid][auraInstanceID]
                 if unitAuras[guid] and unitAuras[guid][auraInstanceID] then
                     if old.isHelpful and player_buff_names[old.name] and old.sourceUnit == "player" then
@@ -2591,8 +2618,10 @@ function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, u
                     if old.isHarmful and debuff_types[old.dispelName] then
                         PlexusStatusAuras:UnitLostDebuffType(guid,nil,old.dispelName)
                     end
-                    unitAuras[guid][old.auraInstanceID] = nil
+                    unitAuras[guid][auraInstanceID] = nil
                 end
+            end
+            if auraTable then
                 if buff_names[auraTable.name] or player_buff_names[auraTable.name] or debuff_names[auraTable.name] or player_debuff_names[auraTable.name] or debuff_types[auraTable.dispelName] then
                     if not unitAuras[guid] then
                         unitAuras[guid] = {}
