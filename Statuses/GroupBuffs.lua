@@ -5,8 +5,11 @@ local GetSpellInfo = _G.GetSpellInfo
 local GetSpellTexture = _G.GetSpellTexture
 local InCombatLockdown = _G.InCombatLockdown
 
-local UnitAura, UnitClass, UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDead, UnitIsGhost
-    = _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsVisible, _G.UnitIsDead, _G.UnitIsGhost
+local UnitClass, UnitGUID, UnitIsPlayer, UnitIsDead, UnitIsGhost
+    = _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsDead, _G.UnitIsGhost
+
+local GetAuraDataByAuraInstanceID = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = _G.AuraUtil and _G.AuraUtil.ForEachAura
 
 local UnitInPartyIsAI
 if Plexus:IsRetailWow() then
@@ -514,75 +517,235 @@ function PlexusStatusGroupBuffs:UpdateAllUnits()
     --self:Debug("UpdateAllUnits")
     for guid, unit in PlexusRoster:IterateRoster() do
         if (UnitIsPlayer(unit) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unit))) then
-            self:UpdateUnit("UpdateAllUnits", unit, _, guid)
+            self:UpdateUnit("UpdateAllUnits", unit, {isFullUpdate = true}, guid)
         end
     end
 end
 
-function PlexusStatusGroupBuffs:UpdateUnit(event, unit, _, guid)
+local enabledBuffs
+function PlexusStatusGroupBuffs:UpdateUnit(event, unit, updatedAuras, guid)
     if not guid then guid = UnitGUID(unit) end
+    if not PlexusRoster:IsGUIDInGroup(guid) then return end
+    if not enabledBuffs then enabledBuffs = {} end
     if (UnitIsPlayer(unit) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unit))) then
         for status in self:ConfiguredStatusIterator() do
-            self:ShowMissingBuffs(event, unit, status, guid)
+            local settings = self.db.profile[status]
+            local BuffClass = settings.class
+            local EnableClassFilter = self.db.profile.EnableClassFilter
+            local _, englishClass= UnitClass("player")
+            if not settings.enable or (UnitIsDead(unit) or UnitIsGhost(unit)) or (EnableClassFilter and BuffClass ~= englishClass) then
+                for _,buffName in pairs(settings.buffs) do
+                    enabledBuffs[buffName] = nil
+                end
+                self.core:SendStatusLostAllUnits(status)
+            elseif settings.enable then
+                --self:ShowMissingBuffs(event, unit, status, guid, updatedAuras)
+                for _,buffName in pairs(settings.buffs) do
+                    enabledBuffs[buffName] = {settings = settings, status = status}
+                end
+            end
         end
+        self:ShowMissingBuffs(event, unit, guid, updatedAuras)
     end
 end
 
-function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, status, guid)
+local unitAuras
+function PlexusStatusGroupBuffs:ShowMissingBuffs(event, unit, guid, updatedAuras)
     self:Debug("UpdateUnit Event: ", event)
     self:Debug("UpdateUnit Unit: ", unit)
     self:Debug("UpdateUnit GUID: ", guid)
     if not unit then return end
-    if not status then return end
     if not guid then return end
-    local settings = self.db.profile[status]
-    local BuffClass = settings.class
-    local EnableClassFilter = self.db.profile.EnableClassFilter
-    local _, englishClass= UnitClass("player")
+    if not PlexusRoster:IsGUIDInGroup(guid) then return end
+    --local settings = self.db.profile[status]
+    --local BuffClass = settings.class
+    --local EnableClassFilter = self.db.profile.EnableClassFilter
+    --local _, englishClass= UnitClass("player")
 
-    if not settings.enable then
-        self.core:SendStatusLostAllUnits(status)
-        return
+    --if (UnitIsDead(unit) or UnitIsGhost(unit)) or (EnableClassFilter and BuffClass ~= englishClass) then
+    --    self.core:SendStatusLost(guid, status)
+    --    if (EnableClassFilter and BuffClass ~= englishClass) then
+    --        self:Debug("Class Filter is on, we are not the class")
+    --    end
+    --    return
+    --end
+
+    --for i = 1, 40 do
+    --    local name = UnitAura(unit, i, "HELPFUL")
+    --    if not name then break end
+    --    for _, buff in pairs(settings.buffs) do
+    --        if name == buff then
+    --            self.core:SendStatusLost(guid, status)
+    --            return
+    --        end
+    --    end
+    --end
+
+    if not unitAuras then
+        unitAuras = {}
     end
 
-    if UnitIsDead(unit) or UnitIsGhost(unit) then
-        self.core:SendStatusLost(guid, status)
-        return
-    end
-
-    if EnableClassFilter then
-        if BuffClass ~= englishClass then
-            --self:Debug("Class Filter is on, we are not the class")
-            self.core:SendStatusLost(guid, status)
-            return
+    -- Full Update
+    if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
+        local unitauraInfo = {}
+        if (AuraUtil.ForEachAura) then
+            ForEachAura(unit, "HELPFUL", nil,
+                function(aura)
+                    if aura and aura.auraInstanceID then
+                        unitauraInfo[aura.auraInstanceID] = aura
+                    end
+                end,
+            true)
+            --ForEachAura(unit, "HARMFUL", nil,
+            --    function(aura)
+            --        if aura and aura.auraInstanceID then
+            --            unitauraInfo[aura.auraInstanceID] = aura
+            --        end
+            --    end,
+            --true)
+        else
+            for i = 0, 40 do
+                local auraData = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
+                if auraData then
+                    unitauraInfo[auraData.auraInstanceID] = auraData
+                end
+            end
+            --for i = 0, 40 do
+            --    local auraData = C_UnitAuras.GetAuraDataByIndex(unit, i, "HARMFUL")
+            --    if auraData then
+            --        unitauraInfo[auraData.auraInstanceID] = auraData
+            --    end
+            --end
+        end
+        if unitAuras[guid] then
+            --self.core:SendStatusGained(
+            --    guid,
+            --    status,
+            --    settings.priority,
+            --    nil,
+            --    settings.color,
+            --    settings.text,
+            --    nil,
+            --    nil,
+            --    icon
+            --)
+            unitAuras[guid] = nil
+        end
+        for _, v in pairs(unitauraInfo) do
+            if not unitAuras[guid] then
+                unitAuras[guid] = {}
+            end
+            if v.spellId == 367364 then
+                v.name = "Echo: Reversion"
+            end
+            if v.spellId == 376788 then
+                v.name = "Echo: Dream Breath"
+            end
+            --if buff_names[v.name] or player_buff_names[v.name] or debuff_names[v.name] or player_debuff_names[v.name] or debuff_types[v.dispelName] then
+                unitAuras[guid][v.auraInstanceID] = v
+            --end
         end
     end
 
-    if UnitIsVisible(unit) then
-        for i = 1, 40 do
-            local name = UnitAura(unit, i, "HELPFUL")
-            if not name then break end
-            for _, buff in pairs(settings.buffs) do
-                if name == buff then
-                    self.core:SendStatusLost(guid, status)
-                    return
+    if updatedAuras and updatedAuras.addedAuras then
+        for _, aura in pairs(updatedAuras.addedAuras) do
+            if aura.spellId == 367364 then
+                aura.name = "Echo: Reversion"
+            end
+            if aura.spellId == 376788 then
+                aura.name = "Echo: Dream Breath"
+            end
+            --if buff_names[aura.name] or player_buff_names[aura.name] or debuff_names[aura.name] or player_debuff_names[aura.name] or debuff_types[aura.dispelName] then
+                if not unitAuras[guid] then
+                    unitAuras[guid] = {}
                 end
+                unitAuras[guid][aura.auraInstanceID] = aura
+            --end
+       end
+    end
+
+    if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
+        for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
+            local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+            if auraTable and auraTable.spellId == 367364 then
+                auraTable.name = "Echo: Reversion"
+            end
+            if auraTable and auraTable.spellId == 376788 then
+                auraTable.name = "Echo: Dream Breath"
+            end
+            if not unitAuras[guid] then
+                unitAuras[guid] = {}
+            end
+            unitAuras[guid][auraInstanceID] = auraTable
+            --if auraTable then
+            --    --if buff_names[auraTable.name] or player_buff_names[auraTable.name] or debuff_names[auraTable.name] or player_debuff_names[auraTable.name] or debuff_types[auraTable.dispelName] then
+            --        if not unitAuras[guid] then
+            --            unitAuras[guid] = {}
+            --        end
+            --        unitAuras[guid][auraInstanceID] = auraTable
+            --    --end
+            --end
+        end
+    end
+
+    if updatedAuras and updatedAuras.removedAuraInstanceIDs then
+        for _, auraInstanceIDTable in ipairs(updatedAuras.removedAuraInstanceIDs) do
+            if unitAuras[guid] and unitAuras[guid][auraInstanceIDTable] then
+                unitAuras[guid][auraInstanceIDTable] = nil
+                --self.core:SendStatusGained(
+                --    guid,
+                --    status,
+                --    settings.priority,
+                --    nil,
+                --    settings.color,
+                --    settings.text,
+                --    nil,
+                --    nil,
+                --    icon
+                --)
             end
         end
     end
 
-    local icon = settings.icon
+    for _, info in pairs(enabledBuffs) do
+        local settings = info.settings
+        local status = info.status
+        local icon = settings.icon
+        self.core:SendStatusGained(
+            guid,
+            status,
+            settings.priority,
+            nil,
+            settings.color,
+            settings.text,
+            nil,
+            nil,
+            icon
+        )
+    end
 
-    self.core:SendStatusGained(
-        guid,
-        status,
-        settings.priority,
-        nil,
-        settings.color,
-        settings.text,
-        nil,
-        nil,
-        icon
-    )
-
+    if unitAuras[guid] then
+        local numAuras = 0
+        --id, info
+        for id in pairs(unitAuras[guid]) do
+            local auraTable = GetAuraDataByAuraInstanceID(unit, id)
+            if not auraTable then
+                unitAuras[guid][id] = nil
+            end
+            if auraTable  then
+                numAuras = numAuras + 1
+                for _,buffInfo in pairs(enabledBuffs) do
+                    for _,buffName in pairs(buffInfo.settings.buffs) do
+                        if buffName == auraTable.name then
+                            self.core:SendStatusLost(guid, buffInfo.status)
+                            --return
+                        end
+                    end
+                end
+            end
+        end
+        if numAuras == 0 then
+            unitAuras[guid] = nil
+        end
+    end
 end
