@@ -1209,7 +1209,12 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
+    if not Plexus:IsWrathWow() then
+        self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
+    end
+    if Plexus:IsWrathWow() then
+        self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
+    end
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     --self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
 
@@ -1716,13 +1721,25 @@ function PlexusStatusAuras:DeleteAura(status)
 end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
-    for guid, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
+    if not Plexus:IsWrathWow() then
+        for guid, unitid in PlexusRoster:IterateRoster() do
+            self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
+        end
+    end
+    if Plexus:IsWrathWow() then
+        for guid, unitid in PlexusRoster:IterateRoster() do
+            self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
+        end
     end
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
+    if not Plexus:IsWrathWow() then
+        self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
+    end
+    if Plexus:IsWrathWow() then
+        self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
+    end
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
