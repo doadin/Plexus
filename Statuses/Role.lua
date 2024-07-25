@@ -12,7 +12,7 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitAffectingCombat = _G.UnitAffectingCombat
+local UnitAffectingCombat = UnitAffectingCombat
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
@@ -26,19 +26,19 @@ PlexusStatusRole.defaultDB = {
         TANK = {
             enable = true,
             hideInCombat = false,
-            text = string.utf8sub(_G.TANK, 1, 1), --luacheck: ignore 143
+            text = string.utf8sub(TANK, 1, 1), --luacheck: ignore 143
             color = { r = 1, g = 1, b = 0, a = 1, ignore = true },
         },
         HEALER = {
             enable = true,
             hideInCombat = false,
-            text = string.utf8sub(_G.HEALER, 1, 1), --luacheck: ignore 143
+            text = string.utf8sub(HEALER, 1, 1), --luacheck: ignore 143
             color = { r = 0, g = 1, b = 0, a = 1, ignore = true },
         },
         DAMAGER = {
             enable = false,
             hideInCombat = false,
-            text = string.utf8sub(_G.DAMAGER, 1, 1), --luacheck: ignore 143
+            text = string.utf8sub(DAMAGER, 1, 1), --luacheck: ignore 143
             color = { r = 1, g = 0, b = 0, a = 1, ignore = true },
         },
     },
@@ -210,10 +210,10 @@ end
 function PlexusStatusRole:UpdateUnit(event, unit, guid)
     local role
     if Plexus:IsClassicWow() then
-        local LibClassicSpecs = _G.LibStub("LibClassicSpecs")
+        local LibClassicSpecs = LibStub("LibClassicSpecs")
         role = LibClassicSpecs.Role
     else
-        role = _G.UnitGroupRolesAssigned(unit) or "NONE"
+        role = UnitGroupRolesAssigned(unit) or "NONE"
     end
     self:Debug("UpdateUnit", event, unit, role)
 

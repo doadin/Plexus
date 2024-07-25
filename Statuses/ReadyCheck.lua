@@ -12,8 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetReadyCheckStatus = _G.GetReadyCheckStatus
-local UnitGUID = _G.UnitGUID
+local GetReadyCheckStatus = GetReadyCheckStatus
+local UnitGUID = UnitGUID
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

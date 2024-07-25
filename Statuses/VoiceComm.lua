@@ -13,7 +13,7 @@ local _, Plexus = ...
 local L = Plexus.L
 --local Roster = Plexus:GetModule("PlexusRoster")
 
-local C_VoiceChat = _G.C_VoiceChat
+local C_VoiceChat = C_VoiceChat
 
 local PlexusStatusVoiceComm = Plexus:NewStatusModule("PlexusStatusVoiceComm")
 PlexusStatusVoiceComm.menuName = L["Voice Chat"]

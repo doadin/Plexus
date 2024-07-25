@@ -13,8 +13,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitGUID = _G.UnitGUID
-local UnitIsAFK = _G.UnitIsAFK
+local UnitGUID = UnitGUID
+local UnitIsAFK = UnitIsAFK
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

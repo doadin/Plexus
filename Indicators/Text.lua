@@ -8,7 +8,7 @@
 
 local _, Plexus = ...
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = _G.LibStub:GetLibrary("LibSharedMedia-3.0")
+local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 local strsub = string.utf8sub or string.sub --luacheck: ignore 143
@@ -51,13 +51,13 @@ end
 local function Reset(self)
     local profile = PlexusFrame.db.profile
     local PLEXUS_STANDARD_TEXT_FONT
-    if (_G.GetLocale() == "koKR") then
+    if (GetLocale() == "koKR") then
         PLEXUS_STANDARD_TEXT_FONT = "Fonts\\2002.TTF";
-    elseif (_G.GetLocale() == "zhCN") then
+    elseif (GetLocale() == "zhCN") then
         PLEXUS_STANDARD_TEXT_FONT = "Fonts\\ARKai_T.ttf";
-    elseif (_G.GetLocale() == "zhTW") then
+    elseif (GetLocale() == "zhTW") then
         PLEXUS_STANDARD_TEXT_FONT = "Fonts\\blei00d.TTF";
-    elseif (_G.GetLocale() == "ruRU") then
+    elseif (GetLocale() == "ruRU") then
         PLEXUS_STANDARD_TEXT_FONT = "Fonts\\FRIZQT___CYR.TTF";
     else
         PLEXUS_STANDARD_TEXT_FONT = "Fonts\\FRIZQT__.TTF";

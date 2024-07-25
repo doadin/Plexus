@@ -9,8 +9,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetNumGroupMembers = _G.GetNumGroupMembers
-local GetRaidRosterInfo = _G.GetRaidRosterInfo
+local GetNumGroupMembers = GetNumGroupMembers
+local GetRaidRosterInfo = GetRaidRosterInfo
 
 local Layout = Plexus:GetModule("PlexusLayout")
 local Roster = Plexus:GetModule("PlexusRoster")
@@ -155,7 +155,7 @@ local Layouts = {
     },
 }
 --@debug@
-_G.PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
+PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
 --@end-debug@
 
 --------------------------------------------------------------------------------
@@ -268,9 +268,9 @@ function Manager:GetGroupFilter()
 
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
-    local playerMapID = _G.C_Map.GetBestMapForUnit("player")
-    local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
-    local MAX_RAID_MEMBERS = _G.MAX_RAID_MEMBERS or 40
+    local playerMapID = C_Map.GetBestMapForUnit("player")
+    local MAX_RAID_GROUPS = MAX_RAID_GROUPS or 8
+    local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS or 40
 
     for i = 1, MAX_RAID_GROUPS do
         hideGroup[i] = ""
@@ -280,12 +280,12 @@ function Manager:GetGroupFilter()
     for i = 1, MAX_RAID_MEMBERS do
         --name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML, combatRole
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
-        local raidMemberMapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
+        local raidMemberMapID = C_Map.GetBestMapForUnit("raid" .. i)
         local playerMapGroupID
         local raidMemberMapGroupID
         if playerMapID and raidMemberMapID then
-            playerMapGroupID = _G.C_Map.GetMapGroupID(playerMapID)
-            raidMemberMapGroupID = _G.C_Map.GetMapGroupID(raidMemberMapID)
+            playerMapGroupID = C_Map.GetMapGroupID(playerMapID)
+            raidMemberMapGroupID = C_Map.GetMapGroupID(raidMemberMapID)
         end
         if playerMapGroupID and raidMemberMapGroupID then
             if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then

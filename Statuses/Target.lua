@@ -13,8 +13,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitExists = _G.UnitExists
-local UnitGUID = _G.UnitGUID
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
 
 local currentTarget, currentFocus
 

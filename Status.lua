@@ -9,15 +9,15 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local FillLocalizedClassList = _G.FillLocalizedClassList
-local UnitClass = _G.UnitClass
-local UnitCreatureType = _G.UnitCreatureType
+local FillLocalizedClassList = FillLocalizedClassList
+local UnitClass = UnitClass
+local UnitCreatureType = UnitCreatureType
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatus = Plexus:NewModule("PlexusStatus")
 
-local format, next, pairs, type = _G.format, next, pairs, type
+local format, next, pairs, type = format, next, pairs, type
 
 PlexusStatus.modulePrototype = {
     core = PlexusStatus,
@@ -424,7 +424,7 @@ end
 
 function PlexusStatus:ResetClassColors()
     local colors = self.db.profile.colors
-    for class, class_color in pairs(_G.CUSTOM_CLASS_COLORS or _G.RAID_CLASS_COLORS) do
+    for class, class_color in pairs(CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS) do
         local c = colors[class]
         c.r, c.g, c.b = class_color.r, class_color.g, class_color.b
     end

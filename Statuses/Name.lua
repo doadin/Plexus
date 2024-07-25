@@ -12,19 +12,19 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local DEFAULT_CHAT_FRAME = _G.DEFAULT_CHAT_FRAME
-local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
-local UnitClass = _G.UnitClass
-local UnitExists = _G.UnitExists
-local UnitGUID = _G.UnitGUID
-local UnitName = _G.UnitName
+local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
+local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
+local UnitClass = UnitClass
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
+local UnitName = UnitName
 local UnitHasVehicleUI
 if Plexus:IsRetailWow() then
-    UnitHasVehicleUI = _G.UnitHasVehicleUI
+    UnitHasVehicleUI = UnitHasVehicleUI
 end
 local UnitOnTaxi
 if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
-    UnitOnTaxi = _G.UnitOnTaxi
+    UnitOnTaxi = UnitOnTaxi
 end
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -202,7 +202,7 @@ local nameOptions = {
             PlexusStatusName:UpdateAllUnits()
         end,
         hidden = function ()
-            if _G.NickTag then
+            if NickTag then
                 return false
             else
                 return true
@@ -232,7 +232,7 @@ local nameOptions = {
             end
         end,
         hidden = function ()
-            if _G.NickTag then
+            if NickTag then
                 return false
             else
                 return true
@@ -272,8 +272,8 @@ function PlexusStatusName:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitLeft", "UpdateUnit")
 
     self:RegisterMessage("Plexus_ColorsChanged", "UpdateAllUnits")
-    if _G.NickTag then
-        _G.NickTag.RegisterCallback(self, 'NickTag_Update', "UpdateAllUnits")
+    if NickTag then
+        NickTag.RegisterCallback(self, 'NickTag_Update', "UpdateAllUnits")
     end
 
     self:UpdateAllUnits()

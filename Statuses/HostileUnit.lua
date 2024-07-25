@@ -1,8 +1,8 @@
 local _, Plexus = ...
 --local L = Plexus.L
 
-local UnitCanAttack = _G.UnitCanAttack
-local UnitGUID = _G.UnitGUID
+local UnitCanAttack = UnitCanAttack
+local UnitGUID = UnitGUID
 
 local PlexusStatusHostileUnit = Plexus:NewStatusModule("PlexusStatusHostileUnit")
 PlexusStatusHostileUnit.menuName = "HostileUnit"

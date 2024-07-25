@@ -12,8 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local CreateFrame = _G.CreateFrame
-local UnitGUID = _G.UnitGUID
+local CreateFrame = CreateFrame
+local UnitGUID = UnitGUID
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

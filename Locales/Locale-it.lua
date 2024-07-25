@@ -10,7 +10,7 @@
     Contributors: Holydeath1984, kappesante, _YuSaKu_
 ----------------------------------------------------------------------]]
 
-if _G.GetLocale() ~= "itIT" then return end
+if GetLocale() ~= "itIT" then return end
 
 local _, Plexus = ...
 local L = { }

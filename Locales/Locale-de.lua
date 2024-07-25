@@ -10,7 +10,7 @@
     Contributors: Alakabaster, derwanderer, Firuzz, kaybe, kunda, Leialyn, ole510
 ----------------------------------------------------------------------]]
 
-if _G.GetLocale() ~= "deDE" then return end
+if GetLocale() ~= "deDE" then return end
 
 local _, Plexus = ...
 local L = { }

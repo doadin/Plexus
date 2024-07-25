@@ -12,11 +12,11 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetLootMethod = _G.GetLootMethod
-local UnitAffectingCombat = _G.UnitAffectingCombat
-local UnitIsGroupAssistant = _G.UnitIsGroupAssistant
-local UnitIsGroupLeader = _G.UnitIsGroupLeader
-local UnitIsUnit = _G.UnitIsUnit
+local GetLootMethod = GetLootMethod
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitIsGroupAssistant = UnitIsGroupAssistant
+local UnitIsGroupLeader = UnitIsGroupLeader
+local UnitIsUnit = UnitIsUnit
 
 local Roster = Plexus:GetModule("PlexusRoster")
 

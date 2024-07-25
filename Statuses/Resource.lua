@@ -7,22 +7,22 @@
 
 local _, Plexus = ...
 
-local UnitGUID = _G.UnitGUID
-local UnitIsPlayer = _G.UnitIsPlayer
-local UnitPower = _G.UnitPower
-local UnitPowerMax = _G.UnitPowerMax
-local UnitPowerType = _G.UnitPowerType
-local GetNumGroupMembers = _G.GetNumGroupMembers
-local GetNumSubgroupMembers = _G.GetNumSubgroupMembers
+local UnitGUID = UnitGUID
+local UnitIsPlayer = UnitIsPlayer
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
+local GetNumGroupMembers = GetNumGroupMembers
+local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetSpecialization
 local GetSpecializationInfo
 local UnitGroupRolesAssigned
 local UnitInPartyIsAI
 if Plexus:IsRetailWow() then
-    GetSpecialization = _G.GetSpecialization
-    GetSpecializationInfo = _G.GetSpecializationInfo
-    UnitGroupRolesAssigned = _G.UnitGroupRolesAssigned
-    UnitInPartyIsAI = _G.UnitInPartyIsAI
+    GetSpecialization = GetSpecialization
+    GetSpecializationInfo = GetSpecializationInfo
+    UnitGroupRolesAssigned = UnitGroupRolesAssigned
+    UnitInPartyIsAI = UnitInPartyIsAI
 end
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
