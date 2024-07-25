@@ -17,6 +17,7 @@ local wipe = wipe
 local UnitClass = UnitClass
 local UnitGUID = UnitGUID
 local GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = AuraUtil.ForEachAura
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
@@ -166,7 +167,7 @@ function PlexusStatusStagger:UpdateAllUnits()
 end
 
 local unitAuras
-function PlexusStatusStagger:UpdateUnit(event, unitid, updatedAuras)
+function PlexusStatusStagger:UpdateUnit(_, unitid, updatedAuras) --event, unitid, updatedAuras
     local guid = UnitGUID(unitid)
     if not unitid then return end
     if not guid then return end
@@ -180,7 +181,7 @@ function PlexusStatusStagger:UpdateUnit(event, unitid, updatedAuras)
     -- Full Update
     if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
         local unitauraInfo = {}
-        if (AuraUtil.ForEachAura) then
+        if (ForEachAura) then
             --ForEachAura(unitid, "HELPFUL", nil,
             --    function(aura)
             --        if aura and aura.auraInstanceID then

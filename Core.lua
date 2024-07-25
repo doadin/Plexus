@@ -6,7 +6,7 @@
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-PLEXUS, Plexus = ...
+local PLEXUS, Plexus = ...
 
 local format = format
 local strfind = strfind
@@ -62,7 +62,7 @@ function Plexus:IsRetailWow() --luacheck: ignore 212
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 
-Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+_G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if NickTag then
     LibStub("NickTag-1.0"):Embed(Plexus)
     if not Plexus.nick_tag_cache then
