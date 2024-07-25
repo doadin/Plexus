@@ -12,16 +12,16 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetTime = _G.GetTime
+local GetTime = GetTime
 
-local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
-local GetSpellInfo = _G.GetSpellInfo
-local UnitCastingInfo = _G.UnitCastingInfo
-local UnitGUID = _G.UnitGUID
-local UnitHasIncomingResurrection = _G.UnitHasIncomingResurrection
-local UnitIsDead = _G.UnitIsDead
-local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
-local UnitIsGhost = _G.UnitIsGhost
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
+local UnitCastingInfo = UnitCastingInfo
+local UnitGUID = UnitGUID
+local UnitHasIncomingResurrection = UnitHasIncomingResurrection
+local UnitIsDead = UnitIsDead
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsGhost = UnitIsGhost
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
@@ -81,39 +81,50 @@ local extraOptionsForStatus = {
     },
 }
 
+local function GetSpellName(spellid)
+    local info = GetSpellInfo(spellid)
+    if Plexus:IsRetailWow() then
+        if info and info.name then
+            return info.name
+        end
+    else
+        return info
+    end
+end
+
 local ResSpells = {
     -- Class Abilities
-    [2008]   = GetSpellInfo(2008),   -- Ancestral Spirit (Shaman)
-    [7328]   = GetSpellInfo(7328),   -- Redemption (Paladin)
-    [2006]   = GetSpellInfo(2006),   -- Resurrection (Priest)
-    [115178] = GetSpellInfo(115178), -- Resuscitate (Monk)
-    [50769]  = GetSpellInfo(50769),  -- Revive (Druid)
-    [20484]  = GetSpellInfo(20484),  -- Rebirth (Druid)
-    --[982]    = GetSpellInfo(982),    -- Revive Pet (Hunter)
-    [361227] = GetSpellInfo(361227), -- Return (Evoker)
+    [2008]   = GetSpellName(2008),   -- Ancestral Spirit (Shaman)
+    [7328]   = GetSpellName(7328),   -- Redemption (Paladin)
+    [2006]   = GetSpellName(2006),   -- Resurrection (Priest)
+    [115178] = GetSpellName(115178), -- Resuscitate (Monk)
+    [50769]  = GetSpellName(50769),  -- Revive (Druid)
+    [20484]  = GetSpellName(20484),  -- Rebirth (Druid)
+    --[982]    = GetSpellName(982),    -- Revive Pet (Hunter)
+    [361227] = GetSpellName(361227), -- Return (Evoker)
     -- Items
-    [8342]   = GetSpellInfo(8342),   -- Defibrillate (Goblin Jumper Cables)
-    [22999]  = GetSpellInfo(22999),  -- Defibrillate (Goblin Jumper Cables XL)
-    [54732]  = GetSpellInfo(54732),  -- Defibrillate (Gnomish Army Knife)
-    [164729] = GetSpellInfo(164729), -- Defibrillate (Ultimate Gnomish Army Knife)
-    [265116] = GetSpellInfo(265116), -- Defibrillate (Unstable Temporal Time Shifter)
-    [199119] = GetSpellInfo(199119), -- Failure Detection Aura (Failure Detection Pylon) -- NEEDS CHECK
-    [187777] = GetSpellInfo(187777), -- Reawaken (Brazier of Awakening)
+    [8342]   = GetSpellName(8342),   -- Defibrillate (Goblin Jumper Cables)
+    [22999]  = GetSpellName(22999),  -- Defibrillate (Goblin Jumper Cables XL)
+    [54732]  = GetSpellName(54732),  -- Defibrillate (Gnomish Army Knife)
+    [164729] = GetSpellName(164729), -- Defibrillate (Ultimate Gnomish Army Knife)
+    [265116] = GetSpellName(265116), -- Defibrillate (Unstable Temporal Time Shifter)
+    [199119] = GetSpellName(199119), -- Failure Detection Aura (Failure Detection Pylon) -- NEEDS CHECK
+    [187777] = GetSpellName(187777), -- Reawaken (Brazier of Awakening)
     -- pening souslstone ank etc
-    [160029] = GetSpellInfo(160029), -- Resurrecting aka pending
-    --[27740] = GetSpellInfo(27740), -- Reincarnation
-    --[20608] = GetSpellInfo(20608), -- Reincarnation
-    --[225080] = GetSpellInfo(225080), -- Reincarnation
-    --[21169] = GetSpellInfo(21169), -- Reincarnation
+    [160029] = GetSpellName(160029), -- Resurrecting aka pending
+    --[27740] = GetSpellName(27740), -- Reincarnation
+    --[20608] = GetSpellName(20608), -- Reincarnation
+    --[225080] = GetSpellName(225080), -- Reincarnation
+    --[21169] = GetSpellName(21169), -- Reincarnation
 }
 local MassResSpells = {
     -- massSpells
-    [212056] = GetSpellInfo(212056), -- Absolution (Holy Paladin)
-    [212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
-    [212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
-    [212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
-    [212040] = GetSpellInfo(212040), -- Revitalize (Restoration Druid)
-    [361178] = GetSpellInfo(361178)  -- Mass Return (Preservation Evoker)
+    [212056] = GetSpellName(212056), -- Absolution (Holy Paladin)
+    [212048] = GetSpellName(212048), -- Ancestral Vision (Restoration Shaman)
+    [212036] = GetSpellName(212036), -- Mass Resurrection (Discipline/Holy Priest)
+    [212051] = GetSpellName(212051), -- Reawaken (Mistweaver Monk)
+    [212040] = GetSpellName(212040), -- Revitalize (Restoration Druid)
+    [361178] = GetSpellName(361178)  -- Mass Return (Preservation Evoker)
 }
 
 ------------------------------------------------------------------------
@@ -191,7 +202,12 @@ function PlexusStatusResurrect:UNIT_SPELLCAST_START(event, source, destGUID, cas
                 if UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsDeadOrGhost(unit) then
                     local casterUnitID = PlexusRoster:GetUnitidByGUID(sourceguid)
                     local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(casterUnitID)
-                    local icon = spellid and select(3,GetSpellInfo(spellid)) or "Interface\\ICONS\\Spell_Shadow_Soulgem"
+                    local icon
+                    if Plexus:IsRetailWow() then
+                        icon = spellid and GetSpellInfo(spellid).originalIconID or "Interface\\ICONS\\Spell_Shadow_Soulgem"
+                    else
+                        icon = spellid and select(3,GetSpellInfo(spellid)) or "Interface\\ICONS\\Spell_Shadow_Soulgem"
+                    end
                     local duration = (endTimeMS and startTimeMS and (endTimeMS - startTimeMS) / 1000) or 10
                     --combat res does not work with above math.
                     if spellid == (8342 or 22999 or 54732 or 164729 or 265116) then
@@ -218,7 +234,8 @@ end
 -- Guess mass ress from combat log since INCOMING_RESURRECT_CHANGED event doesnt fire
 function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, castguid, spellid) --luacheck: ignore 212
     --print(CombatLogGetCurrentEventInfo())
-    local timestamp, eventType, _, sourceGUID, _, _, _, destGUID, _, _, _, spellId, spellName, _ = CombatLogGetCurrentEventInfo()
+    --timestamp, eventType, _, sourceGUID, _, _, _, destGUID, _, _, _, spellId, spellName, _
+    local timestamp, eventType, _, sourceGUID, _, _, _, destGUID, _, _, _, _, spellName, _ = CombatLogGetCurrentEventInfo()
     if not PlexusRoster:IsGUIDInGroup(sourceGUID) then
         return
     end
@@ -236,7 +253,12 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                         local casterUnitID = PlexusRoster:GetUnitidByGUID(sourceGUID)
                         local _, _, _, startTimeMS, endTimeMS = UnitCastingInfo(casterUnitID)
                         local duration = (endTimeMS and startTimeMS and (endTimeMS - startTimeMS) / 1000) or 10
-                        local icon = spellId and select(3,GetSpellInfo(spellId)) or "Interface\\ICONS\\Spell_holy_guardianspirit"
+                        local icon
+                        if Plexus:IsRetailWow() then
+                            icon = spellid and GetSpellInfo(spellid).originalIconID or "Interface\\ICONS\\Spell_holy_guardianspirit"
+                        else
+                            icon = spellid and select(3,GetSpellInfo(spellid)) or "Interface\\ICONS\\Spell_holy_guardianspirit"
+                        end
                         self.core:SendStatusGained(guid, "alert_resurrect",
                         db.priority,
                         nil,
@@ -267,7 +289,7 @@ function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, cas
                 self.core:SendStatusLost(destGUID, "alert_resurrect")
             end
             if eventType == "SPELL_AURA_APPLIED" then
-                local icon = spelllistid and select(3,GetSpellInfo(spelllistid)) or "Interface\\ICONS\\Spell_holy_guardianspirit"
+                local icon = spelllistid and select(3,GetSpellName(spelllistid)) or "Interface\\ICONS\\Spell_holy_guardianspirit"
                 if not timestamp then timestamp = GetTime() end
                 local startTime = GetTime()
                 self.core:SendStatusGained(destGUID, "alert_resurrect",

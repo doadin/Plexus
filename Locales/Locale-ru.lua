@@ -10,7 +10,7 @@
     Contributors: Exzorm, Moschkara, nightik, onyxmaster, StingerSoft
 ----------------------------------------------------------------------]]
 
-if _G.GetLocale() ~= "ruRU" then return end
+if GetLocale() ~= "ruRU" then return end
 
 local _, Plexus = ...
 local L = { }

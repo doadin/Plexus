@@ -12,13 +12,13 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitGUID = _G.UnitGUID
-local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
-local UnitIsVisible = _G.UnitIsVisible
-local UnitName = _G.UnitName
-local UnitPower = _G.UnitPower
-local UnitPowerMax = _G.UnitPowerMax
-local UnitPowerType = _G.UnitPowerType
+local UnitGUID = UnitGUID
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsVisible = UnitIsVisible
+local UnitName = UnitName
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")

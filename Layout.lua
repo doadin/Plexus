@@ -9,25 +9,25 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local floor = _G.floor
-local format = _G.format
-local tinsert = _G.tinsert
-local strmatch = _G.strmatch
-local strtrim = _G.strtrim
+local floor = floor
+local format = format
+local tinsert = tinsert
+local strmatch = strmatch
+local strtrim = strtrim
 
-local C_Map = _G.C_Map
-local CreateFrame = _G.CreateFrame
-local GameTooltip = _G.GameTooltip
-local GetInstanceInfo = _G.GetInstanceInfo
-local GetTime = _G.GetTime
-local InCombatLockdown = _G.InCombatLockdown
-local IsAltKeyDown = _G.IsAltKeyDown
-local SlashCmdList = _G.SlashCmdList
-local UIParent = _G.UIParent
+local C_Map = C_Map
+local CreateFrame = CreateFrame
+local GameTooltip = GameTooltip
+local GetInstanceInfo = GetInstanceInfo
+local GetTime = GetTime
+local InCombatLockdown = InCombatLockdown
+local IsAltKeyDown = IsAltKeyDown
+local SlashCmdList = SlashCmdList
+local UIParent = UIParent
 
 local PlexusFrame
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
-local Media = _G.LibStub:GetLibrary("LibSharedMedia-3.0")
+local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 
 local PlexusLayout = Plexus:NewModule("PlexusLayout", "AceBucket-3.0", "AceTimer-3.0")
 PlexusLayout.LayoutList = {}
@@ -198,15 +198,15 @@ function PlexusLayout:CreateHeader(isPetGroup)
     --self:Debug("CreateHeader")
     NUM_HEADERS = NUM_HEADERS + 1
 
-    local header = CreateFrame("Frame", "PlexusLayoutHeader" .. NUM_HEADERS, _G.PlexusLayoutFrame, (isPetGroup and "SecureGroupPetHeaderTemplate" or "SecureGroupHeaderTemplate"))
+    local header = CreateFrame("Frame", "PlexusLayoutHeader" .. NUM_HEADERS, PlexusLayoutFrame, (isPetGroup and "SecureGroupPetHeaderTemplate" or "SecureGroupHeaderTemplate"))
 
     for k, v in pairs(self.prototype) do
         header[k] = v
     end
 
-    if _G.Clique then
+    if Clique then
         header:SetAttribute("template", "ClickCastUnitTemplate,SecureUnitButtonTemplate")
-        _G.SecureHandlerSetFrameRef(header, "clickcast_header", _G.Clique.header)
+        SecureHandlerSetFrameRef(header, "clickcast_header", Clique.header)
     else
         header:SetAttribute("template", "SecureUnitButtonTemplate")
     end
@@ -331,19 +331,17 @@ PlexusLayout.options = {
                 PlexusLayout:ReloadLayout()
             end,
         },
---@debug@
-        splitGroups = {
-            name = _G.COMPACT_UNIT_FRAME_PROFILE_KEEPGROUPSTOGETHER, -- L["Keep Groups Together"]
-            desc = L["Layouts added by plugins might not support this option."], -- TODO
-            order = 10,
-            width = "double",
-            type = "toggle",
-            set = function(info, v) --luacheck: ignore 212
-                PlexusLayout.db.profile.splitGroups = v
-                PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
-            end,
-        },
---@end-debug@
+        --splitGroups = {
+        --    name = COMPACT_UNIT_FRAME_PROFILE_KEEPGROUPSTOGETHER, -- L["Keep Groups Together"]
+        --    desc = L["Layouts added by plugins might not support this option."], -- TODO
+        --    order = 10,
+        --    width = "double",
+        --    type = "toggle",
+        --    set = function(info, v) --luacheck: ignore 212
+        --        PlexusLayout.db.profile.splitGroups = v
+        --        PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
+        --    end,
+        --},
         layouts = {
             name = L["Layouts"],
             order = 18,
@@ -818,13 +816,13 @@ end
 
 local function PlexusLayout_OnMouseDown(frame, button)
     if button == "LeftButton" then
-        if IsAltKeyDown() and frame == _G.PlexusLayoutFrame.tab then
+        if IsAltKeyDown() and frame == PlexusLayoutFrame.tab then
             PlexusLayout.db.profile.hideTab = true
             PlexusLayout:UpdateTabVisibility()
         else
             PlexusLayout:StartMoveFrame()
         end
-    elseif button == "RightButton" and frame == _G.PlexusLayoutFrame.tab and not InCombatLockdown() then
+    elseif button == "RightButton" and frame == PlexusLayoutFrame.tab and not InCombatLockdown() then
         Plexus:ToggleOptions()
     end
 end
@@ -850,9 +848,9 @@ end
 function PlexusLayout:CreateFrames()
     --self:Debug("CreateFrames")
     -- create pet battle hider
-    local hider = CreateFrame("Frame", "PlexusPetBattleFrameHider", UIParent, "SecureHandlerStateTemplate")
-    hider:SetAllPoints(true)
-    _G.RegisterStateDriver(hider, "visibility", "[petbattle] hide; show")
+    local hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+    hider:SetAllPoints()
+    RegisterStateDriver(hider, "visibility", "[petbattle] hide; show")
 
     -- create main frame to hold all our gui elements
     local f = CreateFrame("Frame", "PlexusLayoutFrame", hider)
@@ -864,7 +862,7 @@ function PlexusLayout:CreateFrames()
     f:SetScript("OnHide", PlexusLayout_OnMouseUp)
 
     -- create backdrop
-    f.backdrop = CreateFrame("Frame", "$parentBackdrop", f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
+    f.backdrop = CreateFrame("Frame", nil, f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
     f.backdrop:SetPoint("BOTTOMLEFT", -4, -4)
     f.backdrop:SetPoint("TOPRIGHT", 4, 4)
     f.backdrop:SetBackdrop({
@@ -876,7 +874,7 @@ function PlexusLayout:CreateFrames()
     f:SetFrameLevel(f.backdrop:GetFrameLevel() + 2)
 
     -- create drag handle
-    f.tab = CreateFrame("Frame", "$parentTab", f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
+    f.tab = CreateFrame("Frame", nil, f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
     f.tab:SetWidth(48)
     f.tab:SetHeight(28)
     f.tab:EnableMouse(true)

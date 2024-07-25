@@ -11,16 +11,16 @@
 
 local _, Plexus = ...
 
-local tinsert = _G.tinsert
+local tinsert = tinsert
 
-local GetInstanceInfo = _G.GetInstanceInfo
-local GetZonePVPInfo = _G.GetZonePVPInfo
-local IsInRaid = _G.IsInRaid
-local IsInGroup = _G.IsInGroup
-local UnitExists = _G.UnitExists
-local UnitName = _G.UnitName
-local UnitGUID = _G.UnitGUID
-local UnitFullName = _G.UnitFullName
+local GetInstanceInfo = GetInstanceInfo
+local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
+local IsInRaid = IsInRaid
+local IsInGroup = IsInGroup
+local UnitExists = UnitExists
+local UnitName = UnitName
+local UnitGUID = UnitGUID
+local UnitFullName = UnitFullName
 
 local PlexusRoster = Plexus:NewModule("PlexusRoster")
 
@@ -63,11 +63,11 @@ do
 
     register_unit(party_units, "player", "pet")
 
-    for i = 1, _G.MAX_PARTY_MEMBERS do
+    for i = 1, MAX_PARTY_MEMBERS do
         register_unit(party_units, "party"..i, "partypet"..i)
     end
 
-    for i = 1, _G.MAX_RAID_MEMBERS do
+    for i = 1, MAX_RAID_MEMBERS do
         register_unit(raid_units, "raid"..i, "raidpet"..i)
     end
 end
@@ -164,7 +164,7 @@ do
         local guid = UnitGUID(unit)
 
         if guid then
-            if realm == "" then realm = nil end
+            --if realm == "" then realm = nil end
 
             if units_to_remove[guid] then
                 units_to_remove[guid] = nil

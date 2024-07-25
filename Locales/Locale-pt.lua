@@ -10,7 +10,7 @@
     Contributors: heltonaugusto, leocolpas
 ----------------------------------------------------------------------]]
 
-if not _G.GetLocale():match("^pt") then return end
+if not GetLocale():match("^pt") then return end
 
 local _, Plexus = ...
 local L = { }

@@ -14,10 +14,10 @@ local L = Plexus.L
 
 local strutf8sub = string.utf8sub --luacheck: ignore 143
 local format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
-    = _G.format, _G.GetTime, _G.gmatch, _G.gsub, _G.pairs, _G.strfind, _G.strlen, _G.strmatch, _G.tostring, _G.type, _G.wipe
-local GetSpellInfo = _G.GetSpellInfo
+    = format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
 local IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
-    = _G.IsPlayerSpell, _G.IsSpellKnown, _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsVisible
+    = IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -29,115 +29,125 @@ local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
 
-local GetAuraDataByAuraInstanceID = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-local ForEachAura = _G.AuraUtil and _G.AuraUtil.ForEachAura
+local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = AuraUtil and AuraUtil.ForEachAura
+
+local function GetSpellName(spellid)
+    local info = GetSpellInfo(spellid)
+    if Plexus:IsRetailWow() then
+        if info and info.name then
+            return info.name
+        end
+    else
+        return info
+    end
+end
 
 if Plexus:IsRetailWow() then
 spell_names = {
 -- All
-    ["Ghost"] = GetSpellInfo(8326),
+    ["Ghost"] = GetSpellName(8326),
 -- Druid
-    ["Cenarion Ward"] = GetSpellInfo(102351),
-    ["Lifebloom"] = GetSpellInfo(33763),
-    ["Regrowth"] = GetSpellInfo(8936),
-    ["Rejuvenation"] = GetSpellInfo(774),
-    ["Rejuvenation (Germination)"] = GetSpellInfo(155777),
-    ["Wild Growth"] = GetSpellInfo(48438),
+    ["Cenarion Ward"] = GetSpellName(102351),
+    ["Lifebloom"] = GetSpellName(33763),
+    ["Regrowth"] = GetSpellName(8936),
+    ["Rejuvenation"] = GetSpellName(774),
+    ["Rejuvenation (Germination)"] = GetSpellName(155777),
+    ["Wild Growth"] = GetSpellName(48438),
 -- Evoker
-    ["Reversion"] = GetSpellInfo(366155),
+    ["Reversion"] = GetSpellName(366155),
     ["Echo: Reversion"] = "Echo: Reversion",
-    ["Dream Breath"] = GetSpellInfo(355941),
+    ["Dream Breath"] = GetSpellName(355941),
     ["Echo: Dream Breath"] = "Echo: Dream Breath",
-    ["Echo"] = GetSpellInfo(364343),
-    ["Temporal Anomaly"] = GetSpellInfo(373862),
-    ["Rewind"] = GetSpellInfo(363534),
-    ["Blistering Scales"] = GetSpellInfo(360827),
-    ["Ebon Might"] = GetSpellInfo(395152),
-    ["Prescience"] = GetSpellInfo(409311),
+    ["Echo"] = GetSpellName(364343),
+    ["Temporal Anomaly"] = GetSpellName(373862),
+    ["Rewind"] = GetSpellName(363534),
+    ["Blistering Scales"] = GetSpellName(360827),
+    ["Ebon Might"] = GetSpellName(395152),
+    ["Prescience"] = GetSpellName(409311),
 -- Monk
-    ["Enveloping Breath"] = GetSpellInfo(325209),
-    ["Enveloping Mist"] = GetSpellInfo(124682),
-    ["Essence Font"] = GetSpellInfo(191837),
-    ["Life Cocoon"] = GetSpellInfo(116849),
-    ["Renewing Mist"] = GetSpellInfo(115151),
-    ["Soothing Mist"] = GetSpellInfo(115175),
+    ["Enveloping Breath"] = GetSpellName(325209),
+    ["Enveloping Mist"] = GetSpellName(124682),
+    ["Life Cocoon"] = GetSpellName(116849),
+    ["Renewing Mist"] = GetSpellName(115151),
+    ["Soothing Mist"] = GetSpellName(115175),
 -- Paladin
-    ["Barrier of Faith"] = GetSpellInfo(148039),
-    ["Beacon of Faith"] = GetSpellInfo(156910),
-    ["Beacon of Light"] = GetSpellInfo(53563),
-    ["Beacon of Virtue"] = GetSpellInfo(200025),
-    ["Bestow Faith"] = GetSpellInfo(223306),
-    ["Forbearance"] = GetSpellInfo(25771),
-    ["Sacred Dawn"] = GetSpellInfo(243174),
-    ["Tyr's Deliverance"] = GetSpellInfo(200652),
-    ["Glimmer of Light"] = GetSpellInfo(287286),
+    ["Barrier of Faith"] = GetSpellName(148039),
+    ["Beacon of Faith"] = GetSpellName(156910),
+    ["Beacon of Light"] = GetSpellName(53563),
+    ["Beacon of Virtue"] = GetSpellName(200025),
+    ["Bestow Faith"] = GetSpellName(223306),
+    ["Forbearance"] = GetSpellName(25771),
+    ["Sacred Dawn"] = GetSpellName(243174),
+    ["Tyr's Deliverance"] = GetSpellName(200652),
+    ["Glimmer of Light"] = GetSpellName(287286),
 -- Priest
-    ["Atonement"] = GetSpellInfo(214206),
-    ["Clarity of Will"] = GetSpellInfo(152118),
-    ["Guardian Spirit"] = GetSpellInfo(47788),
-    ["Light of T'uure"] = GetSpellInfo(208065),
-    ["Power Word: Fortitude"] = GetSpellInfo(21562),
-    ["Power Word: Shield"] = GetSpellInfo(17),
-    ["Prayer of Mending"] = GetSpellInfo(33076),
-    ["Renew"] = GetSpellInfo(139),
-    ["Weakened Soul"] = GetSpellInfo(6788),
+    ["Atonement"] = GetSpellName(214206),
+    ["Clarity of Will"] = GetSpellName(152118),
+    ["Guardian Spirit"] = GetSpellName(47788),
+    ["Light of T'uure"] = GetSpellName(208065),
+    ["Power Word: Fortitude"] = GetSpellName(21562),
+    ["Power Word: Shield"] = GetSpellName(17),
+    ["Prayer of Mending"] = GetSpellName(33076),
+    ["Renew"] = GetSpellName(139),
+    ["Weakened Soul"] = GetSpellName(6788),
 -- Shaman
-    ["Earth Shield"] = GetSpellInfo(204288),
-    ["Water Shield"] = GetSpellInfo(52127),
-    ["Riptide"] = GetSpellInfo(61295),
+    ["Earth Shield"] = GetSpellName(204288),
+    ["Water Shield"] = GetSpellName(52127),
+    ["Riptide"] = GetSpellName(61295),
 }
 end
 
 if Plexus:IsClassicWow() then
 spell_names = {
 -- All
-    ["Ghost"] = GetSpellInfo(8326),
+    ["Ghost"] = GetSpellName(8326),
 -- Druid
-    ["Regrowth"] = GetSpellInfo(8936),
-    ["Rejuvenation"] = GetSpellInfo(774),
-    ["Mark of the Wild"] = GetSpellInfo(5231) or GetSpellInfo(21849),
+    ["Regrowth"] = GetSpellName(8936),
+    ["Rejuvenation"] = GetSpellName(774),
+    ["Mark of the Wild"] = GetSpellName(5231) or GetSpellName(21849),
 -- Paladin
-    ["Beacon of Light"] = GetSpellInfo(53563),
-    ["Forbearance"] = GetSpellInfo(25771),
-    ["Blessing of Kings"] = GetSpellInfo(20217) or GetSpellInfo(25898),
-    ["Blessing of Might"] = GetSpellInfo(19740) or GetSpellInfo(25782),
-    ["Blessing of Sanctuary"] = GetSpellInfo(20911) or GetSpellInfo(25899),
-    ["Blessing of Wisdom"] = GetSpellInfo(19742) or GetSpellInfo(25894),
+    ["Beacon of Light"] = GetSpellName(53563),
+    ["Forbearance"] = GetSpellName(25771),
+    ["Blessing of Kings"] = GetSpellName(20217) or GetSpellName(25898),
+    ["Blessing of Might"] = GetSpellName(19740) or GetSpellName(25782),
+    ["Blessing of Sanctuary"] = GetSpellName(20911) or GetSpellName(25899),
+    ["Blessing of Wisdom"] = GetSpellName(19742) or GetSpellName(25894),
 -- Priest
-    ["Guardian Spirit"] = GetSpellInfo(47788),
-    ["Power Word: Fortitude"] = GetSpellInfo(1243) or GetSpellInfo(21562),
-    ["Power Word: Shield"] = GetSpellInfo(17),
-    ["Prayer of Mending"] = GetSpellInfo(33076),
-    ["Renew"] = GetSpellInfo(139),
-    ["Weakened Soul"] = GetSpellInfo(6788),
+    ["Guardian Spirit"] = GetSpellName(47788),
+    ["Power Word: Fortitude"] = GetSpellName(1243) or GetSpellName(21562),
+    ["Power Word: Shield"] = GetSpellName(17),
+    ["Prayer of Mending"] = GetSpellName(33076),
+    ["Renew"] = GetSpellName(139),
+    ["Weakened Soul"] = GetSpellName(6788),
 }
 end
 
 if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
     spell_names = {
 -- All
-    ["Ghost"] = GetSpellInfo(8326),
+    ["Ghost"] = GetSpellName(8326),
 -- Druid
-    ["Lifebloom"] = GetSpellInfo(33763),
-    ["Regrowth"] = GetSpellInfo(8936),
-    ["Rejuvenation"] = GetSpellInfo(774),
-    ["Mark of the Wild"] = GetSpellInfo(5231) or GetSpellInfo(21849),
+    ["Lifebloom"] = GetSpellName(33763),
+    ["Regrowth"] = GetSpellName(8936),
+    ["Rejuvenation"] = GetSpellName(774),
+    ["Mark of the Wild"] = GetSpellName(5231) or GetSpellName(21849),
 -- Paladin
-    ["Beacon of Light"] = GetSpellInfo(53563),
-    ["Forbearance"] = GetSpellInfo(25771),
-    ["Blessing of Kings"] = GetSpellInfo(20217) or GetSpellInfo(25898),
-    ["Blessing of Might"] = GetSpellInfo(19740) or GetSpellInfo(25782),
-    ["Blessing of Sanctuary"] = GetSpellInfo(20911) or GetSpellInfo(25899),
-    ["Blessing of Wisdom"] = GetSpellInfo(19742) or GetSpellInfo(25894),
+    ["Beacon of Light"] = GetSpellName(53563),
+    ["Forbearance"] = GetSpellName(25771),
+    ["Blessing of Kings"] = GetSpellName(20217) or GetSpellName(25898),
+    ["Blessing of Might"] = GetSpellName(19740) or GetSpellName(25782),
+    ["Blessing of Sanctuary"] = GetSpellName(20911) or GetSpellName(25899),
+    ["Blessing of Wisdom"] = GetSpellName(19742) or GetSpellName(25894),
 -- Priest
-    ["Guardian Spirit"] = GetSpellInfo(47788),
-    ["Power Word: Fortitude"] = GetSpellInfo(1243) or GetSpellInfo(21562),
-    ["Power Word: Shield"] = GetSpellInfo(17),
-    ["Prayer of Mending"] = GetSpellInfo(33076),
-    ["Renew"] = GetSpellInfo(139),
-    ["Weakened Soul"] = GetSpellInfo(6788),
+    ["Guardian Spirit"] = GetSpellName(47788),
+    ["Power Word: Fortitude"] = GetSpellName(1243) or GetSpellName(21562),
+    ["Power Word: Shield"] = GetSpellName(17),
+    ["Prayer of Mending"] = GetSpellName(33076),
+    ["Renew"] = GetSpellName(139),
+    ["Weakened Soul"] = GetSpellName(6788),
 -- Shaman
-    ["Earth Shield"] = GetSpellInfo(974),
+    ["Earth Shield"] = GetSpellName(974),
 }
 end
 
@@ -224,7 +234,7 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     ["dispel_curse"] = {
         desc = format(L["Debuff type: %s"], L["Curse"]),
-        text = _G.DEBUFF_SYMBOL_CURSE,
+        text = DEBUFF_SYMBOL_CURSE,
         color = { r = 0.6, g = 0, b = 1, a = 1 },
         durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
@@ -234,7 +244,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_disease"] = {
         desc = format(L["Debuff type: %s"], L["Disease"]),
-        text = _G.DEBUFF_SYMBOL_DISEASE,
+        text = DEBUFF_SYMBOL_DISEASE,
         color = { r = 0.6, g = 0.4, b = 0, a = 1 },
         durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
@@ -244,7 +254,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_magic"] = {
         desc = format(L["Debuff type: %s"], L["Magic"]),
-        text = _G.DEBUFF_SYMBOL_MAGIC,
+        text = DEBUFF_SYMBOL_MAGIC,
         color = { r = 0.2, g = 0.6, b = 1, a = 1 },
         durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
@@ -254,7 +264,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_poison"] = {
         desc = format(L["Debuff type: %s"], L["Poison"]),
-        text = _G.DEBUFF_SYMBOL_POISON,
+        text = DEBUFF_SYMBOL_POISON,
         color = { r = 0, g = 0.6, b = 0, a = 1 },
         durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
         durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
@@ -484,14 +494,6 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Enveloping Mist"],
         desc = format(L["Buff: %s"], spell_names["Enveloping Mist"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Enveloping Mist"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        mine = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Essence Font", true)] = {
-        -- 191837
-        buff = spell_names["Essence Font"],
-        desc = format(L["Buff: %s"], spell_names["Essence Font"]),
-        text = PlexusStatusAuras:TextForSpell(spell_names["Essence Font"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
     },
@@ -763,7 +765,7 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     ["dispel_curse"] = {
         desc = format(L["Debuff type: %s"], L["Curse"]),
-        text = _G.DEBUFF_SYMBOL_CURSE,
+        text = DEBUFF_SYMBOL_CURSE,
         color = { r = 0.6, g = 0, b = 1, a = 1 },
         durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
@@ -773,7 +775,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_disease"] = {
         desc = format(L["Debuff type: %s"], L["Disease"]),
-        text = _G.DEBUFF_SYMBOL_DISEASE,
+        text = DEBUFF_SYMBOL_DISEASE,
         color = { r = 0.6, g = 0.4, b = 0, a = 1 },
         durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
@@ -783,7 +785,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_magic"] = {
         desc = format(L["Debuff type: %s"], L["Magic"]),
-        text = _G.DEBUFF_SYMBOL_MAGIC,
+        text = DEBUFF_SYMBOL_MAGIC,
         color = { r = 0.2, g = 0.6, b = 1, a = 1 },
         durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
@@ -793,7 +795,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_poison"] = {
         desc = format(L["Debuff type: %s"], L["Poison"]),
-        text = _G.DEBUFF_SYMBOL_POISON,
+        text = DEBUFF_SYMBOL_POISON,
         color = { r = 0, g = 0.6, b = 0, a = 1 },
         durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
         durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
@@ -954,7 +956,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         ---------------------
         ["dispel_curse"] = {
             desc = format(L["Debuff type: %s"], L["Curse"]),
-            text = _G.DEBUFF_SYMBOL_CURSE,
+            text = DEBUFF_SYMBOL_CURSE,
             color = { r = 0.6, g = 0, b = 1, a = 1 },
             durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
             durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
@@ -964,7 +966,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         },
         ["dispel_disease"] = {
             desc = format(L["Debuff type: %s"], L["Disease"]),
-            text = _G.DEBUFF_SYMBOL_DISEASE,
+            text = DEBUFF_SYMBOL_DISEASE,
             color = { r = 0.6, g = 0.4, b = 0, a = 1 },
             durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
             durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
@@ -974,7 +976,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         },
         ["dispel_magic"] = {
             desc = format(L["Debuff type: %s"], L["Magic"]),
-            text = _G.DEBUFF_SYMBOL_MAGIC,
+            text = DEBUFF_SYMBOL_MAGIC,
             color = { r = 0.2, g = 0.6, b = 1, a = 1 },
             durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
             durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
@@ -984,7 +986,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         },
         ["dispel_poison"] = {
             desc = format(L["Debuff type: %s"], L["Poison"]),
-            text = _G.DEBUFF_SYMBOL_POISON,
+            text = DEBUFF_SYMBOL_POISON,
             color = { r = 0, g = 0.6, b = 0, a = 1 },
             durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
             durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
@@ -1209,7 +1211,12 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
+    if not Plexus:IsWrathWow() then
+        self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
+    end
+    if Plexus:IsWrathWow() then
+        self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
+    end
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     --self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
 
@@ -1716,13 +1723,26 @@ function PlexusStatusAuras:DeleteAura(status)
 end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
-    for guid, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
+    if not Plexus:IsWrathWow() then
+        --guid, unitid
+        for _, unitid in PlexusRoster:IterateRoster() do
+            self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
+        end
+    end
+    if Plexus:IsWrathWow() then
+        for guid, unitid in PlexusRoster:IterateRoster() do
+            self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
+        end
     end
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
+    if not Plexus:IsWrathWow() then
+        self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
+    end
+    if Plexus:IsWrathWow() then
+        self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
+    end
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
@@ -2482,7 +2502,7 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 local unitAuras
-function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, unit, updatedAuras
+function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit, updatedAuras
     if not unit then
         return
     end

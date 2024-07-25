@@ -13,10 +13,10 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local format = _G.format
-local gsub = _G.gsub
-local strmatch = _G.strmatch
-local strlen = _G.strlen
+local format = format
+local gsub = gsub
+local strmatch = strmatch
+local strlen = strlen
 
 local helpText = {
     {
@@ -82,7 +82,7 @@ local helpText = {
 ------------------------------------------------------------------------
 
 -- Example localization
-if _G.GetLocale() == "xxXX" then
+if GetLocale() == "xxXX" then
     helpText = {
         -- Insert localized help sections here.
         -- Order is optional, and should be omitted for most sections.

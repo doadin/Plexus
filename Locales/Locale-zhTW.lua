@@ -10,7 +10,7 @@
     Contributors: ananhaid, helium, lsjyzjl, scorpion, Whyv, zhTW
 ----------------------------------------------------------------------]]
 
-if _G.GetLocale() ~= "zhTW" then return end
+if GetLocale() ~= "zhTW" then return end
 
 local _, Plexus = ...
 local L = { }

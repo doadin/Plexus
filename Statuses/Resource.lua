@@ -7,23 +7,17 @@
 
 local _, Plexus = ...
 
-local UnitGUID = _G.UnitGUID
-local UnitIsPlayer = _G.UnitIsPlayer
-local UnitPower = _G.UnitPower
-local UnitPowerMax = _G.UnitPowerMax
-local UnitPowerType = _G.UnitPowerType
-local GetNumGroupMembers = _G.GetNumGroupMembers
-local GetNumSubgroupMembers = _G.GetNumSubgroupMembers
-local GetSpecialization
-local GetSpecializationInfo
-local UnitGroupRolesAssigned
-local UnitInPartyIsAI
-if Plexus:IsRetailWow() then
-    GetSpecialization = _G.GetSpecialization
-    GetSpecializationInfo = _G.GetSpecializationInfo
-    UnitGroupRolesAssigned = _G.UnitGroupRolesAssigned
-    UnitInPartyIsAI = _G.UnitInPartyIsAI
-end
+local UnitGUID = UnitGUID
+local UnitIsPlayer = UnitIsPlayer
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
+local GetNumGroupMembers = GetNumGroupMembers
+local GetNumSubgroupMembers = GetNumSubgroupMembers
+local GetSpecialization = GetSpecialization
+local GetSpecializationInfo = GetSpecializationInfo
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned
+local UnitInPartyIsAI = UnitInPartyIsAI
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
@@ -406,7 +400,7 @@ function PlexusStatusResource:UpdateUnitResource(unitid)
     local unitpower = UnitPowerType(unitid)
     if Plexus:IsRetailWow() then
         if EnableForHealers then
-            local currentSpecRole = GetSpecialization and select(5, GetSpecializationInfo(GetSpecialization())) or "None"
+            local currentSpecRole = select(5, GetSpecializationInfo(GetSpecialization())) or "None"
             if ((GetNumGroupMembers() ~= 0 or GetNumSubgroupMembers() ~= 0) and UnitGroupRolesAssigned(unitid) ~= "HEALER") or
             (UnitGUID("player") == UnitGUID(unitid) and currentSpecRole ~= "HEALER") then
                 self.core:SendStatusLost(unitGUID, "unit_resource")

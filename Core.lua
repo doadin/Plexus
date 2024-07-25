@@ -8,39 +8,39 @@
 
 local PLEXUS, Plexus = ...
 
-local format = _G.format
-local strfind = _G.strfind
-local strjoin = _G.strjoin
-local strlen = _G.strlen
-local strlower = _G.strlower
-local strmatch = _G.strmatch
-local strtrim = _G.strtrim
-local strupper = _G.strupper
-local tinsert = _G.tinsert
+local format = format
+local strfind = strfind
+local strjoin = strjoin
+local strlen = strlen
+local strlower = strlower
+local strmatch = strmatch
+local strtrim = strtrim
+local strupper = strupper
+local tinsert = tinsert
 
---local GetBuildInfo = _G.GetBuildInfo
-local CreateFrame = _G.CreateFrame
-local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
-local InCombatLockdown = _G.InCombatLockdown
-local IsAddOnLoaded = _G.IsAddOnLoaded
-local StaticPopup_Show = _G.StaticPopup_Show
-local tostringall = _G.tostringall
-local WOW_PROJECT_ID = _G.WOW_PROJECT_ID
-local WOW_PROJECT_CLASSIC = _G.WOW_PROJECT_CLASSIC
-local WOW_PROJECT_BURNING_CRUSADE_CLASSIC = _G.WOW_PROJECT_BURNING_CRUSADE_CLASSIC
-local WOW_PROJECT_WRATH_CLASSIC = _G.WOW_PROJECT_WRATH_CLASSIC
-local WOW_PROJECT_CATACLYSM_CLASSIC = _G.WOW_PROJECT_CATACLYSM_CLASSIC
-local WOW_PROJECT_MAINLINE = _G.WOW_PROJECT_MAINLINE
-local LE_EXPANSION_LEVEL_CURRENT = _G.LE_EXPANSION_LEVEL_CURRENT
-local LE_EXPANSION_BURNING_CRUSADE = _G. LE_EXPANSION_BURNING_CRUSADE
-local LE_EXPANSION_WRATH_OF_THE_LICH_KING = _G.LE_EXPANSION_WRATH_OF_THE_LICH_KING
-local LE_EXPANSION_CATACLYSM = _G.LE_EXPANSION_CATACLYSM
+--local GetBuildInfo = GetBuildInfo
+local CreateFrame = CreateFrame
+local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata
+local InCombatLockdown = InCombatLockdown
+local IsAddOnLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
+local StaticPopup_Show = StaticPopup_Show
+local tostringall = tostringall
+local WOW_PROJECT_ID = WOW_PROJECT_ID
+local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
+local WOW_PROJECT_BURNING_CRUSADE_CLASSIC = WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+local WOW_PROJECT_WRATH_CLASSIC = WOW_PROJECT_WRATH_CLASSIC
+local WOW_PROJECT_CATACLYSM_CLASSIC = WOW_PROJECT_CATACLYSM_CLASSIC
+local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
+local LE_EXPANSION_LEVEL_CURRENT = LE_EXPANSION_LEVEL_CURRENT
+local LE_EXPANSION_BURNING_CRUSADE =  LE_EXPANSION_BURNING_CRUSADE
+local LE_EXPANSION_WRATH_OF_THE_LICH_KING = LE_EXPANSION_WRATH_OF_THE_LICH_KING
+local LE_EXPANSION_CATACLYSM = LE_EXPANSION_CATACLYSM
 
-local LDBIcon = _G.LibStub:GetLibrary("LibDBIcon-1.0")
-local LibDeflate = _G.LibStub:GetLibrary('LibDeflate')
-local AceGUI = _G.LibStub:GetLibrary("AceGUI-3.0")
-local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
-local tostring, type , tcopy = tostring, type, _G.CopyTable
+local LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0")
+local LibDeflate = LibStub:GetLibrary('LibDeflate')
+local AceGUI = LibStub:GetLibrary("AceGUI-3.0")
+local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
+local tostring, type , tcopy = tostring, type, CopyTable
 
 function Plexus:IsClassicWow() --luacheck: ignore 212
     return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
@@ -62,44 +62,42 @@ function Plexus:IsRetailWow() --luacheck: ignore 212
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 
-_G.Plexus = _G.LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
-if _G.NickTag then
-    _G.LibStub("NickTag-1.0"):Embed(_G.Plexus)
-    if not _G.Plexus.nick_tag_cache then
-        _G.Plexus.nick_tag_cache = {}
+_G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
+if NickTag then
+    LibStub("NickTag-1.0"):Embed(Plexus)
+    if not Plexus.nick_tag_cache then
+        Plexus.nick_tag_cache = {}
     end
-    _G.Plexus:NickTagSetCache(_G.Plexus.nick_tag_cache)
+    Plexus:NickTagSetCache(Plexus.nick_tag_cache)
 end
-if not (IsAddOnLoaded("Grid")) then
-_G.Grid = _G.Plexus
-end
+
 if (IsAddOnLoaded("Grid")) then
 StaticPopupDialogs["GRID_ENABLED"] = { --luacheck: ignore 112
   text = "Grid and Plexus should never be enabled at the same time, unless you are copying settings! Do you want to copy Grid settings to Plexus?(Please Have Backups and Note: Restart is Required After Copy)",
   button1 = "Yes",
   button2 = "No",
   OnAccept = function()
-  _G.PlexusDB.namespaces.PlexusFrame = _G.GridDB.namespaces.GridFrame
-  _G.PlexusDB.namespaces.PlexusLayout = _G.GridDB.namespaces.GridLayout
-  _G.PlexusDB.namespaces.PlexusRoster = _G.GridDB.namespaces.GridRoster
-  _G.PlexusDB.namespaces.PlexusStatus = _G.GridDB.namespaces.GridStatus
-  _G.PlexusDB.namespaces.PlexusStatusAbsorbs = _G.GridDB.namespaces.GridStatusAbsorbs
-  _G.PlexusDB.namespaces.PlexusStatusAggro = _G.GridDB.namespaces.GridStatusAggro
-  _G.PlexusDB.namespaces.PlexusStatusAuras = _G.GridDB.namespaces.GridStatusAuras
-  _G.PlexusDB.namespaces.PlexusStatusGroup = _G.GridDB.namespaces.GridStatusGroup
-  _G.PlexusDB.namespaces.PlexusStatusHeals = _G.GridDB.namespaces.GridStatusHeals
-  _G.PlexusDB.namespaces.PlexusStatusHealth = _G.GridDB.namespaces.GridStatusHealth
-  _G.PlexusDB.namespaces.PlexusStatusMana = _G.GridDB.namespaces.GridStatusMana
-  _G.PlexusDB.namespaces.PlexusStatusMouseover = _G.GridDB.namespaces.GridStatusMouseover
-  _G.PlexusDB.namespaces.PlexusStatusName = _G.GridDB.namespaces.GridStatusName
-  _G.PlexusDB.namespaces.PlexusStatusRaidIcon = _G.GridDB.namespaces.GridStatusRaidIcon
-  _G.PlexusDB.namespaces.PlexusStatusRange = _G.GridDB.namespaces.GridStatusRange
-  _G.PlexusDB.namespaces.PlexusStatusReadyCheck = _G.GridDB.namespaces.GridStatusReadyCheck
-  _G.PlexusDB.namespaces.PlexusStatusResurrect = _G.GridDB.namespaces.GridStatusResurrect
-  _G.PlexusDB.namespaces.PlexusStatusRole = _G.GridDB.namespaces.GridStatusRole
-  _G.PlexusDB.namespaces.PlexusStatusStagger = _G.GridDB.namespaces.GridStatusStagger
-  _G.PlexusDB.namespaces.PlexusStatusTarget = _G.GridDB.namespaces.GridStatusTarget
-  _G.PlexusDB.namespaces.PlexusStatusVehicle = _G.GridDB.namespaces.GridStatusVehicle
+  PlexusDB.namespaces.PlexusFrame = GridDB.namespaces.GridFrame
+  PlexusDB.namespaces.PlexusLayout = GridDB.namespaces.GridLayout
+  PlexusDB.namespaces.PlexusRoster = GridDB.namespaces.GridRoster
+  PlexusDB.namespaces.PlexusStatus = GridDB.namespaces.GridStatus
+  PlexusDB.namespaces.PlexusStatusAbsorbs = GridDB.namespaces.GridStatusAbsorbs
+  PlexusDB.namespaces.PlexusStatusAggro = GridDB.namespaces.GridStatusAggro
+  PlexusDB.namespaces.PlexusStatusAuras = GridDB.namespaces.GridStatusAuras
+  PlexusDB.namespaces.PlexusStatusGroup = GridDB.namespaces.GridStatusGroup
+  PlexusDB.namespaces.PlexusStatusHeals = GridDB.namespaces.GridStatusHeals
+  PlexusDB.namespaces.PlexusStatusHealth = GridDB.namespaces.GridStatusHealth
+  PlexusDB.namespaces.PlexusStatusMana = GridDB.namespaces.GridStatusMana
+  PlexusDB.namespaces.PlexusStatusMouseover = GridDB.namespaces.GridStatusMouseover
+  PlexusDB.namespaces.PlexusStatusName = GridDB.namespaces.GridStatusName
+  PlexusDB.namespaces.PlexusStatusRaidIcon = GridDB.namespaces.GridStatusRaidIcon
+  PlexusDB.namespaces.PlexusStatusRange = GridDB.namespaces.GridStatusRange
+  PlexusDB.namespaces.PlexusStatusReadyCheck = GridDB.namespaces.GridStatusReadyCheck
+  PlexusDB.namespaces.PlexusStatusResurrect = GridDB.namespaces.GridStatusResurrect
+  PlexusDB.namespaces.PlexusStatusRole = GridDB.namespaces.GridStatusRole
+  PlexusDB.namespaces.PlexusStatusStagger = GridDB.namespaces.GridStatusStagger
+  PlexusDB.namespaces.PlexusStatusTarget = GridDB.namespaces.GridStatusTarget
+  PlexusDB.namespaces.PlexusStatusVehicle = GridDB.namespaces.GridStatusVehicle
   end,
   timeout = 0,
   whileDead = true,
@@ -290,7 +288,7 @@ Plexus.options = {
 }
 
 function Plexus:ExportProfile() --luacheck: ignore 212
-    local ExportProfile = tcopy(_G.PlexusDB.namespaces)
+    local ExportProfile = tcopy(PlexusDB.namespaces)
     local SerializedProfile = AceSerializer:Serialize(ExportProfile)
     local EncodedProfile = LibDeflate:EncodeForPrint(SerializedProfile);
     local input = AceGUI:Create("MultiLineEditBox");
@@ -331,7 +329,7 @@ function Plexus:ImportProfile() --luacheck: ignore 212
                                 local decoded = LibDeflate:DecodeForPrint(input:GetText());
                                 local DeserializedResult, DeserializedData = AceSerializer:Deserialize(decoded);
                                 if DeserializedResult then
-                                    _G.PlexusDB.namespaces = DeserializedData;
+                                    PlexusDB.namespaces = DeserializedData;
                                     f:SetStatusText("Profile imported You can now reload!");
                                 else
                                     f:SetStatusText("Invalid Profile!")
@@ -556,27 +554,27 @@ Plexus:SetDefaultModuleLibraries("AceEvent-3.0")
 ------------------------------------------------------------------------
 
 function Plexus:OnInitialize()
-    self.db = _G.LibStub:GetLibrary("AceDB-3.0"):New("PlexusDB", self.defaultDB, true)
+    self.db = LibStub:GetLibrary("AceDB-3.0"):New("PlexusDB", self.defaultDB, true)
 
     self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileEnable")
     self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileEnable")
     self.db.RegisterCallback(self, "OnProfileReset", "OnProfileEnable")
 
-    self.options.args.profile = _G.LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
+    self.options.args.profile = LibStub:GetLibrary("AceDBOptions-3.0"):GetOptionsTable(self.db)
     self.options.args.profile.order = -3
     if Plexus:IsRetailWow() or Plexus:IsWrathWow() then
-        local LibDualSpec = _G.LibStub:GetLibrary("LibDualSpec-1.0")
+        local LibDualSpec = LibStub:GetLibrary("LibDualSpec-1.0")
         LibDualSpec:EnhanceDatabase(self.db, PLEXUS)
         LibDualSpec:EnhanceOptions(self.options.args.profile, self.db)
     end
 
-    _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
+    LibStub:GetLibrary("AceConfigRegistry-3.0"):RegisterOptionsTable(PLEXUS, self.options)
 
     --
     --	Broker launcher
     --
 
-    local DataBroker = _G.LibStub:GetLibrary("LibDataBroker-1.1", true)
+    local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1", true)
     if DataBroker then
         self.Broker = DataBroker:NewDataObject(PLEXUS, {
             type = "launcher",
@@ -587,7 +585,7 @@ function Plexus:OnInitialize()
                 elseif not InCombatLockdown() then
                     local PlexusLayout = Plexus:GetModule("PlexusLayout")
                     PlexusLayout.db.profile.lock = not PlexusLayout.db.profile.lock
-                    _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
+                    LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
                     PlexusLayout:UpdateTabVisibility()
                 end
             end,
@@ -603,13 +601,13 @@ function Plexus:OnInitialize()
         })
     end
 
-    function _G.PlexusOnAddonCompartmentClick(_, button)
+    function PlexusOnAddonCompartmentClick(_, button)
         if button == "RightButton" then
             Plexus:ToggleOptions()
         elseif not InCombatLockdown() then
             local PlexusLayout = Plexus:GetModule("PlexusLayout")
             PlexusLayout.db.profile.lock = not PlexusLayout.db.profile.lock
-            _G.LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
+            LibStub:GetLibrary("AceConfigRegistry-3.0"):NotifyChange(PLEXUS)
             PlexusLayout:UpdateTabVisibility()
         end
     end
@@ -681,8 +679,8 @@ function Plexus:OnProfileEnable()
 end
 
 function Plexus:SetupOptions()
-    local Command = _G.LibStub:GetLibrary("AceConfigCmd-3.0")
-    local Dialog = _G.LibStub:GetLibrary("AceConfigDialog-3.0")
+    local Command = LibStub:GetLibrary("AceConfigCmd-3.0")
+    local Dialog = LibStub:GetLibrary("AceConfigDialog-3.0")
 
     ---------------------------------------------------------------------
     --	Standalone options
@@ -722,11 +720,11 @@ function Plexus:SetupOptions()
     end)
 
     if Plexus:IsRetailWow() then
-        _G.SettingsPanel:HookScript("OnShow", function()
+        SettingsPanel:HookScript("OnShow", function()
             Dialog:Close(PLEXUS)
         end)
     else
-        _G.InterfaceOptionsFrame:HookScript("OnShow", function()
+        InterfaceOptionsFrame:HookScript("OnShow", function()
             Dialog:Close(PLEXUS)
         end)
     end
@@ -760,13 +758,13 @@ function Plexus:SetupOptions()
         Dialog:AddToBlizOptions(PLEXUS, PLEXUS, nil, "general") -- "appName", "panelName", "parentName", ... "optionsPath"
     }
 
-    local noop = function() end
+    --local noop = function() end
     for i = 1, #panels do
         local path = panels[i]
         local name = self.options.args[path].name
         local f = Dialog:AddToBlizOptions(PLEXUS, name, PLEXUS, path)
-        f.obj:SetTitle(PLEXUS .. " - " .. name) -- workaround for AceConfig deficiency
-        f.obj.SetTitle = noop
+        --f.obj:SetTitle(PLEXUS .. " - " .. name) -- workaround for AceConfig deficiency
+        --f.obj.SetTitle = noop
         self.optionsPanels[i+1] = f
     end
 
@@ -775,7 +773,7 @@ end
 
 function Plexus:ToggleOptions()
     if self.db.profile.standaloneOptions then
-        local Dialog = _G.LibStub:GetLibrary("AceConfigDialog-3.0")
+        local Dialog = LibStub:GetLibrary("AceConfigDialog-3.0")
         if Dialog.OpenFrames[PLEXUS] then
             Dialog:Close(PLEXUS)
         else
@@ -783,10 +781,10 @@ function Plexus:ToggleOptions()
         end
     else
         if Plexus:IsRetailWow() then
-            _G.Settings.OpenToCategory(self.optionsPanels[2])
+            Settings.OpenToCategory(self.optionsPanels[2])
         else
-            _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
-            _G.InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
+            InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
+            InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- double up as a workaround for the bug that opens the frame without selecting the panel
         end
     end
 end
@@ -883,7 +881,7 @@ do
 
     local function hideFrame(frame)
         if frame then
-            _G.UnregisterUnitWatch(frame)
+            UnregisterUnitWatch(frame)
             frame:Hide()
             frame:UnregisterAllEvents()
             frame:SetParent(hiddenFrame)
@@ -899,39 +897,39 @@ do
     local function HidePartyFrames()
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
-        if _G.PartyFrame then
-            hideFrame(_G.PartyFrame)
-            for frame in _G.PartyFrame.PartyMemberFramePool:EnumerateActive() do
+        if PartyFrame then
+            hideFrame(PartyFrame)
+            for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
                 hideFrame(frame)
                 hideFrame(frame.HealthBar)
                 hideFrame(frame.ManaBar)
             end
-            _G.PartyFrame.PartyMemberFramePool:ReleaseAll()
+            PartyFrame.PartyMemberFramePool:ReleaseAll()
         end
-        hideFrame(_G.CompactPartyFrame)
-        _G.UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
+        hideFrame(CompactPartyFrame)
+        UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- used by compact party frame
     end
 
     -- raid frames
     local function HideRaidFrames()
-        if not _G.CompactRaidFrameManager then return end
+        if not CompactRaidFrameManager then return end
         local function HideFrames()
-            _G.CompactRaidFrameManager:SetAlpha(0)
-            _G.CompactRaidFrameManager:UnregisterAllEvents()
-            _G.CompactRaidFrameContainer:UnregisterAllEvents()
+            CompactRaidFrameManager:SetAlpha(0)
+            CompactRaidFrameManager:UnregisterAllEvents()
+            CompactRaidFrameContainer:UnregisterAllEvents()
             if not InCombatLockdown() then
-                _G.CompactRaidFrameManager:Hide()
-                local shown = _G.CompactRaidFrameManager_GetSetting('IsShown')
+                CompactRaidFrameManager:Hide()
+                local shown = CompactRaidFrameManager_GetSetting('IsShown')
                 if shown and shown ~= '0' then
-                    _G.CompactRaidFrameManager_SetSetting('IsShown', '0')
+                    CompactRaidFrameManager_SetSetting('IsShown', '0')
                 end
             end
         end
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
-        _G.hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
-        _G.CompactRaidFrameManager:HookScript('OnShow', HideFrames)
-        _G.CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
+        hooksecurefunc('CompactRaidFrameManager_UpdateShown', HideFrames)
+        CompactRaidFrameManager:HookScript('OnShow', HideFrames)
+        CompactRaidFrameContainer:HookScript('OnShow', HideFrames)
         HideFrames()
     end
 

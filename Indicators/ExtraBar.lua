@@ -1,17 +1,17 @@
 local _, Plexus = ...
 
-local CreateFrame = _G.CreateFrame
-local GetTime = _G.GetTime
+local CreateFrame = CreateFrame
+local GetTime = GetTime
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local LibSharedMedia = _G.LibStub:GetLibrary("LibSharedMedia-3.0", true)
+local LibSharedMedia = LibStub:GetLibrary("LibSharedMedia-3.0", true)
 
 local PlexusIndicatorsExtraBar = PlexusFrame:NewModule("PlexusIndicatorsExtraBar")
 
 local function New(frame)
     local bar = CreateFrame("StatusBar", nil, frame)
     local bg = bar:CreateTexture(nil, "BACKGROUND")
-    bg:SetAllPoints(true)
+    bg:SetAllPoints()
     bar.bg = bg
     bar:SetStatusBarTexture("Interface\\Addons\\Plexus\\gradient32x32")
     bar:SetMinMaxValues(0,1)

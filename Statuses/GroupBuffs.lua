@@ -1,38 +1,46 @@
 local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
-local GetSpellInfo = _G.GetSpellInfo
-local GetSpellTexture = _G.GetSpellTexture
-local InCombatLockdown = _G.InCombatLockdown
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
+local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or GetSpellTexture
+local InCombatLockdown = InCombatLockdown
 
 local UnitClass, UnitGUID, UnitIsPlayer, UnitIsDead, UnitIsGhost
-    = _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsDead, _G.UnitIsGhost
+    = UnitClass, UnitGUID, UnitIsPlayer, UnitIsDead, UnitIsGhost
 
-local GetAuraDataByAuraInstanceID = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-local ForEachAura = _G.AuraUtil and _G.AuraUtil.ForEachAura
+local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = AuraUtil and AuraUtil.ForEachAura
 
-local UnitInPartyIsAI
-if Plexus:IsRetailWow() then
-    UnitInPartyIsAI = _G.UnitInPartyIsAI
-end
+local UnitInPartyIsAI = UnitInPartyIsAI
 
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"
 PlexusStatusGroupBuffs.options = false
 
+local function GetSpellName(spellid)
+    local info = GetSpellInfo(spellid)
+    if Plexus:IsRetailWow() then
+        if info and info.name then
+            return info.name
+        end
+    else
+        return info
+    end
+end
+
 local spellNameList
 local spellIconList
 if Plexus:IsRetailWow() then
 spellNameList = {
-    ["Power Word: Fortitude"] = GetSpellInfo(21562),
+    ["Power Word: Fortitude"] = GetSpellName(21562),
 
-    ["Arcane Intellect"] = GetSpellInfo(1459),
+    ["Arcane Intellect"] = GetSpellName(1459),
 
-    ["Mark of the Wild"] = GetSpellInfo(1126),
+    ["Mark of the Wild"] = GetSpellName(1126),
 
-    ["Battle Shout"] = GetSpellInfo(6673),
+    ["Battle Shout"] = GetSpellName(6673),
 
-    ["Blessing of the Bronze"] = GetSpellInfo(381748),
+    ["Blessing of the Bronze"] = GetSpellName(381748),
 }
 
 spellIconList = {
@@ -151,37 +159,37 @@ PlexusStatusGroupBuffs.options = {
 
 if Plexus:IsClassicWow() then
 spellNameList = {
-    ["Power Word: Fortitude"] = GetSpellInfo(1243),
-    ["Prayer of Fortitude"] = GetSpellInfo(21562),
-    ["Divine Spirit"] = GetSpellInfo(27841),
-    ["Prayer of Spirit"] = GetSpellInfo(27681),
+    ["Power Word: Fortitude"] = GetSpellName(1243),
+    ["Prayer of Fortitude"] = GetSpellName(21562),
+    ["Divine Spirit"] = GetSpellName(27841),
+    ["Prayer of Spirit"] = GetSpellName(27681),
 
-    ["Arcane Intellect"] = GetSpellInfo(1472),
-    ["Arcane Brilliance"] = GetSpellInfo(23028),
+    ["Arcane Intellect"] = GetSpellName(1472),
+    ["Arcane Brilliance"] = GetSpellName(23028),
 
-    ["Battle Shout"] = GetSpellInfo(6673),
+    ["Battle Shout"] = GetSpellName(6673),
 
-    ["Blessing of Kings"] = GetSpellInfo(20217),
-    ["Greater Blessing of Kings"] = GetSpellInfo(25898),
-    ["Blessing of Might"] = GetSpellInfo(19740),
-    ["Greater Blessing of Might"] = GetSpellInfo(25782),
-    ["Blessing of Sanctuary"] = GetSpellInfo(20911),
-    ["Greater Blessing of Sanctuary"] = GetSpellInfo(25899),
-    ["Blessing of Wisdom"] = GetSpellInfo(19742),
-    ["Greater Blessing of Wisdom"] = GetSpellInfo(25894),
+    ["Blessing of Kings"] = GetSpellName(20217),
+    ["Greater Blessing of Kings"] = GetSpellName(25898),
+    ["Blessing of Might"] = GetSpellName(19740),
+    ["Greater Blessing of Might"] = GetSpellName(25782),
+    ["Blessing of Sanctuary"] = GetSpellName(20911),
+    ["Greater Blessing of Sanctuary"] = GetSpellName(25899),
+    ["Blessing of Wisdom"] = GetSpellName(19742),
+    ["Greater Blessing of Wisdom"] = GetSpellName(25894),
 
-    ["Mark of the Wild"] = GetSpellInfo(1126),
-    ["Gift of the Wild"] = GetSpellInfo(21849),
+    ["Mark of the Wild"] = GetSpellName(1126),
+    ["Gift of the Wild"] = GetSpellName(21849),
 }
 
 spellIconList = {
     ["Power Word: Fortitude"] = GetSpellTexture(1243),
     ["Prayer of Fortitude"] = GetSpellTexture(21562),
     ["Divine Spirit"] = GetSpellTexture(27841),
-    ["Prayer of Spirit"] = GetSpellInfo(27681),
+    ["Prayer of Spirit"] = GetSpellName(27681),
 
     ["Arcane Intellect"] = GetSpellTexture(1472),
-    ["Arcane Brilliance"] = GetSpellInfo(23028),
+    ["Arcane Brilliance"] = GetSpellName(23028),
 
     ["Battle Shout"] = GetSpellTexture(6673),
 
@@ -295,37 +303,37 @@ end
 
 if Plexus:IsTBCWow() then
     spellNameList = {
-        ["Power Word: Fortitude"] = GetSpellInfo(1243),
-        ["Prayer of Fortitude"] = GetSpellInfo(21562),
-        ["Divine Spirit"] = GetSpellInfo(27841),
-        ["Prayer of Spirit"] = GetSpellInfo(27681),
+        ["Power Word: Fortitude"] = GetSpellName(1243),
+        ["Prayer of Fortitude"] = GetSpellName(21562),
+        ["Divine Spirit"] = GetSpellName(27841),
+        ["Prayer of Spirit"] = GetSpellName(27681),
 
-        ["Arcane Intellect"] = GetSpellInfo(1459),
-        ["Arcane Brilliance"] = GetSpellInfo(23028),
+        ["Arcane Intellect"] = GetSpellName(1459),
+        ["Arcane Brilliance"] = GetSpellName(23028),
 
-        ["Battle Shout"] = GetSpellInfo(6673),
+        ["Battle Shout"] = GetSpellName(6673),
 
-        ["Blessing of Kings"] = GetSpellInfo(20217),
-        ["Greater Blessing of Kings"] = GetSpellInfo(25898),
-        ["Blessing of Might"] = GetSpellInfo(19740),
-        ["Greater Blessing of Might"] = GetSpellInfo(25782),
-        ["Blessing of Sanctuary"] = GetSpellInfo(20911),
-        ["Greater Blessing of Sanctuary"] = GetSpellInfo(25899),
-        ["Blessing of Wisdom"] = GetSpellInfo(19742),
-        ["Greater Blessing of Wisdom"] = GetSpellInfo(25894),
+        ["Blessing of Kings"] = GetSpellName(20217),
+        ["Greater Blessing of Kings"] = GetSpellName(25898),
+        ["Blessing of Might"] = GetSpellName(19740),
+        ["Greater Blessing of Might"] = GetSpellName(25782),
+        ["Blessing of Sanctuary"] = GetSpellName(20911),
+        ["Greater Blessing of Sanctuary"] = GetSpellName(25899),
+        ["Blessing of Wisdom"] = GetSpellName(19742),
+        ["Greater Blessing of Wisdom"] = GetSpellName(25894),
 
-        ["Mark of the Wild"] = GetSpellInfo(1126),
-        ["Gift of the Wild"] = GetSpellInfo(21849),
+        ["Mark of the Wild"] = GetSpellName(1126),
+        ["Gift of the Wild"] = GetSpellName(21849),
     }
 
     spellIconList = {
         ["Power Word: Fortitude"] = GetSpellTexture(1243),
         ["Prayer of Fortitude"] = GetSpellTexture(21562),
         ["Divine Spirit"] = GetSpellTexture(27841),
-        ["Prayer of Spirit"] = GetSpellInfo(27681),
+        ["Prayer of Spirit"] = GetSpellName(27681),
 
         ["Arcane Intellect"] = GetSpellTexture(1459),
-        ["Arcane Brilliance"] = GetSpellInfo(23028),
+        ["Arcane Brilliance"] = GetSpellName(23028),
 
         ["Battle Shout"] = GetSpellTexture(6673),
 

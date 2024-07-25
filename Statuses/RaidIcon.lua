@@ -12,8 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local format = _G.format
-local GetRaidTargetIndex = _G.GetRaidTargetIndex
+local format = format
+local GetRaidTargetIndex = GetRaidTargetIndex
 
 local Roster = Plexus:GetModule("PlexusRoster")
 

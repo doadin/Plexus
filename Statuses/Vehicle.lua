@@ -12,8 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitGUID = _G.UnitGUID
-local UnitHasVehicleUI = _G.UnitHasVehicleUI
+local UnitGUID = UnitGUID
+local UnitHasVehicleUI = UnitHasVehicleUI
 
 local Roster = Plexus:GetModule("PlexusRoster")
 

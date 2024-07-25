@@ -8,10 +8,10 @@
 
 local _, Plexus = ...
 
-local CreateFrame = _G.CreateFrame
+local CreateFrame = CreateFrame
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = _G.LibStub:GetLibrary("LibSharedMedia-3.0")
+local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 local function SetBarColor(bar, r, g, b, invert)
@@ -56,7 +56,7 @@ PlexusFrame:RegisterIndicator("bar", L["Health Bar"],
         bar:SetPoint("TOPRIGHT")
 
         local bg = bar:CreateTexture(nil, "BACKGROUND")
-        bg:SetAllPoints(true)
+        bg:SetAllPoints()
         bar.bg = bg
 
         bar:SetStatusBarTexture("Interface\\Addons\\Plexus\\gradient32x32")

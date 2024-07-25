@@ -12,13 +12,13 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local format = _G.format
+local format = format
 
-local UnitGetTotalAbsorbs = _G.UnitGetTotalAbsorbs
-local UnitGUID = _G.UnitGUID
-local UnitHealth = _G.UnitHealth
-local UnitHealthMax = _G.UnitHealthMax
-local UnitIsVisible = _G.UnitIsVisible
+local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
+local UnitGUID = UnitGUID
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsVisible = UnitIsVisible
 
 local settings
 

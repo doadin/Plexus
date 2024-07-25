@@ -19,7 +19,7 @@ local BACKDROP = {
 PlexusFrame:RegisterIndicator("border", L["Border"],
     -- New
     function(frame)
-        _G.Mixin(frame, _G.BackdropTemplateMixin)
+        Mixin(frame, BackdropTemplateMixin)
         frame:SetBackdrop(BACKDROP)
         return {}
     end,

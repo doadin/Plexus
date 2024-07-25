@@ -12,8 +12,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitGUID = _G.UnitGUID
-local UnitPhaseReason = _G.UnitPhaseReason
+local UnitGUID = UnitGUID
+local UnitPhaseReason = UnitPhaseReason
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
@@ -211,13 +211,13 @@ function PlexusStatusPhase:UpdateUnit(unitid)
     local guid = UnitGUID(unitid)
     local reason = UnitPhaseReason(unitid)
     local settings = self.db.profile.phase_status
-	if reason == _G.Enum.PhaseReason.WarMode then
+	if reason == Enum.PhaseReason.WarMode then
         self:GainStatus(guid, "WAR_MODE", settings)
-	elseif reason == _G.Enum.PhaseReason.ChromieTime then
+	elseif reason == Enum.PhaseReason.ChromieTime then
         self:GainStatus(guid, "CHROMIE_TIME", settings)
-	elseif reason == _G.Enum.PhaseReason.Phasing then
+	elseif reason == Enum.PhaseReason.Phasing then
         self:GainStatus(guid, "PHASING", settings)
-	elseif reason == _G.Enum.PhaseReason.Sharding then
+	elseif reason == Enum.PhaseReason.Sharding then
         self:GainStatus(guid, "SHARDING", settings)
     elseif not reason then
 		self.core:SendStatusLost(guid, "phase_status")
