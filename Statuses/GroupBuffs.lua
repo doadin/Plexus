@@ -11,10 +11,7 @@ local UnitClass, UnitGUID, UnitIsPlayer, UnitIsDead, UnitIsGhost
 local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
 local ForEachAura = AuraUtil and AuraUtil.ForEachAura
 
-local UnitInPartyIsAI
-if Plexus:IsRetailWow() then
-    UnitInPartyIsAI = UnitInPartyIsAI
-end
+local UnitInPartyIsAI = UnitInPartyIsAI
 
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")
 PlexusStatusGroupBuffs.menuName = "Group Buffs"

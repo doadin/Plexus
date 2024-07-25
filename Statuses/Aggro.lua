@@ -12,10 +12,7 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetThreatStatusColor
-if Plexus:IsRetailWow() then
-    GetThreatStatusColor = GetThreatStatusColor
-end
+local GetThreatStatusColor = GetThreatStatusColor
 local UnitGUID = UnitGUID
 local UnitIsVisible = UnitIsVisible
 local UnitThreatSituation = UnitThreatSituation

@@ -9,7 +9,7 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local FillLocalizedClassList = FillLocalizedClassList
+local FillLocalizedClassList = LocalizedClassList or FillLocalizedClassList
 local UnitClass = UnitClass
 local UnitCreatureType = UnitCreatureType
 

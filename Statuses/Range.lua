@@ -116,7 +116,7 @@ do
 end
 
 local function GroupRangeCheck(_, unit)
-    local _, class = UnitClass("player")
+    --local _, class = UnitClass("player")
     if UnitIsUnit(unit, "player") then
         return true
     elseif resSpell and UnitIsDead(unit) and not UnitIsDead("player") then

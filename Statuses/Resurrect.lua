@@ -234,7 +234,8 @@ end
 -- Guess mass ress from combat log since INCOMING_RESURRECT_CHANGED event doesnt fire
 function PlexusStatusResurrect:COMBAT_LOG_EVENT_UNFILTERED(event, eventunit, castguid, spellid) --luacheck: ignore 212
     --print(CombatLogGetCurrentEventInfo())
-    local timestamp, eventType, _, sourceGUID, _, _, _, destGUID, _, _, _, spellId, spellName, _ = CombatLogGetCurrentEventInfo()
+    --timestamp, eventType, _, sourceGUID, _, _, _, destGUID, _, _, _, spellId, spellName, _
+    local timestamp, eventType, _, sourceGUID, _, _, _, destGUID, _, _, _, _, spellName, _ = CombatLogGetCurrentEventInfo()
     if not PlexusRoster:IsGUIDInGroup(sourceGUID) then
         return
     end

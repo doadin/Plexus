@@ -14,7 +14,7 @@ local _, Plexus = ...
 local tinsert = tinsert
 
 local GetInstanceInfo = GetInstanceInfo
-local GetZonePVPInfo = GetZonePVPInfo
+local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
 local IsInRaid = IsInRaid
 local IsInGroup = IsInGroup
 local UnitExists = UnitExists

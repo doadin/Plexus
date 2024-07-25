@@ -12,10 +12,7 @@ local UnitIsPlayer = UnitIsPlayer
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 
-local UnitInPartyIsAI
-if Plexus:IsRetailWow() then
-    UnitInPartyIsAI = UnitInPartyIsAI
-end
+local UnitInPartyIsAI = UnitInPartyIsAI
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
