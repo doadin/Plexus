@@ -96,7 +96,7 @@ local function Reset(self)
 
 	if not self.cooldown then
 		local cd = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
-        cd:SetAllPoints(true)
+        cd:SetAllPoints(nil,true)
         cd:SetDrawBling(false)
         cd:SetDrawEdge(false)
         cd:SetHideCountdownNumbers(true)

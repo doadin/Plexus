@@ -22,7 +22,7 @@ local tinsert = tinsert
 local CreateFrame = CreateFrame
 local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata
 local InCombatLockdown = InCombatLockdown
-local IsAddOnLoaded = IsAddOnLoaded
+local IsAddOnLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 local StaticPopup_Show = StaticPopup_Show
 local tostringall = tostringall
 local WOW_PROJECT_ID = WOW_PROJECT_ID
@@ -758,13 +758,13 @@ function Plexus:SetupOptions()
         Dialog:AddToBlizOptions(PLEXUS, PLEXUS, nil, "general") -- "appName", "panelName", "parentName", ... "optionsPath"
     }
 
-    local noop = function() end
+    --local noop = function() end
     for i = 1, #panels do
         local path = panels[i]
         local name = self.options.args[path].name
         local f = Dialog:AddToBlizOptions(PLEXUS, name, PLEXUS, path)
-        f.obj:SetTitle(PLEXUS .. " - " .. name) -- workaround for AceConfig deficiency
-        f.obj.SetTitle = noop
+        --f.obj:SetTitle(PLEXUS .. " - " .. name) -- workaround for AceConfig deficiency
+        --f.obj.SetTitle = noop
         self.optionsPanels[i+1] = f
     end
 

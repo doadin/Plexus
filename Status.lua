@@ -9,7 +9,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local FillLocalizedClassList = LocalizedClassList or FillLocalizedClassList
+local FillLocalizedClassList = FillLocalizedClassList
+local LocalizedClassList = LocalizedClassList
 local UnitClass = UnitClass
 local UnitCreatureType = UnitCreatureType
 
@@ -374,8 +375,14 @@ end
 
 
 function PlexusStatus:FillColorOptions(options)
-    local classEnglishToLocal = {}
-    FillLocalizedClassList(classEnglishToLocal, false)
+    local classEnglishToLocal
+    if FillLocalizedClassList then
+        classEnglishToLocal = {}
+        FillLocalizedClassList(classEnglishToLocal,false)
+    end
+    if LocalizedClassList then
+        classEnglishToLocal = LocalizedClassList(false)
+    end
 
     local classcolor = {}
     for class, color in pairs(PlexusClasses) do
