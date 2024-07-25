@@ -16,7 +16,7 @@ local format = format
 local wipe = wipe
 local UnitClass = UnitClass
 local UnitGUID = UnitGUID
-local UnitDebuff = C_UnitAuras and C_UnitAuras.GetDebuffDataByIndex or UnitDebuff
+local GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
@@ -136,13 +136,15 @@ function PlexusStatusStagger:Plexus_UnitJoined(event, guid, unitid)
     local _, class = UnitClass(unitid)
     if class == "MONK" then
         monks[guid] = true
-        self:UpdateUnit(event, unitid)
+        self:UpdateUnit(event, unitid, {isFullUpdate = true})
     end
 end
 
 function PlexusStatusStagger:Plexus_UnitLeft(event, guid) --luacheck: ignore 212
     self:Debug("Plexus_UnitLeft event: ", event)
-    monks[guid] = nil
+    if monks[guid] then
+        monks[guid] = nil
+    end
 end
 
 function PlexusStatusStagger:UpdateName(event, unitid)
@@ -152,47 +154,155 @@ function PlexusStatusStagger:UpdateName(event, unitid)
         if not guid then return end
         if PlexusRoster:IsGUIDInGroup(guid) and not monks[guid] then
             monks[guid] = true
-            self:UpdateUnit(event, unitid)
+            self:UpdateUnit(event, unitid, {isFullUpdate = true})
         end
     end
 end
 
 function PlexusStatusStagger:UpdateAllUnits()
     for _, unitid in PlexusRoster:IterateRoster() do
-        self:UpdateUnit("UpdateAllUnits", unitid)
+        self:UpdateUnit("UpdateAllUnits", unitid, {isFullUpdate = true})
     end
 end
 
-function PlexusStatusStagger:UpdateUnit(event, unitid)
-    self:Debug("UpdateUnit event: ", event)
+local unitAuras
+function PlexusStatusStagger:UpdateUnit(event, unitid, updatedAuras)
     local guid = UnitGUID(unitid)
-    if monks[guid] then
-        for i = 1, 40 do
-            local name, icon, spellID, debuffData
-            debuffData = UnitDebuff(unitid, i)
-            name = debuffData and debuffData.name
-            icon = debuffData and debuffData.icon
-            spellID = debuffData and debuffData.spellId
+    if not unitid then return end
+    if not guid then return end
+    if not monks[guid] then return end
+    if not PlexusRoster:IsGUIDInGroup(guid) then return end
 
-            if not name then
-                break
+    if not unitAuras then
+        unitAuras = {}
+    end
+
+    -- Full Update
+    if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
+        local unitauraInfo = {}
+        if (AuraUtil.ForEachAura) then
+            --ForEachAura(unitid, "HELPFUL", nil,
+            --    function(aura)
+            --        if aura and aura.auraInstanceID then
+            --            unitauraInfo[aura.auraInstanceID] = aura
+            --        end
+            --    end,
+            --true)
+            ForEachAura(unitid, "HARMFUL", nil,
+                function(aura)
+                    if aura and aura.auraInstanceID and spellID_severity[aura.auraInstanceID.spellId] then
+                        unitauraInfo[aura.auraInstanceID] = aura
+                    end
+                end,
+            true)
+        else
+            --for i = 0, 40 do
+            --    local auraData = C_UnitAuras.GetAuraDataByIndex(unitid, i, "HELPFUL")
+            --    if auraData then
+            --        unitauraInfo[auraData.auraInstanceID] = auraData
+            --    end
+            --end
+            for i = 0, 40 do
+                local auraData = C_UnitAuras.GetAuraDataByIndex(unitid, i, "HARMFUL")
+                if auraData and auraData.auraInstanceID and spellID_severity[auraData.spellId] then
+                    unitauraInfo[auraData.auraInstanceID] = auraData
+                end
             end
+        end
+        if unitAuras[guid] then
+            unitAuras[guid] = nil
+        end
+        for _, v in pairs(unitauraInfo) do
+            if not unitAuras[guid] then
+                unitAuras[guid] = {}
+            end
+            if v.spellId == 367364 then
+                v.name = "Echo: Reversion"
+            end
+            if v.spellId == 376788 then
+                v.name = "Echo: Dream Breath"
+            end
+            unitAuras[guid][v.auraInstanceID] = v
+        end
+    end
 
-            local severity = spellID_severity[spellID]
-            if severity then
-                local settings = self.db.profile.alert_stagger
-                local color = severity and settings.colors[severity]
-                return self.core:SendStatusGained(guid,
-                                                    "alert_stagger",
-                                                    settings.priority,
-                                                    settings.range,
-                                                    color,
-                                                    name,
-                                                    nil,
-                                                    nil,
-                                                    icon)
+    if updatedAuras and updatedAuras.addedAuras then
+        for _, aura in pairs(updatedAuras.addedAuras) do
+            if aura.spellId == 367364 then
+                aura.name = "Echo: Reversion"
+            end
+            if aura.spellId == 376788 then
+                aura.name = "Echo: Dream Breath"
+            end
+            if aura and aura.auraInstanceID and spellID_severity[aura.spellId] then
+                if not unitAuras[guid] then
+                    unitAuras[guid] = {}
+                end
+                unitAuras[guid][aura.auraInstanceID] = aura
+            end
+       end
+    end
+
+    if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
+        for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
+            local auraTable = GetAuraDataByAuraInstanceID(unitid, auraInstanceID)
+            if auraTable and auraTable.spellId == 367364 then
+                auraTable.name = "Echo: Reversion"
+            end
+            if auraTable and auraTable.spellId == 376788 then
+                auraTable.name = "Echo: Dream Breath"
+            end
+            if not unitAuras[guid] then
+                unitAuras[guid] = {}
+            end
+            if auraTable and auraTable.auraInstanceID and spellID_severity[auraTable.spellId] then
+                unitAuras[guid][auraInstanceID] = auraTable
+            elseif not auraTable then
+                unitAuras[guid][auraInstanceID] = auraTable
             end
         end
     end
-    self.core:SendStatusLost(guid, "alert_stagger")
+
+    if updatedAuras and updatedAuras.removedAuraInstanceIDs then
+        for _, auraInstanceIDTable in ipairs(updatedAuras.removedAuraInstanceIDs) do
+            if unitAuras[guid] and unitAuras[guid][auraInstanceIDTable] then
+                unitAuras[guid][auraInstanceIDTable] = nil
+            end
+        end
+    end
+
+    if unitAuras[guid] then
+        local numAuras = 0
+        --id, info
+        for id in pairs(unitAuras[guid]) do
+            local auraTable = GetAuraDataByAuraInstanceID(unitid, id)
+            if not auraTable then
+                unitAuras[guid][id] = nil
+            end
+            if auraTable  then
+                numAuras = numAuras + 1
+                if not auraTable.name then
+                    break
+                end
+                local severity = spellID_severity[auraTable.spellId]
+                if severity then
+                    local settings = self.db.profile.alert_stagger
+                    local color = severity and settings.colors[severity]
+                    return self.core:SendStatusGained(guid,
+                                                        "alert_stagger",
+                                                        settings.priority,
+                                                        settings.range,
+                                                        color,
+                                                        auraTable.name,
+                                                        nil,
+                                                        nil,
+                                                        auraTable.icon)
+                end
+            end
+        end
+        if numAuras == 0 then
+            unitAuras[guid] = nil
+            self.core:SendStatusLost(guid, "alert_stagger")
+        end
+    end
 end
