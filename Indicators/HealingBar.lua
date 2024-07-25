@@ -8,10 +8,10 @@
 
 local _, Plexus = ...
 
-local CreateFrame = _G.CreateFrame
+local CreateFrame = CreateFrame
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local Media = _G.LibStub:GetLibrary("LibSharedMedia-3.0")
+local Media = LibStub:GetLibrary("LibSharedMedia-3.0")
 local L = Plexus.L
 
 PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],

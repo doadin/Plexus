@@ -1,19 +1,19 @@
 local _, Plexus = ...
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or _G.GetSpellInfo
-local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or _G.GetSpellTexture
-local InCombatLockdown = _G.InCombatLockdown
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
+local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or GetSpellTexture
+local InCombatLockdown = InCombatLockdown
 
 local UnitClass, UnitGUID, UnitIsPlayer, UnitIsDead, UnitIsGhost
-    = _G.UnitClass, _G.UnitGUID, _G.UnitIsPlayer, _G.UnitIsDead, _G.UnitIsGhost
+    = UnitClass, UnitGUID, UnitIsPlayer, UnitIsDead, UnitIsGhost
 
-local GetAuraDataByAuraInstanceID = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-local ForEachAura = _G.AuraUtil and _G.AuraUtil.ForEachAura
+local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = AuraUtil and AuraUtil.ForEachAura
 
 local UnitInPartyIsAI
 if Plexus:IsRetailWow() then
-    UnitInPartyIsAI = _G.UnitInPartyIsAI
+    UnitInPartyIsAI = UnitInPartyIsAI
 end
 
 local PlexusStatusGroupBuffs = Plexus:NewStatusModule("PlexusStatusGroupBuffs")

@@ -1,7 +1,7 @@
 local _, Plexus = ...
 --local L = Plexus.L
 
-local UnitGUID = _G.UnitGUID
+local UnitGUID = UnitGUID
 
 local PlexusStatusPlayer = Plexus:NewStatusModule("PlexusStatusPlayer")
 PlexusStatusPlayer.menuName = "Player"

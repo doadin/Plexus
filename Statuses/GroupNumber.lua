@@ -11,8 +11,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local UnitInRaid = _G.UnitInRaid
-local GetRaidRosterInfo = _G.GetRaidRosterInfo
+local UnitInRaid = UnitInRaid
+local GetRaidRosterInfo = GetRaidRosterInfo
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")

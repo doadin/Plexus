@@ -13,12 +13,12 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or _G.GetSpellInfo
-local IsSpellInRange = C_Spell and C_Spell.IsSpellInRange or _G.IsSpellInRange
-local UnitClass = _G.UnitClass
-local UnitInRange = _G.UnitInRange
-local UnitIsDead = _G.UnitIsDead
-local UnitIsUnit = _G.UnitIsUnit
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
+local IsSpellInRange = C_Spell and C_Spell.IsSpellInRange or IsSpellInRange
+local UnitClass = UnitClass
+local UnitInRange = UnitInRange
+local UnitIsDead = UnitIsDead
+local UnitIsUnit = UnitIsUnit
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

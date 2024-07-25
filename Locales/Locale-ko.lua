@@ -10,7 +10,7 @@
     Contributors: 7destiny, Sayclub
 ----------------------------------------------------------------------]]
 
-if _G.GetLocale() ~= "koKR" then return end
+if GetLocale() ~= "koKR" then return end
 
 local _, Plexus = ...
 local L = { }

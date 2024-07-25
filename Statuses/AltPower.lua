@@ -7,14 +7,14 @@
 
 local _, Plexus = ...
 
-local UnitGUID = _G.UnitGUID
-local UnitIsPlayer = _G.UnitIsPlayer
-local UnitPower = _G.UnitPower
-local UnitPowerMax = _G.UnitPowerMax
+local UnitGUID = UnitGUID
+local UnitIsPlayer = UnitIsPlayer
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
 
 local UnitInPartyIsAI
 if Plexus:IsRetailWow() then
-    UnitInPartyIsAI = _G.UnitInPartyIsAI
+    UnitInPartyIsAI = UnitInPartyIsAI
 end
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")

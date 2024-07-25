@@ -12,16 +12,16 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetTime = _G.GetTime
+local GetTime = GetTime
 
-local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or _G.GetSpellInfo
-local UnitCastingInfo = _G.UnitCastingInfo
-local UnitGUID = _G.UnitGUID
-local UnitHasIncomingResurrection = _G.UnitHasIncomingResurrection
-local UnitIsDead = _G.UnitIsDead
-local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
-local UnitIsGhost = _G.UnitIsGhost
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
+local UnitCastingInfo = UnitCastingInfo
+local UnitGUID = UnitGUID
+local UnitHasIncomingResurrection = UnitHasIncomingResurrection
+local UnitIsDead = UnitIsDead
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsGhost = UnitIsGhost
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

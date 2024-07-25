@@ -1,10 +1,10 @@
 local _, Plexus = ...
 
-local CreateFrame = _G.CreateFrame
-local GetTime = _G.GetTime
+local CreateFrame = CreateFrame
+local GetTime = GetTime
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local LibSharedMedia = _G.LibStub:GetLibrary("LibSharedMedia-3.0", true)
+local LibSharedMedia = LibStub:GetLibrary("LibSharedMedia-3.0", true)
 
 local PlexusIndicatorsExtraBar = PlexusFrame:NewModule("PlexusIndicatorsExtraBar")
 

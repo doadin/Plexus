@@ -12,9 +12,9 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local C_IncomingSummon = _G.C_IncomingSummon
-local GetTime = _G.GetTime
-local UnitGUID = _G.UnitGUID
+local C_IncomingSummon = C_IncomingSummon
+local GetTime = GetTime
+local UnitGUID = UnitGUID
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

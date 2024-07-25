@@ -14,10 +14,10 @@ local L = Plexus.L
 
 local strutf8sub = string.utf8sub --luacheck: ignore 143
 local format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
-    = _G.format, _G.GetTime, _G.gmatch, _G.gsub, _G.pairs, _G.strfind, _G.strlen, _G.strmatch, _G.tostring, _G.type, _G.wipe
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or _G.GetSpellInfo
+    = format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
 local IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
-    = _G.IsPlayerSpell, _G.IsSpellKnown, _G.UnitAura, _G.UnitClass, _G.UnitGUID, _G.UnitIsVisible
+    = IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -29,8 +29,8 @@ local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
 
-local GetAuraDataByAuraInstanceID = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-local ForEachAura = _G.AuraUtil and _G.AuraUtil.ForEachAura
+local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
+local ForEachAura = AuraUtil and AuraUtil.ForEachAura
 
 local function GetSpellName(spellid)
     local info = GetSpellInfo(spellid)
@@ -234,7 +234,7 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     ["dispel_curse"] = {
         desc = format(L["Debuff type: %s"], L["Curse"]),
-        text = _G.DEBUFF_SYMBOL_CURSE,
+        text = DEBUFF_SYMBOL_CURSE,
         color = { r = 0.6, g = 0, b = 1, a = 1 },
         durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
@@ -244,7 +244,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_disease"] = {
         desc = format(L["Debuff type: %s"], L["Disease"]),
-        text = _G.DEBUFF_SYMBOL_DISEASE,
+        text = DEBUFF_SYMBOL_DISEASE,
         color = { r = 0.6, g = 0.4, b = 0, a = 1 },
         durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
@@ -254,7 +254,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_magic"] = {
         desc = format(L["Debuff type: %s"], L["Magic"]),
-        text = _G.DEBUFF_SYMBOL_MAGIC,
+        text = DEBUFF_SYMBOL_MAGIC,
         color = { r = 0.2, g = 0.6, b = 1, a = 1 },
         durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
@@ -264,7 +264,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_poison"] = {
         desc = format(L["Debuff type: %s"], L["Poison"]),
-        text = _G.DEBUFF_SYMBOL_POISON,
+        text = DEBUFF_SYMBOL_POISON,
         color = { r = 0, g = 0.6, b = 0, a = 1 },
         durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
         durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
@@ -765,7 +765,7 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     ["dispel_curse"] = {
         desc = format(L["Debuff type: %s"], L["Curse"]),
-        text = _G.DEBUFF_SYMBOL_CURSE,
+        text = DEBUFF_SYMBOL_CURSE,
         color = { r = 0.6, g = 0, b = 1, a = 1 },
         durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
@@ -775,7 +775,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_disease"] = {
         desc = format(L["Debuff type: %s"], L["Disease"]),
-        text = _G.DEBUFF_SYMBOL_DISEASE,
+        text = DEBUFF_SYMBOL_DISEASE,
         color = { r = 0.6, g = 0.4, b = 0, a = 1 },
         durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
         durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
@@ -785,7 +785,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_magic"] = {
         desc = format(L["Debuff type: %s"], L["Magic"]),
-        text = _G.DEBUFF_SYMBOL_MAGIC,
+        text = DEBUFF_SYMBOL_MAGIC,
         color = { r = 0.2, g = 0.6, b = 1, a = 1 },
         durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
         durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
@@ -795,7 +795,7 @@ PlexusStatusAuras.defaultDB = {
     },
     ["dispel_poison"] = {
         desc = format(L["Debuff type: %s"], L["Poison"]),
-        text = _G.DEBUFF_SYMBOL_POISON,
+        text = DEBUFF_SYMBOL_POISON,
         color = { r = 0, g = 0.6, b = 0, a = 1 },
         durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
         durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
@@ -956,7 +956,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         ---------------------
         ["dispel_curse"] = {
             desc = format(L["Debuff type: %s"], L["Curse"]),
-            text = _G.DEBUFF_SYMBOL_CURSE,
+            text = DEBUFF_SYMBOL_CURSE,
             color = { r = 0.6, g = 0, b = 1, a = 1 },
             durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
             durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
@@ -966,7 +966,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         },
         ["dispel_disease"] = {
             desc = format(L["Debuff type: %s"], L["Disease"]),
-            text = _G.DEBUFF_SYMBOL_DISEASE,
+            text = DEBUFF_SYMBOL_DISEASE,
             color = { r = 0.6, g = 0.4, b = 0, a = 1 },
             durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
             durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
@@ -976,7 +976,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         },
         ["dispel_magic"] = {
             desc = format(L["Debuff type: %s"], L["Magic"]),
-            text = _G.DEBUFF_SYMBOL_MAGIC,
+            text = DEBUFF_SYMBOL_MAGIC,
             color = { r = 0.2, g = 0.6, b = 1, a = 1 },
             durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
             durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
@@ -986,7 +986,7 @@ if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         },
         ["dispel_poison"] = {
             desc = format(L["Debuff type: %s"], L["Poison"]),
-            text = _G.DEBUFF_SYMBOL_POISON,
+            text = DEBUFF_SYMBOL_POISON,
             color = { r = 0, g = 0.6, b = 0, a = 1 },
             durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
             durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },

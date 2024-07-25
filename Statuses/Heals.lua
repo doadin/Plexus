@@ -12,14 +12,14 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local format = _G.format
+local format = format
 
-local UnitGetIncomingHeals = _G.UnitGetIncomingHeals
-local UnitGUID = _G.UnitGUID
-local UnitHealth = _G.UnitHealth
-local UnitHealthMax = _G.UnitHealthMax
-local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
-local UnitIsVisible = _G.UnitIsVisible
+local UnitGetIncomingHeals = UnitGetIncomingHeals
+local UnitGUID = UnitGUID
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsVisible = UnitIsVisible
 
 local settings
 
@@ -81,7 +81,7 @@ function PlexusStatusHeals:OnStatusEnable(status)
         self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")
         self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
         if not Plexus:IsRetailWow() then
-            HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
+            HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             if HealComm then
                 local function HealComm_Heal_Update()
                     self:UpdateAllUnits()
@@ -107,7 +107,7 @@ function PlexusStatusHeals:OnStatusDisable(status)
         self:UnregisterEvent("UNIT_MAXHEALTH")
         self:UnregisterEvent("UNIT_HEAL_PREDICTION")
         if not Plexus:IsRetailWow() then
-            HealComm = _G.LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
+            HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             if HealComm then
                 HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
                 HealComm.UnregisterCallback(self, 'HealComm_HealUpdated')

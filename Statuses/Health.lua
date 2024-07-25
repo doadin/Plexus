@@ -12,15 +12,15 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local format = _G.format
+local format = format
 
-local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
-local UnitGUID = _G.UnitGUID
-local UnitHealth = _G.UnitHealth
-local UnitHealthMax = _G.UnitHealthMax
-local UnitIsConnected = _G.UnitIsConnected
-local UnitIsDeadOrGhost = _G.UnitIsDeadOrGhost
-local UnitIsFeignDeath = _G.UnitIsFeignDeath
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local UnitGUID = UnitGUID
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsFeignDeath = UnitIsFeignDeath
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
