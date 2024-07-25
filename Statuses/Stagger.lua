@@ -16,7 +16,7 @@ local format = format
 local wipe = wipe
 local UnitClass = UnitClass
 local UnitGUID = UnitGUID
-local UnitDebuff = UnitDebuff
+local UnitDebuff = C_UnitAuras and C_UnitAuras.GetDebuffDataByIndex or UnitDebuff
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 local PlexusStatus = Plexus:GetModule("PlexusStatus")
@@ -149,6 +149,7 @@ function PlexusStatusStagger:UpdateName(event, unitid)
     local _, class = UnitClass(unitid)
     if class == "MONK" then
         local guid = UnitGUID(unitid)
+        if not guid then return end
         if PlexusRoster:IsGUIDInGroup(guid) and not monks[guid] then
             monks[guid] = true
             self:UpdateUnit(event, unitid)
@@ -167,8 +168,11 @@ function PlexusStatusStagger:UpdateUnit(event, unitid)
     local guid = UnitGUID(unitid)
     if monks[guid] then
         for i = 1, 40 do
-            local name, icon, spellID, _
-            name, icon, _, _, _, _, _, _, _, spellID = UnitDebuff(unitid, i)
+            local name, icon, spellID, debuffData
+            debuffData = UnitDebuff(unitid, i)
+            name = debuffData and debuffData.name
+            icon = debuffData and debuffData.icon
+            spellID = debuffData and debuffData.spellId
 
             if not name then
                 break

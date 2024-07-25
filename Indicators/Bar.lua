@@ -56,7 +56,7 @@ PlexusFrame:RegisterIndicator("bar", L["Health Bar"],
         bar:SetPoint("TOPRIGHT")
 
         local bg = bar:CreateTexture(nil, "BACKGROUND")
-        bg:SetAllPoints(true)
+        bg:SetAllPoints(nil,true)
         bar.bg = bg
 
         bar:SetStatusBarTexture("Interface\\Addons\\Plexus\\gradient32x32")
