@@ -13,8 +13,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetSpellInfo = _G.GetSpellInfo
-local IsSpellInRange = _G.IsSpellInRange
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or _G.GetSpellInfo
+local IsSpellInRange = C_Spell and C_Spell.IsSpellInRange or _G.IsSpellInRange
 local UnitClass = _G.UnitClass
 local UnitInRange = _G.UnitInRange
 local UnitIsDead = _G.UnitIsDead
@@ -82,25 +82,36 @@ function PlexusStatusRange:OnStatusDisable()
     self.core:SendStatusLostAllUnits("alert_range")
 end
 
+local function GetSpellName(spellid)
+    local info = GetSpellInfo(spellid)
+    if Plexus:IsRetailWow() then
+        if info and info.name then
+            return info.name
+        end
+    else
+        return info
+    end
+end
+
 local resSpell
 do
     local _, class = UnitClass("player")
     if class == "DEATHKNIGHT" then
-        resSpell = GetSpellInfo(61999)  -- Raise Ally
+        resSpell = GetSpellName(61999)  -- Raise Ally
     elseif class == "DRUID" then
-        resSpell = GetSpellInfo(50769)  -- Revive
+        resSpell = GetSpellName(50769)  -- Revive
     elseif class == "MONK" then
-        resSpell = GetSpellInfo(115178) -- Resuscitate
+        resSpell = GetSpellName(115178) -- Resuscitate
     elseif class == "PALADIN" then
-        resSpell = GetSpellInfo(7328)   -- Redemption
+        resSpell = GetSpellName(7328)   -- Redemption
     elseif class == "PRIEST" then
-        resSpell = GetSpellInfo(2006)   -- Resurrection
+        resSpell = GetSpellName(2006)   -- Resurrection
     elseif class == "SHAMAN" then
-        resSpell = GetSpellInfo(2008)   -- Ancestral Spirit
+        resSpell = GetSpellName(2008)   -- Ancestral Spirit
     elseif class == "WARLOCK" then
-        resSpell = GetSpellInfo(20707)  -- Soulstone
+        resSpell = GetSpellName(20707)  -- Soulstone
     elseif class == "EVOKER" then
-        resSpell = GetSpellInfo(361227)  -- Return
+        resSpell = GetSpellName(361227)  -- Return
     end
 end
 
