@@ -11,7 +11,7 @@ local PlexusIndicatorsExtraBar = PlexusFrame:NewModule("PlexusIndicatorsExtraBar
 local function New(frame)
     local bar = CreateFrame("StatusBar", nil, frame)
     local bg = bar:CreateTexture(nil, "BACKGROUND")
-    bg:SetAllPoints(true)
+    bg:SetAllPoints()
     bar.bg = bg
     bar:SetStatusBarTexture("Interface\\Addons\\Plexus\\gradient32x32")
     bar:SetMinMaxValues(0,1)

@@ -154,9 +154,6 @@ local Layouts = {
         },
     },
 }
---@debug@
-PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
---@end-debug@
 
 --------------------------------------------------------------------------------
 
