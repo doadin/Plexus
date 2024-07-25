@@ -331,19 +331,17 @@ PlexusLayout.options = {
                 PlexusLayout:ReloadLayout()
             end,
         },
---@debug@
-        splitGroups = {
-            name = COMPACT_UNIT_FRAME_PROFILE_KEEPGROUPSTOGETHER, -- L["Keep Groups Together"]
-            desc = L["Layouts added by plugins might not support this option."], -- TODO
-            order = 10,
-            width = "double",
-            type = "toggle",
-            set = function(info, v) --luacheck: ignore 212
-                PlexusLayout.db.profile.splitGroups = v
-                PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
-            end,
-        },
---@end-debug@
+        --splitGroups = {
+        --    name = COMPACT_UNIT_FRAME_PROFILE_KEEPGROUPSTOGETHER, -- L["Keep Groups Together"]
+        --    desc = L["Layouts added by plugins might not support this option."], -- TODO
+        --    order = 10,
+        --    width = "double",
+        --    type = "toggle",
+        --    set = function(info, v) --luacheck: ignore 212
+        --        PlexusLayout.db.profile.splitGroups = v
+        --        PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
+        --    end,
+        --},
         layouts = {
             name = L["Layouts"],
             order = 18,
@@ -850,8 +848,8 @@ end
 function PlexusLayout:CreateFrames()
     --self:Debug("CreateFrames")
     -- create pet battle hider
-    local hider = CreateFrame("Frame", "PlexusPetBattleFrameHider", UIParent, "SecureHandlerStateTemplate")
-    hider:SetAllPoints(true)
+    local hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+    hider:SetAllPoints()
     RegisterStateDriver(hider, "visibility", "[petbattle] hide; show")
 
     -- create main frame to hold all our gui elements
@@ -864,7 +862,7 @@ function PlexusLayout:CreateFrames()
     f:SetScript("OnHide", PlexusLayout_OnMouseUp)
 
     -- create backdrop
-    f.backdrop = CreateFrame("Frame", "$parentBackdrop", f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
+    f.backdrop = CreateFrame("Frame", nil, f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
     f.backdrop:SetPoint("BOTTOMLEFT", -4, -4)
     f.backdrop:SetPoint("TOPRIGHT", 4, 4)
     f.backdrop:SetBackdrop({
@@ -876,7 +874,7 @@ function PlexusLayout:CreateFrames()
     f:SetFrameLevel(f.backdrop:GetFrameLevel() + 2)
 
     -- create drag handle
-    f.tab = CreateFrame("Frame", "$parentTab", f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
+    f.tab = CreateFrame("Frame", nil, f, BackdropTemplateMixin and "BackdropTemplate") --luacheck: ignore
     f.tab:SetWidth(48)
     f.tab:SetHeight(28)
     f.tab:EnableMouse(true)
