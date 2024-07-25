@@ -6,7 +6,7 @@
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
-local PLEXUS, Plexus = ...
+PLEXUS, Plexus = ...
 
 local format = format
 local strfind = strfind
