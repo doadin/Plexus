@@ -1724,7 +1724,8 @@ end
 
 function PlexusStatusAuras:UpdateAllUnitAuras()
     if not Plexus:IsWrathWow() then
-        for guid, unitid in PlexusRoster:IterateRoster() do
+        --guid, unitid
+        for _, unitid in PlexusRoster:IterateRoster() do
             self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
         end
     end
@@ -2501,7 +2502,7 @@ function PlexusStatusAuras:UpdateAuraScanList()
 end
 
 local unitAuras
-function PlexusStatusAuras:UpdateUnitAuras(event, unit, updatedAuras) --event, unit, updatedAuras
+function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit, updatedAuras
     if not unit then
         return
     end

@@ -18,14 +18,8 @@ local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitName = UnitName
-local UnitHasVehicleUI
-if Plexus:IsRetailWow() then
-    UnitHasVehicleUI = UnitHasVehicleUI
-end
-local UnitOnTaxi
-if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
-    UnitOnTaxi = UnitOnTaxi
-end
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitOnTaxi = UnitOnTaxi
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 

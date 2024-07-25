@@ -70,9 +70,7 @@ if NickTag then
     end
     Plexus:NickTagSetCache(Plexus.nick_tag_cache)
 end
-if not (IsAddOnLoaded("Grid")) then
-Grid = Plexus
-end
+
 if (IsAddOnLoaded("Grid")) then
 StaticPopupDialogs["GRID_ENABLED"] = { --luacheck: ignore 112
   text = "Grid and Plexus should never be enabled at the same time, unless you are copying settings! Do you want to copy Grid settings to Plexus?(Please Have Backups and Note: Restart is Required After Copy)",
