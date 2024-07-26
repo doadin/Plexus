@@ -120,7 +120,7 @@ local function GroupRangeCheck(_, unit)
     if UnitIsUnit(unit, "player") then
         return true
     elseif resSpell and UnitIsDead(unit) and not UnitIsDead("player") then
-        return IsSpellInRange(resSpell, unit) == 1
+        return IsSpellInRange(resSpell, unit)
     else
         local inRange, checkedRange = UnitInRange(unit)
         if checkedRange then
