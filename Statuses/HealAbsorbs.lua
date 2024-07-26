@@ -17,12 +17,13 @@ local format = format
 local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
 local UnitGUID = UnitGUID
 local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
+--local UnitHealthMax = UnitHealthMax
 local UnitIsVisible = UnitIsVisible
 
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
+--local PlexusStatusHealth = Plexus:GetModule("PlexusStatusHealth")
 
 local PlexusStatusAbsorbs = Plexus:NewStatusModule("PlexusStatusBadAbsorbs")
 PlexusStatusAbsorbs.menuName = L["Heal Absorbs"]
@@ -101,7 +102,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
         amount = UnitIsVisible(unit) and UnitGetTotalHealAbsorbs(unit) or 0
     end
     if amount > 0 then
-        local maxHealth = UnitHealthMax(unit)
+        local maxHealth = Plexus:CalcMaxHP(unit)
         if (amount / maxHealth) > settings.minimumValue then
             local text = amount
             if amount > 9999 then
@@ -116,7 +117,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
                 settings.color,
                 format(settings.text, text),
                 UnitHealth(unit) + amount,
-                UnitHealthMax(unit),
+                maxHealth,
                 settings.icon
             )
         end
