@@ -462,6 +462,144 @@ if Plexus:IsTBCWow() then
     }
 end
 
+if Plexus:IsCataWow() then
+    spellNameList = {
+        --Priest
+        ["Power Word: Fortitude"] = GetSpellName(1243),
+        --Mage
+        ["Arcane Brilliance"] = GetSpellName(1459),
+        ["Dalaran Brilliance"] = GetSpellName(61316),
+        --Warrior
+        ["Battle Shout"] = GetSpellName(6673),
+        --Paladin
+        ["Blessing of Kings"] = GetSpellName(20217),
+        ["Blessing of Might"] = GetSpellName(19740),
+        --Druid
+        ["Mark of the Wild"] = GetSpellName(1126),
+        --Death Knight
+        ["Horn of Winter"] = GetSpellName(57330),
+        --Hunter
+        ["Embrace of the Shale Spider"] = GetSpellName(90363),
+    }
+
+    spellIconList = {
+        --Priest
+        ["Power Word: Fortitude"] = GetSpellTexture(1243),
+        --Mage
+        ["Arcane Brilliance"] = GetSpellTexture(1459),
+        ["Dalaran Brilliance"] = GetSpellTexture(61316),
+        --Warrior
+        ["Battle Shout"] = GetSpellTexture(6673),
+        --Paladin
+        ["Blessing of Kings"] = GetSpellTexture(20217),
+        ["Blessing of Might"] = GetSpellTexture(19740),
+        --Druid
+        ["Mark of the Wild"] = GetSpellTexture(1126),
+        --Death Knight
+        ["Horn of Winter"] = GetSpellTexture(57330),
+        --Hunter
+        ["Embrace of the Shale Spider"] = GetSpellTexture(90363),
+    }
+
+    PlexusStatusGroupBuffs.defaultDB = {
+        debug = false,
+        EnableClassFilter = false,
+        --alert_groupbuffs = {
+        --	class = true,
+        --	enable = true,
+        --	priority = 40,
+        --	color = { r = 1, g = 1, b = 0, a = 1 },
+        --},
+        buffGroup_Fortitude = {
+            text = spellNameList["Power Word: Fortitude"],
+            desc = "Buff Group: "..spellNameList["Power Word: Fortitude"],
+            icon = spellIconList["Power Word: Fortitude"],
+            buffs = {
+                spellNameList["Power Word: Fortitude"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "PRIEST",
+        },
+        buffGroup_Spirit = {
+            text = spellNameList["Divine Spirit"],
+            desc = "Buff Group: "..spellNameList["Divine Spirit"],
+            icon = spellIconList["Divine Spirit"],
+            buffs = {
+                spellNameList["Divine Spirit"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "PRIEST",
+        },
+        buffGroup_Intellect = {
+            text = spellNameList["Arcane Intellect"],
+            desc = "Buff Group: "..spellNameList["Arcane Intellect"],
+            icon = spellIconList["Arcane Intellect"],
+            buffs = {
+                spellNameList["Arcane Brilliance"],
+                spellNameList["Dalaran Brilliance"],
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "MAGE",
+        },
+        buffGroup_Battle_Shout = {
+            text = spellNameList["Battle Shout"],
+            desc = "Buff Group: "..spellNameList["Battle Shout"],
+            icon = spellIconList["Battle Shout"],
+            buffs = {
+                spellNameList["Battle Shout"],
+                spellNameList["Horn of Winter"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "WARRIOR",
+        },
+        buffGroup_Wild = {
+            text = spellNameList["Mark of the Wild"],
+            desc = "Buff Group: "..spellNameList["Mark of the Wild"],
+            icon = spellIconList["Mark of the Wild"],
+            buffs = {
+                spellNameList["Mark of the Wild"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "DRUID",
+        },
+        buffGroup_HunterStats = {
+            text = "buffGroup_HunterStats",
+            desc = "Buff Group: ".."HunterStats",
+            icon = spellIconList["Embrace of the Shale Spider"],
+            buffs = {
+                spellNameList["Embrace of the Shale Spider"]
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "HUNTER",
+        },
+        buffGroup_Blessing = {
+            text = "Paladin Blessings",
+            desc = "Buff Group: Paladin Blessings",
+            icon = spellIconList["Blessing of Kings"],
+            buffs = {
+                spellNameList["Blessing of Kings"],
+                spellNameList["Blessing of Might"],
+            },
+            enable = true,
+            color = { r = 0, g = 0, b = 1, a = 1 },
+            priority = 99,
+            class = "PALADIN",
+        }
+    }
+end
+
 local extraOptionsForStatus = {
     --enable = false, -- you can't disable this
 }
