@@ -93,6 +93,9 @@ Indicators\Text.lua
 #@retail@
 Statuses\Absorbs.lua
 #@end-retail@
+#@version-cata@
+Statuses\Absorbs.lua
+#@end-version-cata@
 Statuses\Aggro.lua
 Statuses\AFK.lua
 #@retail@
