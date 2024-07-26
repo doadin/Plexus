@@ -96,6 +96,23 @@ PlexusStatusHealth.extraOptions = {
     },
 }
 
+if Plexus:IsRetailWow() then
+    PlexusStatusHealth.defaultDB.unit_health.velhariFix = true
+    PlexusStatusHealth.extraOptions.velhariFix = {
+        order = 102, width = "double",
+        name = L["HFC Tyrant Velhari Encounter maximum health Fix"],
+        desc = L["Adjust players maximum health according to Aura of Contempt debuff in HellFire Citadel Tyrant Velhari Encounter. This adjust affects statuses displayed in bar indicators."],
+        type = "toggle",
+        get = function()
+            return PlexusStatusHealth.db.profile.unit_health.velhariFix
+        end,
+        set = function(_, v)
+            PlexusStatusHealth.db.profile.unit_health.velhariFix = v
+            PlexusStatusHealth:UpdateAllUnits()
+        end,
+    }
+end
+
 local healthOptions = {
     enable = false, -- you can't disable this
     useClassColors = {
@@ -202,6 +219,10 @@ function PlexusStatusHealth:PostEnable()
     if Plexus:IsRetailWow() or Plexus:IsClassicWow() or Plexus:IsCataWow() then
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
     end
+    if Plexus:IsRetailWow() then
+        self:RegisterEvent("ENCOUNTER_START", "CheckEncounter")
+        self:RegisterEvent("ENCOUNTER_END", "CheckEncounter")
+    end
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "CLEU")
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
         self:RegisterEvent("UNIT_HEALTH_FREQUENT", "UpdateUnit")
@@ -224,6 +245,22 @@ end
 
 function PlexusStatusHealth:OnStatusDisable(status)
     self.core:SendStatusLostAllUnits(status)
+end
+
+local velhari_fix = false
+local velhari_aura
+function PlexusStatusHealth:CheckEncounter(event,encounterID)
+    self:Debug("PlexusStatusHealth CheckEncounter: ", encounterID)
+    if event == "ENCOUNTER_START" then
+        if encounterID == 1784 then
+            velhari_fix = true
+            velhari_aura = 179986 -- Hellfire Citadel Velhari Contempt
+        end
+    end
+    if event == "ENCOUNTER_END" then
+        velhari_fix = false
+        velhari_aura = nil
+    end
 end
 
 function PlexusStatusHealth:CLEU()
@@ -261,6 +298,25 @@ function PlexusStatusHealth:Plexus_UnitJoined(event, guid, unitid)
     end
 end
 
+function PlexusStatusHealth:CalcMaxHP(unitid)
+    self:Debug("PlexusStatusHealth CalcMaxHP: ", unitid)
+    local max = UnitHealthMax(unitid) or 100
+    if max == 0 then
+        -- fix for 4.3 division by zero
+        max = 100
+    end
+    if velhari_fix and velhari_aura then
+        for i=1,40 do
+            local auraData = C_UnitAuras.GetAuraDataByIndex("boss1", i)
+            if auraData and auraData.spellId == velhari_aura then
+                local mod = auraData and auraData.timeMod/100 or 1
+                max = floor( UnitHealthMax(unitid) * mod )
+            end
+        end
+    end
+    return max
+end
+
 function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
     self:Debug("UpdateUnit Event: ", event)
     if not unitid then
@@ -275,11 +331,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         return
     end
 
-    local cur, max = UnitHealth(unitid), UnitHealthMax(unitid)
-    if max == 0 then
-        -- fix for 4.3 division by zero
-        cur, max = 100, 100
-    end
+    local cur, max = UnitHealth(unitid), PlexusStatusHealth:CalcMaxHP(unitid)
 
     local healthSettings = self.db.profile.unit_health
     local deficitSettings = self.db.profile.unit_healthDeficit

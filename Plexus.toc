@@ -90,6 +90,7 @@ Indicators\HealingBar.lua
 Indicators\Icon.lua
 Indicators\Text.lua
 
+Statuses\Health.lua
 #@retail@
 Statuses\Absorbs.lua
 #@end-retail@
@@ -109,7 +110,6 @@ Statuses\GroupNumber.lua
 Statuses\HealAbsorbs.lua
 #@end-retail@
 Statuses\Heals.lua
-Statuses\Health.lua
 Statuses\HostileUnit.lua
 Statuses\Mana.lua
 Statuses\Mouseover.lua

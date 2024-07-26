@@ -17,13 +17,14 @@ local format = format
 local UnitGetIncomingHeals = UnitGetIncomingHeals
 local UnitGUID = UnitGUID
 local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
+--local UnitHealthMax = UnitHealthMax
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitIsVisible = UnitIsVisible
 
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
+local PlexusStatusHealth = Plexus:GetModule("PlexusStatusHealth")
 local PlexusStatusHeals = Plexus:NewStatusModule("PlexusStatusHeals")
 
 PlexusStatusHeals.menuName = L["Heals"]
@@ -149,7 +150,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         end
         --if incoming > 0 then
         --    if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-        --        self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / UnitHealthMax(unit) * 100))
+        --        self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / PlexusStatusHealth:CalcMaxHP(unit) * 100))
         --    end
         --end
         if settings.ignore_self then
@@ -161,7 +162,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             end
         end
         if incoming > 0 then
-            local maxHealth = UnitHealthMax(unit)
+            local maxHealth = PlexusStatusHealth:CalcMaxHP(unit)
             if (incoming / maxHealth) > settings.minimumValue then
                 return self:SendIncomingHealsStatus(guid, incoming, UnitHealth(unit) + incoming, maxHealth)
             end
