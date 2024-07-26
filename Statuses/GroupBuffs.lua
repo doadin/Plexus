@@ -41,6 +41,8 @@ spellNameList = {
     ["Battle Shout"] = GetSpellName(6673),
 
     ["Blessing of the Bronze"] = GetSpellName(381748),
+
+    ["Skyfury"] = GetSpellName(462854),
 }
 
 spellIconList = {
@@ -53,6 +55,8 @@ spellIconList = {
     ["Battle Shout"] = GetSpellTexture(6673),
 
     ["Blessing of the Bronze"] = GetSpellTexture(381748),
+
+    ["Skyfury"] = GetSpellTexture(462854),
 }
 
 PlexusStatusGroupBuffs.defaultDB = {
@@ -127,6 +131,19 @@ PlexusStatusGroupBuffs.defaultDB = {
         color = { r = 0, g = 0, b = 1, a = 1 },
         priority = 99,
         class = "EVOKER",
+        hidden = true,
+    },
+    buffGroup_Skyfury = {
+        text = spellNameList["Skyfury"],
+        desc = "Buff Group: "..spellNameList["Skyfury"],
+        icon = spellIconList["Skyfury"],
+        buffs = {
+            spellNameList["Skyfury"],
+        },
+        enable = true,
+        color = { r = 0, g = 0, b = 1, a = 1 },
+        priority = 99,
+        class = "SHAMAN",
         hidden = true,
     }
 }
