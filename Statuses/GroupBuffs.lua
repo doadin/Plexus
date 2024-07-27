@@ -465,7 +465,7 @@ end
 if Plexus:IsCataWow() then
     spellNameList = {
         --Priest
-        ["Power Word: Fortitude"] = GetSpellName(1243),
+        ["Power Word: Fortitude"] = GetSpellName(21562),
         --Mage
         ["Arcane Brilliance"] = GetSpellName(1459),
         ["Dalaran Brilliance"] = GetSpellName(61316),
@@ -484,7 +484,7 @@ if Plexus:IsCataWow() then
 
     spellIconList = {
         --Priest
-        ["Power Word: Fortitude"] = GetSpellTexture(1243),
+        ["Power Word: Fortitude"] = GetSpellTexture(21562),
         --Mage
         ["Arcane Brilliance"] = GetSpellTexture(1459),
         ["Dalaran Brilliance"] = GetSpellTexture(61316),
@@ -522,22 +522,10 @@ if Plexus:IsCataWow() then
             priority = 99,
             class = "PRIEST",
         },
-        buffGroup_Spirit = {
-            text = spellNameList["Divine Spirit"],
-            desc = "Buff Group: "..spellNameList["Divine Spirit"],
-            icon = spellIconList["Divine Spirit"],
-            buffs = {
-                spellNameList["Divine Spirit"]
-            },
-            enable = true,
-            color = { r = 0, g = 0, b = 1, a = 1 },
-            priority = 99,
-            class = "PRIEST",
-        },
         buffGroup_Intellect = {
-            text = spellNameList["Arcane Intellect"],
-            desc = "Buff Group: "..spellNameList["Arcane Intellect"],
-            icon = spellIconList["Arcane Intellect"],
+            text = spellNameList["Arcane Brilliance"],
+            desc = "Buff Group: "..spellNameList["Arcane Brilliance"],
+            icon = spellIconList["Arcane Brilliance"],
             buffs = {
                 spellNameList["Arcane Brilliance"],
                 spellNameList["Dalaran Brilliance"],
