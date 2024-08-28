@@ -77,8 +77,11 @@ spell_names = {
     ["Beacon of Light"] = GetSpellName(53563),
     ["Beacon of Virtue"] = GetSpellName(200025),
     ["Bestow Faith"] = GetSpellName(223306),
+    ["Dawnlight"] = GetSpellName(431382),
+    ["Eternal Flame"] = GetSpellName(156322),
     ["Forbearance"] = GetSpellName(25771),
     ["Sacred Dawn"] = GetSpellName(243174),
+    ["Sun Sear"] = GetSpellName(431415),
     ["Tyr's Deliverance"] = GetSpellName(200652),
     ["Glimmer of Light"] = GetSpellName(287286),
 -- Priest
@@ -585,11 +588,33 @@ PlexusStatusAuras.defaultDB = {
         durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
     },
-    [PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
-        -- 287286
-        desc = format(L["Buff: %s"], spell_names["Glimmer of Light"]),
-        buff = spell_names["Glimmer of Light"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Glimmer of Light"]),
+    [PlexusStatusAuras:StatusForSpell("Dawnlight", true)] = {
+        -- 431382
+        desc = format(L["Buff: %s"], spell_names["Dawnlight"]),
+        buff = spell_names["Dawnlight"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Dawnlight"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+        durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+        mine = true,
+    },
+    --[PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
+    --    -- 287286
+    --    desc = format(L["Buff: %s"], spell_names["Glimmer of Light"]),
+    --    buff = spell_names["Glimmer of Light"],
+    --    text = PlexusStatusAuras:TextForSpell(spell_names["Glimmer of Light"]),
+    --    color = { r = 0, g = 252, b = 0, a = 1 },
+    --    durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+    --    durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+    --    durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+    --    mine = true,
+    --},
+    [PlexusStatusAuras:StatusForSpell("Eternal Flame", true)] = {
+        -- 156322
+        desc = format(L["Buff: %s"], spell_names["Eternal Flame"]),
+        buff = spell_names["Eternal Flame"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Eternal Flame"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
         durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
@@ -605,6 +630,17 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 0.95, g = 1, b = 0.7, a = 1 },
         durationColorMiddle = { r = 0.66, g = 0.7, b = 0.49, a = 1 },
         durationColorHigh = { r = 0.43, g = 0.45, b = 0.32, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Sun Sear", true)] = {
+        -- 431382
+        desc = format(L["Buff: %s"], spell_names["Sun Sear"]),
+        buff = spell_names["Sun Sear"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Sun Sear"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+        durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
