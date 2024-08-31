@@ -77,8 +77,11 @@ spell_names = {
     ["Beacon of Light"] = GetSpellName(53563),
     ["Beacon of Virtue"] = GetSpellName(200025),
     ["Bestow Faith"] = GetSpellName(223306),
+    ["Dawnlight"] = GetSpellName(431382),
+    ["Eternal Flame"] = GetSpellName(156322),
     ["Forbearance"] = GetSpellName(25771),
     ["Sacred Dawn"] = GetSpellName(243174),
+    ["Sun Sear"] = GetSpellName(431415),
     ["Tyr's Deliverance"] = GetSpellName(200652),
     ["Glimmer of Light"] = GetSpellName(287286),
 -- Priest
@@ -89,6 +92,8 @@ spell_names = {
     ["Power Word: Fortitude"] = GetSpellName(21562),
     ["Power Word: Shield"] = GetSpellName(17),
     ["Prayer of Mending"] = GetSpellName(33076),
+    ["Premonition of Solace"] = GetSpellName(428934),
+    ["Premonition of Solace Absorb"] = GetSpellName(443526),
     ["Renew"] = GetSpellName(139),
     ["Weakened Soul"] = GetSpellName(6788),
 -- Shaman
@@ -585,11 +590,33 @@ PlexusStatusAuras.defaultDB = {
         durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
     },
-    [PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
-        -- 287286
-        desc = format(L["Buff: %s"], spell_names["Glimmer of Light"]),
-        buff = spell_names["Glimmer of Light"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Glimmer of Light"]),
+    [PlexusStatusAuras:StatusForSpell("Dawnlight", true)] = {
+        -- 431382
+        desc = format(L["Buff: %s"], spell_names["Dawnlight"]),
+        buff = spell_names["Dawnlight"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Dawnlight"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+        durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+        mine = true,
+    },
+    --[PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
+    --    -- 287286
+    --    desc = format(L["Buff: %s"], spell_names["Glimmer of Light"]),
+    --    buff = spell_names["Glimmer of Light"],
+    --    text = PlexusStatusAuras:TextForSpell(spell_names["Glimmer of Light"]),
+    --    color = { r = 0, g = 252, b = 0, a = 1 },
+    --    durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+    --    durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+    --    durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+    --    mine = true,
+    --},
+    [PlexusStatusAuras:StatusForSpell("Eternal Flame", true)] = {
+        -- 156322
+        desc = format(L["Buff: %s"], spell_names["Eternal Flame"]),
+        buff = spell_names["Eternal Flame"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Eternal Flame"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
         durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
@@ -605,6 +632,17 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 0.95, g = 1, b = 0.7, a = 1 },
         durationColorMiddle = { r = 0.66, g = 0.7, b = 0.49, a = 1 },
         durationColorHigh = { r = 0.43, g = 0.45, b = 0.32, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Sun Sear", true)] = {
+        -- 431382
+        desc = format(L["Buff: %s"], spell_names["Sun Sear"]),
+        buff = spell_names["Sun Sear"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Sun Sear"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+        durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
@@ -695,6 +733,22 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Prayer of Mending"],
         desc = format(L["Buff: %s"], spell_names["Prayer of Mending"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Prayer of Mending"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Premonition of Solace", true)] = {
+        -- 428934
+        buff = spell_names["Premonition of Solace"],
+        desc = format(L["Buff: %s"], spell_names["Premonition of Solace"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Premonition of Solace"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Premonition of Solace Absorb", true)] = {
+        -- 443526
+        buff = spell_names["Premonition of Solace Absorb"],
+        desc = format(L["Buff: %s"], spell_names["Premonition of Solace Absorb"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Premonition of Solace Absorb"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
     },
@@ -2588,6 +2642,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
             if v.spellId == 376788 then
                 v.name = "Echo: Dream Breath"
             end
+            if v.spellId == 443526 then
+                v.name = "Premonition of Solace Absorb"
+            end
             if buff_names[v.name] or player_buff_names[v.name] or debuff_names[v.name] or player_debuff_names[v.name] or debuff_types[v.dispelName] then
                 unitAuras[guid][v.auraInstanceID] = v
             end
@@ -2601,6 +2658,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
             end
             if aura.spellId == 376788 then
                 aura.name = "Echo: Dream Breath"
+            end
+            if aura.spellId == 443526 then
+                aura.name = "Premonition of Solace Absorb"
             end
             if buff_names[aura.name] or player_buff_names[aura.name] or debuff_names[aura.name] or player_debuff_names[aura.name] or debuff_types[aura.dispelName] then
                 if not unitAuras[guid] then
@@ -2619,6 +2679,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
             end
             if auraTable and auraTable.spellId == 376788 then
                 auraTable.name = "Echo: Dream Breath"
+            end
+            if auraTable and auraTable.spellId == 443526 then
+                auraTable.name = "Premonition of Solace Absorb"
             end
             if not auraTable then
                 local old = unitAuras[guid] and unitAuras[guid][auraInstanceID]

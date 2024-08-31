@@ -1,5 +1,5 @@
-## Interface: 110000
-## Interface-Retail: 110000
+## Interface: 110002
+## Interface-Retail: 110002
 ## Interface-Classic: 11503
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30403
@@ -90,9 +90,13 @@ Indicators\HealingBar.lua
 Indicators\Icon.lua
 Indicators\Text.lua
 
+Statuses\Health.lua
 #@retail@
 Statuses\Absorbs.lua
 #@end-retail@
+#@version-cata@
+Statuses\Absorbs.lua
+#@end-version-cata@
 Statuses\Aggro.lua
 Statuses\AFK.lua
 #@retail@
@@ -106,7 +110,6 @@ Statuses\GroupNumber.lua
 Statuses\HealAbsorbs.lua
 #@end-retail@
 Statuses\Heals.lua
-Statuses\Health.lua
 Statuses\HostileUnit.lua
 Statuses\Mana.lua
 Statuses\Mouseover.lua

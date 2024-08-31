@@ -17,12 +17,13 @@ local format = format
 local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
 local UnitGUID = UnitGUID
 local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
+--local UnitHealthMax = UnitHealthMax
 local UnitIsVisible = UnitIsVisible
 
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
+--local PlexusStatusHealth = Plexus:GetModule("PlexusStatusHealth")
 
 local PlexusStatusAbsorbs = Plexus:NewStatusModule("PlexusStatusAbsorbs")
 PlexusStatusAbsorbs.menuName = L["Absorbs"]
@@ -62,8 +63,11 @@ function PlexusStatusAbsorbs:OnStatusEnable(status)
     if status == "alert_absorbs" then
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
         self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")
-        if not Plexus:IsClassicWow() then
+        if Plexus:IsRetailWow() then
             self:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED", "UpdateUnit")
+        end
+        if Plexus:IsCataWow() then
+            self:RegisterEvent("UNIT_AURA", "UpdateUnit")
         end
         self:UpdateAllUnits()
     end
@@ -73,8 +77,11 @@ function PlexusStatusAbsorbs:OnStatusDisable(status)
     if status == "alert_absorbs" then
         self:UnregisterEvent("UNIT_HEALTH")
         self:UnregisterEvent("UNIT_MAXHEALTH")
-        if not Plexus:IsClassicWow() then
+        if Plexus:IsRetailWow() then
             self:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED")
+        end
+        if Plexus:IsCataWow() then
+            self:UnregisterEvent("UNIT_AURA")
         end
         self.core:SendStatusLostAllUnits("alert_absorbs")
     end
@@ -90,6 +97,17 @@ function PlexusStatusAbsorbs:UpdateAllUnits()
     end
 end
 
+local classicCataAbsorbs = {
+    ["Power Word: Shield"] = 1, --(Priest)
+    ["Divine Aegis"] = 1, --(Priest)
+    ["Mana Shield"] = 1, --(Mage)
+    ["Mage Ward"] = 1, --(Mage)
+    ["Ice Barrier"] = 1, --(Mage)
+    ["Illuminated Healing"] = 1, --(Paladin)
+    ["Sacred Shield"] = 1, --(Paladin)
+    ["Guarded by the Light"] = 1, --(Paladin)
+}
+
 function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     self:Debug("UpdateUnit Event", event)
     if not unit then return end
@@ -97,11 +115,21 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     local guid = UnitGUID(unit)
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
     local amount = 0
-    if not Plexus:IsClassicWow() then
+    if Plexus:IsRetailWow() then
         amount = UnitIsVisible(unit) and UnitGetTotalAbsorbs(unit) or 0
     end
+    if Plexus:IsCataWow() then
+        for i=1,40 do
+            local aura = C_UnitAuras.GetAuraDataByIndex(unit, i , "HELPFUL")
+            if aura and aura.name and classicCataAbsorbs[aura.name] then
+                if aura.points then
+                    amount = amount + aura.points[classicCataAbsorbs[aura.name]]
+                end
+            end
+        end
+    end
     if amount > 0 then
-        local maxHealth = UnitHealthMax(unit)
+        local maxHealth = Plexus:CalcMaxHP(unit)
         if (amount / maxHealth) > settings.minimumValue then
             local text = amount
             if amount > 9999 then
@@ -116,7 +144,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
                 settings.color,
                 format(settings.text, text),
                 UnitHealth(unit) + amount,
-                UnitHealthMax(unit),
+                maxHealth,
                 settings.icon
             )
         end

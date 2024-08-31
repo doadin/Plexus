@@ -191,7 +191,7 @@ function PlexusStatusStagger:UpdateUnit(_, unitid, updatedAuras) --event, unitid
             --true)
             ForEachAura(unitid, "HARMFUL", nil,
                 function(aura)
-                    if aura and aura.auraInstanceID and spellID_severity[aura.auraInstanceID.spellId] then
+                    if aura and aura.auraInstanceID and spellID_severity[aura.spellId] then
                         unitauraInfo[aura.auraInstanceID] = aura
                     end
                 end,

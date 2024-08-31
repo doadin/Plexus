@@ -120,7 +120,11 @@ local function GroupRangeCheck(_, unit)
     if UnitIsUnit(unit, "player") then
         return true
     elseif resSpell and UnitIsDead(unit) and not UnitIsDead("player") then
-        return IsSpellInRange(resSpell, unit) == 1
+        if Plexus:IsRetailWow() then
+            return IsSpellInRange(resSpell, unit)
+        else
+            return IsSpellInRange(resSpell, unit) == 1
+        end
     else
         local inRange, checkedRange = UnitInRange(unit)
         if checkedRange then
