@@ -1530,21 +1530,21 @@ function PlexusFrame:UpdateFrameUnits()
                     durationAnchor =
                     {
                         point = "CENTER",
-                        relativeTo = frame.indicators.bar, --frame.Duration
+                        relativeTo = frame.indicators.PA, --frame.Duration
                         relativePoint = "CENTER",
                         offsetX = settings.PrivateAuraOffsetX,
                         offsetY = settings.PrivateAuraOffsetY,
                     };
                     unitToken = unitid,
                     auraIndex = 1, --frame.auraIndex
-                    parent = frame.indicators.bar,
+                    parent = frame.indicators.PA,
                     showCountdownFrame = settings.enablePrivateAuraCountdownFrame,
                     showCountdownNumbers = settings.enablePrivateAuraCountdownNumbers,
                     iconInfo =
                     {
                         iconAnchor = {
                             point = "CENTER",
-                            relativeTo = frame.indicators.bar,
+                            relativeTo = frame.indicators.PA,
                             relativePoint = "CENTER",
                             offsetX = settings.PrivateAuraOffsetX,
                             offsetY = settings.PrivateAuraOffsetY,
