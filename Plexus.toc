@@ -88,7 +88,6 @@ Indicators\Corner.lua
 Indicators\ExtraBar.lua
 Indicators\HealingBar.lua
 Indicators\Icon.lua
-Indicators\PrivateAura.lua
 Indicators\Text.lua
 
 Statuses\Health.lua
