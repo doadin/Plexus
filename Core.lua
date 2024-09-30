@@ -719,7 +719,7 @@ function Plexus:SetupOptions()
         end
     end)
 
-    if Plexus:IsRetailWow() then
+    if SettingsPanel then
         SettingsPanel:HookScript("OnShow", function()
             Dialog:Close(PLEXUS)
         end)
