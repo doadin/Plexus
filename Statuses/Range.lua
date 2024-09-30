@@ -13,8 +13,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
-local IsSpellInRange = C_Spell and C_Spell.IsSpellInRange or IsSpellInRange
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo or GetSpellInfo
+local IsSpellInRange = C_Spell and C_Spell.IsSpellInRange and C_Spell.IsSpellInRange or IsSpellInRange
 local UnitClass = UnitClass
 local UnitInRange = UnitInRange
 local UnitIsDead = UnitIsDead
@@ -83,14 +83,8 @@ function PlexusStatusRange:OnStatusDisable()
 end
 
 local function GetSpellName(spellid)
-    local info = GetSpellInfo(spellid)
-    if Plexus:IsRetailWow() then
-        if info and info.name then
-            return info.name
-        end
-    else
-        return info
-    end
+    local info = C_Spell.GetSpellName and C_Spell.GetSpellName(spellid) or GetSpellInfo(spellid)
+    return info
 end
 
 local resSpell
