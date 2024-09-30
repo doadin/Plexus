@@ -780,7 +780,7 @@ function Plexus:ToggleOptions()
             Dialog:Open(PLEXUS)
         end
     else
-        if Plexus:IsRetailWow() then
+        if Settings and Settings.OpenToCategory then
             Settings.OpenToCategory(self.optionsPanels[2])
         else
             InterfaceOptionsFrame_OpenToCategory(self.optionsPanels[2]) -- default to Layout
