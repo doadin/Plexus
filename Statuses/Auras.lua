@@ -15,7 +15,7 @@ local L = Plexus.L
 local strutf8sub = string.utf8sub --luacheck: ignore 143
 local format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
     = format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
+local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo or GetSpellInfo
 local IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
     = IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
 
@@ -33,14 +33,8 @@ local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAur
 local ForEachAura = AuraUtil and AuraUtil.ForEachAura
 
 local function GetSpellName(spellid)
-    local info = GetSpellInfo(spellid)
-    if Plexus:IsRetailWow() then
-        if info and info.name then
-            return info.name
-        end
-    else
-        return info
-    end
+    local info = C_Spell.GetSpellName and C_Spell.GetSpellName(spellid) or GetSpellInfo(spellid)
+    return info
 end
 
 if Plexus:IsRetailWow() then
