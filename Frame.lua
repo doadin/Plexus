@@ -143,7 +143,15 @@ function PlexusFrame:InitializeFrame(frame)
     frame:SetHighlightTexture("")
 
     if Clique then
-        local direction = Clique.db.char.downclick and "AnyDown" or "AnyUp"
+        local direction
+        if Clique.db and Clique.db.char and Clique.db.char.downclick then
+            direction = Clique.db.char.downclick and "AnyDown"
+        elseif Clique.db and Clique.db.char and not Clique.db.char.downclick then
+            direction = "AnyUp"
+        else
+            direction = "AnyUp"
+        end
+        if not direction then direction = "AnyUp" end
         frame:RegisterForClicks(direction)
     else
         local direction = PlexusFrame.db.profile.clickUPDOWN and PlexusFrame.db.profile.clickUPDOWN or "AnyUp"
