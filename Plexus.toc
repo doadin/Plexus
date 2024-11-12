@@ -59,6 +59,9 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@version-cata@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-version-cata@
+#@retail@
+Libs\LibDispel\LibDispel.lua
+#@end-retail@
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua
