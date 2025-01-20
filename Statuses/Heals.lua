@@ -40,6 +40,7 @@ PlexusStatusHeals.defaultDB = {
         text = "+%s",
         icon = nil,
         ignore_self = false,
+        ignore_heal_comm = true,
         minimumValue = 0.1,
     },
 }
@@ -56,6 +57,19 @@ local healsOptions = {
             PlexusStatusHeals.db.profile.alert_heals.ignore_self = v
             PlexusStatusHeals:UpdateAllUnits()
         end,
+    },
+    ignoreHealComm = {
+        type = "toggle", width = "double",
+        name = L["Ignore LibHealComm"],
+        desc = L["Ignore LibHealComm and Use Game API."],
+        get = function()
+            return PlexusStatusHeals.db.profile.alert_heals.ignore_heal_comm
+        end,
+        set = function(_, v)
+            PlexusStatusHeals.db.profile.alert_heals.ignore_heal_comm = v
+            PlexusStatusHeals:UpdateAllUnits()
+        end,
+        hidden = Plexus:IsRetailWow(),
     },
     minimumValue = {
         width = "double",
@@ -141,10 +155,10 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
         local incoming = 0
-        if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) then
+        if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
             incoming = UnitGetIncomingHeals(unit) or 0
         end
-        if HealComm and (not Plexus:IsRetailWow()) then
+        if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
             local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1)
             incoming = (incoming + myIncomingHeal) or 0
         end
@@ -154,10 +168,10 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         --    end
         --end
         if settings.ignore_self then
-            if HealComm and (not Plexus:IsRetailWow()) then
+            if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
                 incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
             end
-            if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) then
+            if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
                 incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
             end
         end
