@@ -37,6 +37,15 @@ local function GetSpellName(spellid)
     return info
 end
 
+local LibDispel
+local BleedSupported
+if Plexus:IsRetailWow() then
+    LibDispel = LibStub("LibDispel-1.0", true)
+    if LibDispel and LibDispel.BleedList then
+        BleedSupported = true
+    end
+end
+
 if Plexus:IsRetailWow() then
 spell_names = {
 -- All
@@ -162,6 +171,7 @@ local debuff_types = {
     ["Disease"] = "dispel_disease",
     ["Magic"] = "dispel_magic",
     ["Poison"] = "dispel_poison",
+    ["Bleed"] = "dispel_bleed",
 }
 
 function PlexusStatusAuras:StatusForSpell(spell, isBuff) --luacheck: ignore 212
@@ -265,6 +275,16 @@ PlexusStatusAuras.defaultDB = {
         desc = format(L["Debuff type: %s"], L["Poison"]),
         text = DEBUFF_SYMBOL_POISON,
         color = { r = 0, g = 0.6, b = 0, a = 1 },
+        durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
+        durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
+        durationColorHigh = { r = 0, g = 0.6, b = 0, a = 1 },
+        dispellable = true,
+        order = 25,
+    },
+    ["dispel_bleed"] = {
+        desc = format(L["Debuff type: %s"], L["Bleed"]),
+        text = "Bl",
+        color = { r = 1, g = 0, b = 0, a = 1 },
         durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
         durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
         durationColorHigh = { r = 0, g = 0.6, b = 0, a = 1 },
@@ -1850,8 +1870,9 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
             --	374251	Cauterizing Flame	Devastation, Preservation		Curse, Disease, Poison
             PlayerCanDispel.Curse   = IsPlayerSpell(374251)
             PlayerCanDispel.Disease = IsPlayerSpell(374251)
-            PlayerCanDispel.Magic   = IsPlayerSpell(360823)
+            PlayerCanDispel.Magic   = IsPlayerSpell(360823) or IsPlayerSpell(378438)
             PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
+            PlayerCanDispel.Bleed   = IsPlayerSpell(374251)
         end
     end
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
@@ -2608,6 +2629,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
         end
         if unitAuras[guid] then
             for _, info in pairs(unitAuras[guid]) do
+                if BleedSupported and LibDispel.BleedList[info.spellId] then
+                    info.dispelName = "Bleed"
+                end
                 if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
                     PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,info.name)
                 end
@@ -2630,6 +2654,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
             if not unitAuras[guid] then
                 unitAuras[guid] = {}
             end
+            if BleedSupported and LibDispel.BleedList[v.spellId] then
+                v.dispelName = "Bleed"
+            end
             if v.spellId == 367364 then
                 v.name = "Echo: Reversion"
             end
@@ -2647,6 +2674,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
 
     if updatedAuras and updatedAuras.addedAuras then
         for _, aura in pairs(updatedAuras.addedAuras) do
+            if BleedSupported and LibDispel.BleedList[aura.spellId] then
+                aura.dispelName = "Bleed"
+            end
             if aura.spellId == 367364 then
                 aura.name = "Echo: Reversion"
             end
@@ -2668,6 +2698,9 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
     if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
             local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+            if auraTable and BleedSupported and LibDispel.BleedList[auraTable.spellId] then
+                auraTable.dispelName = "Bleed"
+            end
             if auraTable and auraTable.spellId == 367364 then
                 auraTable.name = "Echo: Reversion"
             end

@@ -141,10 +141,10 @@ function PlexusStatusResurrect:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
 
     if not Plexus:IsClassicWow() then
-      self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-      self:RegisterEvent("UNIT_SPELLCAST_STOP")
-      self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-      self:RegisterEvent("UNIT_SPELLCAST_START")
+      --self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+      --self:RegisterEvent("UNIT_SPELLCAST_STOP")
+      --self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+      --self:RegisterEvent("UNIT_SPELLCAST_START")
       --self:RegisterEvent("UNIT_AURA", "HasRessPending")
       self:RegisterEvent("INCOMING_RESURRECT_CHANGED")
     end
@@ -160,10 +160,10 @@ function PlexusStatusResurrect:OnStatusDisable(status)
     self:Debug("OnStatusDisable", status)
 
     if not Plexus:IsClassicWow() then
-        self:UnRegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        self:UnRegisterEvent("UNIT_SPELLCAST_STOP")
-        self:UnRegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-        self:UnRegisterEvent("UNIT_SPELLCAST_START")
+        --self:UnRegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        --self:UnRegisterEvent("UNIT_SPELLCAST_STOP")
+        --self:UnRegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+        --self:UnRegisterEvent("UNIT_SPELLCAST_START")
         --self:UnRegisterEvent("UNIT_AURA", "HasRessPending")
         self:UnRegisterEvent("INCOMING_RESURRECT_CHANGED")
     end
