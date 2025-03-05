@@ -139,8 +139,8 @@ function PlexusFrame:InitializeFrame(frame)
         frame[k] = v
     end
 
-    frame:SetNormalTexture("")
-    frame:SetHighlightTexture("")
+    frame:ClearNormalTexture()
+    frame:ClearHighlightTexture()
 
     if Clique then
         local direction
