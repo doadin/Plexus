@@ -96,7 +96,7 @@ spell_names = {
     ["Power Word: Shield"] = GetSpellName(17),
     ["Prayer of Mending"] = GetSpellName(33076),
     ["Premonition of Solace"] = GetSpellName(428934),
-    ["Premonition of Solace Absorb"] = GetSpellName(443526),
+    ["Premonition of Solace Absorb"] = "Premonition of Solace Absorb",
     ["Renew"] = GetSpellName(139),
     ["Weakened Soul"] = GetSpellName(6788),
 -- Shaman
