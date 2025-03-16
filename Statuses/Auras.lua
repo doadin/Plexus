@@ -50,6 +50,7 @@ if Plexus:IsRetailWow() then
 spell_names = {
 -- All
     ["Ghost"] = GetSpellName(8326),
+    ["Insurance!"] = GetSpellName(1215503),
 -- Druid
     ["Cenarion Ward"] = GetSpellName(102351),
     ["Lifebloom"] = GetSpellName(33763),
@@ -302,7 +303,22 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Ghost"]),
         color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
     },
-
+    [PlexusStatusAuras:StatusForSpell("Insurance!")] = {
+        -- 1215503
+        desc = format(L["Buff: %s"], spell_names["Insurance!"]),
+        buff = spell_names["Insurance!"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Insurance!"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
+        durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
+        countColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
+        countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
+        countLow = 1,
+        countHigh = 2,
+        mine = true,
+    },
     ---------------------
     -- Druid
     ---------------------
