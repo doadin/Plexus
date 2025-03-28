@@ -3,6 +3,7 @@
     Compact party and raid unit frames.
     Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
     Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    Copyright (c) 2018-2025 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
     PlexusLocale-frFR.lua
