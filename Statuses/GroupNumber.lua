@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
     Plexus
     Compact party and raid unit frames.
-    Copyright (c) 2018-2021 Doadin <doadinaddons@gmail.com>
+    Copyright (c) 2018-2025 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
     GroupNumber.lua
