@@ -92,6 +92,7 @@ spell_names = {
 -- Priest
     ["Atonement"] = GetSpellName(214206),
     ["Clarity of Will"] = GetSpellName(152118),
+    ["Divine Aegis"] = GetSpellName(47753),
     ["Guardian Spirit"] = GetSpellName(47788),
     ["Light of T'uure"] = GetSpellName(208065),
     ["Power Word: Fortitude"] = GetSpellName(21562),
@@ -718,6 +719,14 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
         durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
         durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+    },
+    [PlexusStatusAuras:StatusForSpell("Divine Aegis", true)] = {
+        -- 47753
+        buff = spell_names["Divine Aegis"],
+        desc = format(L["Buff: %s"], spell_names["Divine Aegis"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Divine Aegis"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
         -- 47788
