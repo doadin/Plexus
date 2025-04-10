@@ -106,6 +106,9 @@ Statuses\AFK.lua
 Statuses\AltPower.lua
 #@end-retail@
 Statuses\Auras.lua
+#@retail@
+Statuses\Factions.lua
+#@end-retail@
 Statuses\Group.lua
 Statuses\GroupBuffs.lua
 Statuses\GroupNumber.lua
