@@ -90,7 +90,7 @@ spell_names = {
     ["Tyr's Deliverance"] = GetSpellName(200652),
     ["Glimmer of Light"] = GetSpellName(287286),
 -- Priest
-    ["Atonement"] = GetSpellName(214206),
+    ["Atonement"] = GetSpellName(194384),
     ["Clarity of Will"] = GetSpellName(152118),
     ["Divine Aegis"] = GetSpellName(47753),
     ["Guardian Spirit"] = GetSpellName(47788),
@@ -703,7 +703,7 @@ PlexusStatusAuras.defaultDB = {
     -- Priest
     ---------------------
     [PlexusStatusAuras:StatusForSpell("Atonement", true)] = {
-        -- 214206
+        -- 194384
         buff = spell_names["Atonement"],
         desc = format(L["Buff: %s"], spell_names["Atonement"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Atonement"]),
