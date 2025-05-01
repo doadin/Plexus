@@ -239,6 +239,7 @@ PlexusLayout.defaultDB = {
 
     lock = false,
     horizontal = false,
+    showPetsFirst = false,
     showOffline = false,
     showWrongZone = "MYTHIC",
 
@@ -329,6 +330,18 @@ PlexusLayout.options = {
             type = "toggle",
             set = function(info, v) --luacheck: ignore 212
                 PlexusLayout.db.profile.horizontal = v
+                PlexusLayout:ReloadLayout()
+            end,
+        },
+        showPetsFirst = {
+            name = L["Show Pets First(Requires Reload)"],
+            desc = L["Add Pets First to Layouts."],
+            order = 9,
+            width = "double",
+            type = "toggle",
+            set = function(info, v) --luacheck: ignore 212
+                PlexusLayout.db.profile.showPetsFirst = v
+                PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
                 PlexusLayout:ReloadLayout()
             end,
         },
