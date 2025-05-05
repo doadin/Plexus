@@ -3,6 +3,7 @@
     Compact party and raid unit frames.
     Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
     Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    Copyright (c) 2018-2025 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ------------------------------------------------------------------------
     Auras.lua
@@ -50,6 +51,7 @@ if Plexus:IsRetailWow() then
 spell_names = {
 -- All
     ["Ghost"] = GetSpellName(8326),
+    ["Insurance!"] = GetSpellName(1215503),
 -- Druid
     ["Cenarion Ward"] = GetSpellName(102351),
     ["Lifebloom"] = GetSpellName(33763),
@@ -88,8 +90,9 @@ spell_names = {
     ["Tyr's Deliverance"] = GetSpellName(200652),
     ["Glimmer of Light"] = GetSpellName(287286),
 -- Priest
-    ["Atonement"] = GetSpellName(214206),
+    ["Atonement"] = GetSpellName(194384),
     ["Clarity of Will"] = GetSpellName(152118),
+    ["Divine Aegis"] = GetSpellName(47753),
     ["Guardian Spirit"] = GetSpellName(47788),
     ["Light of T'uure"] = GetSpellName(208065),
     ["Power Word: Fortitude"] = GetSpellName(21562),
@@ -302,7 +305,22 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Ghost"]),
         color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
     },
-
+    [PlexusStatusAuras:StatusForSpell("Insurance!")] = {
+        -- 1215503
+        desc = format(L["Buff: %s"], spell_names["Insurance!"]),
+        buff = spell_names["Insurance!"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Insurance!"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
+        durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
+        countColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
+        countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
+        countLow = 1,
+        countHigh = 2,
+        mine = true,
+    },
     ---------------------
     -- Druid
     ---------------------
@@ -685,7 +703,7 @@ PlexusStatusAuras.defaultDB = {
     -- Priest
     ---------------------
     [PlexusStatusAuras:StatusForSpell("Atonement", true)] = {
-        -- 214206
+        -- 194384
         buff = spell_names["Atonement"],
         desc = format(L["Buff: %s"], spell_names["Atonement"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Atonement"]),
@@ -701,6 +719,14 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
         durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
         durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+    },
+    [PlexusStatusAuras:StatusForSpell("Divine Aegis", true)] = {
+        -- 47753
+        buff = spell_names["Divine Aegis"],
+        desc = format(L["Buff: %s"], spell_names["Divine Aegis"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Divine Aegis"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
         -- 47788

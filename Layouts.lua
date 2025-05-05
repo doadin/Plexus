@@ -3,6 +3,7 @@
     Compact party and raid unit frames.
     Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
     Copyright (c) 2009-2018 Phanx <addons@phanx.net>
+    Copyright (c) 2018-2025 Doadin <doadinaddons@gmail.com>
     All rights reserved. See the accompanying LICENSE file for details.
 ----------------------------------------------------------------------]]
 
@@ -195,7 +196,7 @@ local function AddPetGroup(t, groupFilter, numGroups)
 end
 
 
-local function UpdateSplitGroups(layout, groupFilter, numGroups, showPets)
+local function UpdateSplitGroups(layout, groupFilter, numGroups, showPets, showPetsFirst)
 --@debug@
     assert(type(layout) == "table")
     assert(type(groupFilter) == "string")
@@ -203,50 +204,98 @@ local function UpdateSplitGroups(layout, groupFilter, numGroups, showPets)
     assert(type(numGroups) == "number")
     assert(numGroups == (1 + string.len(groupFilter)) / 2)
 --@end-debug@
+    if showPetsFirst then
+        local offset = showPets and 1 or 0
 
-    for i = 1, numGroups do
-        local t = layout[i] or {}
-        layout[i] = t
+        -- Add pet group first if showPets is true
+        if showPets then
+            layout[1] = AddPetGroup(layout[1], groupFilter, numGroups)
+        end
 
-        t.groupFilter = string.sub(groupFilter, i * 2 - 1, i * 2)
+        -- Update the remaining groups
+        for i = 1, numGroups do
+            local t = layout[i + offset] or {}
+            layout[i + offset] = t
 
-        -- Reset attributes from merged layout
-        t.maxColumns = 1
+            t.groupFilter = string.sub(groupFilter, i * 2 - 1, i * 2)
 
-        -- Remove attributes for pet group
-        t.isPetGroup = nil
-        t.groupBy = nil
-        t.groupingOrder = nil
-    end
+            -- Reset attributes from merged layout
+            t.maxColumns = 1
 
-    if showPets then
-        local i = numGroups + 1
-        layout[i] = AddPetGroup(layout[i], groupFilter, numGroups)
-        numGroups = i
-    end
+            -- Remove attributes for pet group
+            t.isPetGroup = nil
+            t.groupBy = nil
+            t.groupingOrder = nil
+        end
 
-    for i = numGroups + 1, #layout do
-        layout[i] = nil
+        -- Clear any leftover groups
+        for i = numGroups + offset + 1, #layout do
+            layout[i] = nil
+        end
+    else
+
+        for i = 1, numGroups do
+            local t = layout[i] or {}
+            layout[i] = t
+
+            t.groupFilter = string.sub(groupFilter, i * 2 - 1, i * 2)
+
+            -- Reset attributes from merged layout
+            t.maxColumns = 1
+
+            -- Remove attributes for pet group
+            t.isPetGroup = nil
+            t.groupBy = nil
+            t.groupingOrder = nil
+        end
+
+        if showPets then
+            local i = numGroups + 1
+            layout[i] = AddPetGroup(layout[i], groupFilter, numGroups)
+            numGroups = i
+        end
+
+        for i = numGroups + 1, #layout do
+            layout[i] = nil
+        end
     end
 end
 
 
-local function UpdateMergedGroups(layout, groupFilter, numGroups, showPets)
+local function UpdateMergedGroups(layout, groupFilter, numGroups, showPets, showPetsFirst)
 --@debug@
-    assert(type(layout) == "table")
-    assert(type(groupFilter) == "string")
-    assert(string.len(groupFilter) > 0 and string.len(groupFilter) % 2 == 1)
-    assert(type(numGroups) == "number")
-    assert(numGroups == (1 + string.len(groupFilter)) / 2)
+        assert(type(layout) == "table")
+        assert(type(groupFilter) == "string")
+        assert(string.len(groupFilter) > 0 and string.len(groupFilter) % 2 == 1)
+        assert(type(numGroups) == "number")
+        assert(numGroups == (1 + string.len(groupFilter)) / 2)
 --@end-debug@
 
-    layout[1].groupFilter = groupFilter
-    layout[1].maxColumns = numGroups
+    if showPets and showPetsFirst then
+        -- Add pet group as the first group
+        layout[1] = AddPetGroup(layout[1], groupFilter, numGroups)
 
-    layout[2] = showPets and AddPetGroup(layout[2], groupFilter, numGroups) or nil
+        -- Shift the main group to the second position
+        layout[2] = layout[2] or {}
+        layout[2].groupFilter = groupFilter
+        layout[2].maxColumns = numGroups
 
-    for i = 3, numGroups do
-        layout[i] = nil
+        -- Clear any leftover groups
+        for i = 3, #layout do
+            layout[i] = nil
+        end
+    else
+        -- Add main group as the first group
+        layout[1].groupFilter = groupFilter
+        layout[1].maxColumns = numGroups
+
+        -- Add pet group as the second group if showPets is true
+        layout[2] = showPets and AddPetGroup(layout[2], groupFilter, numGroups) or nil
+
+        -- Clear any leftover groups
+        for i = 3, #layout do
+            layout[i] = nil
+        end
     end
 end
 
@@ -322,6 +371,7 @@ function Manager:UpdateLayouts(event)
 
     local groupFilter, numGroups = self:GetGroupFilter()
     local splitGroups = Layout.db.profile.splitGroups
+    local showPetsFirst = Layout.db.profile.showPetsFirst
 
     if not groupFilter then
         return false
@@ -338,22 +388,22 @@ function Manager:UpdateLayouts(event)
 
     -- Update class and role layouts
     if splitGroups then
-        UpdateSplitGroups(Layouts.ByClass,  groupFilter, numGroups, false)
-        UpdateSplitGroups(Layouts.ByRole,   groupFilter, numGroups, false)
+        UpdateSplitGroups(Layouts.ByClass,  groupFilter, numGroups, false, showPetsFirst)
+        UpdateSplitGroups(Layouts.ByRole,   groupFilter, numGroups, false, showPetsFirst)
     else
-        UpdateMergedGroups(Layouts.ByClass, groupFilter, numGroups, false)
-        UpdateMergedGroups(Layouts.ByClassPets, groupFilter, numGroups, true)
-        UpdateMergedGroups(Layouts.ByRole,  groupFilter, numGroups, false)
-        UpdateMergedGroups(Layouts.ByRolePets,  groupFilter, numGroups, true)
+        UpdateMergedGroups(Layouts.ByClass, groupFilter, numGroups, false, showPetsFirst)
+        UpdateMergedGroups(Layouts.ByClassPets, groupFilter, numGroups, true, showPetsFirst)
+        UpdateMergedGroups(Layouts.ByRole,  groupFilter, numGroups, false, showPetsFirst)
+        UpdateMergedGroups(Layouts.ByRolePets,  groupFilter, numGroups, true, showPetsFirst)
     end
 
     -- Update group layout (always split)
-    UpdateSplitGroups(Layouts.ByGroup, groupFilter, numGroups, false)
-    UpdateSplitGroups(Layouts.ByGroupPets, groupFilter, numGroups, true)
-    UpdateSplitGroups(Layouts.ByGroupRole, groupFilter, numGroups, false)
-    UpdateSplitGroups(Layouts.ByGroupRolePets, groupFilter, numGroups, true)
-    UpdateSplitGroups(Layouts.ByName, groupFilter, numGroups, false)
-    UpdateSplitGroups(Layouts.ByNamePets, groupFilter, numGroups, true)
+    UpdateSplitGroups(Layouts.ByGroup, groupFilter, numGroups, false, showPetsFirst)
+    UpdateSplitGroups(Layouts.ByGroupPets, groupFilter, numGroups, true, showPetsFirst)
+    UpdateSplitGroups(Layouts.ByGroupRole, groupFilter, numGroups, false, showPetsFirst)
+    UpdateSplitGroups(Layouts.ByGroupRolePets, groupFilter, numGroups, true, showPetsFirst)
+    UpdateSplitGroups(Layouts.ByName, groupFilter, numGroups, false, showPetsFirst)
+    UpdateSplitGroups(Layouts.ByNamePets, groupFilter, numGroups, true, showPetsFirst)
 
     -- Apply changes
     Layout:ReloadLayout()
