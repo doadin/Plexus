@@ -178,7 +178,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         end
         if incoming > 0 then
             local maxHealth = Plexus:CalcMaxHP(unit)
-            if (incoming / maxHealth) > settings.minimumValue then
+            if (incoming / maxHealth) > (settings and settings.minimumValue or 0.1) then
                 return self:SendIncomingHealsStatus(guid, incoming, UnitHealth(unit) + incoming, maxHealth)
             end
         end
