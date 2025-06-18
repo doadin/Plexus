@@ -13,6 +13,7 @@ local L = Plexus.L
 
 local UnitGUID = UnitGUID
 local IsInInstance = IsInInstance
+local IsInGroup = IsInGroup
 local UnitFactionGroup = UnitFactionGroup
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
