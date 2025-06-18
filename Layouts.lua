@@ -10,8 +10,8 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetNumGroupMembers = _G.GetNumGroupMembers
-local GetRaidRosterInfo = _G.GetRaidRosterInfo
+local GetNumGroupMembers = GetNumGroupMembers
+local GetRaidRosterInfo = GetRaidRosterInfo
 
 local Layout = Plexus:GetModule("PlexusLayout")
 local Roster = Plexus:GetModule("PlexusRoster")
@@ -155,9 +155,6 @@ local Layouts = {
         },
     },
 }
---@debug@
-_G.PLEXUSLAYOUTS = Layouts --luacheck: ignore 111
---@end-debug@
 
 --------------------------------------------------------------------------------
 
@@ -309,40 +306,46 @@ function Manager:GetGroupFilter()
     local groupType, maxPlayers = Roster:GetPartyState()
     self:Debug("groupType", groupType, "maxPlayers", maxPlayers)
 
-    if groupType ~= "raid" and groupType ~= "bg" then
+    -- GetNumGroupMembers when solo returns 0 even in world BG zones such as wintergrasp
+    -- Therefore even in BG if GetNumGroupMembers == 0 return 1
+    if groupType ~= "raid" and groupType ~= "bg" or (groupType == "bg" and GetNumGroupMembers() == 0) then
         return "1", 1
     end
 
     local showOffline = Layout.db.profile.showOffline
     local showWrongZone = Layout:ShowWrongZone()
-    local curMapID = _G.C_Map.GetBestMapForUnit("player")
-    local curMapInfo = curMapID and _G.C_Map.GetMapInfo(curMapID)
-    local MAX_RAID_GROUPS = _G.MAX_RAID_GROUPS or 8
+    local playerMapID = C_Map.GetBestMapForUnit("player")
+    local MAX_RAID_GROUPS = MAX_RAID_GROUPS or 8
+    local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS or 40
 
     for i = 1, MAX_RAID_GROUPS do
-        -- In world BG zones such as wintergrasp
-        -- GetNumGroupMembers when solo returns 0
-        if GetNumGroupMembers() == 0 and groupType == "bg" then
-            hideGroup[i] = nil
-        else
-            hideGroup[i] = ""
-        end
+        hideGroup[i] = ""
     end
 
-    for i = 1, GetNumGroupMembers() do
+    --discouraged to use GetNumGroupMembers
+    for i = 1, MAX_RAID_MEMBERS do
+        --name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML, combatRole
         local _, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
-        local mapID = _G.C_Map.GetBestMapForUnit("raid" .. i)
-        local mapInfo = mapID and _G.C_Map.GetMapInfo(mapID)
-
-        if showWrongZone == "MYTHICFIXED" then
-            if maxPlayers == 20 and subgroup < 5 then
-                hideGroup[subgroup] = nil
-            elseif maxPlayers ~= 20 then
+        local raidMemberMapID = C_Map.GetBestMapForUnit("raid" .. i)
+        local playerMapGroupID
+        local raidMemberMapGroupID
+        if playerMapID and raidMemberMapID then
+            playerMapGroupID = C_Map.GetMapGroupID(playerMapID)
+            raidMemberMapGroupID = C_Map.GetMapGroupID(raidMemberMapID)
+        end
+        if playerMapGroupID and raidMemberMapGroupID then
+            if (showOffline or online) and (showWrongZone or playerMapGroupID == raidMemberMapGroupID) then
                 hideGroup[subgroup] = nil
             end
-        end
-        if (showOffline or online) and (showWrongZone ~= "MYTHICFIXED") and (showWrongZone or mapInfo and curMapInfo and curMapInfo.parentMapID == mapInfo.parentMapID) then
-            hideGroup[subgroup] = nil
+        elseif playerMapID and raidMemberMapID then
+            if (showOffline or online) and (showWrongZone or playerMapID == raidMemberMapID) then
+                hideGroup[subgroup] = nil
+            end
+        -- if we cant get zone info for a unit just show the group
+        else
+            if (showOffline or online) then
+                hideGroup[subgroup] = nil
+            end
         end
     end
 
