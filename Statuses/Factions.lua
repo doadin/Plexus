@@ -59,19 +59,17 @@ end
 
 function PlexusStatusFactions:UpdateAllUnits(event, ...)
     if not IsInGroup() then return end
-    if event == "Plexus_PartyTransition" then
-        local _, oldstate = ...
-        if oldstate and oldstate == "solo" then
-            C_Timer.After(0.3, function()
-                for guid, unit in PlexusRoster:IterateRoster() do
-                    if IsInInstance() then
-                        self.core:SendStatusLost(guid, "faction")
-                    else
-                        self:UpdateUnit("UpdateAllUnits",unit)
-                    end
+    local currentstate, oldstate = ...
+    if event == "Plexus_PartyTransition" and currentstate and currentstate == "raid" and oldstate and oldstate == "solo" then
+        C_Timer.After(5, function()
+            for guid, unit in PlexusRoster:IterateRoster() do
+                if IsInInstance() then
+                    self.core:SendStatusLost(guid, "faction")
+                else
+                    self:UpdateUnit("UpdateAllUnits",unit)
                 end
-            end)
-        end
+            end
+        end)
     else
         for guid, unit in PlexusRoster:IterateRoster() do
             if IsInInstance() then
