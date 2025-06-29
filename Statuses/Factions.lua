@@ -57,26 +57,14 @@ function PlexusStatusFactions:OnStatusDisable(status)
     self:SendStatusLostAllUnits(status)
 end
 
-function PlexusStatusFactions:UpdateAllUnits(event, ...)
+function PlexusStatusFactions:UpdateAllUnits()
     if not IsInGroup() then return end
-    local currentstate, oldstate = ...
-    if event == "Plexus_PartyTransition" and currentstate and currentstate == "raid" and oldstate and oldstate == "solo" then
-        C_Timer.After(5, function()
-            for guid, unit in PlexusRoster:IterateRoster() do
-                if IsInInstance() then
-                    self.core:SendStatusLost(guid, "faction")
-                else
-                    self:UpdateUnit("UpdateAllUnits",unit)
-                end
-            end
-        end)
-    else
-        for guid, unit in PlexusRoster:IterateRoster() do
-            if IsInInstance() then
-                self.core:SendStatusLost(guid, "faction")
-            else
-                self:UpdateUnit("UpdateAllUnits",unit)
-            end
+    self:SendStatusLostAllUnits("faction")
+    for guid, unit in PlexusRoster:IterateRoster() do
+        if IsInInstance() then
+            self.core:SendStatusLost(guid, "faction")
+        else
+            self:UpdateUnit("UpdateAllUnits",unit)
         end
     end
 end
@@ -108,6 +96,8 @@ function PlexusStatusFactions:UpdateUnit(event, unitid)
                 nil,
                 profile.icon
             )
+        else
+            self.core:SendStatusLost(guid, "faction")
         end
     end
 end
