@@ -4,6 +4,7 @@
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30403
 ## Interface-Cata: 40402
+## Interface-Mists: 50501
 ## Version: @project-version@
 
 ## Title: Plexus
@@ -59,6 +60,9 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@version-cata@
 Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 #@end-version-cata@
+#@version-mists@
+Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
+#@end-version-mists@
 #@retail@
 Libs\LibDispel\LibDispel.lua
 #@end-retail@
