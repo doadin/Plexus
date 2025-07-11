@@ -671,7 +671,7 @@ end
 function Plexus:OnProfileEnable()
     self:Debug("Loaded profile", self.db:GetCurrentProfile())
 
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+    if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() or Plexus:IsMistWow() then
         if LDBIcon then
             LDBIcon:Refresh(PLEXUS, self.db.profile.minimap)
             if self.db.profile.minimap.hide then
