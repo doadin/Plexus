@@ -267,7 +267,7 @@ do
     }
 
     local function GetPartyState()
-        local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+        local _, instanceType, _, scenarioType, maxPlayers = GetInstanceInfo()
         if maxPlayers == 0 then
             maxPlayers = nil
         end
@@ -283,6 +283,8 @@ do
                 maxPlayers = 40
             end
             return "raid", maxPlayers or 40
+        elseif IsInGroup() and instanceType == "scenario" and scenarioType == "Delves" then
+            return "raid", 40
         else
             return "party", 5
         end
