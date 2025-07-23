@@ -267,7 +267,7 @@ do
     }
 
     local function GetPartyState()
-        local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+        local _, instanceType, _, scenarioType, maxPlayers = GetInstanceInfo()
         if maxPlayers == 0 then
             maxPlayers = nil
         end
@@ -275,6 +275,8 @@ do
             return "arena", maxPlayers or 5
         elseif instanceType == "pvp" or (instanceType == "none" and GetZonePVPInfo() == "combat") then
             return "bg", maxPlayers or 40
+        elseif IsInGroup() and instanceType == "scenario" and scenarioType == "Delves" then
+            return "party", 6
         elseif maxPlayers == 1 or not IsInGroup() then -- treat solo scenarios as solo, not party or raid
             return "solo", 1
         elseif IsInRaid() then
