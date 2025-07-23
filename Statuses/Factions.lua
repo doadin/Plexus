@@ -13,6 +13,7 @@ local L = Plexus.L
 
 local UnitGUID = UnitGUID
 local IsInInstance = IsInInstance
+local IsInGroup = IsInGroup
 local UnitFactionGroup = UnitFactionGroup
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -38,28 +39,27 @@ end
 
 function PlexusStatusFactions:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
-    self:RegisterEvent("PLAYER_FLAGS_CHANGED", "UpdateUnit")
-    self:RegisterEvent("UNIT_FLAGS", "UpdateUnit")
     self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllUnits")
+    self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
+    self:RegisterMessage("Plexus_PartyTransition", "UpdateAllUnits")
     self:RegisterMessage("Plexus_UnitJoined")
 
-    self:RegisterEvent("UNIT_FACTION", "UpdateUnit")
-    self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateAllUnits")
     self:UpdateAllUnits()
 end
 
 function PlexusStatusFactions:OnStatusDisable(status)
     self:Debug("OnStatusDisable", status)
-    self:UnregisterEvent("PLAYER_FLAGS_CHANGED")
-    self:UnregisterEvent("UNIT_FLAGS")
     self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    self:UnregisterEvent("GROUP_ROSTER_UPDATE")
+    self:UnregisterMessage("Plexus_PartyTransition")
     self:UnregisterMessage("Plexus_UnitJoined")
 
-    self:UnregisterEvent("UNIT_FACTION")
     self:SendStatusLostAllUnits(status)
 end
 
 function PlexusStatusFactions:UpdateAllUnits()
+    if not IsInGroup() then return end
+    self:SendStatusLostAllUnits("faction")
     for guid, unit in PlexusRoster:IterateRoster() do
         if IsInInstance() then
             self.core:SendStatusLost(guid, "faction")
@@ -70,7 +70,7 @@ function PlexusStatusFactions:UpdateAllUnits()
 end
 
 function PlexusStatusFactions:Plexus_UnitJoined(_, _, unitid)
-    if not unitid then return end
+    if IsInInstance() or not unitid then return end
     self:UpdateUnit("Plexus_UnitJoined",unitid)
 end
 
@@ -96,6 +96,8 @@ function PlexusStatusFactions:UpdateUnit(event, unitid)
                 nil,
                 profile.icon
             )
+        else
+            self.core:SendStatusLost(guid, "faction")
         end
     end
 end
