@@ -13,7 +13,7 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local GetLootMethod = GetLootMethod
+local GetLootMethod = C_PartyInfo and C_PartyInfo.GetLootMethod or GetLootMethod
 local UnitAffectingCombat = UnitAffectingCombat
 local UnitIsGroupAssistant = UnitIsGroupAssistant
 local UnitIsGroupLeader = UnitIsGroupLeader
