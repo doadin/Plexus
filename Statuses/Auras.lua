@@ -105,6 +105,7 @@ spell_names = {
     ["Prayer of Mending"] = GetSpellName(33076),
     ["Premonition of Solace"] = GetSpellName(428934),
     ["Premonition of Solace Absorb"] = "Premonition of Solace Absorb",
+    ["Protective Light"] = GetSpellName(193065),
     ["Renew"] = GetSpellName(139),
     ["Weakened Soul"] = GetSpellName(6788),
 -- Shaman
@@ -858,6 +859,14 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Premonition of Solace Absorb"],
         desc = format(L["Buff: %s"], spell_names["Premonition of Solace Absorb"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Premonition of Solace Absorb"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Protective Light", true)] = {
+        -- 193065
+        buff = spell_names["Protective Light"],
+        desc = format(L["Buff: %s"], spell_names["Protective Light"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Protective Light"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
     },
