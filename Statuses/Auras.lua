@@ -331,6 +331,7 @@ PlexusStatusAuras.defaultDB = {
         debuff = spell_names["Oath-Bound"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Oath-Bound"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Boon of the Oathsworn")] = {
         -- 1240000
