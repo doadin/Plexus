@@ -97,6 +97,7 @@ spell_names = {
     ["Atonement"] = GetSpellName(194384),
     ["Clarity of Will"] = GetSpellName(152118),
     ["Divine Aegis"] = GetSpellName(47753),
+    ["Echo of Light"] = GetSpellName(77489),
     ["Guardian Spirit"] = GetSpellName(47788),
     ["Light of T'uure"] = GetSpellName(208065),
     ["Power Word: Fortitude"] = GetSpellName(21562),
@@ -785,6 +786,14 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Divine Aegis"],
         desc = format(L["Buff: %s"], spell_names["Divine Aegis"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Divine Aegis"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Echo of Light", true)] = {
+        -- 77489
+        buff = spell_names["Echo of Light"],
+        desc = format(L["Buff: %s"], spell_names["Echo of Light"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Echo of Light"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
     },
