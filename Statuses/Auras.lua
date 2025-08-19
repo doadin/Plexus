@@ -97,6 +97,7 @@ spell_names = {
     ["Atonement"] = GetSpellName(194384),
     ["Clarity of Will"] = GetSpellName(152118),
     ["Divine Aegis"] = GetSpellName(47753),
+    ["Echo of Light"] = GetSpellName(77489),
     ["Guardian Spirit"] = GetSpellName(47788),
     ["Light of T'uure"] = GetSpellName(208065),
     ["Power Word: Fortitude"] = GetSpellName(21562),
@@ -104,6 +105,7 @@ spell_names = {
     ["Prayer of Mending"] = GetSpellName(33076),
     ["Premonition of Solace"] = GetSpellName(428934),
     ["Premonition of Solace Absorb"] = "Premonition of Solace Absorb",
+    ["Protective Light"] = GetSpellName(193065),
     ["Renew"] = GetSpellName(139),
     ["Weakened Soul"] = GetSpellName(6788),
 -- Shaman
@@ -331,6 +333,7 @@ PlexusStatusAuras.defaultDB = {
         debuff = spell_names["Oath-Bound"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Oath-Bound"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
     },
     [PlexusStatusAuras:StatusForSpell("Boon of the Oathsworn")] = {
         -- 1240000
@@ -787,6 +790,14 @@ PlexusStatusAuras.defaultDB = {
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
     },
+    [PlexusStatusAuras:StatusForSpell("Echo of Light", true)] = {
+        -- 77489
+        buff = spell_names["Echo of Light"],
+        desc = format(L["Buff: %s"], spell_names["Echo of Light"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Echo of Light"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
     [PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
         -- 47788
         desc = format(L["Buff: %s"], spell_names["Guardian Spirit"]),
@@ -848,6 +859,14 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Premonition of Solace Absorb"],
         desc = format(L["Buff: %s"], spell_names["Premonition of Solace Absorb"]),
         text = PlexusStatusAuras:TextForSpell(spell_names["Premonition of Solace Absorb"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Protective Light", true)] = {
+        -- 193065
+        buff = spell_names["Protective Light"],
+        desc = format(L["Buff: %s"], spell_names["Protective Light"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Protective Light"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
     },
