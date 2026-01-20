@@ -24,6 +24,7 @@ local CreateFrame = CreateFrame
 local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata
 local InCombatLockdown = InCombatLockdown
 local IsAddOnLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
+local issecretvalue = issecretvalue
 local StaticPopup_Show = StaticPopup_Show
 local tostringall = tostringall
 local WOW_PROJECT_ID = WOW_PROJECT_ID
@@ -67,6 +68,10 @@ end
 
 function Plexus:IsRetailWow() --luacheck: ignore 212
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+end
+
+function Plexus:issecretvalue(value) --luacheck: ignore 212
+    return issecretvalue and issecretvalue(value) or false
 end
 
 _G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")

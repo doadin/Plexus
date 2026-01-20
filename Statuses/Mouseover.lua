@@ -67,20 +67,16 @@ end)
 function PlexusStatusMouseover:UpdateAllUnits()
     local profile = self.db.profile.mouseover
     local mouseover = UnitGUID("mouseover")
-    if not mouseover then
+    if not mouseover or Plexus:issecretvalue(mouseover) then
         return self.core:SendStatusLostAllUnits("mouseover")
     end
-    for guid, _ in PlexusRoster:IterateRoster() do
-        if guid == mouseover then
-            self.core:SendStatusGained(guid, "mouseover",
-                profile.priority,
-                nil,
-                profile.color,
-                profile.text
-            )
-            updater:Show()
-        else
-            self.core:SendStatusLost(guid, "mouseover")
-        end
+    if PlexusRoster:IsGUIDInGroup(mouseover) then
+        self.core:SendStatusGained(mouseover, "mouseover",
+            profile.priority,
+            nil,
+            profile.color,
+            profile.text
+        )
+        updater:Show()
     end
 end

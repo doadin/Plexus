@@ -13,6 +13,10 @@
 local _, Plexus = ...
 local L = Plexus.L
 
+if Plexus:IsRetailWow() then
+    return
+end
+
 local format = format
 local wipe = wipe
 local UnitClass = UnitClass

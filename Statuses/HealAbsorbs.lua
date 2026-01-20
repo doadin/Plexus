@@ -102,27 +102,40 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     if not Plexus:IsClassicWow() then
         amount = UnitIsVisible(unit) and UnitGetTotalHealAbsorbs(unit) or 0
     end
-    if amount > 0 then
+    if Plexus:IsRetailWow() then
         local maxHealth = Plexus:CalcMaxHP(unit)
-        if (amount / maxHealth) > settings.minimumValue then
-            local text = amount
-            if amount > 9999 then
-                text = format("%.0fk", amount / 1000)
-            elseif amount > 999 then
-                text = format("%.1fk", amount / 1000)
-            end
-            if not settings.text then return end
-            self.core:SendStatusGained(guid, "alert_heal_absorbs",
-                settings.priority,
-                nil,
-                settings.color,
-                format(settings.text, text),
-                UnitHealth(unit) + amount,
-                maxHealth,
-                settings.icon
-            )
-        end
+        self.core:SendStatusGained(guid, "alert_heal_absorbs",
+            settings.priority,
+            nil,
+            settings.color,
+            amount,
+            amount,
+            maxHealth,
+            settings.icon
+        )
     else
-        self.core:SendStatusLost(guid, "alert_heal_absorbs")
+        if amount > 0 then
+            local maxHealth = Plexus:CalcMaxHP(unit)
+            if (amount / maxHealth) > settings.minimumValue then
+                local text = amount
+                if amount > 9999 then
+                    text = format("%.0fk", amount / 1000)
+                elseif amount > 999 then
+                    text = format("%.1fk", amount / 1000)
+                end
+                if not settings.text then return end
+                self.core:SendStatusGained(guid, "alert_heal_absorbs",
+                    settings.priority,
+                    nil,
+                    settings.color,
+                    format(settings.text, text),
+                    UnitHealth(unit) + amount,
+                    maxHealth,
+                    settings.icon
+                )
+            end
+        else
+            self.core:SendStatusLost(guid, "alert_heal_absorbs")
+        end
     end
 end

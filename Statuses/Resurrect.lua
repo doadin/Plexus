@@ -141,7 +141,7 @@ end
 function PlexusStatusResurrect:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
 
-    if not Plexus:IsClassicWow() then
+    if not Plexus:IsClassicWow() and not Plexus:IsRetailWow() then
       self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
       self:RegisterEvent("UNIT_SPELLCAST_STOP")
       self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
@@ -153,6 +153,11 @@ function PlexusStatusResurrect:OnStatusEnable(status)
         self:RegisterEvent("UNIT_SPELLCAST_START")
         self:RegisterEvent("INCOMING_RESURRECT_CHANGED")
     end
+    if Plexus:IsRetailWow() then
+        self:RegisterEvent("INCOMING_RESURRECT_CHANGED")
+    end
+
+     --self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")
 
     --self:RegisterMessage("Plexus_RosterUpdated", "UpdateAllUnits")
 end

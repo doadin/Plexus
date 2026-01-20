@@ -156,7 +156,11 @@ local function SetStatus(self, color, text)
         return self:SetText("")
     end
 
-    self:SetText(strsub(text, 1, profile.textlength))
+    if not Plexus:issecretvalue(text) then
+        self:SetText(strsub(text, 1, profile.textlength))
+    else
+        self:SetText(text)
+    end
 
     if color then
         if profile.invertBarColor and profile.invertTextColor then

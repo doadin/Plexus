@@ -52,6 +52,7 @@ local extraOptionsForStatus = {
         set = function(_, v)
             PlexusStatusAbsorbs.db.profile.alert_absorbs.minimumValue = v
         end,
+        hidden = Plexus:IsRetailWow(),
     },
 }
 
@@ -129,27 +130,40 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
             end
         end
     end
-    if amount > 0 then
+    if Plexus:IsRetailWow() then
         local maxHealth = Plexus:CalcMaxHP(unit)
-        if (amount / maxHealth) > settings.minimumValue then
-            local text = amount
-            if amount > 9999 then
-                text = format("%.0fk", amount / 1000)
-            elseif amount > 999 then
-                text = format("%.1fk", amount / 1000)
-            end
-            if not settings.text then return end
-            self.core:SendStatusGained(guid, "alert_absorbs",
-                settings.priority,
-                nil,
-                settings.color,
-                format(settings.text, text),
-                UnitHealth(unit) + amount,
-                maxHealth,
-                settings.icon
-            )
-        end
+        self.core:SendStatusGained(guid, "alert_absorbs",
+            settings.priority,
+            nil,
+            settings.color,
+            amount,
+            amount,
+            maxHealth,
+            settings.icon
+        )
     else
-        self.core:SendStatusLost(guid, "alert_absorbs")
+        if amount > 0 then
+            local maxHealth = Plexus:CalcMaxHP(unit)
+            if (amount / maxHealth) > settings.minimumValue then
+                local text = amount
+                if amount > 9999 then
+                    text = format("%.0fk", amount / 1000)
+                elseif amount > 999 then
+                    text = format("%.1fk", amount / 1000)
+                end
+                if not settings.text then return end
+                self.core:SendStatusGained(guid, "alert_absorbs",
+                    settings.priority,
+                    nil,
+                    settings.color,
+                    format(settings.text, text),
+                    UnitHealth(unit) + amount,
+                    maxHealth,
+                    settings.icon
+                )
+            end
+        else
+            self.core:SendStatusLost(guid, "alert_absorbs")
+        end
     end
 end

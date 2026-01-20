@@ -43,6 +43,7 @@ PlexusStatusHeals.defaultDB = {
         ignore_self = false,
         ignore_heal_comm = true,
         minimumValue = 0.1,
+        reduced_heal_absorb = true,
     },
 }
 
@@ -58,6 +59,7 @@ local healsOptions = {
             PlexusStatusHeals.db.profile.alert_heals.ignore_self = v
             PlexusStatusHeals:UpdateAllUnits()
         end,
+        --hidden = Plexus:IsRetailWow(),
     },
     ignoreHealComm = {
         type = "toggle", width = "double",
@@ -72,6 +74,19 @@ local healsOptions = {
         end,
         hidden = Plexus:IsRetailWow(),
     },
+    reduced_heal_absorb = {
+        type = "toggle", width = "double",
+        name = L["Factor Heal Absorbs"],
+        desc = L["Factor heal absorbs into the incoming heals."],
+        get = function()
+            return PlexusStatusHeals.db.profile.alert_heals.reduced_heal_absorb
+        end,
+        set = function(_, v)
+            PlexusStatusHeals.db.profile.alert_heals.reduced_heal_absorb = v
+            PlexusStatusHeals:UpdateAllUnits()
+        end,
+        hidden = true,
+    },
     minimumValue = {
         width = "double",
         type = "range", min = 0, max = 0.5, step = 0.005, isPercent = true,
@@ -83,6 +98,7 @@ local healsOptions = {
         set = function(_, v)
             PlexusStatusHeals.db.profile.alert_heals.minimumValue = v
         end,
+        hidden = Plexus:IsRetailWow(),
     },
 }
 
@@ -147,6 +163,8 @@ function PlexusStatusHeals:UpdateAllUnits()
     end
 end
 
+local timer = {}
+local calculator
 function PlexusStatusHeals:UpdateUnit(event, unit)
     self:Debug("UpdateUnit Event: ", event)
     if not unit then return end
@@ -155,49 +173,85 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
-        local incoming = 0
-        if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
-            incoming = UnitGetIncomingHeals(unit) or 0
-        end
-        if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
-            local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1)
-            incoming = (incoming + myIncomingHeal) or 0
-        end
-        --if incoming > 0 then
-        --    if Plexus:IsRetailWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() then
-        --        self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / PlexusStatusHealth:CalcMaxHP(unit) * 100))
-        --    end
-        --end
-        if settings.ignore_self then
-            if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
-                incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
-            end
+        local incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped = 0
+        if not Plexus:IsRetailWow() then
             if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
-                incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
+                incoming = UnitGetIncomingHeals(unit) or 0
+            end
+            if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
+                local myIncomingHeal = (HealComm:GetHealAmount(guid, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(guid) or 1)
+                incoming = (incoming + myIncomingHeal) or 0
+            end
+            if Plexus:IsTBCWow() or Plexus:IsWrathWow() then
+                self:Debug("UpdateUnit", unit, incoming, UnitGetIncomingHeals(unit, "player") or 0, format("%.2f%%", incoming / Plexus:CalcMaxHP(unit) * 100))
+            end
+            if settings.ignore_self then
+                if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
+                    incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
+                end
+                --if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
+                --    incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
+                --end
             end
         end
-        if incoming > 0 then
-            local maxHealth = Plexus:CalcMaxHP(unit)
-            if (incoming / maxHealth) > (settings and settings.minimumValue or 0.1) then
-                return self:SendIncomingHealsStatus(guid, incoming, UnitHealth(unit) + incoming, maxHealth)
+
+        if Plexus:IsRetailWow() then
+            if not calculator then
+                calculator = CreateUnitHealPredictionCalculator()
+            else
+                calculator:Reset()
             end
+            --UnitHealPredictionCalculator:SetHealAbsorbMode(settings.reduced_heal_absorb and 0 or 1)
+            local role = UnitGroupRolesAssigned(unit)
+            local healer = role == "HEALER" and unit or nil
+            UnitGetDetailedHealPrediction(unit, healer, calculator)  -- 'calculator' is updated with new data after this call.
+            incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped = calculator:GetIncomingHeals()
+            if settings.ignore_self then
+                incoming = incomingHealsFromOthers or 0
+            end
+            --myStatusBar:SetValue(incomingHealsFromHealer);
+            --DevTools_Dump(incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped)
+            --DevTools_Dump(calculator:GetHealAbsorbs())
+            --DevTools_Dump(calculator:GetPredictedValues())
+            --local values = calculator:GetPredictedValues()
+            --local healthMax = values and values.healthMax or Plexus:CalcMaxHP(unit)
+        end
+
+        local maxHealth = Plexus:CalcMaxHP(unit)
+        if not Plexus:IsRetailWow() then
+            if incoming > 0 then
+                if (incoming / maxHealth) > (settings and settings.minimumValue or 0.1) then
+                    return self:SendIncomingHealsStatus(guid, incoming, UnitHealth(unit) + incoming, maxHealth)
+                end
+            else
+                self.core:SendStatusLost(guid, "alert_heals")
+            end
+        else
+            self:SendIncomingHealsStatus(guid, incoming, incoming, maxHealth)
+            if timer and timer[guid] and not timer[guid]:IsCancelled() then
+                timer[guid]:Cancel()
+            end
+            timer[guid] = C_Timer.After(1.5, function()
+                self.core:SendStatusLost(guid, "alert_heals")
+            end)
         end
     end
-    self.core:SendStatusLost(guid, "alert_heals")
 end
 
 function PlexusStatusHeals:SendIncomingHealsStatus(guid, incoming, estimatedHealth, maxHealth)
     local incomingText = incoming
-    if incoming > 9999 then
-        incomingText = format("%.0fk", incoming / 1000)
-    elseif incoming > 999 then
-        incomingText = format("%.1fk", incoming / 1000)
+    if not Plexus:issecretvalue(incoming) then
+        if incoming > 9999 then
+            incomingText = format("%.0fk", incoming / 1000)
+        elseif incoming > 999 then
+            incomingText = format("%.1fk", incoming / 1000)
+        end
     end
     self.core:SendStatusGained(guid, "alert_heals",
         settings.priority,
         settings.range,
         settings.color,
-        format(settings.text, incomingText),
+        not Plexus:issecretvalue(incomingText) and format(settings.text, incomingText) or incomingText,
         estimatedHealth,
         maxHealth,
         settings.icon)

@@ -11,6 +11,11 @@
 ----------------------------------------------------------------------]]
 
 local _, Plexus = ...
+
+if Plexus:IsRetailWow() then
+    return
+end
+
 local L = Plexus.L
 
 local UnitGUID = UnitGUID
@@ -98,8 +103,6 @@ function PlexusStatusMana:UpdateAllUnits()
     end
 end
 
-local cache = {}
-
 function PlexusStatusMana:UpdateUnit(event, unit)
     local guid = UnitGUID(unit)
     self:Debug("UpdateUnit event: ", event)
@@ -110,24 +113,27 @@ function PlexusStatusMana:UpdateUnit(event, unit)
         local cur = UnitPower(unit, 0)
         local max = UnitPowerMax(unit, 0)
         local settings = self.db.profile.alert_lowMana
-        if max > 0 and settings.threshold > (cur / max * 100) then
-            if not cache[guid] then
-                self:Debug("GAINED", UnitName(unit))
-                cache[guid] = true
+        if Plexus:IsRetailWoW() then
+                return PlexusStatus:SendStatusGained(guid, "alert_lowMana",
+                    settings.priority,
+                    settings.range,
+                    settings.color,
+                    settings.text,
+                    nil,
+                    nil,
+                    settings.icon)
+        else
+            if max > 0 and settings.threshold > (cur / max * 100) then
+                return PlexusStatus:SendStatusGained(guid, "alert_lowMana",
+                    settings.priority,
+                    settings.range,
+                    settings.color,
+                    settings.text,
+                    nil,
+                    nil,
+                    settings.icon)
             end
-            return PlexusStatus:SendStatusGained(guid, "alert_lowMana",
-                settings.priority,
-                settings.range,
-                settings.color,
-                settings.text,
-                nil,
-                nil,
-                settings.icon)
         end
-    end
-    if cache[guid] then
-        self:Debug("LOST", UnitName(unit))
-        cache[guid] = nil
     end
     PlexusStatus:SendStatusLost(guid, "alert_lowMana")
 end

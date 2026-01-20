@@ -57,8 +57,10 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
 
     -- SetStatus
     function(self, color, _, value, maxValue)
-        if not value or not maxValue or value == 0 or maxValue == 0 then
-            return self:Hide()
+        if not Plexus:issecretvalue(value) then
+            if not value or not maxValue or value == 0 or maxValue == 0 then
+                return self:Hide()
+            end
         end
         --print("SetStatus", self.__id, self.__owner.unit, value, maxValue, format("%0.2f%%", value / maxValue * 100))
 
@@ -68,12 +70,16 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
         self:SetMinMaxValues(0, maxValue)
         self:SetValue(value)
 
-        local perc = value / maxValue
-        local coord = (perc > 0 and perc <= 1) and perc or 1
-        if profile.orientation == "VERTICAL" then
-            self.texture:SetTexCoord(0, 1, 1 - coord, 1)
+        if not Plexus:issecretvalue(value) then
+            local perc = value / maxValue
+            local coord = (perc > 0 and perc <= 1) and perc or 1
+            if profile.orientation == "VERTICAL" then
+                self.texture:SetTexCoord(0, 1, 1 - coord, 1)
+            else
+                self.texture:SetTexCoord(0, coord, 0, 1)
+            end
         else
-            self.texture:SetTexCoord(0, coord, 0, 1)
+            self:SetOrientation(profile.orientation)
         end
 
         if profile.healingBar_useStatusColor then

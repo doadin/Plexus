@@ -144,6 +144,9 @@ function PlexusRoster:GetOwnerUnitidByUnitid(unitid) --luacheck: ignore 212
 end
 
 function PlexusRoster:IsGUIDInGroup(guid) --luacheck: ignore 212
+    if Plexus:issecretvalue(guid) then
+        return false
+    end
     return roster.guid[guid] ~= nil
 end
 PlexusRoster.IsGUIDInRaid = PlexusRoster.IsGUIDInGroup -- deprecated

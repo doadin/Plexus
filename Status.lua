@@ -562,58 +562,63 @@ function PlexusStatus:SendStatusGained(guid, status, priority, range, color, tex
     end
 
     -- create cache for unit if needed
-    if not cache[guid] then
-        cache[guid] = {}
+    if not Plexus:issecretvalue(guid) then
+        if not cache[guid] then
+            cache[guid] = {}
+        end
+
+        if not cache[guid][status] then
+            cache[guid][status] = {}
+        end
+
+        cached = cache[guid][status]
+
+        -- if no changes were made, return rather than triggering an event
+        if not Plexus:IsRetailWow() and (cached
+            and cached.priority == priority
+            and cached.range == range
+            and cached.color == color
+            and cached.text == text
+            and cached.value == value
+            and cached.maxValue == maxValue
+            and cached.texture == texture
+            and cached.start == start
+            and cached.duration == duration
+            and cached.count == count
+            and cached.texCoords == texCoords)
+        then
+            return
+        end
+
+        -- update cache
+        cached.priority = priority
+        cached.range = range
+        cached.color = color
+        cached.text = text
+        cached.value = value
+        cached.maxValue = maxValue
+        cached.texture = texture
+        cached.start = start
+        cached.duration = duration
+        cached.count = count
+        cached.texCoords = texCoords
     end
-
-    if not cache[guid][status] then
-        cache[guid][status] = {}
-    end
-
-    cached = cache[guid][status]
-
-    -- if no changes were made, return rather than triggering an event
-    if cached
-        and cached.priority == priority
-        and cached.range == range
-        and cached.color == color
-        and cached.text == text
-        and cached.value == value
-        and cached.maxValue == maxValue
-        and cached.texture == texture
-        and cached.start == start
-        and cached.duration == duration
-        and cached.count == count
-        and cached.texCoords == texCoords
-    then
-        return
-    end
-
-    -- update cache
-    cached.priority = priority
-    cached.range = range
-    cached.color = color
-    cached.text = text
-    cached.value = value
-    cached.maxValue = maxValue
-    cached.texture = texture
-    cached.start = start
-    cached.duration = duration
-    cached.count = count
-    cached.texCoords = texCoords
 
     self:SendMessage("Plexus_StatusGained", guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords)
 end
 
 function PlexusStatus:SendStatusLost(guid, status)
+    self:Debug("PlexusStatus", "SendStatusLost", guid, status)
     if not guid then return end
 
     -- if status isn't cached, don't send status lost event
-    if not self.cache[guid] or not self.cache[guid][status] then
-        return
-    end
+    if not Plexus:issecretvalue(guid) then
+        if not self.cache[guid] or not self.cache[guid][status] then
+            return
+        end
 
-    self.cache[guid][status] = nil
+        self.cache[guid][status] = nil
+    end
 
     self:SendMessage("Plexus_StatusLost", guid, status)
 end

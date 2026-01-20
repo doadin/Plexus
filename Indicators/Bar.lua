@@ -103,12 +103,16 @@ PlexusFrame:RegisterIndicator("bar", L["Health Bar"],
         self:SetMinMaxValues(0, maxValue)
         self:SetValue(value)
 
-        local perc = value / maxValue
-        local coord = (perc > 0 and perc <= 1) and perc or 1
-        if profile.orientation == "VERTICAL" then
-            self.texture:SetTexCoord(0, 1, 1 - coord, 1)
+        if not Plexus:issecretvalue(value) then
+            local perc = value / maxValue
+            local coord = (perc > 0 and perc <= 1) and perc or 1
+            if profile.orientation == "VERTICAL" then
+                self.texture:SetTexCoord(0, 1, 1 - coord, 1)
+            else
+                self.texture:SetTexCoord(0, coord, 0, 1)
+            end
         else
-            self.texture:SetTexCoord(0, coord, 0, 1)
+            self:SetOrientation(profile.orientation)
         end
 
         if color and not profile.enableBarColor then

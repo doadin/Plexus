@@ -204,8 +204,10 @@ local low_healthOptions = {
 
 function PlexusStatusHealth:PostInitialize()
     self:RegisterStatus("unit_health", L["Unit health"], healthOptions)
-    self:RegisterStatus("unit_healthDeficit", L["Health deficit"], healthDeficitOptions)
-    self:RegisterStatus("alert_lowHealth", L["Low HP warning"], low_healthOptions)
+    if not Plexus:IsRetailWow() then
+        self:RegisterStatus("unit_healthDeficit", L["Health deficit"], healthDeficitOptions)
+        self:RegisterStatus("alert_lowHealth", L["Low HP warning"], low_healthOptions)
+    end
     self:RegisterStatus("alert_death", L["Death warning"], nil, true)
     self:RegisterStatus("alert_feignDeath", L["Feign Death warning"], nil, true)
     self:RegisterStatus("alert_offline", L["Offline warning"], nil, true)
@@ -349,7 +351,9 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
     else
         self:StatusDeath(guid, false)
         self:StatusFeignDeath(guid, UnitIsFeignDeath(unitid))
-        self:StatusLowHealth(guid, (cur / max * 100) <= self.db.profile.alert_lowHealth.threshold)
+        if not Plexus:IsRetailWow() then
+            self:StatusLowHealth(guid, (cur / max * 100) <= self.db.profile.alert_lowHealth.threshold)
+        end
     end
 
     self:StatusOffline(guid, not UnitIsConnected(unitid))
@@ -357,7 +361,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
     local healthText
     local deficitText
 
-    if cur < max then
+    if not Plexus:IsRetailWow() and cur < max then
         if cur > 999 then
             healthText = format("%.1fk", cur / 1000)
         else
@@ -375,7 +379,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         deficitPriority = 1
     end
 
-    if (cur / max * 100) <= deficitSettings.threshold then
+    if not Plexus:IsRetailWow() and (cur / max * 100) <= deficitSettings.threshold then
         self.core:SendStatusGained(guid, "unit_healthDeficit",
             deficitPriority,
             deficitSettings.range,

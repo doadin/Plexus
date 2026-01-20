@@ -69,16 +69,16 @@ function PlexusStatusAFK:UpdateUnit(event, unitid)
     self:Debug("UpdateUnit Event", event)
     local profile = self.db.profile.afk
     local uguid = UnitGUID(unitid)
-        if UnitIsAFK(unitid) then
-            self:Debug("UpdateUnit", "Unit is afk", unitid)
-            self.core:SendStatusGained(uguid, "afk",
-                profile.priority,
-                nil,
-                profile.color,
-                profile.text
-            )
-        else
-            self:Debug("UpdateUnit", "Unit is NOT afk", unitid)
-            self.core:SendStatusLost(uguid, "afk")
-        end
+    if UnitIsAFK(unitid) then
+        self:Debug("UpdateUnit", "Unit is afk", unitid)
+        self.core:SendStatusGained(uguid, "afk",
+            profile.priority,
+            nil,
+            profile.color,
+            profile.text
+        )
+    else
+        self:Debug("UpdateUnit", "Unit is NOT afk", unitid)
+        self.core:SendStatusLost(uguid, "afk")
+    end
 end

@@ -1742,7 +1742,7 @@ end
 
 function PlexusFrame:Plexus_StatusGained(_, guid, status)
     for _, frame in pairs(self.registeredFrames) do
-        if frame.unitGUID == guid then
+        if not Plexus:issecretvalue(guid) and frame.unitGUID == guid then
             self:UpdateIndicatorsForStatus(frame, status)
         end
     end
@@ -1750,7 +1750,7 @@ end
 
 function PlexusFrame:Plexus_StatusLost(_, guid, status)
     for _, frame in pairs(self.registeredFrames) do
-        if frame.unitGUID == guid then
+        if not Plexus:issecretvalue(guid) and frame.unitGUID == guid then
             self:UpdateIndicatorsForStatus(frame, status)
         end
     end
