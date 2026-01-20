@@ -1,10 +1,10 @@
-## Interface: 110207
-## Interface-Retail: 110207
+## Interface: 120000
+## Interface-Retail: 120000
 ## Interface-Classic: 11508
-## Interface-BCC: 20504
+## Interface-BCC: 20505
 ## Interface-Wrath: 30403
 ## Interface-Cata: 40402
-## Interface-Mists: 50502
+## Interface-Mists: 50503
 ## Version: @project-version@
 
 ## Title: Plexus
@@ -93,6 +93,9 @@ Indicators\Bar.lua
 Indicators\Border.lua
 Indicators\Corner.lua
 Indicators\ExtraBar.lua
+Indicators\AbsorbBar.lua
+Indicators\HealingAbsorbBar.lua
+Indicators\IncomingHealingBar.lua
 Indicators\HealingBar.lua
 Indicators\Icon.lua
 Indicators\Text.lua
@@ -100,6 +103,8 @@ Indicators\Text.lua
 Statuses\Health.lua
 #@retail@
 Statuses\Absorbs.lua
+Statuses\BuffIcons.lua
+Statuses\DeBuffIcons.lua
 #@end-retail@
 #@version-cata@
 Statuses\Absorbs.lua
@@ -109,7 +114,9 @@ Statuses\AFK.lua
 #@retail@
 Statuses\AltPower.lua
 #@end-retail@
+#@non-retail@
 Statuses\Auras.lua
+#@end-non-retail@
 #@retail@
 Statuses\Factions.lua
 #@end-retail@
@@ -135,8 +142,10 @@ Statuses\Resource.lua
 Statuses\Resurrect.lua
 #@retail@
 Statuses\Role.lua
-Statuses\Stagger.lua
 #@end-retail@
+#@version-mists@
+Statuses\Stagger.lua
+#@end-version-mists@
 #@retail@
 Statuses\Summon.lua
 #@end-retail@
