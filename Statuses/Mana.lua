@@ -113,7 +113,7 @@ function PlexusStatusMana:UpdateUnit(event, unit)
         local cur = UnitPower(unit, 0)
         local max = UnitPowerMax(unit, 0)
         local settings = self.db.profile.alert_lowMana
-        if Plexus:IsRetailWoW() then
+        if Plexus:IsRetailWow() then
                 return PlexusStatus:SendStatusGained(guid, "alert_lowMana",
                     settings.priority,
                     settings.range,
