@@ -30,6 +30,7 @@ PlexusBuffIcons.menuName = L["Buff Icons"]
 
 PlexusBuffIcons.defaultDB = {
     enabled = true,
+    showMine = true,
     iconsize = 9,
     offsetx = -1,
     offsety = -1,
@@ -81,6 +82,19 @@ local options = {
                 elseif not v and PlexusBuffIcons.enabled then
                     PlexusBuffIcons:OnDisable()
                 end
+            end,
+        },
+        showMine = {
+            order = 41, width = "double",
+            type = "toggle",
+            name = L["Show Mine"],
+            desc = L["Enabling/disabling will display only buffs you casted."],
+            get = function()
+                return PlexusBuffIcons.db.profile.showMine
+            end,
+            set = function(_, v)
+                PlexusBuffIcons.db.profile.showMine = v
+                PlexusBuffIcons:UpdateAllUnitsBuffs()
             end,
         },
         iconsize = {
@@ -333,6 +347,7 @@ function PlexusBuffIcons:OnEnable()
     if not PlexusBuffIcons.db.profile.enabled then return end
     self.enabled = true
     self:RegisterEvent("UNIT_AURA")
+    self:RegisterEvent("LOADING_SCREEN_DISABLED")
     if(not self.bucket) then
         self:Debug("registering bucket")
         self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
@@ -344,6 +359,7 @@ end
 function PlexusBuffIcons:OnDisable()
     self.enabled = nil
     self:UnregisterEvent("UNIT_AURA")
+    self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     if(self.bucket) then
         self:Debug("unregistering bucket")
         self:UnregisterBucket(self.bucket)
@@ -431,6 +447,9 @@ local function updateFrame_df(v)
     end
 end
 
+function PlexusBuffIcons:LOADING_SCREEN_DISABLED()
+    PlexusBuffIcons:UpdateAllUnitsBuffs()
+end
 
 function PlexusBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     if not self.enabled then return end
@@ -449,7 +468,7 @@ function PlexusBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     end
 
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
-    local filter = "HELPFUL" -- HARMFUL
+    local filter = PlexusBuffIcons.db.profile.showMine and "HELPFUL|PLAYER|RAID" or "HELPFUL|RAID" -- HARMFUL
 
     -- UnitAuraInstanceID[guid] = auras = C_UnitAuras.GetUnitAuras(unit, filter [, maxCount [, sortRule [, sortDirection]]])
 
@@ -507,6 +526,6 @@ end
 
 function PlexusBuffIcons:UpdateAllUnitsBuffs()
     for _, unitid in PlexusRoster:IterateRoster() do
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid)
+        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid, {isFullUpdate = true} )
     end
 end
