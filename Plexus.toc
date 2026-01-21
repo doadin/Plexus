@@ -121,7 +121,9 @@ Statuses\Auras.lua
 Statuses\Factions.lua
 #@end-retail@
 Statuses\Group.lua
+#@non-retail@
 Statuses\GroupBuffs.lua
+#@end-non-retail@
 Statuses\GroupNumber.lua
 #@retail@
 Statuses\HealAbsorbs.lua
