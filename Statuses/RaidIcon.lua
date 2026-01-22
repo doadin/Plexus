@@ -113,19 +113,30 @@ end
 function PlexusStatusRaidIcon:UpdateAllUnits(event, ...)
     self:Debug("UpdateAllUnits", event, ...)
     local settings = self.db.profile.raid_icon
+    local icon
+    local color
+    local text
 
     for guid, unit in Roster:IterateRoster() do
         local i = GetRaidTargetIndex(unit)
-        self:Debug(unit, i, i and settings.text[i], i and settings.icon[i])
+        --self:Debug(unit, i, i and settings.text[i], i and settings.icon[i])
+        if Plexus:IsRetailWow() then
+            icon = "Interface\\TargetingFrame\\UI-RaidTargetingIcons"
+        end
         if i then
+            if not Plexus:IsRetailWow() then
+                color = settings.color[i]
+                text = settings.text[i]
+                icon = settings.icon[i]
+            end
             self.core:SendStatusGained(guid, "raid_icon",
                 settings.priority,
                 nil,
-                settings.color[i],
-                settings.text[i],
+                color, -- settings.color[i]
+                text, -- settings.text[i]
+                i,
                 nil,
-                nil,
-                settings.icon[i])
+                icon)
         else
             self.core:SendStatusLost(guid, "raid_icon")
         end

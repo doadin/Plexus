@@ -192,7 +192,7 @@ local function Reset(self)
 
 end
 
-local function SetStatus(self, color, text, _, _, texture, texCoords, stack, start, duration)
+local function SetStatus(self, color, text, value, _, texture, texCoords, stack, start, duration)
 	local profile = PlexusFrame.db.profile
 	if not texture then return end
 
@@ -200,12 +200,17 @@ local function SetStatus(self, color, text, _, _, texture, texCoords, stack, sta
 		self.texture:SetTexture(texture.r, texture.g, texture.b, texture.a or 1)
 	else
         self.texture:SetTexture(texture)
+        if texture == "Interface\\TargetingFrame\\UI-RaidTargetingIcons" then
+            SetRaidTargetIconTexture(self.texture,value)
+        end
         if profile.enableIconBackgroundColor then
             self.texture:SetAlpha(profile.iconBackgroundAlpha)
         else
             self.texture:SetAlpha(1)
         end
-		self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
+        if (not texture == "Interface\\TargetingFrame\\UI-RaidTargetingIcons") and texCoords then
+		    self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
+        end
 	end
 
 	if type(color) == "table" then
