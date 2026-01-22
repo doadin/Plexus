@@ -33,13 +33,11 @@ local function Reset(self) -- luacheck: ignore 432
 
     self:SetParent(healthBar)
     self:ClearAllPoints()
-    if profile.orientation == "VERTICAL" then
-        self:SetPoint("TOP", frame, "TOP", offset, -offset)
-        self:SetWidth(frame:GetWidth()-5)
-        self:SetHeight(frame:GetHeight()-5)
-        self:SetOrientation("VERTICAL")
-        self:SetReverseFill(true)
-    end
+    self:SetPoint("TOP", frame, "TOP", offset, -offset)
+    self:SetWidth(frame:GetWidth()-5)
+    self:SetHeight(frame:GetHeight()-5)
+    self:SetOrientation(profile.orientation)
+    self:SetReverseFill(true)
     --if side == "Right" then
     --    self:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -offset, -offset)
     --    self:SetWidth((frame:GetWidth()-2*offset) * barWidth)
