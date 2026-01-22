@@ -1682,6 +1682,83 @@ function PlexusFrame:UpdateIndicator(frame, indicator)
     end
 end
 
+local TextNames = {
+    -- Center Text
+    text = true,
+    text2 = true,
+    text3 = true,
+
+    -- Top
+    ei_text_top = true,
+    ei_text_top2 = true,
+    ei_text_top3 = true,
+    ei_text_top4 = true,
+
+    -- Top Left
+    ei_text_topleft = true,
+    ei_text_topleft2 = true,
+    ei_text_topleft3 = true,
+
+    -- Top Right
+    ei_text_topright = true,
+    ei_text_topright2 = true,
+    ei_text_topright3 = true,
+
+    -- Bottom
+    ei_text_bottom = true,
+    ei_text_bottom2 = true,
+    ei_text_bottom3 = true,
+    ei_text_bottom4 = true,
+
+    -- Bottom Left
+    ei_text_bottomleft = true,
+    ei_text_bottomleft2 = true,
+    ei_text_bottomleft3 = true,
+
+    -- Bottom Right
+    ei_text_bottomright = true,
+    ei_text_bottomright2 = true,
+    ei_text_bottomright3 = true,
+}
+
+
+local IconNames = {
+    ["icon"] = true,
+    ["ei_icon_top"] = true,
+    ["ei_icon_top2"] = true,
+    ["ei_icon_top3"] = true,
+    ["ei_icon_top4"] = true,
+    ["ei_icon_topleft"] = true,
+    ["ei_icon_topleft2"] = true,
+    ["ei_icon_topleft3"] = true,
+    ["ei_icon_topleft4"] = true,
+    ["ei_icon_topright"] = true,
+    ["ei_icon_topright2"] = true,
+    ["ei_icon_topright3"] = true,
+    ["ei_icon_topright4"] = true,
+    ["ei_icon_bottom"] = true,
+    ["ei_icon_bottom2"] = true,
+    ["ei_icon_bottom3"] = true,
+    ["ei_icon_bottom4"] = true,
+    ["ei_icon_botleft"] = true,
+    ["ei_icon_botleft2"] = true,
+    ["ei_icon_botleft3"] = true,
+    ["ei_icon_botleft4"] = true,
+    ["ei_icon_botright"] = true,
+    ["ei_icon_botright2"] = true,
+    ["ei_icon_botright3"] = true,
+    ["ei_icon_botright4"] = true,
+    ["ei_icon_left"] = true,
+    ["ei_icon_left2"] = true,
+    ["ei_icon_left3"] = true,
+    ["ei_icon_left4"] = true,
+    ["ei_icon_right"] = true,
+    ["ei_icon_right2"] = true,
+    ["ei_icon_right3"] = true,
+    ["ei_icon_right4"] = true,
+}
+
+
 function PlexusFrame:StatusForIndicator(_, guid, indicator)
     local topPriority = 0
     local topStatus
@@ -1694,11 +1771,11 @@ function PlexusFrame:StatusForIndicator(_, guid, indicator)
             local valid = true
 
             -- make sure the status can be displayed
-            if (indicator == "text" or indicator == "text2") and not status.text then
+            if TextNames[indicator] and not status.text then
                 self:Debug("unable to display", statusName, "on", indicator, ": no text")
                 valid = false
             end
-            if indicator == "icon" and not status.texture then
+            if IconNames[indicator] and not status.texture then
                 self:Debug("unable to display", statusName, "on", indicator, ": no texture")
                 valid = false
             end
