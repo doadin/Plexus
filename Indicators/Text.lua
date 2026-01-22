@@ -156,6 +156,14 @@ local function SetStatus(self, color, text)
         return self:SetText("")
     end
 
+    if type(text) == "number" then
+        text = tostring(text)
+    end
+    if type(text) ~= "string" then
+        PlexusFrame:Debug("text indicator got text that is not a string")
+        return
+    end
+
     if not Plexus:issecretvalue(text) then
         self:SetText(strsub(text, 1, profile.textlength))
     else
