@@ -204,8 +204,8 @@ local low_healthOptions = {
 
 function PlexusStatusHealth:PostInitialize()
     self:RegisterStatus("unit_health", L["Unit health"], healthOptions)
+    self:RegisterStatus("unit_healthDeficit", L["Health deficit"], healthDeficitOptions)
     if not Plexus:IsRetailWow() then
-        self:RegisterStatus("unit_healthDeficit", L["Health deficit"], healthDeficitOptions)
         self:RegisterStatus("alert_lowHealth", L["Low HP warning"], low_healthOptions)
     end
     self:RegisterStatus("alert_death", L["Death warning"], nil, true)
@@ -374,12 +374,24 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         else
             deficitText = format("-%d", deficit)
         end
+    elseif Plexus:IsRetailWow() then
+        healthText = AbbreviateNumbers(cur)
+        deficitText = AbbreviateNumbers(UnitHealthMissing(unitid))
     else
         healthPriority = 1
         deficitPriority = 1
     end
 
     if not Plexus:IsRetailWow() and (cur / max * 100) <= deficitSettings.threshold then
+        self.core:SendStatusGained(guid, "unit_healthDeficit",
+            deficitPriority,
+            deficitSettings.range,
+            (deficitSettings.useClassColors and self.core:UnitColor(guid) or deficitSettings.color),
+            deficitText,
+            cur,
+            max,
+            deficitSettings.icon)
+    elseif Plexus:IsRetailWow() then
         self.core:SendStatusGained(guid, "unit_healthDeficit",
             deficitPriority,
             deficitSettings.range,
