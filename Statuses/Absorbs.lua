@@ -117,6 +117,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     local guid = UnitGUID(unit)
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
     local amount = 0
+    local amountText
     if Plexus:IsRetailWow() then
         amount = UnitIsVisible(unit) and UnitGetTotalAbsorbs(unit) or 0
     end
@@ -132,11 +133,12 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
     end
     if Plexus:IsRetailWow() then
         local maxHealth = Plexus:CalcMaxHP(unit)
+        amountText = AbbreviateNumbers(amount)
         self.core:SendStatusGained(guid, "alert_absorbs",
             settings.priority,
             nil,
             settings.color,
-            amount,
+            amountText,
             amount,
             maxHealth,
             settings.icon

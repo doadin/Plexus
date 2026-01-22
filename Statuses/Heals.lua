@@ -246,6 +246,8 @@ function PlexusStatusHeals:SendIncomingHealsStatus(guid, incoming, estimatedHeal
         elseif incoming > 999 then
             incomingText = format("%.1fk", incoming / 1000)
         end
+    else
+        incomingText = AbbreviateNumbers(incomingText)
     end
     self.core:SendStatusGained(guid, "alert_heals",
         settings.priority,
