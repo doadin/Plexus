@@ -152,7 +152,7 @@ local function SetStatus(self, color, text)
     local profile = PlexusFrame.db.profile
     if (self.__id == "text2" or self.__id == "text3") and not (profile.enableText2 or profile.enableText3) then
         return
-    elseif not text or text == "" then
+    elseif not text or (not Plexus:issecretvalue(text) and text == "") then
         return self:SetText("")
     end
 
