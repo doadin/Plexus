@@ -636,7 +636,7 @@ end
 
 function PlexusStatus:GetCachedStatus(guid, status)
     local cache = self.cache
-    return cache[guid] and cache[guid][status]
+    return (not Plexus:issecretvalue(guid) and cache[guid] and cache[guid][status])
 end
 
 function PlexusStatus:CachedStatusIterator(status)
@@ -688,13 +688,14 @@ end
 
 function PlexusStatus:UnitColor(guid)
     local unitid = PlexusRoster:GetUnitidByGUID(guid)
-
-    if not unitid then
+    local colors = self.db.profile.colors
+    if not unitid or Plexus:issecretvalue(unitid) then
+        return colors["HUNTER"]
         -- bad news if we can't get a unitid
-        return
+        --return
     end
 
-    local colors = self.db.profile.colors
+    --local colors = self.db.profile.colors
 
     local owner = PlexusRoster:GetOwnerUnitidByUnitid(unitid)
 

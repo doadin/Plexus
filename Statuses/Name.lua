@@ -270,6 +270,7 @@ function PlexusStatusName:OnStatusEnable(status)
     if NickTag then
         NickTag.RegisterCallback(self, 'NickTag_Update', "UpdateAllUnits")
     end
+    self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
 
     self:UpdateAllUnits()
 end
@@ -301,15 +302,27 @@ function PlexusStatusName:UpdateVehicle(event, unitid)
     end
 end
 
-function PlexusStatusName:UpdateUnit(event, guid)
+function PlexusStatusName:ExtraUnitsChanged(message, unitid)
+    self:Debug("UpdateUnit message: ", message)
+    local guid = UnitGUID(unitid) or unitid
+    PlexusStatusName:UpdateUnit(message, guid, unitid)
+end
+
+function PlexusStatusName:UpdateUnit(event, guid, unitid)
     self:Debug("UpdateUnit event: ", event)
     local settings = self.db.profile.unit_name
+    if not guid then return end
 
-    local name = PlexusRoster:GetNameByGUID(guid)
+    local name = (not Plexus:issecretvalue(guid) and PlexusRoster:GetNameByGUID(guid)) or Plexus:IsRetailWow() and UnitNameFromGUID(guid)
     if not name or not settings.enable then return end
 
-    local unitid = PlexusRoster:GetUnitidByGUID(guid)
-    local _, class = UnitClass(unitid)
+    if not unitid then
+        unitid = PlexusRoster:GetUnitidByGUID(guid) or unitid
+    end
+    local _, class
+    if event ~= "Plexus_ExtraUnitsChanged" then
+        _, class = UnitClass(unitid)
+    end
 
     -- show player name instead of vehicle name
     local owner_unitid = PlexusRoster:GetOwnerUnitidByUnitid(unitid)
@@ -352,6 +365,20 @@ function PlexusStatusName:UpdateUnit(event, guid)
         end
     end
 
+    if Plexus.IsSpecialUnit[unitid] then
+        self.core:SendStatusGained(unitid, "unit_name",
+            settings.priority,
+            nil,
+            settings.class and self.core:UnitColor(guid) or settings.color,
+            name,
+            nil,
+            nil,
+            class and [[Interface\Glues\CharacterCreate\UI-CharacterCreate-Classes]] or nil,
+            nil,
+            nil,
+            nil,
+            class and classIconCoords[class] or nil)
+    end
     self.core:SendStatusGained(guid, "unit_name",
         settings.priority,
         nil,

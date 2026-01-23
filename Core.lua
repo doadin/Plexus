@@ -662,6 +662,13 @@ function Plexus:OnEnable()
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
     self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
+    self:RegisterEvent("PLAYER_FOCUS_CHANGED", "ExtraUnitsChanged")
+    self:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT", "ExtraUnitsChanged")
+    self:RegisterEvent("UNIT_TARGETABLE_CHANGED", "ExtraUnitsChanged")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "ExtraUnitsChanged")
+    self:RegisterEvent("ARENA_OPPONENT_UPDATE", "ExtraUnitsChanged")
+    self:RegisterEvent("PLAYER_REGEN_ENABLED", "ExtraUnitsChanged")
+
     self:SendMessage("Plexus_Enabled")
 end
 
@@ -961,6 +968,30 @@ do
     end
 end
 
+function Plexus:ExtraUnitsChanged(event)
+    for i = 1, 10 do
+        if UnitExists("boss"..i) then
+            self:SendMessage("Plexus_ExtraUnitsChanged", "boss"..i, true)
+        else
+            self:SendMessage("Plexus_ExtraUnitsChanged", "boss"..i, false)
+        end
+    end
+    if UnitExists("focus") then
+        self:SendMessage("Plexus_ExtraUnitsChanged", "focus", true)
+    else
+        self:SendMessage("Plexus_ExtraUnitsChanged", "focus", false)
+    end
+    if event == "ARENA_OPPONENT_UPDATE" then
+        for i = 1, 5 do
+            if UnitExists("arena"..i) then
+                self:SendMessage("Plexus_ExtraUnitsChanged", "arena"..i, true)
+            else
+                self:SendMessage("Plexus_ExtraUnitsChanged", "arena"..i, false)
+            end
+        end
+    end
+end
+
 function Plexus:PLAYER_ENTERING_WORLD()
     -- this is needed for zoning while in combat
     self:PLAYER_REGEN_ENABLED()
@@ -985,3 +1016,10 @@ function Plexus:ADDON_LOADED()
         self:RegisterModule(name, module)
     end
 end
+
+Plexus.IsSpecialUnit = {
+    focus = true,
+    boss1 = true,  boss2 = true,  boss3 = true,  boss4 = true,  boss5 = true,
+    boss6 = true,  boss7 = true,  boss8 = true,  boss9 = true,  boss10 = true,
+    arena1 = true, arena2 = true, arena3 = true, arena4 = true, arena5 = true,
+}

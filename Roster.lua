@@ -127,7 +127,9 @@ function PlexusRoster:GetFullNameByGUID(guid)
 end
 
 function PlexusRoster:GetUnitidByGUID(guid) --luacheck: ignore 212
-    return roster.unitid[guid]
+    if not Plexus:issecretvalue(guid) then
+        return roster.unitid[guid]
+    end
 end
 
 function PlexusRoster:GetOwnerUnitidByGUID(guid) --luacheck: ignore 212
@@ -140,7 +142,11 @@ function PlexusRoster:GetPetUnitidByUnitid(unitid) --luacheck: ignore 212
 end
 
 function PlexusRoster:GetOwnerUnitidByUnitid(unitid) --luacheck: ignore 212
-    return owner_of_unit[unitid]
+    if not Plexus:issecretvalue(unitid) then
+        return owner_of_unit[unitid]
+    else
+        return
+    end
 end
 
 function PlexusRoster:IsGUIDInGroup(guid) --luacheck: ignore 212

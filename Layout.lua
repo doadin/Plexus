@@ -226,6 +226,83 @@ function PlexusLayout:CreateHeader(isPetGroup)
     return header
 end
 
+function PlexusLayout:ExtraUnitsChanged(message, unitid, show)
+    self:Debug("UpdateUnit message: ", message, unitid)
+    --if unit ~= "focus" then return end
+    --if not self.FocusFrame then return end
+    if not self[unitid .. "Frame"] then return end
+
+    local frame = self[unitid .. "Frame"]
+
+    if show then
+        -- Reinitialize now that the unit is real
+        if not InCombatLockdown() then
+            frame:Reset()
+            --frame:Show()
+        end
+        --if frame.UpdateAllIndicators then
+        --    frame:UpdateAllIndicators()
+        --end
+    else
+        -- No focus → hide or ghost
+        if not InCombatLockdown() then
+            --frame:Hide()
+        end
+    end
+    --local PlexusStatus = Plexus:GetModule("PlexusStatus")
+    --PlexusStatus:RemoveFromCache(message, frame.unit)
+    --PlexusStatus:RemoveFromCache(message, frame.unitGUID)
+    --if frame.indicators then
+    --    for _, indicator in pairs(frame.indicators) do
+    --        if indicator.Clear then
+    --            indicator:Clear()
+    --        elseif indicator.Reset then
+    --            indicator:Reset()
+    --        end
+    --    end
+    --end
+    --frame:ResetAllIndicators()
+    --if frame.UpdateAllIndicators then
+    --    frame:UpdateAllIndicators()
+    --end
+    --PlexusFrame:UpdateIndicators(frame)
+end
+
+function PlexusLayout:CreateFocusFrame(unitid)
+    local frame = CreateFrame(
+        "Button",
+        "Plexus"..unitid.."Frame",
+        PlexusLayoutFrame,
+        "SecureUnitButtonTemplate,BackdropTemplate"
+    )
+
+    frame:SetAttribute("unit", unitid)
+
+    for k, v in pairs(self.prototype) do
+        frame[k] = v
+    end
+
+    if frame.Initialize then
+        frame:Initialize()
+    end
+
+    PlexusFrame:RegisterFrame(frame)
+    frame:SetPoint("TOPLEFT", PlexusLayoutFrame, "TOPRIGHT", 0, 0)
+    frame:SetSize(PlexusFrame.db.profile.frameWidth, PlexusFrame.db.profile.frameHeight)
+    frame:SetFrameStrata("HIGH")
+    frame:SetFrameLevel(PlexusLayoutFrame:GetFrameLevel() + 1)
+    frame:Hide()
+    if not UnitWatchRegistered(frame) then
+		RegisterUnitWatch(frame)
+	end
+
+    self[unitid .. "Frame"] = frame
+    return frame
+end
+
+
+
+
 ------------------------------------------------------------------------
 
 PlexusLayout.defaultDB = {
@@ -240,6 +317,9 @@ PlexusLayout.defaultDB = {
     lock = false,
     horizontal = false,
     showPetsFirst = false,
+    focus = false,
+    boss = false,
+    arena = false,
     showOffline = false,
     showWrongZone = "MYTHIC",
 
@@ -343,6 +423,57 @@ PlexusLayout.options = {
                 PlexusLayout.db.profile.showPetsFirst = v
                 PlexusLayout:GetModule("PlexusLayoutManager"):UpdateLayouts()
                 PlexusLayout:ReloadLayout()
+            end,
+        },
+        focus = {
+            name = L["Show Focus Frame(Requires Reload)"],
+            desc = L[""],
+            order = 10,
+            width = "double",
+            type = "toggle",
+            set = function(info, v) --luacheck: ignore 212
+                PlexusLayout.db.profile.focus = v
+                if not PlexusLayout.focusFrame then
+                    PlexusLayout:CreateFocusFrame("focus")
+                end
+            end,
+        },
+        boss = {
+            name = L["Show Boss Frames(Requires Reload)"],
+            desc = L[""],
+            order = 11,
+            width = "double",
+            type = "toggle",
+            set = function(info, v) --luacheck: ignore 212
+                PlexusLayout.db.profile.boss = v
+                --if PlexusLayout.db.profile.boss then
+                --    for i = 1, 10 do
+                --        local unit = "boss" .. i
+                --        local key = unit .. "Frame"
+                --        if not "Plexus"..key then
+                --            PlexusLayout:CreateBossFrame(unit)
+                --        end
+                --    end
+                --end
+            end,
+        },
+        arena = {
+            name = L["Show Arena Frames(Requires Reload)"],
+            desc = L[""],
+            order = 12,
+            width = "double",
+            type = "toggle",
+            set = function(info, v) --luacheck: ignore 212
+                PlexusLayout.db.profile.arena = v
+                --if PlexusLayout.db.profile.arena then
+                --    for i = 1, 5 do
+                --        local unit = "arena" .. i
+                --        local key = unit .. "Frame"
+                --        if not "Plexus"..key then
+                --            PlexusLayout:CreateBossFrame(unit)
+                --        end
+                --    end
+                --end
             end,
         },
         --splitGroups = {
@@ -614,6 +745,7 @@ function PlexusLayout:PostInitialize()
     end
 end
 
+local OrderedUnits = {}
 function PlexusLayout:PostEnable()
     --self:Debug("PostEnable")
     self:Debug("OnEnable")
@@ -627,6 +759,52 @@ function PlexusLayout:PostEnable()
     -- position and scale frame
     self:RestorePosition()
     self:Scale()
+    -- Create focus frame once
+    if self.db.profile.focus then
+        if not self["focusFrame"] then
+            self.FocusFrame = self:CreateFocusFrame("focus")
+            table.insert(OrderedUnits, "focus")
+        end
+    end
+    if self.db.profile.boss then
+        for i = 1, 10 do
+            local unit = "boss" .. i
+            local key = unit .. "Frame"
+            if not self[key] then
+                self[key] = self:CreateFocusFrame(unit)
+                table.insert(OrderedUnits, "boss"..i)
+            end
+        end
+    end
+    if self.db.profile.arena then
+        for i = 1, 5 do
+            local unit = "arena" .. i
+            local key = unit .. "Frame"
+            if not self[key] then
+                self[key] = self:CreateFocusFrame(unit)
+                table.insert(OrderedUnits, "arena"..i)
+            end
+        end
+    end
+    local previous = nil
+    for _, unitid in ipairs(OrderedUnits) do
+        local frame = self[unitid .. "Frame"]
+        if frame then
+            frame:ClearAllPoints()
+            if not previous then
+                -- First frame anchors to PlexusLayoutFrame
+                frame:SetPoint("TOPLEFT", PlexusLayoutFrame, "TOPRIGHT", 0, 0)
+            else
+                -- Subsequent frames anchor to the previous frame
+                frame:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -4)
+            end
+            previous = frame
+        end
+    end
+
+    if self.db.profile.focus or self.db.profile.boss or self.db.profile.arena then
+        self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
+    end
 
     self:RegisterMessage("Plexus_ReloadLayout", "PartyTypeChanged")
     self:RegisterMessage("Plexus_PartyTransition", "PartyTypeChanged")

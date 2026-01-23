@@ -217,7 +217,7 @@ end
 function PlexusStatusHealth:PostEnable()
     self:RegisterMessage("Plexus_UnitJoined")
 
-    self:RegisterEvent("UNIT_AURA", "UpdateUnit")
+    --self:RegisterEvent("UNIT_AURA", "UpdateUnit")
     self:RegisterEvent("UNIT_CONNECTION", "UpdateUnit")
     if Plexus:IsRetailWow() or Plexus:IsClassicWow() or Plexus:IsCataWow() or Plexus:IsMistWow() then
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
@@ -237,6 +237,7 @@ function PlexusStatusHealth:PostEnable()
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
 
     self:RegisterMessage("Plexus_ColorsChanged", "UpdateAllUnits")
+    self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
 end
 
 function PlexusStatusHealth:OnStatusEnable()
@@ -320,6 +321,11 @@ function Plexus:CalcMaxHP(unitid)
     return max
 end
 
+function PlexusStatusHealth:ExtraUnitsChanged(message, unitid)
+    --self:Debug("UpdateUnit message: ", message, unitid)
+    PlexusStatusHealth:UpdateUnit(message, unitid, true)
+end
+
 function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
     self:Debug("UpdateUnit Event: ", event)
     if not unitid then
@@ -328,9 +334,9 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         return
     end
 
-    local guid = UnitGUID(unitid)
+    local guid = UnitGUID(unitid) or unitid
 
-    if not PlexusRoster:IsGUIDInRaid(guid) then
+    if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then
         return
     end
 
@@ -356,7 +362,9 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         end
     end
 
-    self:StatusOffline(guid, not UnitIsConnected(unitid))
+    if not Plexus.IsSpecialUnit[unitid] then
+        self:StatusOffline(guid, not UnitIsConnected(unitid))
+    end
 
     local healthText
     local deficitText
@@ -404,6 +412,16 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         self.core:SendStatusLost(guid, "unit_healthDeficit")
     end
 
+    if Plexus.IsSpecialUnit[unitid] then
+        self.core:SendStatusGained(unitid, "unit_health",
+            healthPriority,
+            (not ignoreRange and healthSettings.range),
+            (healthSettings.useClassColors and self.core:UnitColor(guid) or healthSettings.color),
+            healthText,
+            cur,
+            max,
+            healthSettings.icon)
+    end
     self.core:SendStatusGained(guid, "unit_health",
         healthPriority,
         (not ignoreRange and healthSettings.range),
