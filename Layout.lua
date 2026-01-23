@@ -757,6 +757,7 @@ function PlexusLayout:PostEnable()
 
     self:LoadLayout(self.db.profile.layout or self.db.profile.layouts["raid"])
     -- position and scale frame
+    self:MigrateOldPosition()
     self:RestorePosition()
     self:Scale()
     -- Create focus frame once
@@ -1428,59 +1429,59 @@ function PlexusLayout:UpdateColor()
     end
 end
 
-function PlexusLayout:SavePosition()
-    self:Debug("SavePosition")
-    local f = self.frame
-    local s = f:GetEffectiveScale()
-    local uiScale = UIParent:GetEffectiveScale()
-    local anchor = self.db.profile.anchor
+function PlexusLayout:MigrateOldPosition()
+    local db = self.db.profile
 
-    local x, y, relativePoint
-
-    relativePoint = anchor
-
-    if f:GetLeft() == nil then
-        self:Debug("WTF, GetLeft is nil")
+    -- If new format already exists, do nothing
+    if db.point and db.relativePoint and db.x and db.y then
         return
     end
 
-    if anchor == "CENTER" then
-        x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
-        y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
-    elseif anchor == "TOP" then
-        x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
-        y = f:GetTop() * s - UIParent:GetHeight() * uiScale
-    elseif anchor == "LEFT" then
-        x = f:GetLeft() * s
-        y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
-    elseif anchor == "RIGHT" then
-        x = f:GetRight() * s - UIParent:GetWidth() * uiScale
-        y = (f:GetTop() - f:GetHeight() / 2) * s - UIParent:GetHeight() / 2 * uiScale
-    elseif anchor == "BOTTOM" then
-        x = (f:GetLeft() + f:GetWidth() / 2) * s - UIParent:GetWidth() / 2 * uiScale
-        y = f:GetBottom() * s
-    elseif anchor == "TOPLEFT" then
-        x = f:GetLeft() * s
-        y = f:GetTop() * s - UIParent:GetHeight() * uiScale
-    elseif anchor == "TOPRIGHT" then
-        x = f:GetRight() * s - UIParent:GetWidth() * uiScale
-        y = f:GetTop() * s - UIParent:GetHeight() * uiScale
-    elseif anchor == "BOTTOMLEFT" then
-        x = f:GetLeft() * s
-        y = f:GetBottom() * s
-    elseif anchor == "BOTTOMRIGHT" then
-        x = f:GetRight() * s - UIParent:GetWidth() * uiScale
-        y = f:GetBottom() * s
+    -- If old format doesn't exist, nothing to migrate
+    if not db.PosX or not db.PosY or not db.anchorRel then
+        return
     end
 
-    if x and y and s then
-        x, y = floor(x + 0.5), floor(y + 0.5)
-        self.db.profile.PosX = x
-        self.db.profile.PosY = y
-        --self.db.profile.anchor = point
-        self.db.profile.anchorRel = relativePoint
-        self:Debug("Saved position", anchor, x, y)
-    end
+    local f = self.frame
+    local s = f:GetEffectiveScale()
+    local uiScale = UIParent:GetEffectiveScale()
+
+    -- Reverse the old math: convert stored screen coords back to UIParent coords
+    local x = db.PosX / s
+    local y = db.PosY / s
+
+    -- Now anchor to UIParent using the old anchor
+    f:ClearAllPoints()
+    f:SetPoint(db.anchorRel, UIParent, db.anchorRel, x, y)
+
+    -- Now read the *real* point using the new system
+    local point, relTo, relPoint, newX, newY = f:GetPoint()
+
+    -- Save in new format
+    db.point = point
+    db.relativePoint = relPoint
+    db.x = newX
+    db.y = newY
+
+    -- Remove old fields
+    db.PosX = nil
+    db.PosY = nil
+    db.anchorRel = nil
+end
+
+function PlexusLayout:SavePosition()
+    local f = self.frame
+    local point, _, relativePoint, x, y = f:GetPoint()
+
+    if not point then return end
+
+    x = floor(x + 0.5)
+    y = floor(y + 0.5)
+
+    self.db.profile.point = point
+    self.db.profile.relativePoint = relativePoint
+    self.db.profile.PosX = x
+    self.db.profile.PosY = y
 end
 
 function PlexusLayout:ResetPosition()
@@ -1496,17 +1497,17 @@ function PlexusLayout:ResetPosition()
 end
 
 function PlexusLayout:RestorePosition()
-    self:Debug("RestorePosition")
     local f = self.frame
-    local s = f:GetEffectiveScale()
-    local x = self.db.profile.PosX
-    local y = self.db.profile.PosY
-    local point = self.db.profile.anchor
-    self:Debug("Loaded position", point, x, y)
-    x, y = floor(x / s + 0.5), floor(y / s + 0.5)
+    local db = self.db.profile
+
     f:ClearAllPoints()
-    f:SetPoint(point, UIParent, point, x, y)
-    self:Debug("Restored position", point, x, y)
+    f:SetPoint(
+        db.point or "CENTER",
+        UIParent,
+        db.relativePoint or "CENTER",
+        db.PosX or 0,
+        db.PosY or 0
+    )
 end
 
 function PlexusLayout:Scale()
