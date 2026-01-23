@@ -326,15 +326,24 @@ function PlexusDeDeBuffIcons:OnInitialize()
 end
 
 function PlexusDeDeBuffIcons:OnEnable()
-    if not PlexusDeDeBuffIcons.db.profile.enabled then return end
-    self.enabled = true
-    self:RegisterEvent("UNIT_AURA")
-    if(not self.bucket) then
-        self:Debug("registering bucket")
-        self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
+    if not PlexusDeDeBuffIcons.db.profile.enabled then
+        for _,v in pairs(PlexusFrame.registeredFrames) do
+            for i=1, MAX_BUFFS do --luacheck: ignore
+                v.DeBuffIcons[i]:Hide()
+            end
+        end
+        self.enabled = nil
+        return
+    else
+        self.enabled = true
+        self:RegisterEvent("UNIT_AURA")
+        self:RegisterEvent("LOADING_SCREEN_DISABLED")
+        if(not self.bucket) then
+            self:Debug("registering bucket")
+            self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
+        end
+        self:UpdateAllUnitsBuffs()
     end
-
-    self:UpdateAllUnitsBuffs()
 end
 
 function PlexusDeDeBuffIcons:OnDisable()
@@ -427,6 +436,9 @@ local function updateFrame_df(v)
     end
 end
 
+function PlexusDeDeBuffIcons:LOADING_SCREEN_DISABLED()
+    PlexusDeDeBuffIcons:UpdateAllUnitsBuffs()
+end
 
 function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     if not self.enabled then return end

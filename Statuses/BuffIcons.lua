@@ -344,16 +344,24 @@ function PlexusBuffIcons:OnInitialize()
 end
 
 function PlexusBuffIcons:OnEnable()
-    if not PlexusBuffIcons.db.profile.enabled then return end
-    self.enabled = true
-    self:RegisterEvent("UNIT_AURA")
-    self:RegisterEvent("LOADING_SCREEN_DISABLED")
-    if(not self.bucket) then
-        self:Debug("registering bucket")
-        self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
+    if not PlexusBuffIcons.db.profile.enabled then
+        for _,v in pairs(PlexusFrame.registeredFrames) do
+            for i=1, MAX_BUFFS do --luacheck: ignore
+                v.BuffIcons[i]:Hide()
+            end
+        end
+        self.enabled = nil
+        return
+    else
+        self.enabled = true
+        self:RegisterEvent("UNIT_AURA")
+        self:RegisterEvent("LOADING_SCREEN_DISABLED")
+        if(not self.bucket) then
+            self:Debug("registering bucket")
+            self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
+        end
+        self:UpdateAllUnitsBuffs()
     end
-
-    self:UpdateAllUnitsBuffs()
 end
 
 function PlexusBuffIcons:OnDisable()
