@@ -44,6 +44,7 @@ PlexusStatusHeals.defaultDB = {
         ignore_heal_comm = true,
         minimumValue = 0.1,
         reduced_heal_absorb = true,
+        deficit = false,
     },
 }
 
@@ -97,6 +98,19 @@ local healsOptions = {
         end,
         set = function(_, v)
             PlexusStatusHeals.db.profile.alert_heals.minimumValue = v
+        end,
+        hidden = Plexus:IsRetailWow(),
+    },
+    deficit = {
+        type = "toggle", width = "double",
+        name = L["Work With Health Deficit"],
+        desc = L[""],
+        get = function()
+            return PlexusStatusHeals.db.profile.alert_heals.deficit
+        end,
+        set = function(_, v)
+            PlexusStatusHeals.db.profile.alert_heals.deficit = v
+            PlexusStatusHeals:UpdateAllUnits()
         end,
         hidden = Plexus:IsRetailWow(),
     },
@@ -239,6 +253,33 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 end
 
 function PlexusStatusHeals:SendIncomingHealsStatus(guid, incoming, estimatedHealth, maxHealth)
+    if not Plexus:issecretvalue(estimatedHealth) and settings.deficit then
+        local healthDeficit = maxHealth - estimatedHealth
+        local deficitText
+        if healthDeficit < 0 then
+            if healthDeficit > 0.1 then
+                deficitText = tostring(-healthDeficit)  -- Convert to string without "-" sign
+            else
+                deficitText = format("+%.1fk", -healthDeficit / 1000)
+            end
+        else
+            if healthDeficit <= -0.1 then
+                deficitText = tostring(healthDeficit)  -- Convert to string without "+" sign
+            else
+                deficitText = format("-%.1fk", healthDeficit / 1000)
+            end
+        end
+        local incomingText = format("%s", deficitText, incoming)
+        self.core:SendStatusGained(guid, "alert_heals",
+            settings.priority,
+            settings.range,
+            settings.color,
+            incomingText,
+            estimatedHealth,
+            maxHealth,
+            settings.icon)
+        return
+    end
     local incomingText = incoming
     if not Plexus:issecretvalue(incoming) then
         if incoming > 9999 then
