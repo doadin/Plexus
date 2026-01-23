@@ -145,7 +145,9 @@ local function Clear(self) -- luacheck: ignore 432
             for indicator in pairs(frame.indicators) do
                 if indicator ~= "text" or indicator ~= "text2" or indicator ~= "text3" then
                     --indicator:SetFrameLevel(indicator:GetFrameLevel()+1)
-                    indicator:SetParent(healthBar)
+                    if indicator.SetParent then
+                        indicator:SetParent(healthBar)
+                    end
                 end
             end
         end
