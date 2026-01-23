@@ -375,7 +375,7 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
 
     v.DeBuffIcons[n].stack:SetText(count)
     v.DeBuffIcons[n].stack:Show()
-    v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur, true)
+    v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur)
     local DEBUFF_DISPLAY_COLOR_INFO = {
         [0] = DEBUFF_TYPE_NONE_COLOR,
         [1] = DEBUFF_TYPE_MAGIC_COLOR,
