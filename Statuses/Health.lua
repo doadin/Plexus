@@ -304,7 +304,7 @@ end
 function Plexus:CalcMaxHP(unitid)
     self:Debug("PlexusStatusHealth CalcMaxHP: ", unitid)
     local max = UnitHealthMax(unitid) or 100
-    if max == 0 then
+    if not Plexus:issecretvalue(max) and max == 0 then
         -- fix for 4.3 division by zero
         max = 100
     end
