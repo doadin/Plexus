@@ -781,10 +781,10 @@ function Plexus:SetupOptions()
     for i = 1, #panels do
         local path = panels[i]
         local name = self.options.args[path].name
-        local f = Dialog:AddToBlizOptions(PLEXUS, name, PLEXUS, path)
+        local _, id = Dialog:AddToBlizOptions(PLEXUS, name, PLEXUS, path)
         --f.obj:SetTitle(PLEXUS .. " - " .. name) -- workaround for AceConfig deficiency
         --f.obj.SetTitle = noop
-        self.optionsPanels[i+1] = f
+        self.optionsPanels[i+1] = id
     end
 
     self.SetupOptions = nil
