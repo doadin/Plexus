@@ -4,7 +4,7 @@ end
 
 local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
 
-local MAX_BUFFS = 6
+local MAX_BUFFS = 40
 
 local L = setmetatable(PlexusBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
 
@@ -102,7 +102,7 @@ local options = {
             type = "range",
             name = L["Icons Size"],
             desc = L["Size for each buff icon"],
-            max = 16,
+            max = 50,
             min = 5,
             step = 1,
             get = function () return PlexusBuffIcons.db.profile.iconsize end,
