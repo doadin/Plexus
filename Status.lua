@@ -535,14 +535,14 @@ end
 
 ------------------------------------------------------------------------
 
-function PlexusStatus:SendStatusGained(guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords)
+function PlexusStatus:SendStatusGained(guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords, expirationTime)
     self:Debug("PlexusStatus", "SendStatusGained", guid, status, text, value, maxValue)
     if not guid then return end
 
     if type(priority) == "table" then
         -- support tables!
         local t = priority
-        priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords = t.priority, t.range, t.color, t.text, t.value, t.maxValue, t.texture, t.start, t.duration, t.count or t.stack, t.texCoords
+        priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords, expirationTime = t.priority, t.range, t.color, t.text, t.value, t.maxValue, t.texture, t.start, t.duration, t.count or t.stack, t.texCoords, t.expirationTime
     end
 
     local cache = self.cache
@@ -585,7 +585,9 @@ function PlexusStatus:SendStatusGained(guid, status, priority, range, color, tex
             and cached.start == start
             and cached.duration == duration
             and cached.count == count
-            and cached.texCoords == texCoords)
+            and cached.texCoords == texCoords
+            and cached.expirationTime == expirationTime
+        )
         then
             return
         end
@@ -602,9 +604,10 @@ function PlexusStatus:SendStatusGained(guid, status, priority, range, color, tex
         cached.duration = duration
         cached.count = count
         cached.texCoords = texCoords
+        cached.expirationTime = expirationTime
     end
 
-    self:SendMessage("Plexus_StatusGained", guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords)
+    self:SendMessage("Plexus_StatusGained", guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords, expirationTime)
 end
 
 function PlexusStatus:SendStatusLost(guid, status)

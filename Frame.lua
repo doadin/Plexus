@@ -218,7 +218,7 @@ end
 local COLOR_WHITE = { r = 1, g = 1, b = 1, a = 1 }
 local COORDS_FULL = { left = 0, right = 1, top = 0, bottom = 1 }
 
-function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, texture, start, duration, count, texCoords)
+function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, texture, start, duration, count, texCoords, expirationTime)
 
     if not color then
         color = COLOR_WHITE
@@ -232,7 +232,7 @@ function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, te
 
     local indicator = self.indicators[id]
     if indicator then
-        indicator:SetStatus(color, text, value, maxValue, texture, texCoords, count, start, duration)
+        indicator:SetStatus(color, text, value, maxValue, texture, texCoords, count, start, duration, expirationTime)
     else
         PlexusFrame:Debug("SetIndicator:", id, "does not exist")
     end
