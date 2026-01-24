@@ -208,7 +208,7 @@ local function SetStatus(self, color, text, value, _, texture, texCoords, stack,
         else
             self.texture:SetAlpha(1)
         end
-        if (not texture == "Interface\\TargetingFrame\\UI-RaidTargetingIcons") and texCoords then
+        if (texture ~= "Interface\\TargetingFrame\\UI-RaidTargetingIcons") and texCoords then
 		    self.texture:SetTexCoord(texCoords.left, texCoords.right, texCoords.top, texCoords.bottom)
         end
 	end
@@ -233,17 +233,27 @@ local function SetStatus(self, color, text, value, _, texture, texCoords, stack,
 		self.cooldown:Hide()
 	end
 
-	if profile.enableIconStackText and stack and stack ~= 0 then
-		self.text:SetText(stack)
-	else
-		self.text:SetText("")
+    if Plexus:issecretvalue(stack) then
+        self.text:SetText(C_StringUtil.TruncateWhenZero(stack))
+    else
+	    if profile.enableIconStackText and stack and stack ~= 0 then
+	        self.text:SetText(stack)
+	    else
+	        self.text:SetText("")
+        end
     end
 
     local CountDownNumber = tonumber(text)
-    if profile.showIconCountDownText and type(CountDownNumber) == "number" and CountDownNumber ~= 0 then
-        self.cooldowntext:SetText(text)
-	else
-		self.cooldowntext:SetText("")
+    if Plexus:issecretvalue(CountDownNumber) then
+        if profile.showIconCountDownText and type(CountDownNumber) == "number" then
+            self.text:SetText(C_StringUtil.TruncateWhenZero(CountDownNumber))
+        end
+    else
+        if profile.showIconCountDownText and type(CountDownNumber) == "number" and CountDownNumber ~= 0 then
+            self.cooldowntext:SetText(text)
+	    else
+	        self.cooldowntext:SetText("")
+        end
     end
 
 	self:Show()
