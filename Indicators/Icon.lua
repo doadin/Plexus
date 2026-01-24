@@ -226,7 +226,7 @@ local function SetStatus(self, color, text, value, _, texture, texCoords, stack,
 	if profile.enableIconCooldown and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then --luacheck: ignore 631
         self.cooldown:SetCooldown(start, duration)
 		self.cooldown:Show()
-    elseif duration and type(duration == "userdata") then
+    elseif profile.enableIconCooldown and self.cooldown.SetCooldownFromDurationObject and duration and type(duration == "userdata") then
 		self.cooldown:SetCooldownFromDurationObject(duration)
 		self.cooldown:Show()
 	else
