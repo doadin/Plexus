@@ -662,12 +662,17 @@ function Plexus:OnEnable()
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
     self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
-    self:RegisterEvent("PLAYER_FOCUS_CHANGED", "ExtraUnitsChanged")
-    self:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT", "ExtraUnitsChanged")
-    self:RegisterEvent("UNIT_TARGETABLE_CHANGED", "ExtraUnitsChanged")
-    self:RegisterEvent("PLAYER_ENTERING_WORLD", "ExtraUnitsChanged")
-    self:RegisterEvent("ARENA_OPPONENT_UPDATE", "ExtraUnitsChanged")
-    self:RegisterEvent("PLAYER_REGEN_ENABLED", "ExtraUnitsChanged")
+    local PlexusLayout = Plexus:GetModule("PlexusLayout")
+    if PlexusLayout.db.profile.focus then
+        self:RegisterEvent("PLAYER_FOCUS_CHANGED", "ExtraUnitsChanged")
+    end
+    if PlexusLayout.db.profile.boss then
+        self:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT", "ExtraUnitsChanged")
+        self:RegisterEvent("UNIT_TARGETABLE_CHANGED", "ExtraUnitsChanged")
+    end
+    if PlexusLayout.db.profile.arena then
+        self:RegisterEvent("ARENA_OPPONENT_UPDATE", "ExtraUnitsChanged")
+    end
 
     self:SendMessage("Plexus_Enabled")
 end
