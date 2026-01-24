@@ -1611,7 +1611,7 @@ function PlexusFrame:UpdateFrameUnits()
             end
             --End Priavte Aura
 
-            --if old_unit ~= unitid or old_guid ~= guid then
+            if old_unit ~= unitid or old_guid ~= guid then
                 self:Debug("Updating", frame_name, "to", unitid, guid, "was", old_unit, old_guid)
 
                 if unitid then
@@ -1631,7 +1631,7 @@ function PlexusFrame:UpdateFrameUnits()
 
                     self:ClearIndicators(frame)
                 end
-            --end
+            end
         end
     end
 end
