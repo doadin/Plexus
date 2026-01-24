@@ -192,7 +192,7 @@ local function Reset(self)
 
 end
 
-local function SetStatus(self, color, text, value, _, texture, texCoords, stack, start, duration)
+local function SetStatus(self, color, text, value, _, texture, texCoords, stack, start, duration, expirationTime)
 	local profile = PlexusFrame.db.profile
 	if not texture then return end
 
