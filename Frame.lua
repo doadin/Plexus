@@ -1679,7 +1679,8 @@ function PlexusFrame:UpdateIndicator(frame, indicator)
             status.start,
             status.duration,
             status.count,
-            status.texCoords)
+            status.texCoords,
+            status.expirationTime)
     else
         self:Debug("Clearing indicator", indicator, "for", (UnitName(frame.unit)))
         frame:ClearIndicator(indicator)
