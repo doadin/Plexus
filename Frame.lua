@@ -1527,7 +1527,7 @@ function PlexusFrame:UpdateFrameUnits()
             local old_guid = frame.unitGUID
             local unitid = SecureButton_GetModifiedUnit(frame)
                   unitid = unitid and gsub(unitid, "petpet", "pet") -- http://forums.wowace.com/showpost.php?p=307619&postcount=3174
-            local guid = unitid and UnitGUID(unitid) or nil
+            local guid = unitid and ( (not Plexus.IsSpecialUnit[unitid]) and UnitGUID(unitid) or unitid ) or nil
 
             --Start Priavte Aura
             if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) and not frame.anchorID then
