@@ -396,7 +396,7 @@ function PlexusBuffIcons:ExtraUnitsChanged(message, unitid)
 end
 
 local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
-    local dur = C_UnitAuras.GetAuraDuration(unit, instanceid) or 0
+    local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
     v.BuffIcons[n]:Show()
     v.BuffIcons[n].icon:SetTexture(icon)
     v.BuffIcons[n].auraid = instanceid
@@ -404,7 +404,9 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, instanceid , 2 , 100)
     v.BuffIcons[n].stack:SetText(count)
     v.BuffIcons[n].stack:Show()
-    v.BuffIcons[n].cd:SetCooldownFromDurationObject(dur, true)
+    if dur then
+        v.BuffIcons[n].cd:SetCooldownFromDurationObject(dur)
+    end
     --local DEBUFF_DISPLAY_COLOR_INFO = {
     --    [0] = DEBUFF_TYPE_NONE_COLOR,
     --    [1] = DEBUFF_TYPE_MAGIC_COLOR,
