@@ -251,6 +251,7 @@ function PlexusBuffIcons.InitializeFrame(_, f) --luacheck: ignore 212
             bg:SetFrameLevel(100)
 
             f.BuffIcons[i] = bg
+            f.BuffIcons[i]:Hide()
         end
 
         PlexusBuffIcons.ResetBuffIconSize(f)
@@ -356,6 +357,7 @@ function PlexusBuffIcons:OnEnable()
         self.enabled = true
         self:RegisterEvent("UNIT_AURA")
         self:RegisterEvent("LOADING_SCREEN_DISABLED")
+        self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
         if(not self.bucket) then
             self:Debug("registering bucket")
             self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
@@ -368,6 +370,7 @@ function PlexusBuffIcons:OnDisable()
     self.enabled = nil
     self:UnregisterEvent("UNIT_AURA")
     self:UnregisterEvent("LOADING_SCREEN_DISABLED")
+    self:UnregisterMessage("Plexus_ExtraUnitsChanged")
     if(self.bucket) then
         self:Debug("unregistering bucket")
         self:UnregisterBucket(self.bucket)
@@ -382,6 +385,14 @@ end
 
 function PlexusBuffIcons:Reset()
     self.super.Reset(self)
+end
+
+function PlexusBuffIcons:ExtraUnitsChanged(message, unitid)
+    for _,v in pairs(PlexusFrame.registeredFrames) do
+        if (v.unit == unitid) and (v.BuffIcons) then
+            for i=1, MAX_BUFFS do v.BuffIcons[i]:Hide() end
+        end
+    end
 end
 
 local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
@@ -462,7 +473,7 @@ end
 function PlexusBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     if not self.enabled then return end
     if not unitid then return end
-    local guid = UnitGUID(unitid)
+    local guid = not Plexus.IsSpecialUnit[unitid] and UnitGUID(unitid) or unitid
     if not guid then return end
 
     if not UnitAuraInstanceID then
