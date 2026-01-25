@@ -407,7 +407,9 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
         end
     end
     local dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unit, instanceid, curve)
-    v.DeBuffIcons[n]:SetBackdropBorderColor(dispelTypeColor:GetRGBA())
+    if dispelTypeColor then
+        v.DeBuffIcons[n]:SetBackdropBorderColor(dispelTypeColor:GetRGBA())
+    end
     --if not v.DeBuffIcons[n].hooked then
     --    v.DeBuffIcons[n]:HookScript("OnUpdate", function(self, elapsed)
     --        if v.DeBuffIcons[n].auraid then
