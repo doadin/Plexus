@@ -232,6 +232,8 @@ function PlexusDeDeBuffIcons.InitializeFrame(_, f) --luacheck: ignore 212
             bg.stack:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
             bg.stack:ClearAllPoints()
             bg.stack:SetPoint("BOTTOMRIGHT", bg.icon, 1, -1)
+            bg:SetFrameStrata("MEDIUM")
+            bg:SetFrameLevel(100)
             f.DeBuffIcons[i] = bg
             f.DeBuffIcons[i]:Hide()
         end
