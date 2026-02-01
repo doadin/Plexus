@@ -338,6 +338,7 @@ function PlexusDeDeBuffIcons:OnEnable()
     else
         self.enabled = true
         self:RegisterEvent("UNIT_AURA")
+        self:RegisterEvent("UNIT_FLAGS")
         self:RegisterEvent("LOADING_SCREEN_DISABLED")
         self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
         if(not self.bucket) then
@@ -351,6 +352,7 @@ end
 function PlexusDeDeBuffIcons:OnDisable()
     self.enabled = nil
     self:UnregisterEvent("UNIT_AURA")
+    self:UnregisterEvent("UNIT_FLAGS")
     self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     self:UnregisterMessage("Plexus_ExtraUnitsChanged")
     if(self.bucket) then
@@ -452,6 +454,13 @@ local function updateFrame_df(v)
     end
 end
 
+function PlexusDeDeBuffIcons:UNIT_FLAGS(_,unit)
+    local hostile = UnitCanAttack("player", unit) or UnitIsCharmed(unitid)
+    if hostile then
+        self:UNIT_AURA("UpdateAllUnitsBuffs", unit, {isFullUpdate = true} )
+    end
+end
+
 function PlexusDeDeBuffIcons:LOADING_SCREEN_DISABLED()
     PlexusDeDeBuffIcons:UpdateAllUnitsBuffs()
 end
@@ -472,10 +481,27 @@ function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
         UnitAuraInstanceID[guid] = {}
     end
 
-    if not PlexusRoster:IsGUIDInRaid(guid) then return end
+    if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then return end
     local filter = "HARMFUL" --HELPFUL
+    if Plexus.IsSpecialUnit[unitid] and UnitCanAttack("player", unitid) then
+        filter = "HARMFUL|PLAYER"
+    end
 
     -- UnitAuraInstanceID[guid] = auras = C_UnitAuras.GetUnitAuras(unit, filter [, maxCount [, sortRule [, sortDirection]]])
+
+    if IsRetailWow() then
+        --UnitAuraInstanceID[guid] = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
+        --doadintest = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
+        local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusDeDeBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.ExpirationOnly, Enum.UnitAuraSortDirection.Normal) or {}
+        UnitAuraInstanceID[guid] = {}
+        for _,aura in pairs(auradata) do
+            UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
+        end
+        for _,v in pairs(PlexusFrame.registeredFrames) do
+            if v.unitGUID == guid then updateFrame_df(v) end
+        end
+        return
+    end
 
     if IsRetailWow() then
         if updatedAuras and updatedAuras.isFullUpdate then

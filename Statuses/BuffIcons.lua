@@ -48,7 +48,8 @@ PlexusBuffIcons.defaultDB = {
         enable = true,
         priority = 30,
         range = false
-    }
+    },
+    overrideFilter = "false"
 }
 
 local options = {
@@ -206,6 +207,30 @@ local options = {
             end,
             values ={["TOPRIGHT"] = L["TOPRIGHT"], ["TOPLEFT"] = L["TOPLEFT"], ["BOTTOMLEFT"] = L["BOTTOMLEFT"], ["BOTTOMRIGHT"] = L["BOTTOMRIGHT"]}
         },
+        overrideFilter = {
+            order = 100,  width = "double",
+            type = "select",
+            name = L["Override Aura Filter(Advanced)"],
+            desc = L["Choose an option for aura filtering. Or false to keep defaults"],
+            get = function ()
+                return PlexusBuffIcons.db.profile.overrideFilter
+            end,
+            set = function(_, v)
+                PlexusBuffIcons.db.profile.overrideFilter = v
+                WithAllPlexusFrames(function (f) PlexusBuffIcons.ResetBuffIconPos(f) end)
+            end,
+        values = {
+            ["false"] = L["False"],
+            ["HELPFUL"] = L["HELPFUL"],
+            ["HELPFUL|PLAYER"] = L["HELPFUL PLAYER"],
+            ["HELPFUL|RAID"] = L["HELPFUL RAID"],
+            ["HELPFUL|RAID_IN_COMBAT"] = L["HELPFUL RAID IN COMBAT"],
+            ["HELPFUL|PLAYER|RAID"] = L["HELPFUL PLAYER RAID"],
+            ["HELPFUL|PLAYER|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID IN COMBAT"],
+            ["HELPFUL|RAID|RAID_IN_COMBAT"] = L["HELPFUL RAID RAID IN COMBAT"],
+            ["HELPFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID RAID IN COMBAT"],
+        }
+        },
     }
 }
 
@@ -356,6 +381,7 @@ function PlexusBuffIcons:OnEnable()
     else
         self.enabled = true
         self:RegisterEvent("UNIT_AURA")
+        self:RegisterEvent("UNIT_FLAGS")
         self:RegisterEvent("LOADING_SCREEN_DISABLED")
         self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
         if(not self.bucket) then
@@ -369,6 +395,7 @@ end
 function PlexusBuffIcons:OnDisable()
     self.enabled = nil
     self:UnregisterEvent("UNIT_AURA")
+    self:UnregisterEvent("UNIT_FLAGS")
     self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     self:UnregisterMessage("Plexus_ExtraUnitsChanged")
     if(self.bucket) then
@@ -468,6 +495,13 @@ local function updateFrame_df(v)
     end
 end
 
+function PlexusBuffIcons:UNIT_FLAGS(_,unit)
+    local hostile = UnitCanAttack("player", unit) or UnitIsCharmed(unitid)
+    if hostile then
+        self:UNIT_AURA("UpdateAllUnitsBuffs", unit, {isFullUpdate = true} )
+    end
+end
+
 function PlexusBuffIcons:LOADING_SCREEN_DISABLED()
     PlexusBuffIcons:UpdateAllUnitsBuffs()
 end
@@ -488,10 +522,23 @@ function PlexusBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
         UnitAuraInstanceID[guid] = {}
     end
 
-    if not PlexusRoster:IsGUIDInRaid(guid) then return end
-    local filter = PlexusBuffIcons.db.profile.showMine and "HELPFUL|PLAYER|RAID" or "HELPFUL|RAID" -- HARMFUL
+    if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then return end
+    local filter = (PlexusBuffIcons.db.profile.overrideFilter ~= "false" and PlexusBuffIcons.db.profile.overrideFilter) or (PlexusBuffIcons.db.profile.showMine and "HELPFUL|PLAYER" or "HELPFUL") -- HARMFUL
 
     -- UnitAuraInstanceID[guid] = auras = C_UnitAuras.GetUnitAuras(unit, filter [, maxCount [, sortRule [, sortDirection]]])
+    if IsRetailWow() then
+        --UnitAuraInstanceID[guid] = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
+        --doadintest = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
+        local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.Expiration, Enum.UnitAuraSortDirection.Normal) or {}
+        UnitAuraInstanceID[guid] = {}
+        for _,aura in pairs(auradata) do
+            UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
+        end
+        for _,v in pairs(PlexusFrame.registeredFrames) do
+            if v.unitGUID == guid then updateFrame_df(v) end
+        end
+        return
+    end
 
     if IsRetailWow() then
         if updatedAuras and updatedAuras.isFullUpdate then
