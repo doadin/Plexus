@@ -172,6 +172,14 @@ do
     local function UpdateUnit(unit)
         local name, realm = UnitName(unit)
         local guid = (not Plexus.IsSpecialUnit[unit] and UnitGUID(unit)) or (not Plexus:issecretvalue(unit) and unit)
+        if Plexus:issecretvalue(guid) then
+            if not Plexus:issecretvalue(unit) then
+                guid = unit
+            end
+        end
+        if Plexus:issecretvalue(guid) then
+            return
+        end
 
         if guid then
             --if realm == "" then realm = nil end
