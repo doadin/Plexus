@@ -1,3 +1,5 @@
+local _, Plexus = ...
+
 local function IsRetailWow()
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
@@ -11,6 +13,22 @@ local L = setmetatable(PlexusDeDeBuffIconsLocale or {}, {__index = function(t, k
 local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
 local PlexusDeDeBuffIcons = _G.Plexus:NewModule("PlexusDeDeBuffIcons", "AceBucket-3.0")
+
+local PlexusStatusAuras = _G.Plexus:NewStatusModule("PlexusStatusDispelByMe", "AceTimer-3.0")
+PlexusStatusAuras.menuName = L["Dispelable By Me"]
+
+PlexusStatusAuras.defaultDB = {
+    dispelable_by_me = {
+        enable = true,
+        priority = 70,
+        range = false,
+        color = { r = 0, g = 0, b = 1.0, a = 1.0 },
+    },
+}
+
+function PlexusStatusAuras:PostInitialize()
+    self:RegisterStatus("dispelable_by_me", L["Dispelable By Me"], nil, true)
+end
 
 local function WithAllPlexusFrames(func)
     for _, frame in pairs(PlexusFrame.registeredFrames) do
@@ -382,6 +400,7 @@ function PlexusDeDeBuffIcons:ExtraUnitsChanged(message, unitid)
 end
 
 local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
+    local settings = PlexusStatusAuras.db.profile.dispelable_by_me
     local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
     v.DeBuffIcons[n]:Show()
     v.DeBuffIcons[n].icon:SetTexture(icon)
@@ -410,9 +429,39 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
             curve:AddPoint(i, c)
         end
     end
+    local filter = "HARMFUL|RAID_PLAYER_DISPELLABLE"
+    local alpha
+    local ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, instanceid, filter) end, geterrorhandler())
+    if ok and not filtered then
+        alpha = 1
+    else
+        alpha = 0
+    end
     local dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unit, instanceid, curve)
+    local R,G,B
     if dispelTypeColor then
-        v.DeBuffIcons[n]:SetBackdropBorderColor(dispelTypeColor:GetRGBA())
+        R,G,B = dispelTypeColor:GetRGB()
+    end
+    if dispelTypeColor and R and G and B then
+        v.DeBuffIcons[n]:SetBackdropBorderColor(R,G,B,alpha)
+    end
+    PlexusStatusAuras.core:SendStatusLost(v.unitGUID, "dispelable_by_me")
+    if dispelTypeColor then
+        if ok and not filtered then
+            PlexusStatusAuras.core:SendStatusGained(v.unitGUID,
+                "dispelable_by_me",
+                settings.priority,
+                nil,
+                dispelTypeColor,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil)
+        end
     end
     --if not v.DeBuffIcons[n].hooked then
     --    v.DeBuffIcons[n]:HookScript("OnUpdate", function(self, elapsed)
@@ -436,6 +485,7 @@ local function updateFrame_df(v)
     for i=n, MAX_BUFFS do --luacheck: ignore
         v.DeBuffIcons[i]:Hide()
     end
+    PlexusStatusAuras.core:SendStatusLost(v.unitGUID, "dispelable_by_me")
 
     if v.unit and UnitAuraInstanceID[v.unitGUID] then
         local numAuras = 0
