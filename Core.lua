@@ -943,6 +943,7 @@ do
             CompactRaidFrameContainer:UnregisterAllEvents()
             if not InCombatLockdown() then
                 CompactRaidFrameManager:Hide()
+                CompactRaidFrameContainer:Hide()
                 local shown = CompactRaidFrameManager_GetSetting('IsShown')
                 if shown and shown ~= '0' then
                     CompactRaidFrameManager_SetSetting('IsShown', '0')
@@ -969,9 +970,17 @@ do
                 HidePartyFrames()
             end
         end
-        self.UpdateBlizzardFrames = nil
+        --self.UpdateBlizzardFrames = nil
     end
 end
+
+hooksecurefunc(EditModeManagerFrame, "EnterEditMode", function()
+    Plexus:UpdateBlizzardFrames()
+end)
+
+hooksecurefunc(EditModeManagerFrame, "ExitEditMode", function()
+    Plexus:UpdateBlizzardFrames()
+end)
 
 function Plexus:ExtraUnitsChanged(event)
     for i = 1, 10 do
