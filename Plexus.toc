@@ -114,9 +114,11 @@ Statuses\AFK.lua
 #@retail@
 Statuses\AltPower.lua
 #@end-retail@
+
 #@non-retail@
-Statuses\Auras.lua
 #@end-non-retail@
+Statuses\Auras.lua
+
 #@retail@
 Statuses\Factions.lua
 #@end-retail@
