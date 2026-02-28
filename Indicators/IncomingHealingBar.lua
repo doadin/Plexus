@@ -113,13 +113,13 @@ local function SetStatus(self, color, _, value, maxValue, _, _, _, start, durati
     if color then
         if PlexusFrame.db.profile.ExtraBarInvertColor then
             self:SetStatusBarColor(color.r,color.g,color.b,color.a)
-            self.bg:SetVertexColor(0,0,0,0.8)
+            self.bg:SetVertexColor(0,0,0,0.3)
         else
-            self:SetStatusBarColor(0,0,0,0.8)
+            self:SetStatusBarColor(0,0,0,0.3)
             self.bg:SetVertexColor(color.r,color.g,color.b,color.a)
         end
     end
-    self:SetStatusBarColor(0,1,0,0.5)
+    self:SetStatusBarColor(0,1,0,0.3)
     --if not self:IsShown() then
     --    local frame = self.__owner
     --    frame.indicators.text:SetParent(self)
