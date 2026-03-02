@@ -399,6 +399,7 @@ function PlexusDeDeBuffIcons:ExtraUnitsChanged(message, unitid)
     end
 end
 
+local UnitAuraInstanceID
 local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     local settings = PlexusStatusAuras.db.profile.dispelable_by_me
     local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
@@ -430,12 +431,14 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
         end
     end
     local filter = "HARMFUL|RAID_PLAYER_DISPELLABLE"
-    local alpha
-    local ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, instanceid, filter) end, geterrorhandler())
-    if ok and filtered then
-        alpha = 1
-    else
-        alpha = 0
+    local alpha = 0
+    local ok, filtered = true, true
+    for instanceID in pairs(UnitAuraInstanceID[v.unitGUID]) do
+        ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, instanceID, filter) end, geterrorhandler())
+        if ok and not filtered then
+            alpha = 1
+            break
+        end
     end
     local dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unit, instanceid, curve)
     local R,G,B
@@ -477,7 +480,6 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     --end
 end
 
-local UnitAuraInstanceID
 local function updateFrame_df(v)
     local n = 1
     local setting = PlexusDeDeBuffIcons.db.profile
