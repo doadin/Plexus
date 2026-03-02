@@ -974,13 +974,15 @@ do
     end
 end
 
-hooksecurefunc(EditModeManagerFrame, "EnterEditMode", function()
-    Plexus:UpdateBlizzardFrames()
-end)
+if Plexus:IsRetailWow() then
+    hooksecurefunc(EditModeManagerFrame, "EnterEditMode", function()
+        Plexus:UpdateBlizzardFrames()
+    end)
 
-hooksecurefunc(EditModeManagerFrame, "ExitEditMode", function()
-    Plexus:UpdateBlizzardFrames()
-end)
+    hooksecurefunc(EditModeManagerFrame, "ExitEditMode", function()
+        Plexus:UpdateBlizzardFrames()
+    end)
+end
 
 function Plexus:ExtraUnitsChanged(event)
     for i = 1, 10 do
