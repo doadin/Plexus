@@ -432,7 +432,7 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     local filter = "HARMFUL|RAID_PLAYER_DISPELLABLE"
     local alpha
     local ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, instanceid, filter) end, geterrorhandler())
-    if ok and not filtered then
+    if ok and filtered then
         alpha = 1
     else
         alpha = 0
