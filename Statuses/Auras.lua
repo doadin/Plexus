@@ -162,7 +162,9 @@ spell_names = {
     ["Prayer of Mending"] = GetSpellName(41635),
     ["Echo of Light"] = GetSpellName(77489),
 -- Shaman
+    ["Ancestral Vigor"] = GetSpellName(207400),
     ["Earth Shield"] = GetSpellName(974),
+    ["Hydrobubble"] = GetSpellName(444490),
     ["Riptide"] = GetSpellName(61295),
     ["Earthliving Weapon"] = GetSpellName(382021),
 }
@@ -1032,12 +1034,34 @@ PlexusStatusAuras.defaultDB = {
     ---------------------
     -- Shaman
     ---------------------
+    [PlexusStatusAuras:StatusForSpell("Ancestral Vigor", true)] = {
+        -- 207400
+        desc = format(L["Buff: %s"], spell_names["Ancestral Vigor"]),
+        buff = spell_names["Ancestral Vigor"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Ancestral Vigor"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
+    },
     [PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
         -- 204288
         desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
         buff = spell_names["Earth Shield"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Earth Shield"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+    },
+    [PlexusStatusAuras:StatusForSpell("Hydrobubble", true)] = {
+        -- 444490
+        desc = format(L["Buff: %s"], spell_names["Hydrobubble"]),
+        buff = spell_names["Hydrobubble"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Hydrobubble"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
     },
     --[PlexusStatusAuras:StatusForSpell("Water Shield", true)] = {
     --    -- 52127
