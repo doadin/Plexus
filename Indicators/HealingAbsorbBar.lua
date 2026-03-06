@@ -28,12 +28,16 @@ local function Reset(self) -- luacheck: ignore 432
     local frame = self.__owner
     local healthBar = frame.indicators.bar
     local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
+    local side = profile.ExtraBarSide
+    local enableExtraBar = profile.enableExtraBar
+    local extraBarSizeModW = side == "Left" or side == "Right" and enableExtraBar and profile.ExtraBarSize * 100 or 0
+    local extraBarSizeModH = side == "Top" or side == "Bottom" and enableExtraBar and profile.ExtraBarSize * 100 or 0
 
     self:SetParent(healthBar)
     self:ClearAllPoints()
-    self:SetPoint("TOP", frame, "TOP", offset, -offset)
-    self:SetWidth(frame:GetWidth()-5)
-    self:SetHeight(frame:GetHeight()-5)
+    self:SetPoint("TOP", frame, "TOP", -2, -offset)
+    self:SetWidth(frame:GetWidth()-extraBarSizeModW)
+    self:SetHeight(frame:GetHeight()-extraBarSizeModH)
     self:SetOrientation(profile.orientation)
     self:SetReverseFill(true)
     --if side == "Right" then
@@ -112,14 +116,17 @@ local function SetStatus(self, color, _, value, maxValue, _, _, _, start, durati
 
     if color then
         if PlexusFrame.db.profile.ExtraBarInvertColor then
-            self:SetStatusBarColor(color.r,color.g,color.b,color.a)
+            self:SetStatusBarColor(color.r,color.g,color.b,0.3)
             self.bg:SetVertexColor(0,0,0,0.3)
         else
             self:SetStatusBarColor(0,0,0,0.3)
-            self.bg:SetVertexColor(color.r,color.g,color.b,color.a)
+            self.bg:SetVertexColor(color.r,color.g,color.b,0.3)
         end
+    else
+        self:SetStatusBarColor(1,0,0,0.3)
     end
-    self:SetStatusBarColor(0,1,0,0.3)
+
+    self:Show()
     --if not self:IsShown() then
     --    local frame = self.__owner
     --    frame.indicators.text:SetParent(self)
@@ -128,12 +135,12 @@ local function SetStatus(self, color, _, value, maxValue, _, _, _, start, durati
     --    end
     --    frame.indicators.icon:SetParent(self)
     --end
-    if profile.enableExtraBar and not self:IsShown() then
-        self:Show()
-    elseif not profile.enableExtraBar and self:IsShown() then
-        self:Hide()
-    end
-    self:SetAlpha(value)
+    --if profile.enableExtraBar and not self:IsShown() then
+    --    self:Show()
+    --elseif not profile.enableExtraBar and self:IsShown() then
+    --    self:Hide()
+    --end
+    --self:SetAlpha(value)
     self.bg:Hide()
 end
 
