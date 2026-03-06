@@ -14,22 +14,6 @@ local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
 local PlexusDeDeBuffIcons = _G.Plexus:NewModule("PlexusDeDeBuffIcons", "AceBucket-3.0")
 
-local PlexusStatusAuras = _G.Plexus:NewStatusModule("PlexusStatusDispelByMe", "AceTimer-3.0")
-PlexusStatusAuras.menuName = L["Dispelable By Me"]
-
-PlexusStatusAuras.defaultDB = {
-    dispelable_by_me = {
-        enable = true,
-        priority = 70,
-        range = false,
-        color = { r = 0, g = 0, b = 1.0, a = 1.0 },
-    },
-}
-
-function PlexusStatusAuras:PostInitialize()
-    self:RegisterStatus("dispelable_by_me", L["Dispelable By Me"], nil, true)
-end
-
 local function WithAllPlexusFrames(func)
     for _, frame in pairs(PlexusFrame.registeredFrames) do
         func(frame)
@@ -355,12 +339,6 @@ function PlexusDeDeBuffIcons:OnEnable()
         end
         self.enabled = nil
         return
-    elseif PlexusStatusAuras.db.profile.dispelable_by_me.enabled then
-        self:RegisterEvent("UNIT_AURA")
-        self:RegisterEvent("UNIT_FLAGS")
-        self:RegisterEvent("LOADING_SCREEN_DISABLED")
-        self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
-        self:UpdateAllUnitsBuffs()
     else
         self.enabled = true
         self:RegisterEvent("UNIT_AURA")
@@ -407,7 +385,6 @@ end
 
 local UnitAuraInstanceID
 local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
-    local settings = PlexusStatusAuras.db.profile.dispelable_by_me
     local DEBUFF_DISPLAY_COLOR_INFO = {
         [0] = DEBUFF_TYPE_NONE_COLOR,
         [1] = DEBUFF_TYPE_MAGIC_COLOR,
@@ -424,30 +401,21 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
             curve:AddPoint(i, c)
         end
     end
-    if PlexusDeDeBuffIcons.db.profile.enabled then
-        local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
-        v.DeBuffIcons[n]:Show()
-        v.DeBuffIcons[n].icon:SetTexture(icon)
-        v.DeBuffIcons[n].auraid = instanceid
-        --count = C_StringUtil.TruncateWhenZero(count)
-        count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, instanceid , 2 , 100)
 
-        v.DeBuffIcons[n].stack:SetText(count)
-        v.DeBuffIcons[n].stack:Show()
-        if dur then
-            v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur)
-        end
+    local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
+    v.DeBuffIcons[n]:Show()
+    v.DeBuffIcons[n].icon:SetTexture(icon)
+    v.DeBuffIcons[n].auraid = instanceid
+    --count = C_StringUtil.TruncateWhenZero(count)
+    count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, instanceid , 2 , 100)
+
+    v.DeBuffIcons[n].stack:SetText(count)
+    v.DeBuffIcons[n].stack:Show()
+    if dur then
+        v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur)
     end
-    local filter = "HARMFUL|RAID_PLAYER_DISPELLABLE"
+
     local alpha = 0
-    local ok, filtered = true, true
-    for instanceID in pairs(UnitAuraInstanceID[v.unitGUID]) do
-        ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, instanceID, filter) end, geterrorhandler())
-        if ok and not filtered then
-            alpha = 1
-            break
-        end
-    end
     local dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unit, instanceid, curve)
     local R,G,B
     if dispelTypeColor then
@@ -456,38 +424,6 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     if dispelTypeColor and R and G and B then
         v.DeBuffIcons[n]:SetBackdropBorderColor(R,G,B,alpha)
     end
-    if settings.enabled then
-        PlexusStatusAuras.core:SendStatusLost(v.unitGUID, "dispelable_by_me")
-        if dispelTypeColor then
-            if ok and not filtered then
-                PlexusStatusAuras.core:SendStatusGained(v.unitGUID,
-                    "dispelable_by_me",
-                    settings.priority,
-                    nil,
-                    dispelTypeColor,
-                    nil,
-                    nil,
-                    nil,
-                    nil,
-                    nil,
-                    nil,
-                    nil,
-                    nil)
-            end
-        end
-    end
-    --if not v.DeBuffIcons[n].hooked then
-    --    v.DeBuffIcons[n]:HookScript("OnUpdate", function(self, elapsed)
-    --        if v.DeBuffIcons[n].auraid then
-    --            local dur = C_UnitAuras.GetAuraDuration(v.unit, v.DeBuffIcons[n].auraid)
-    --            local remains = dur:GetRemainingDuration()
-    --            --local remains = dur:GetRemainingPercent()
-    --            v.DeBuffIcons[n].cdtext:SetText(AbbreviateNumbers(remains))
-    --            --print(v.DeBuffIcons[n].auraid)
-    --        end
-    --    end)
-    --    v.DeBuffIcons[n].hooked = true
-    --end
 end
 
 local function updateFrame_df(v)
@@ -497,7 +433,6 @@ local function updateFrame_df(v)
     for i=n, MAX_BUFFS do --luacheck: ignore
         v.DeBuffIcons[i]:Hide()
     end
-    PlexusStatusAuras.core:SendStatusLost(v.unitGUID, "dispelable_by_me")
 
     if v.unit and UnitAuraInstanceID[v.unitGUID] then
         local numAuras = 0
