@@ -355,6 +355,12 @@ function PlexusDeDeBuffIcons:OnEnable()
         end
         self.enabled = nil
         return
+    elseif PlexusStatusAuras.db.profile.dispelable_by_me.enabled then
+        self:RegisterEvent("UNIT_AURA")
+        self:RegisterEvent("UNIT_FLAGS")
+        self:RegisterEvent("LOADING_SCREEN_DISABLED")
+        self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
+        self:UpdateAllUnitsBuffs()
     else
         self.enabled = true
         self:RegisterEvent("UNIT_AURA")
@@ -402,18 +408,6 @@ end
 local UnitAuraInstanceID
 local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     local settings = PlexusStatusAuras.db.profile.dispelable_by_me
-    local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
-    v.DeBuffIcons[n]:Show()
-    v.DeBuffIcons[n].icon:SetTexture(icon)
-    v.DeBuffIcons[n].auraid = instanceid
-    --count = C_StringUtil.TruncateWhenZero(count)
-    count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, instanceid , 2 , 100)
-
-    v.DeBuffIcons[n].stack:SetText(count)
-    v.DeBuffIcons[n].stack:Show()
-    if dur then
-        v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur)
-    end
     local DEBUFF_DISPLAY_COLOR_INFO = {
         [0] = DEBUFF_TYPE_NONE_COLOR,
         [1] = DEBUFF_TYPE_MAGIC_COLOR,
@@ -428,6 +422,20 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
         curve:SetType(Enum.LuaCurveType.Step)
         for i, c in pairs(DEBUFF_DISPLAY_COLOR_INFO) do
             curve:AddPoint(i, c)
+        end
+    end
+    if PlexusDeDeBuffIcons.db.profile.enabled then
+        local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
+        v.DeBuffIcons[n]:Show()
+        v.DeBuffIcons[n].icon:SetTexture(icon)
+        v.DeBuffIcons[n].auraid = instanceid
+        --count = C_StringUtil.TruncateWhenZero(count)
+        count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, instanceid , 2 , 100)
+
+        v.DeBuffIcons[n].stack:SetText(count)
+        v.DeBuffIcons[n].stack:Show()
+        if dur then
+            v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur)
         end
     end
     local filter = "HARMFUL|RAID_PLAYER_DISPELLABLE"
@@ -448,22 +456,24 @@ local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
     if dispelTypeColor and R and G and B then
         v.DeBuffIcons[n]:SetBackdropBorderColor(R,G,B,alpha)
     end
-    PlexusStatusAuras.core:SendStatusLost(v.unitGUID, "dispelable_by_me")
-    if dispelTypeColor then
-        if ok and not filtered then
-            PlexusStatusAuras.core:SendStatusGained(v.unitGUID,
-                "dispelable_by_me",
-                settings.priority,
-                nil,
-                dispelTypeColor,
-                nil,
-                nil,
-                nil,
-                nil,
-                nil,
-                nil,
-                nil,
-                nil)
+    if settings.enabled then
+        PlexusStatusAuras.core:SendStatusLost(v.unitGUID, "dispelable_by_me")
+        if dispelTypeColor then
+            if ok and not filtered then
+                PlexusStatusAuras.core:SendStatusGained(v.unitGUID,
+                    "dispelable_by_me",
+                    settings.priority,
+                    nil,
+                    dispelTypeColor,
+                    nil,
+                    nil,
+                    nil,
+                    nil,
+                    nil,
+                    nil,
+                    nil,
+                    nil)
+            end
         end
     end
     --if not v.DeBuffIcons[n].hooked then
