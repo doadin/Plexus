@@ -97,24 +97,19 @@ function PlexusStatusAuras:UNIT_AURA(_, unitid, updatedAuras)
         ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unitid, instanceID, filter) end, geterrorhandler())
         if ok and not filtered then
             dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unitid, instanceID, curve)
-            --if dispelTypeColor then
-                if ok and not filtered then
-                    PlexusStatusAuras.core:SendStatusGained(guid,
-                        "dispelable_by_me",
-                        settings.priority,
-                        nil,
-                        dispelTypeColor or settings.color,
-                        nil,
-                        nil,
-                        nil,
-                        nil,
-                        nil,
-                        nil,
-                        nil,
-                        nil)
-                end
-            --end
-            break
+            PlexusStatusAuras.core:SendStatusGained(guid,
+                "dispelable_by_me",
+                settings.priority,
+                nil,
+                dispelTypeColor or settings.color,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil,
+                nil)
         end
     end
 end
