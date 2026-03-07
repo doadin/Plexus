@@ -209,11 +209,11 @@ local function GroupRangeCheck(_, unit)
         elseif Plexus:issecretvalue(checkedRange) then
             inRange = getFriendly() and IsSpellInRange(getFriendly(), unit)
             if inRange == nil then
-                inRange = true
+                inRange = false
             end
             return inRange
         else
-            return true
+            return false
         end
     end
 end
