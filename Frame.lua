@@ -1583,6 +1583,7 @@ function PlexusFrame:UpdateFrameUnits()
                         },
                         iconWidth = settings.PrivateAuraWidth, --frame.indicators.icon:GetWidth()
                         iconHeight = settings.PrivateAuraHeight, --frame.indicators.icon:GetHeight()
+                        borderScale = 1.1,
                     };
                 }
                 frame.anchorID = C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
@@ -1621,6 +1622,7 @@ function PlexusFrame:UpdateFrameUnits()
                         },
                         iconWidth = settings.PrivateAuraWidth, --frame.indicators.icon:GetWidth()
                         iconHeight = settings.PrivateAuraHeight, --frame.indicators.icon:GetHeight()
+                        borderScale = 1.1,
                     };
                 }
                 frame.anchorID = C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
