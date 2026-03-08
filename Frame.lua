@@ -1553,30 +1553,30 @@ function PlexusFrame:UpdateFrameUnits()
 
             --Start Priavte Aura
             if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) and not frame.anchorID then
-                local icon = CreateFrame("Button", frame_name .. "PA", frame.indicators.bar, BackdropTemplateMixin and "BackdropTemplate")
-                icon:SetPoint("CENTER")
-                icon:SetSize(1, 1)
-                icon:EnableMouse(false)
-                icon:Show()
+                frame.pa = CreateFrame("Button", nil, frame.indicators.bar, BackdropTemplateMixin and "BackdropTemplate")
+                frame.pa:SetPoint("CENTER")
+                frame.pa:SetSize(1, 1)
+                frame.pa:EnableMouse(false)
+                frame.pa:Show()
                 local auraAnchor = {
                     durationAnchor =
                     {
                         point = "CENTER",
-                        relativeTo = icon, --frame.Duration
+                        relativeTo = frame.pa, --frame.Duration
                         relativePoint = "CENTER",
                         offsetX = settings.PrivateAuraOffsetX,
                         offsetY = settings.PrivateAuraOffsetY,
                     };
                     unitToken = unitid,
                     auraIndex = 1, --frame.auraIndex
-                    parent = icon,
+                    parent = frame.pa,
                     showCountdownFrame = settings.enablePrivateAuraCountdownFrame,
                     showCountdownNumbers = settings.enablePrivateAuraCountdownNumbers,
                     iconInfo =
                     {
                         iconAnchor = {
                             point = "CENTER",
-                            relativeTo = icon,
+                            relativeTo = frame.pa,
                             relativePoint = "CENTER",
                             offsetX = settings.PrivateAuraOffsetX,
                             offsetY = settings.PrivateAuraOffsetY,
@@ -1591,7 +1591,7 @@ function PlexusFrame:UpdateFrameUnits()
             if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) and frame.anchorID then
                 C_UnitAuras.RemovePrivateAuraAnchor(frame.anchorID)
                 frame.anchorID = nil
-                local icon = _G[frame_name .. "PA"]
+                local icon = frame.pa
                 icon:SetParent(frame.indicators.bar)
                 icon:SetPoint("CENTER")
                 icon:SetSize(1, 1)
