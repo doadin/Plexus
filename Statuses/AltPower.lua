@@ -108,7 +108,7 @@ function PlexusAltPower:UpdateUnitResource(unitid)
     local priority = PlexusAltPower.db.profile.unit_altpower.priority
     local color = PlexusAltPower.db.profile.unit_altpower.color
 
-    if max <= 0 then
+    if not Plexus:issecretvalue(max) and max <= 0 then
         self.core:SendStatusLost(unitGUID, "unit_altpower")
         return
     end
