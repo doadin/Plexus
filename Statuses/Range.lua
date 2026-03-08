@@ -206,6 +206,8 @@ local function GroupRangeCheck(_, unit)
         local inRange, checkedRange = UnitInRange(unit)
         if not Plexus:issecretvalue(checkedRange) and checkedRange then
             return inRange
+        elseif Plexus:IsRetailWow() then
+            return inRange
         elseif Plexus:issecretvalue(checkedRange) then
             inRange = getFriendly() and IsSpellInRange(getFriendly(), unit)
             if inRange == nil then
@@ -223,14 +225,23 @@ PlexusStatusRange.UnitInRange = GroupRangeCheck
 function PlexusStatusRange:CheckRange()
     local settings = self.db.profile.alert_range
     for guid, unit in PlexusRoster:IterateRoster() do
-        if self:UnitInRange(unit) then
-            self.core:SendStatusLost(guid, "alert_range")
-        else
+        if Plexus:IsRetailWow() then
             self.core:SendStatusGained(guid, "alert_range",
                 settings.priority,
-                false,
-                settings.color,
-                settings.text)
+                nil,
+                nil,
+                nil,
+                self:UnitInRange(unit))
+        else
+            if self:UnitInRange(unit) then
+                self.core:SendStatusLost(guid, "alert_range")
+            else
+                self.core:SendStatusGained(guid, "alert_range",
+                    settings.priority,
+                    false,
+                    settings.color,
+                    settings.text)
+            end
         end
     end
 end

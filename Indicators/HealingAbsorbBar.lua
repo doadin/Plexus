@@ -100,7 +100,10 @@ local function Reset(self) -- luacheck: ignore 432
 end
 
 local function SetStatus(self, color, _, value, maxValue, _, _, _, start, duration) -- luacheck: ignore 432
-	local profile = PlexusFrame.db.profile
+	if type(value) ~= "number" then
+        return
+    end
+    local profile = PlexusFrame.db.profile
 
 	if profile.ExtraBarTrackDuration and type(duration) == "number" and duration > 0 and type(start) == "number" and start > 0 then --luacheck: ignore 631
         self.ProcessingDuration = true

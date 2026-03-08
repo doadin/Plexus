@@ -19,11 +19,15 @@ PlexusFrame:RegisterIndicator("frameAlpha", L["Frame Alpha"],
     nil,
 
     -- SetStatus
-    function(self, color)
+    function(self, color, _, value)
         if not color then return end
 
         local frame = self.__owner
-        frame:SetAlpha(color.a or 1)
+        if Plexus:IsRetailWow() and type(value) == "boolean" then
+            frame:SetAlphaFromBoolean(value, 1, 0.3)
+        else
+            frame:SetAlpha(color.a or 1)
+        end
     end,
 
     -- ClearStatus

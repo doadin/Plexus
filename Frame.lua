@@ -229,11 +229,16 @@ local COORDS_FULL = { left = 0, right = 1, top = 0, bottom = 1 }
 
 function PlexusFrame.prototype:SetIndicator(id, color, text, value, maxValue, texture, start, duration, count, texCoords, expirationTime)
 
+    if type(value) == "boolean" and id ~= "frameAlpha" then
+        return
+    end
     if not color then
         color = COLOR_WHITE
     end
-    if value and not maxValue then
-        maxValue = 100
+    if not Plexus:issecretvalue(value) then
+        if value and not maxValue then
+            maxValue = 100
+        end
     end
     if texture and not texCoords then
         texCoords = COORDS_FULL

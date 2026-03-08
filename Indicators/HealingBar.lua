@@ -57,6 +57,9 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
 
     -- SetStatus
     function(self, color, _, value, maxValue)
+        if type(value) ~= "number" then
+            return
+        end
         if not Plexus:issecretvalue(value) then
             if not value or not maxValue or value == 0 or maxValue == 0 then
                 return self:Hide()
