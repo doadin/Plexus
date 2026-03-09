@@ -102,14 +102,14 @@ function PlexusStatusAuras:UNIT_AURA(_, unitid, updatedAuras)
                 settings.priority,
                 nil,
                 dispelTypeColor or settings.color,
+                "DISPEL",
+                nil,
+                nil,
+                7582803,
                 nil,
                 nil,
                 nil,
-                nil,
-                nil,
-                nil,
-                nil,
-                nil)
+                { left = 0.432265625, right = 0.478515625, top = 0.32421875, bottom = 0.42671875 })
         end
     end
 end
