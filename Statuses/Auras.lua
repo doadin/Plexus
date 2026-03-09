@@ -3058,6 +3058,15 @@ function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit,
         end
     end
 
+    -- Weird Second Lifebloom on Retail
+    if unitAuras[guid] then
+        for id, info in pairs(unitAuras[guid]) do
+            if info.spellId == 1227806 then
+                unitAuras[guid][id] = nil
+            end
+        end
+    end
+
     --for unitID,auraInstanceIDTable in pairs(unitAuras) do
     if unitAuras[guid] then
         local numAuras = 0
