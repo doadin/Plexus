@@ -110,7 +110,7 @@ function PlexusAltPower:UpdateUnitResource(unitid)
     local text = current
     if type(current) == "number" then
         if Plexus:IsRetailWow() then
-            text = Plexus:AbbreviateNumbers(current)
+            text = AbbreviateNumbers(current)
         else
             if current > 9999 then
                 text = format("%.0fk", current / 1000)
