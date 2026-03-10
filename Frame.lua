@@ -411,6 +411,19 @@ PlexusFrame.defaultDB = {
     PrivateAuraOffsetY = 0,
 }
 
+if Plexus:IsRetailWow() then
+    PlexusFrame.defaultDB.statusmap.healingBar = {
+        alert_heals = false,
+        alert_absorbs = false,
+    }
+    PlexusFrame.defaultDB.statusmap.ei_bar_bartwo = {
+        alert_absorbs = true,
+    }
+    PlexusFrame.defaultDB.statusmap.ei_bar_barfour = {
+        alert_heals = true,
+    }
+end
+
 ------------------------------------------------------------------------
 
 local reloadHandle
@@ -1787,6 +1800,20 @@ local IconNames = {
     ["ei_icon_right4"] = true,
 }
 
+local noIconStatuses = {
+    ["afk"] = true,
+    ["unit_altpower"] = true,
+    ["groupnumber"] = true,
+    ["alert_heal_absorbs"] = true,
+    ["alert_heals"] = true,
+    ["unit_health"] = true,
+    ["alert_lowMana"] = true,
+    ["mouseover"] = true,
+    ["alert_me"] = true,
+    ["alert_range"] = true,
+    ["unit_resource"] = true,
+}
+
 
 function PlexusFrame:StatusForIndicator(_, guid, indicator)
     local topPriority = 0
@@ -1992,27 +2019,35 @@ function PlexusFrame:UpdateOptionsForIndicator(indicator, name, order)
 
     -- create entry for each registered status
     for status, _, descr in PlexusStatus:RegisteredStatusIterator() do
-        -- needs to be local for the get/set closures
-        local indicatorType = indicator
-        local statusKey = status
+        if (Plexus:IsRetailWow() and not ( (indicator == "healingBar" and (status == "alert_heals" or status == "alert_absorbs" or status == "alert_heal_absorbs")) or (IconNames[indicator] and noIconStatuses[status] ) )
+        or (not Plexus:IsRetailWow() and not (IconNames[indicator] and noIconStatuses[status]))
+        ) then
+            -- needs to be local for the get/set closures
+            local indicatorType = indicator
+            local statusKey = status
 
-        self:Debug(indicator.type, status)
+            self:Debug(indicator, status)
 
-        if not indicatorMenu[status] then
-            indicatorMenu[status] = {
-                name = descr,
-                desc = L["Toggle status display."],
-                width = "double",
-                type = "toggle",
-                get = function()
-                    return PlexusFrame.db.profile.statusmap[indicatorType][statusKey]
-                end,
-                set = function(info, v) --luacheck: ignore 212
-                    PlexusFrame.db.profile.statusmap[indicatorType][statusKey] = v
-                    PlexusFrame:UpdateAllFrames()
-                end,
-            }
-            self:Debug("Added", indicator.type, status)
+            if not indicatorMenu[status] then
+                indicatorMenu[status] = {
+                    name = descr,
+                    desc = L["Toggle status display."],
+                    width = "double",
+                    type = "toggle",
+                    get = function()
+                        return PlexusFrame.db.profile.statusmap[indicatorType][statusKey]
+                    end,
+                    set = function(info, v) --luacheck: ignore 212
+                        PlexusFrame.db.profile.statusmap[indicatorType][statusKey] = v
+                        PlexusFrame:UpdateAllFrames()
+                    end,
+                }
+                self:Debug("Added", indicator, status)
+            end
+        else
+            if Plexus:IsRetailWow() and PlexusFrame.db.profile.statusmap[indicator] and PlexusFrame.db.profile.statusmap[indicator][status] then
+                PlexusFrame.db.profile.statusmap[indicator][status] = nil
+            end
         end
     end
 end
