@@ -86,7 +86,7 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
         end
 
         if profile.healingBar_useStatusColor then
-            if profile.invertBarColor then
+            if profile.invertBarColor or (Plexus:issecretvalue(color.r) or Plexus:issecretvalue(color.g) or Plexus:issecretvalue(color.b)) then
                 self:SetStatusBarColor(color.r, color.g, color.b)
             else
                 local mu = profile.healingBar_intensity
@@ -94,7 +94,7 @@ PlexusFrame:RegisterIndicator("healingBar", L["Healing Bar"],
             end
         else
             local r, g, b = frame.indicators.bar:GetStatusBarColor()
-            if profile.invertBarColor then
+            if profile.invertBarColor or (Plexus:issecretvalue(color.r) or Plexus:issecretvalue(color.g) or Plexus:issecretvalue(color.b)) then
                 self:SetStatusBarColor(r, g, b)
             else
                 local mu = profile.healingBar_intensity
