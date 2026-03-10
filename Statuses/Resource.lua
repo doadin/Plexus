@@ -453,12 +453,25 @@ function PlexusStatusResource:UpdateUnitResource(unitid)
         end
     end
 
+    local text = current
+    if type(current) == "number" then
+        if Plexus:IsRetailWow() then
+            text = Plexus:AbbreviateNumbers(current)
+        else
+            if current > 9999 then
+                text = format("%.0fk", current / 1000)
+            elseif current > 999 then
+                text = format("%.1fk", current / 1000)
+            end
+        end
+    end
+
     self.core:SendStatusGained(
         unitGUID, "unit_resource",
         priority,
         nil,
         color,
-        nil,
+        text,
         current,max,
         nil
     )
