@@ -276,8 +276,7 @@ function PlexusStatusHeals:SendIncomingHealsStatus(guid, incoming, estimatedHeal
             settings.color,
             incomingText,
             estimatedHealth,
-            maxHealth,
-            settings.icon)
+            maxHealth)
         return
     end
     local incomingText = incoming
@@ -296,6 +295,5 @@ function PlexusStatusHeals:SendIncomingHealsStatus(guid, incoming, estimatedHeal
         settings.color,
         not Plexus:issecretvalue(incomingText) and format(settings.text, incomingText) or incomingText,
         estimatedHealth,
-        maxHealth,
-        settings.icon)
+        maxHealth)
 end

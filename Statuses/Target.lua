@@ -81,10 +81,7 @@ function PlexusStatusTarget:PLAYER_TARGET_CHANGED()
             settings.priority,
             settings.range,
             settings.color,
-            settings.text,
-            nil,
-            nil,
-            settings.icon)
+            settings.text)
     end
 end
 
@@ -101,9 +98,6 @@ function PlexusStatusTarget:PLAYER_FOCUS_CHANGED()
             settings.priority,
             settings.range,
             settings.color,
-            settings.text,
-            nil,
-            nil,
-            settings.icon)
+            settings.text)
     end
 end

@@ -112,8 +112,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
             settings.color,
             amountText,
             amount,
-            maxHealth,
-            settings.icon
+            maxHealth
         )
     else
         if amount > 0 then
@@ -132,8 +131,7 @@ function PlexusStatusAbsorbs:UpdateUnit(event, unit)
                     settings.color,
                     format(settings.text, text),
                     UnitHealth(unit) + amount,
-                    maxHealth,
-                    settings.icon
+                    maxHealth
                 )
             end
         else
