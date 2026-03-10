@@ -107,8 +107,20 @@ function PlexusAltPower:UpdateUnitResource(unitid)
     local current, max = UnitPower(unitid,10), UnitPowerMax(unitid,10)
     local priority = PlexusAltPower.db.profile.unit_altpower.priority
     local color = PlexusAltPower.db.profile.unit_altpower.color
+    local text = current
+    if type(current) == "number" then
+        if Plexus:IsRetailWow() then
+            text = Plexus:AbbreviateNumbers(current)
+        else
+            if current > 9999 then
+                text = format("%.0fk", current / 1000)
+            elseif current > 999 then
+                text = format("%.1fk", current / 1000)
+            end
+        end
+    end
 
-    if not Plexus:issecretvalue(max) and max <= 0 then
+    if max <= 0 then
         self.core:SendStatusLost(unitGUID, "unit_altpower")
         return
     end
@@ -118,7 +130,7 @@ function PlexusAltPower:UpdateUnitResource(unitid)
         priority,
         nil,
         color,
-        nil,
+        text,
         current,max,
         nil
     )
