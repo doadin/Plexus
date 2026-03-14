@@ -329,39 +329,52 @@ function PlexusStatusName:UpdateUnit(event, guid, unitid)
     if Plexus:IsRetailWow() then
         if owner_unitid and UnitHasVehicleUI(owner_unitid) then
             local owner_guid = UnitGUID(owner_unitid)
-            name = PlexusRoster:GetNameByGUID(owner_guid)
+            local ownername = PlexusRoster:GetNameByGUID(owner_guid)
+            if ownername and ownername ~= "" then
+                name = ownername
+            end
         end
     end
     if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
         if owner_unitid and UnitOnTaxi(owner_unitid) then
             local owner_guid = UnitGUID(owner_unitid)
-            name = PlexusRoster:GetNameByGUID(owner_guid)
+            local ownername = PlexusRoster:GetNameByGUID(owner_guid)
+            if ownername and ownername ~= "" then
+                name = ownername
+            end
         end
     end
 
-    if settings.translate then
-        self:Debug("Cyrillic to Latin Enabled")
-        if settings.translatemark then
-            self:Debug("Translate with mark")
-            name = Translate(name,"!")
+    if not Plexus:issecretvalue(name) then
+        if settings.translate then
+            self:Debug("Cyrillic to Latin Enabled")
+            if settings.translatemark then
+                self:Debug("Translate with mark")
+                local translateName = Translate(name,"!")
+                if translateName and translateName ~= "" then
+                    name = translateName
+                end
+            end
+            if not settings.translatemark then
+                self:Debug("Translate without mark")
+                local translateName = Translate(name)
+                if translateName and translateName ~= "" then
+                    name = translateName
+                end
+            end
         end
-        if not settings.translatemark then
-            self:Debug("Translate without mark")
-            name = Translate(name)
-        end
-    end
 
-    if settings.usenicktag then
-        self:Debug("Use NickTag Enabled")
-        name = Plexus:GetNickname(UnitName(unitid), nil, true)
-        self:Debug(name)
-        if name == "" then
-            Plexus:ResetPlayerPersona()
-            name = PlexusRoster:GetNameByGUID(guid)
-            self:Debug("blank")
-        end
-        if name == nil then
-            name = PlexusRoster:GetNameByGUID(guid)
+        if settings.usenicktag then
+            self:Debug("Use NickTag Enabled")
+            local nickName = Plexus:GetNickname(UnitName(unitid), nil, true)
+            if nickName and nickName ~= "" then
+                name = Plexus:GetNickname(UnitName(unitid), nil, true)
+            end
+            self:Debug(name)
+            if nickName == "" then
+                Plexus:ResetPlayerPersona()
+                self:Debug("nickName was blank")
+            end
         end
     end
 
