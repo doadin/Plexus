@@ -26,16 +26,18 @@ local function Reset(self) -- luacheck: ignore 432
     local profile = PlexusFrame.db.profile
     local texture = LibSharedMedia:Fetch("statusbar", PlexusFrame.db.profile.texture) or "Interface\\Addons\\Plexus\\gradient32x32"
     local frame = self.__owner
-    local side = profile.ExtraBarSide
     local healthBar = frame.indicators.bar
-    local barWidth = profile.ExtraBarSize
     local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
+    local side = profile.ExtraBarSide
+    local enableExtraBar = profile.enableExtraBar
+    local extraBarSizeModW = side == "Left" or side == "Right" and enableExtraBar and profile.ExtraBarSize * 100 or 0
+    local extraBarSizeModH = side == "Top" or side == "Bottom" and enableExtraBar and profile.ExtraBarSize * 100 or 0
 
     self:SetParent(healthBar)
     self:ClearAllPoints()
-    self:SetPoint("TOP", frame, "TOP", offset, -offset)
-    self:SetWidth(frame:GetWidth()-5)
-    self:SetHeight(frame:GetHeight()-5)
+    self:SetPoint("TOP", frame, "TOP", -2, -offset)
+    self:SetWidth(frame:GetWidth()-extraBarSizeModW)
+    self:SetHeight(frame:GetHeight()-extraBarSizeModH)
     self:SetOrientation(profile.orientation)
     self:SetReverseFill(true)
     --if side == "Right" then
@@ -138,7 +140,7 @@ local function SetStatus(self, color, _, value, maxValue, _, _, _, start, durati
     elseif not profile.enableExtraBar and self:IsShown() then
         self:Hide()
     end
-    self:SetAlpha(value)
+    --self:SetAlpha(value)
     self.bg:Hide()
 end
 
