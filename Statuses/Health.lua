@@ -215,7 +215,10 @@ end
 
 -- you can't disable the unit_health status, so no need to ever unregister
 function PlexusStatusHealth:PostEnable()
-    self:RegisterMessage("Plexus_UnitJoined")
+    --self:RegisterMessage("Plexus_UnitJoined")
+    self:RegisterMessage("Plexus_UnitJoined", "UpdateAllUnits")
+    self:RegisterMessage("Plexus_UnitChanged", "UpdateAllUnits")
+    self:RegisterMessage("Plexus_UnitLeft", "UpdateAllUnits")
 
     --self:RegisterEvent("UNIT_AURA", "UpdateUnit")
     self:RegisterEvent("UNIT_CONNECTION", "UpdateUnit")
