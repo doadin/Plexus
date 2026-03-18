@@ -786,18 +786,38 @@ function PlexusLayout:PostEnable()
             end
         end
     end
+
     local previous = nil
+    local columnTop = nil
+    local bossCount = 0
+
     for _, unitid in ipairs(OrderedUnits) do
         local frame = self[unitid .. "Frame"]
         if frame then
             frame:ClearAllPoints()
+
             if not previous then
-                -- First frame anchors to PlexusLayoutFrame
+                -- Column 1: Focus
                 frame:SetPoint("TOPLEFT", PlexusLayoutFrame, "TOPRIGHT", 0, 0)
+                columnTop = frame
+
+            elseif unitid:match("^boss") then
+                bossCount = bossCount + 1
+
+                -- Boss1 starts Column 2; Boss6 starts Column 3
+                if bossCount == 1 or bossCount == 6 then
+                    frame:SetPoint("TOPLEFT", columnTop, "TOPRIGHT", 20, 0)
+                    columnTop = frame
+                else
+                    -- Boss2–5 and Boss7–10 stack under previous boss
+                    frame:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -4)
+                end
+
             else
-                -- Subsequent frames anchor to the previous frame
+                -- Any non-boss frames stack normally
                 frame:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -4)
             end
+
             previous = frame
         end
     end
