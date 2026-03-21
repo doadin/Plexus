@@ -32,6 +32,7 @@ PlexusDeDeBuffIcons.menuName = L["DeBuff Icons"]
 
 PlexusDeDeBuffIcons.defaultDB = {
     enabled = true,
+    hideSated = false,
     iconsize = 9,
     offsetx = -1,
     offsety = -1,
@@ -49,7 +50,7 @@ PlexusDeDeBuffIcons.defaultDB = {
         enable = true,
         priority = 30,
         range = false
-    }
+    },
 }
 
 local options = {
@@ -83,6 +84,18 @@ local options = {
                 elseif not v and PlexusDeDeBuffIcons.enabled then
                     PlexusDeDeBuffIcons:OnDisable()
                 end
+            end,
+        },
+        hideSated = {
+            order = 40, width = "double",
+            type = "toggle",
+            name = L["Hide Sated/Exhaustion"],
+            desc = L["Enabling/disabling showing Sated/Exhaustion for the debuffs bar."],
+            get = function()
+                return PlexusDeDeBuffIcons.db.profile.hideSated
+            end,
+            set = function(_, v)
+                PlexusDeDeBuffIcons.db.profile.hideSated = v
             end,
         },
         iconsize = {
@@ -464,11 +477,22 @@ function PlexusDeDeBuffIcons:LOADING_SCREEN_DISABLED()
     PlexusDeDeBuffIcons:UpdateAllUnitsBuffs()
 end
 
+local lustDebuffs = {
+    [57723] = true, -- Exhaustion
+    [57724] = true, -- Sated
+    [80354] = true, -- Temporal Displacement
+    [95809] = true, -- Hunter Pet Insanity
+    [160455] = true, -- Hunter Pet Fatigued
+    [264689] = true, -- Hunter Pet Fatigued
+    [390435] = true, -- Exhaustion
+}
+
 function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     if not self.enabled then return end
     if not unitid then return end
     local guid = not Plexus.IsSpecialUnit[unitid] and UnitGUID(unitid) or unitid
     if not guid then return end
+    local settings = self.db.profile
 
     if not UnitAuraInstanceID then
         UnitAuraInstanceID = {}
@@ -494,7 +518,9 @@ function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
         local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusDeDeBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.ExpirationOnly, Enum.UnitAuraSortDirection.Normal) or {}
         UnitAuraInstanceID[guid] = {}
         for _,aura in pairs(auradata) do
-            UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
+            if not settings.hideSated or (settings.hideSated and not Plexus:issecretvalue(aura.spellId) and not lustDebuffs[aura.spellId]) then
+                UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
+            end
         end
         for _,v in pairs(PlexusFrame.registeredFrames) do
             if v.unitGUID == guid then updateFrame_df(v) end
