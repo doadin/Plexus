@@ -8,11 +8,11 @@ local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
 
 local MAX_BUFFS = 40
 
-local L = setmetatable(PlexusDeDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
+local L = setmetatable(PlexusDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
 
 local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
-local PlexusDeDeBuffIcons = _G.Plexus:NewModule("PlexusDeDeBuffIcons", "AceBucket-3.0")
+local PlexusDeBuffIcons = _G.Plexus:NewModule("PlexusDeBuffIcons", "AceBucket-3.0")
 
 local function WithAllPlexusFrames(func)
     for _, frame in pairs(PlexusFrame.registeredFrames) do
@@ -28,9 +28,9 @@ if IsRetailWow() then
     ForEachAura = _G.AuraUtil.ForEachAura
 end
 
-PlexusDeDeBuffIcons.menuName = L["DeBuff Icons"]
+PlexusDeBuffIcons.menuName = L["DeBuff Icons"]
 
-PlexusDeDeBuffIcons.defaultDB = {
+PlexusDeBuffIcons.defaultDB = {
     enabled = true,
     hideSated = false,
     iconsize = 9,
@@ -61,12 +61,12 @@ local options = {
     order = 1200,
     get = function(info)
         local k = info[#info]
-        return PlexusDeDeBuffIcons.db.profile[k]
+        return PlexusDeBuffIcons.db.profile[k]
     end,
     set = function(info, v)
         local k = info[#info]
-        PlexusDeDeBuffIcons.db.profile[k] = v
-        PlexusDeDeBuffIcons:UpdateAllUnitsBuffs()
+        PlexusDeBuffIcons.db.profile[k] = v
+        PlexusDeBuffIcons:UpdateAllUnitsBuffs()
     end,
     args = {
         enabled = {
@@ -75,14 +75,14 @@ local options = {
             name = L["Enable"],
             desc = L["Enabling/disabling the module will display all buff or debuff icons."],
             get = function()
-                return PlexusDeDeBuffIcons.db.profile.enabled
+                return PlexusDeBuffIcons.db.profile.enabled
             end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.enabled = v
-                if v and not PlexusDeDeBuffIcons.enabled then
-                    PlexusDeDeBuffIcons:OnEnable()
-                elseif not v and PlexusDeDeBuffIcons.enabled then
-                    PlexusDeDeBuffIcons:OnDisable()
+                PlexusDeBuffIcons.db.profile.enabled = v
+                if v and not PlexusDeBuffIcons.enabled then
+                    PlexusDeBuffIcons:OnEnable()
+                elseif not v and PlexusDeBuffIcons.enabled then
+                    PlexusDeBuffIcons:OnDisable()
                 end
             end,
         },
@@ -92,10 +92,10 @@ local options = {
             name = L["Hide Sated/Exhaustion"],
             desc = L["Enabling/disabling showing Sated/Exhaustion for the debuffs bar."],
             get = function()
-                return PlexusDeDeBuffIcons.db.profile.hideSated
+                return PlexusDeBuffIcons.db.profile.hideSated
             end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.hideSated = v
+                PlexusDeBuffIcons.db.profile.hideSated = v
             end,
         },
         iconsize = {
@@ -106,10 +106,10 @@ local options = {
             max = 50,
             min = 5,
             step = 1,
-            get = function () return PlexusDeDeBuffIcons.db.profile.iconsize end,
+            get = function () return PlexusDeBuffIcons.db.profile.iconsize end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.iconsize = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetDeBuffIconsize(f) end)
+                PlexusDeBuffIcons.db.profile.iconsize = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetDeBuffIconsize(f) end)
             end
         },
         alpha = {
@@ -120,10 +120,10 @@ local options = {
             max = 1,
             min = 0.1,
             step = 0.1,
-            get = function () return PlexusDeDeBuffIcons.db.profile.alpha end,
+            get = function () return PlexusDeBuffIcons.db.profile.alpha end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.alpha = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetBuffIconAlpha(f) end)
+                PlexusDeBuffIcons.db.profile.alpha = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconAlpha(f) end)
             end
         },
         offsetx = {
@@ -134,10 +134,10 @@ local options = {
             max = 20,
             min = -20,
             step = 1,
-            get = function () return PlexusDeDeBuffIcons.db.profile.offsetx end,
+            get = function () return PlexusDeBuffIcons.db.profile.offsetx end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.offsetx = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDeBuffIcons.db.profile.offsetx = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
             end
         },
         offsety = {
@@ -148,10 +148,10 @@ local options = {
             max = 20,
             min = -20,
             step = 1,
-            get = function () return PlexusDeDeBuffIcons.db.profile.offsety end,
+            get = function () return PlexusDeBuffIcons.db.profile.offsety end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.offsety = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDeBuffIcons.db.profile.offsety = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
             end
         },
         iconnum = {
@@ -172,11 +172,11 @@ local options = {
             min = 0,
             step = 1,
             get = function()
-                return PlexusDeDeBuffIcons.db.profile.iconperrow
+                return PlexusDeBuffIcons.db.profile.iconperrow
             end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.iconperrow = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDeBuffIcons.db.profile.iconperrow = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
             end,
         },
         orientation = {
@@ -185,11 +185,11 @@ local options = {
             name = L["Orientation of Icon"],
             desc = L["Set icons list orientation."],
             get = function ()
-                return PlexusDeDeBuffIcons.db.profile.orientation
+                return PlexusDeBuffIcons.db.profile.orientation
             end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.orientation = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDeBuffIcons.db.profile.orientation = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
             end,
             values ={["HORIZONTAL"] = L["HORIZONTAL"], ["VERTICAL"] = L["VERTICAL"]}
         },
@@ -199,20 +199,20 @@ local options = {
             name = L["Anchor Point"],
             desc = L["Anchor point of the first icon."],
             get = function ()
-                return PlexusDeDeBuffIcons.db.profile.anchor
+                return PlexusDeBuffIcons.db.profile.anchor
             end,
             set = function(_, v)
-                PlexusDeDeBuffIcons.db.profile.anchor = v
-                WithAllPlexusFrames(function (f) PlexusDeDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDeBuffIcons.db.profile.anchor = v
+                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
             end,
             values ={["TOPRIGHT"] = L["TOPRIGHT"], ["TOPLEFT"] = L["TOPLEFT"], ["BOTTOMLEFT"] = L["BOTTOMLEFT"], ["BOTTOMRIGHT"] = L["BOTTOMRIGHT"]}
         },
     }
 }
 
-_G.Plexus.options.args.PlexusDeDeBuffIcons = options
+_G.Plexus.options.args.PlexusDeBuffIcons = options
 
-function PlexusDeDeBuffIcons.InitializeFrame(_, f) --luacheck: ignore 212
+function PlexusDeBuffIcons.InitializeFrame(_, f) --luacheck: ignore 212
     if not f.DeBuffIcons then
         f.DeBuffIcons = {}
         for i=1, MAX_BUFFS do
@@ -253,26 +253,26 @@ function PlexusDeDeBuffIcons.InitializeFrame(_, f) --luacheck: ignore 212
             f.DeBuffIcons[i]:Hide()
         end
 
-        PlexusDeDeBuffIcons.ResetDeBuffIconsize(f)
-        PlexusDeDeBuffIcons.ResetBuffIconPos(f)
-        PlexusDeDeBuffIcons.ResetBuffIconAlpha(f)
+        PlexusDeBuffIcons.ResetDeBuffIconsize(f)
+        PlexusDeBuffIcons.ResetBuffIconPos(f)
+        PlexusDeBuffIcons.ResetBuffIconAlpha(f)
     end
 end
 
-function PlexusDeDeBuffIcons.ResetDeBuffIconsize(f)
+function PlexusDeBuffIcons.ResetDeBuffIconsize(f)
     if(f.DeBuffIcons) then
         for _,v in pairs(f.DeBuffIcons) do
-            v:SetWidth(PlexusDeDeBuffIcons.db.profile.iconsize)
-            v:SetHeight(PlexusDeDeBuffIcons.db.profile.iconsize)
+            v:SetWidth(PlexusDeBuffIcons.db.profile.iconsize)
+            v:SetHeight(PlexusDeBuffIcons.db.profile.iconsize)
         end
     end
 end
 
-function PlexusDeDeBuffIcons.ResetBuffIconPos(f)
+function PlexusDeBuffIcons.ResetBuffIconPos(f)
     local icons = f.DeBuffIcons
     local xadjust = 1
     local yadjust = 1
-    local p = PlexusDeDeBuffIcons.db.profile
+    local p = PlexusDeBuffIcons.db.profile
     if(string.find(p.anchor, "BOTTOM")) then yadjust = -1 end
     if(string.find(p.anchor, "LEFT")) then xadjust = -1 end
     if(icons) then
@@ -329,22 +329,22 @@ function PlexusDeDeBuffIcons.ResetBuffIconPos(f)
     end
 end
 
-function PlexusDeDeBuffIcons.ResetBuffIconAlpha(f)
+function PlexusDeBuffIcons.ResetBuffIconAlpha(f)
     if(f.DeBuffIcons) then
         for _,v in pairs(f.DeBuffIcons) do
-            v:SetAlpha( PlexusDeDeBuffIcons.db.profile.alpha )
+            v:SetAlpha( PlexusDeBuffIcons.db.profile.alpha )
         end
     end
 end
 
-function PlexusDeDeBuffIcons:OnInitialize()
+function PlexusDeBuffIcons:OnInitialize()
     self.super.OnInitialize(self)
-    WithAllPlexusFrames(function(f) PlexusDeDeBuffIcons.InitializeFrame(nil, f) end)
+    WithAllPlexusFrames(function(f) PlexusDeBuffIcons.InitializeFrame(nil, f) end)
     hooksecurefunc(PlexusFrame, "InitializeFrame", self.InitializeFrame)
 end
 
-function PlexusDeDeBuffIcons:OnEnable()
-    if not PlexusDeDeBuffIcons.db.profile.enabled then
+function PlexusDeBuffIcons:OnEnable()
+    if not PlexusDeBuffIcons.db.profile.enabled then
         for _,v in pairs(PlexusFrame.registeredFrames) do
             for i=1, MAX_BUFFS do --luacheck: ignore
                 v.DeBuffIcons[i]:Hide()
@@ -366,7 +366,7 @@ function PlexusDeDeBuffIcons:OnEnable()
     end
 end
 
-function PlexusDeDeBuffIcons:OnDisable()
+function PlexusDeBuffIcons:OnDisable()
     self.enabled = nil
     self:UnregisterEvent("UNIT_AURA")
     self:UnregisterEvent("UNIT_FLAGS")
@@ -384,11 +384,11 @@ function PlexusDeDeBuffIcons:OnDisable()
     end
 end
 
-function PlexusDeDeBuffIcons:Reset()
+function PlexusDeBuffIcons:Reset()
     self.super.Reset(self)
 end
 
-function PlexusDeDeBuffIcons:ExtraUnitsChanged(message, unitid)
+function PlexusDeBuffIcons:ExtraUnitsChanged(message, unitid)
     for _,v in pairs(PlexusFrame.registeredFrames) do
         if (v.unit == unitid) and (v.BuffIcons) then
             for i=1, MAX_BUFFS do v.BuffIcons[i]:Hide() end
@@ -441,7 +441,7 @@ end
 
 local function updateFrame_df(v)
     local n = 1
-    local setting = PlexusDeDeBuffIcons.db.profile
+    local setting = PlexusDeBuffIcons.db.profile
 
     for i=n, MAX_BUFFS do --luacheck: ignore
         v.DeBuffIcons[i]:Hide()
@@ -466,15 +466,15 @@ local function updateFrame_df(v)
     end
 end
 
-function PlexusDeDeBuffIcons:UNIT_FLAGS(_,unit)
+function PlexusDeBuffIcons:UNIT_FLAGS(_,unit)
     local hostile = UnitCanAttack("player", unit) or UnitIsCharmed(unitid)
     if hostile then
         self:UNIT_AURA("UpdateAllUnitsBuffs", unit, {isFullUpdate = true} )
     end
 end
 
-function PlexusDeDeBuffIcons:LOADING_SCREEN_DISABLED()
-    PlexusDeDeBuffIcons:UpdateAllUnitsBuffs()
+function PlexusDeBuffIcons:LOADING_SCREEN_DISABLED()
+    PlexusDeBuffIcons:UpdateAllUnitsBuffs()
 end
 
 local lustDebuffs = {
@@ -487,7 +487,7 @@ local lustDebuffs = {
     [390435] = true, -- Exhaustion
 }
 
-function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
+function PlexusDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     if not self.enabled then return end
     if not unitid then return end
     local guid = not Plexus.IsSpecialUnit[unitid] and UnitGUID(unitid) or unitid
@@ -515,7 +515,7 @@ function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
     if IsRetailWow() then
         --UnitAuraInstanceID[guid] = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
         --doadintest = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
-        local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusDeDeBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.ExpirationOnly, Enum.UnitAuraSortDirection.Normal) or {}
+        local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusDeBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.ExpirationOnly, Enum.UnitAuraSortDirection.Normal) or {}
         UnitAuraInstanceID[guid] = {}
         for _,aura in pairs(auradata) do
             if not settings.hideSated or (settings.hideSated and not Plexus:issecretvalue(aura.spellId) and not lustDebuffs[aura.spellId]) then
@@ -580,7 +580,7 @@ function PlexusDeDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
 
 end
 
-function PlexusDeDeBuffIcons:UpdateAllUnitsBuffs()
+function PlexusDeBuffIcons:UpdateAllUnitsBuffs()
     for _, unitid in PlexusRoster:IterateRoster() do
         self:UNIT_AURA("UpdateAllUnitsBuffs", unitid)
     end
