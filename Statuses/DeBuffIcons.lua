@@ -13,6 +13,7 @@ local L = setmetatable(PlexusDeBuffIconsLocale or {}, {__index = function(t, k) 
 local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
 local PlexusDeBuffIcons = _G.Plexus:NewModule("PlexusDeBuffIcons", "AceBucket-3.0")
+local PlexusDeDeBuffIcons = _G.Plexus:NewModule("PlexusDeDeBuffIcons", "AceBucket-3.0")
 
 local function WithAllPlexusFrames(func)
     for _, frame in pairs(PlexusFrame.registeredFrames) do
@@ -51,6 +52,7 @@ PlexusDeBuffIcons.defaultDB = {
         priority = 30,
         range = false
     },
+    transfer = false
 }
 
 local options = {
@@ -338,6 +340,21 @@ function PlexusDeBuffIcons.ResetBuffIconAlpha(f)
 end
 
 function PlexusDeBuffIcons:OnInitialize()
+    if PlexusDeDeBuffIcons.db.profile then
+        self:Debug("found old setings")
+        --PlexusDeBuffIcons.db.profile = PlexusDeDeBuffIcons.db.profile
+        if PlexusDeBuffIcons.db.profile.transfer == false then
+            for setting, value in pairs(PlexusDeBuffIcons.defaultDB) do
+                self:Debug(setting, value)
+                PlexusDeBuffIcons.db.profile[setting] = value
+            end
+            for setting, value in pairs(PlexusDeDeBuffIcons.db.profile) do
+                self:Debug(setting, value)
+                PlexusDeBuffIcons.db.profile[setting] = value
+            end
+            PlexusDeBuffIcons.db.profile.transfer = true
+        end
+    end
     self.super.OnInitialize(self)
     WithAllPlexusFrames(function(f) PlexusDeBuffIcons.InitializeFrame(nil, f) end)
     hooksecurefunc(PlexusFrame, "InitializeFrame", self.InitializeFrame)
