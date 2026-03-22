@@ -17,18 +17,28 @@ local L = Plexus.L
 
 local function SetBarColor(bar, r, g, b, invert)
     --print("SetBarColor", invert)
-    if invert then
-        bar:SetStatusBarColor(r, g, b, 1)
-        bar.bg:SetVertexColor(r * 0.2, g * 0.2, b * 0.2, 1)
+    if not (Plexus:issecretvalue(r) or Plexus:issecretvalue(g) or Plexus:issecretvalue(b)) then
+        if invert then
+            bar:SetStatusBarColor(r, g, b, 1)
+            bar.bg:SetVertexColor(r * 0.2, g * 0.2, b * 0.2, 1)
+        else
+            bar:SetStatusBarColor(r * 0.2, g * 0.2, b * 0.2, 1)
+            bar.bg:SetVertexColor(r, g, b, 1)
+        end
     else
-        bar:SetStatusBarColor(r * 0.2, g * 0.2, b * 0.2, 1)
-        bar.bg:SetVertexColor(r, g, b, 1)
+        if invert then
+            bar:SetStatusBarColor(r, g, b, 1)
+            bar.bg:SetVertexColor(r, g, b, 1)
+        else
+            bar:SetStatusBarColor(r, g, b, 1)
+            bar.bg:SetVertexColor(r, g, b, 1)
+        end
     end
 
     local profile = PlexusFrame.db.profile
     if not profile.healingBar_useStatusColor then
         local healingBar = bar.__owner.indicators.healingBar
-        if invert then
+        if invert or (Plexus:issecretvalue(r) or Plexus:issecretvalue(g) or Plexus:issecretvalue(b)) then
             healingBar:SetStatusBarColor(r, g, b)
         else
             local mu = PlexusFrame.db.profile.healingBar_intensity
