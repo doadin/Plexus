@@ -30,8 +30,18 @@ local function Reset(self) -- luacheck: ignore 432
     local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
     local side = profile.ExtraBarSide
     local enableExtraBar = profile.enableExtraBar
-    local extraBarSizeModW = side == "Left" or side == "Right" and enableExtraBar and profile.ExtraBarSize * 100 or 0
-    local extraBarSizeModH = side == "Top" or side == "Bottom" and enableExtraBar and profile.ExtraBarSize * 100 or 0
+    local extraBarSizeModW -- = (side == "Left" or side == "Right" and enableExtraBar and profile.ExtraBarSize * 100) or 0
+    if enableExtraBar and side == "Left" or side == "Right" then
+        extraBarSizeModW = profile.ExtraBarSize * 100
+    else
+        extraBarSizeModW = 0
+    end
+    local extraBarSizeModH -- = (side == "Top" or side == "Bottom" and enableExtraBar and profile.ExtraBarSize * 100) or 0
+    if enableExtraBar and side == "Top" or side == "Bottom" then
+        extraBarSizeModH = profile.ExtraBarSize * 100
+    else
+        extraBarSizeModH = 0
+    end
 
     self:SetParent(healthBar)
     self:ClearAllPoints()
