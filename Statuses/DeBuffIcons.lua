@@ -535,8 +535,9 @@ function PlexusDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
         local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusDeBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.ExpirationOnly, Enum.UnitAuraSortDirection.Normal) or {}
         UnitAuraInstanceID[guid] = {}
         for _,aura in pairs(auradata) do
-            if not settings.hideSated or (settings.hideSated and not Plexus:issecretvalue(aura.spellId) and not lustDebuffs[aura.spellId]) then
-                UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
+            UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
+            if settings.hideSated and not Plexus:issecretvalue(aura.spellId) and lustDebuffs[aura.spellId] then
+                UnitAuraInstanceID[guid][aura.auraInstanceID] = nil
             end
         end
         for _,v in pairs(PlexusFrame.registeredFrames) do
