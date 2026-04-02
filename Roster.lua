@@ -191,8 +191,9 @@ do
                 local old_realm = roster.realm[guid]
                 local old_unitid = roster.unitid[guid]
 
-                if old_name ~= name or old_realm ~= realm or
-                    old_unitid ~= unit then
+                if (not Plexus:issecretvalue(old_name) and not Plexus:issecretvalue(name) and old_name ~= name)
+                or (not Plexus:issecretvalue(old_realm) and not Plexus:issecretvalue(realm) and old_realm ~= realm)
+                or (not Plexus:issecretvalue(old_unitid) and not Plexus:issecretvalue(unit) and old_unitid ~= unit) then
                     units_updated[guid] = true
                 end
             else
