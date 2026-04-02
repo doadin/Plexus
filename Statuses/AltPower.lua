@@ -120,7 +120,7 @@ function PlexusAltPower:UpdateUnitResource(unitid)
         end
     end
 
-    if max <= 0 then
+    if not Plexus:issecretvalue(max) and max <= 0 then
         self.core:SendStatusLost(unitGUID, "unit_altpower")
         return
     end
