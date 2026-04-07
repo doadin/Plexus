@@ -369,8 +369,8 @@ end
 
 function PlexusStatusResource:Plexus_UnitJoined(_, _, unitid)
     local NoPets = PlexusStatusResource.db.profile.NoPets
-    local unitGUID = UnitGUID(unitid)
     if not unitid then return end
+    local unitGUID = UnitGUID(unitid)
     if (NoPets and not (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) ) then
         self.core:SendStatusLost(unitGUID, "unit_resource")
     else

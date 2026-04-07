@@ -77,8 +77,8 @@ end
 
 function PlexusAltPower:Plexus_UnitJoined(_, _, unitid)
     if not PlexusAltPower.db.profile.unit_altpower.enable then return end
-    local unitGUID = UnitGUID(unitid)
     if not unitid then return end
+    local unitGUID = UnitGUID(unitid)
     if (UnitIsPlayer(unitid) or (Plexus:IsRetailWow() and UnitInPartyIsAI(unitid))) then
         self:UpdateUnitResource(unitid)
     else
