@@ -1597,6 +1597,7 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
             --    offsetX = 2,
             --    offsetY = -2,
             --},
+            isContainer = false,
             unitToken = unitToken,
             auraIndex = index,
             parent = parent,
@@ -1626,7 +1627,7 @@ local function ResizePrivateAuraDuration(parent, size)
         local regions = { cd:GetRegions() }
         for _, r in ipairs(regions) do
             if r:GetObjectType() == "FontString" then
-                r:SetFont(r:GetFont(), size, "OUTLINE")
+                r:SetFont(r:GetFont(), size)
             end
         end
     end
@@ -1635,7 +1636,7 @@ end
 local function ResizePrivateAuraStacks(parent, size)
     for _, child in ipairs({ parent:GetChildren() }) do
         if child.count and child.count.SetFont then
-            child.count:SetFont(child.count:GetFont(), size, "OUTLINE")
+            child.count:SetFont(child.count:GetFont(), size)
         end
     end
 end
