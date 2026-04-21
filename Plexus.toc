@@ -121,6 +121,7 @@ Statuses\Externals.lua
 Statuses\Auras.lua
 
 #@retail@
+Statuses\Defensives.lua
 Statuses\DispelByMe.lua
 Statuses\Factions.lua
 #@end-retail@
