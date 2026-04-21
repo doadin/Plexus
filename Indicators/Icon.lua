@@ -187,8 +187,8 @@ local function Reset(self)
 	self.texture:SetPoint("TOPRIGHT", -iconBorderSize, -iconBorderSize)
 
 	self.text:SetPoint("CENTER", profile.stackOffsetX, profile.stackOffsetY)
-    self.text:SetFont(font, iconStackFontSize, "OUTLINE")
-    self.cooldowntext:SetFont(font, iconCoolDownFontSize, "OUTLINE")
+    self.text:SetFont(font, iconStackFontSize)
+    self.cooldowntext:SetFont(font, iconCoolDownFontSize)
 
 end
 
