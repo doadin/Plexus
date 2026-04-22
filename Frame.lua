@@ -1677,9 +1677,9 @@ function PlexusFrame:UpdateFrameUnits()
             local unitid = SecureButton_GetModifiedUnit(frame)
                   unitid = unitid and gsub(unitid, "petpet", "pet") -- http://forums.wowace.com/showpost.php?p=307619&postcount=3174
             local guid = unitid and ( (not Plexus.IsSpecialUnit[unitid]) and UnitGUID(unitid) or unitid ) or nil
-            if Plexus:issecretvalue(guid) then guid = nil end
+            if Plexus:issecretvalue(guid) then guid = unitid end
 
-            if not InCombatLockdown() then
+            if not InCombatLockdown() and not Plexus:issecretvalue(guid) then
                 --Start Priavte Aura
                 if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) then
                     -- Create parent frame once
@@ -1767,7 +1767,7 @@ function PlexusFrame:UpdateFrameUnits()
             end
             --End Priavte Aura
 
-            if old_unit ~= unitid or old_guid ~= guid then
+            if not Plexus:issecretvalue(guid) and (old_unit ~= unitid or old_guid ~= guid) then
                 self:Debug("Updating", frame_name, "to", unitid, guid, "was", old_unit, old_guid)
 
                 if unitid then
