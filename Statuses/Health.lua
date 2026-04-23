@@ -330,7 +330,7 @@ function PlexusStatusHealth:ExtraUnitsChanged(message, unitid)
 end
 
 function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
-    self:Debug("UpdateUnit Event: ", event)
+    self:Debug("UpdateUnit Event: ", event, unitid)
     if not unitid then
         -- 7.1: UNIT_HEALTH and UNIT_MAXHEALTH sometimes fire with no unit token
         -- https://wow.curseforge.com/addons/plexus/tickets/859
@@ -339,9 +339,9 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
 
     local guid = UnitGUID(unitid) or unitid
 
-    if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then
-        return
-    end
+    --if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then
+    --    return
+    --end
 
     local cur, max = UnitHealth(unitid), Plexus:CalcMaxHP(unitid)
 
@@ -415,7 +415,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         self.core:SendStatusLost(guid, "unit_healthDeficit")
     end
 
-    if Plexus.IsSpecialUnit[unitid] then
+    if Plexus.IsSpecialUnit[unitid] or Plexus:issecretvalue(guid) then
         self.core:SendStatusGained(unitid, "unit_health",
             healthPriority,
             (not ignoreRange and healthSettings.range),
