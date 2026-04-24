@@ -28,34 +28,45 @@ local function Reset(self) -- luacheck: ignore 432
     local frame = self.__owner
     local healthBar = frame.indicators.bar
     local fill = healthBar:GetStatusBarTexture()
-    --local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
-    --local side = profile.ExtraBarSide
-    --local enableExtraBar = profile.enableExtraBar
-    --local barWidth = profile.ExtraBarSize
-    --local extraBarSizeModW -- = (side == "Left" or side == "Right" and enableExtraBar and profile.ExtraBarSize * 100) or 0
-    --if enableExtraBar and side == "Left" or side == "Right" then
-    --    extraBarSizeModW = profile.ExtraBarSize * 100
-    --else
-    --    extraBarSizeModW = 0
-    --end
-    --local extraBarSizeModH -- = (side == "Top" or side == "Bottom" and enableExtraBar and profile.ExtraBarSize * 100) or 0
-    --if enableExtraBar and side == "Top" or side == "Bottom" then
-    --    extraBarSizeModH = profile.ExtraBarSize * 100
-    --else
-    --    extraBarSizeModH = 0
-    --end
 
-    healthBar:SetClipsChildren(true)
-    self:SetParent(healthBar)
-    self:ClearAllPoints()
-    if profile.orientation == "VERTICAL" then
-        self:SetPoint("BOTTOM", fill, "TOP", 0, 0)
-        self:SetWidth(healthBar:GetWidth())
-        self:SetHeight(healthBar:GetHeight())
+    if profile.anchorAbsorbtoHealthBar then
+        -- NEW
+        healthBar:SetClipsChildren(true)
+        self:SetParent(healthBar)
+        self:ClearAllPoints()
+        if profile.orientation == "VERTICAL" then
+            self:SetPoint("BOTTOM", fill, "TOP", 0, 0)
+            self:SetWidth(healthBar:GetWidth())
+            self:SetHeight(healthBar:GetHeight())
+        else
+            self:SetPoint("LEFT", fill, "RIGHT", 0, 0)
+            self:SetHeight(healthBar:GetHeight())
+            self:SetWidth(healthBar:GetWidth())
+        end
     else
-        self:SetPoint("LEFT", fill, "RIGHT", 0, 0)
-        self:SetHeight(healthBar:GetHeight())
-        self:SetWidth(healthBar:GetWidth())
+        -- OLD
+        local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
+        local side = profile.ExtraBarSide
+        local enableExtraBar = profile.enableExtraBar
+        local extraBarSizeModW -- = (side == "Left" or side == "Right" and enableExtraBar and profile.ExtraBarSize * 100) or 0
+        if enableExtraBar and side == "Left" or side == "Right" then
+            extraBarSizeModW = profile.ExtraBarSize * 100
+        else
+            extraBarSizeModW = 0
+        end
+        local extraBarSizeModH -- = (side == "Top" or side == "Bottom" and enableExtraBar and profile.ExtraBarSize * 100) or 0
+        if enableExtraBar and side == "Top" or side == "Bottom" then
+            extraBarSizeModH = profile.ExtraBarSize * 100
+        else
+            extraBarSizeModH = 0
+        end
+        self:SetParent(healthBar)
+        self:ClearAllPoints()
+        self:SetPoint("TOP", frame, "TOP", -2, -offset)
+        self:SetWidth(frame:GetWidth()-extraBarSizeModW)
+        self:SetHeight(frame:GetHeight()-extraBarSizeModH)
+        self:SetOrientation(profile.orientation)
+        self:SetReverseFill(true)
     end
 
     --self:SetOrientation(profile.orientation)
