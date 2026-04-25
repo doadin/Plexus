@@ -94,7 +94,7 @@ function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
     if settings.alert_EXTERNAL_DEFENSIVE.enable then
         filter = "HELPFUL|EXTERNAL_DEFENSIVE"
         result = C_UnitAuras.GetUnitAuras(unit, filter , 1 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
-        --local dur = result and result[1] and C_UnitAuras.GetAuraDurationRemainingByAuraInstanceID(unit, result[1].auraInstanceID)
+        local dur = result and result[1] and C_UnitAuras.GetAuraDuration(unit, result[1].auraInstanceID)
         if result and result[1] then
             self.core:SendStatusGained(
                 guid, "alert_EXTERNAL_DEFENSIVE", settings.alert_EXTERNAL_DEFENSIVE.priority, (settings.alert_EXTERNAL_DEFENSIVE.range and 40),
@@ -107,7 +107,7 @@ function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
     if settings.alert_BIG_DEFENSIVE.enable then
         filter = "HELPFUL|BIG_DEFENSIVE"
         result = C_UnitAuras.GetUnitAuras(unit, filter , 1 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
-        --local dur = result and result[1] and C_UnitAuras.GetAuraDurationRemainingByAuraInstanceID(unit, result[1].auraInstanceID)
+        local dur = result and result[1] and C_UnitAuras.GetAuraDuration(unit, result[1].auraInstanceID)
         if result and result[1] then
             self.core:SendStatusGained(
                 guid, "alert_BIG_DEFENSIVE", settings.alert_BIG_DEFENSIVE.priority, (settings.alert_BIG_DEFENSIVE.range and 40),
