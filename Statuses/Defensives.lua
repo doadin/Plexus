@@ -105,14 +105,24 @@ function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
     end
 
     if settings.alert_BIG_DEFENSIVE.enable then
+        local foundBigDefensive = false
         filter = "HELPFUL|BIG_DEFENSIVE"
-        result = C_UnitAuras.GetUnitAuras(unit, filter , 1 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
-        local dur = result and result[1] and C_UnitAuras.GetAuraDuration(unit, result[1].auraInstanceID)
-        if result and result[1] then
-            self.core:SendStatusGained(
-                guid, "alert_BIG_DEFENSIVE", settings.alert_BIG_DEFENSIVE.priority, (settings.alert_BIG_DEFENSIVE.range and 40),
-                nil, nil, nil, nil, result[1].icon, nil, dur, result[1].applications, nil, result[1].expirationTime)
-        else
+        result = C_UnitAuras.GetUnitAuras(unit, filter , 40 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
+        for i = 1, #result do
+            if C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, result[i].auraInstanceID, "HELPFUL|EXTERNAL_DEFENSIVE") then
+                local dur = result and result[i] and C_UnitAuras.GetAuraDuration(unit, result[i].auraInstanceID)
+                if result and result[i] then
+                    self.core:SendStatusGained(
+                        guid, "alert_BIG_DEFENSIVE", settings.alert_BIG_DEFENSIVE.priority, (settings.alert_BIG_DEFENSIVE.range and 40),
+                        nil, nil, nil, nil, result[i].icon, nil, dur, result[i].applications, nil, result[i].expirationTime)
+                else
+                    self.core:SendStatusLost(guid, "alert_BIG_DEFENSIVE")
+                end
+                foundBigDefensive = true
+                break
+            end
+        end
+        if not foundBigDefensive then
             self.core:SendStatusLost(guid, "alert_BIG_DEFENSIVE")
         end
     end
