@@ -84,6 +84,10 @@ function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
         return
     end
 
+    if not Plexus:issecretvalue(unit) and not UnitIsVisible(unit) then
+        return
+    end
+
     local filter
     local result
 
