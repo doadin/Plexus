@@ -101,6 +101,12 @@ end
 function PlexusRoster:GetGUIDByName(name, realm) --luacheck: ignore 212
     if realm == my_realm or realm == "" then realm = nil end
     for guid, unit_name in pairs(roster.name) do
+        if Plexus:issecretvalue(name)
+        or Plexus:issecretvalue(unit_name)
+        or Plexus:issecretvalue(guid)
+        or Plexus:issecretvalue(realm) then
+            return
+        end
         if name == unit_name and roster.realm[guid] == realm then
             return guid
         end

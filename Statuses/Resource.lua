@@ -356,7 +356,7 @@ function PlexusStatusResource:ROLE_CHANGED_INFORM(event, changedName, fromName, 
     self:Debug("ROLE_CHANGED_INFORM", event, changedName, fromName, oldRole, newRole)
     self:Debug("ROLE_CHANGED_INFORM",changedName, unitGUID, unitid)
     local EnableForHealers = PlexusStatusResource.db.profile.EnableForHealers
-    if EnableForHealers then
+    if unitGUID and EnableForHealers then
         if newRole ~= "HEALER" then
             self.core:SendStatusLost(unitGUID, "unit_resource")
             return
