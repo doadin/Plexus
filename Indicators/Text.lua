@@ -69,7 +69,11 @@ local function Reset(self)
     local bar = frame.indicators.bar
 
     self:SetParent(bar)
-    self:SetFont(font, profile.fontSize)
+    if profile.fontOutline ~= "NONE" then
+        self:SetFont(font, profile.fontSize, profile.fontOutline)
+    else
+        self:SetFont(font, profile.fontSize)
+    end
 
     if profile.fontShadow then
         self:SetShadowOffset(1, -1)
