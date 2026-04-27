@@ -1656,31 +1656,31 @@ local function ResizePrivateAuraStacks(parent, size)
     end
 end
 
-local QueueUpdate -- delay updates if we are in combat
-do
-	local queue, frame = {}, CreateFrame("Frame")
-	frame:Hide()
-	frame:SetScript("OnEvent", function()
-		frame:UnregisterEvent('PLAYER_REGEN_ENABLED')
-		--for unit in pairs(queue) do
-		--	for _, indicator in Grid2:IterateIndicators('privateauras') do
-		--		if not indicator.suspended then
-		--			for frame in next, Grid2:GetUnitFrames(unit) do
-		--				indicator:Update(frame, unit)
-		--			end
-		--		end
-		--	end
-		--end
-        PlexusFrame:UpdateFrameUnits()
-		wipe(queue)
-	end)
-	function QueueUpdate(unit)
-		if not next(queue) then
-			frame:RegisterEvent('PLAYER_REGEN_ENABLED')
-		end
-		queue[unit] = true
-	end
-end
+--local QueueUpdate -- delay updates if we are in combat
+--do
+--	local queue, frame = {}, CreateFrame("Frame")
+--	frame:Hide()
+--	frame:SetScript("OnEvent", function()
+--		frame:UnregisterEvent('PLAYER_REGEN_ENABLED')
+--		--for unit in pairs(queue) do
+--		--	for _, indicator in Grid2:IterateIndicators('privateauras') do
+--		--		if not indicator.suspended then
+--		--			for frame in next, Grid2:GetUnitFrames(unit) do
+--		--				indicator:Update(frame, unit)
+--		--			end
+--		--		end
+--		--	end
+--		--end
+--        PlexusFrame:UpdateFrameUnits()
+--		wipe(queue)
+--	end)
+--	function QueueUpdate(unit)
+--		if not next(queue) then
+--			frame:RegisterEvent('PLAYER_REGEN_ENABLED')
+--		end
+--		queue[unit] = true
+--	end
+--end
 
 function PlexusFrame:UpdateFrameUnits()
     local settings = self.db.profile
@@ -1694,7 +1694,7 @@ function PlexusFrame:UpdateFrameUnits()
             local guid = unitid and ( (not Plexus.IsSpecialUnit[unitid]) and UnitGUID(unitid) or unitid ) or nil
             if Plexus:issecretvalue(guid) then guid = unitid end
 
-            if not InCombatLockdown() and not Plexus:issecretvalue(guid) then
+            if not Plexus:issecretvalue(guid) then
                 --Start Priavte Aura
                 if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) then
                     -- Create parent frame once
@@ -1732,8 +1732,8 @@ function PlexusFrame:UpdateFrameUnits()
                         end
                     end
                 end
-            else
-                QueueUpdate(unitid)
+            --else
+            --    QueueUpdate(unitid)
             end
             --if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) and frame.anchorID then
             --    C_UnitAuras.RemovePrivateAuraAnchor(frame.anchorID)
