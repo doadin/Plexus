@@ -91,7 +91,7 @@ function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
     local filter
     local result
 
-    if settings.alert_EXTERNAL_DEFENSIVE.enable then
+    if settings and settings.alert_EXTERNAL_DEFENSIVE and settings.alert_EXTERNAL_DEFENSIVE.enable then
         filter = "HELPFUL|EXTERNAL_DEFENSIVE"
         result = C_UnitAuras.GetUnitAuras(unit, filter , 1 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
         local dur = result and result[1] and C_UnitAuras.GetAuraDuration(unit, result[1].auraInstanceID)
@@ -104,7 +104,7 @@ function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
         end
     end
 
-    if settings.alert_BIG_DEFENSIVE.enable then
+    if settings and settings.alert_BIG_DEFENSIVE and settings.alert_BIG_DEFENSIVE.enable then
         local foundBigDefensive = false
         filter = "HELPFUL|BIG_DEFENSIVE"
         result = C_UnitAuras.GetUnitAuras(unit, filter , 40 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
