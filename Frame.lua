@@ -1584,6 +1584,7 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
                 offsetX = 2,
                 offsetY = -2,
             },
+            isContainer = false,
             unitToken = unitToken,
             auraIndex = index,
             parent = parent,
