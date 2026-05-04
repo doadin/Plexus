@@ -155,6 +155,10 @@ function PlexusRoster:GetOwnerUnitidByUnitid(unitid) --luacheck: ignore 212
     end
 end
 
+function PlexusRoster:UnitIsPet(unit) --luacheck: ignore 212
+	return owner_of_unit[unit]
+end
+
 function PlexusRoster:IsGUIDInGroup(guid) --luacheck: ignore 212
     if Plexus:issecretvalue(guid) then
         return false
