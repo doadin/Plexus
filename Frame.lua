@@ -1694,10 +1694,10 @@ function PlexusFrame:UpdateFrameUnits()
             local guid = unitid and ( (not Plexus.IsSpecialUnit[unitid]) and UnitGUID(unitid) or unitid ) or nil
             if Plexus:issecretvalue(guid) then guid = unitid end
 
-            --if not Plexus:issecretvalue(guid) then
+            if not Plexus:issecretvalue(guid) then
                 --Start Priavte Aura
                 --print(GetTime(), "UpdateFrameUnits for", frame_name, "unitid:", unitid, "guid:", guid, "old_unit:", old_unit, "old_guid:", old_guid)
-                if Plexus:IsRetailWow() and settings.enablePrivateAura and (old_unit ~= unitid) then
+                if Plexus:IsRetailWow() and settings.enablePrivateAura and (old_guid ~= guid or old_unit ~= unitid) then
                     -- Create parent frame once
                     if not frame.pa then
                         frame.pa = CreateFrame("Button", nil, frame.indicators.bar, BackdropTemplateMixin and "BackdropTemplate")
@@ -1707,13 +1707,14 @@ function PlexusFrame:UpdateFrameUnits()
                         frame.pa:Show()
                     else
                         frame.pa:Show()
-                        -- Remove old anchors
-                        for i = 1, 5 do
-                            local id = frame.privateAuraAnchors[i]
-                            if id then
-                                C_UnitAuras.RemovePrivateAuraAnchor(id)
-                                frame.privateAuraAnchors[i] = nil
-                            end
+                    end
+
+                    -- Remove old anchors
+                    for i = 1, 5 do
+                        local id = frame.privateAuraAnchors[i]
+                        if id then
+                            C_UnitAuras.RemovePrivateAuraAnchor(id)
+                            frame.privateAuraAnchors[i] = nil
                         end
                     end
 
@@ -1736,7 +1737,7 @@ function PlexusFrame:UpdateFrameUnits()
                 end
             --else
             --    QueueUpdate(unitid)
-            --end
+            end
             --if Plexus:IsRetailWow() and settings.enablePrivateAura and guid and (old_unit ~= unitid or old_guid ~= guid) and frame.anchorID then
             --    C_UnitAuras.RemovePrivateAuraAnchor(frame.anchorID)
             --    frame.anchorID = nil
