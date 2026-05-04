@@ -366,7 +366,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
     end
 
     if not Plexus.IsSpecialUnit[unitid] then
-        self:StatusOffline(guid, not UnitIsConnected(unitid))
+        self:StatusOffline(guid, not UnitIsConnected(unitid), unitid)
     end
 
     local healthText
@@ -509,10 +509,11 @@ function PlexusStatusHealth:StatusFeignDeath(guid, gained)
     end
 end
 
-function PlexusStatusHealth:StatusOffline(guid, gained)
+function PlexusStatusHealth:StatusOffline(guid, gained, unitid)
     local settings = self.db.profile.alert_offline
 
     if not guid then return end
+    if PlexusRoster:UnitIsPet(unitid) then return end
 
     if gained then
         -- trigger offline event for other modules
