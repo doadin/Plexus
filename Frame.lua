@@ -1569,11 +1569,11 @@ local SecureButton_GetModifiedUnit = SecureButton_GetModifiedUnit -- it's so slo
 
 function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
     local w = settings.PrivateAuraWidth
-    local pad = settings.PrivateAuraPadding or 2
-    local slot = w + pad
+    --local pad = settings.PrivateAuraPadding or 2
+    --local slot = w + pad
 
     -- Center the row: index 3 is the middle
-    local offset = (index - 3) * slot
+    --local offset = (index - 3) * slot
 
     if settings.enablePrivateAuraCountdownNumbers then
         return {
@@ -1595,7 +1595,7 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
                     point = "CENTER",
                     relativeTo = parent,
                     relativePoint = "CENTER",
-                    offsetX = settings.PrivateAuraOffsetX + offset,
+                    offsetX = settings.PrivateAuraOffsetX,
                     offsetY = settings.PrivateAuraOffsetY,
                 },
                 iconWidth = w,
@@ -1623,7 +1623,7 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
                     point = "CENTER",
                     relativeTo = parent,
                     relativePoint = "CENTER",
-                    offsetX = settings.PrivateAuraOffsetX + offset,
+                    offsetX = settings.PrivateAuraOffsetX,
                     offsetY = settings.PrivateAuraOffsetY,
                 },
                 iconWidth = w,
@@ -1685,7 +1685,6 @@ end
 function PlexusFrame:UpdateFrameUnits()
     local settings = self.db.profile
     for frame_name, frame in pairs(self.registeredFrames) do
-        frame.privateAuraAnchors = frame.privateAuraAnchors or {}
         if frame:IsVisible() then
             local old_unit = frame.unit
             local old_guid = frame.unitGUID
@@ -1698,42 +1697,57 @@ function PlexusFrame:UpdateFrameUnits()
                 --Start Priavte Aura
                 --print(GetTime(), "UpdateFrameUnits for", frame_name, "unitid:", unitid, "guid:", guid, "old_unit:", old_unit, "old_guid:", old_guid)
                 if Plexus:IsRetailWow() and settings.enablePrivateAura and (old_guid ~= guid or old_unit ~= unitid) then
-                    -- Create parent frame once
-                    if not frame.pa then
-                        frame.pa = CreateFrame("Button", nil, frame.indicators.bar, BackdropTemplateMixin and "BackdropTemplate")
-                        frame.pa:SetPoint("CENTER")
-                        frame.pa:SetSize(1, 1)
-                        frame.pa:EnableMouse(false)
-                        frame.pa:Show()
-                    else
-                        frame.pa:Show()
-                    end
-
-                    -- Remove old anchors
+                    --print(GetTime(), "Updating Private Auras for", frame_name, "unitid:", unitid, "guid:", guid, "old_unit:", old_unit, "old_guid:", old_guid)
+                    frame.pa = frame.pa or {}
                     for i = 1, 5 do
-                        local id = frame.privateAuraAnchors[i]
-                        if id then
-                            C_UnitAuras.RemovePrivateAuraAnchor(id)
-                            frame.privateAuraAnchors[i] = nil
+                        -- Create parent frame once
+                        if not frame.pa[i] then
+                            frame.pa[i] = CreateFrame("Button", nil, frame.indicators.bar, BackdropTemplateMixin and "BackdropTemplate")
+                        else
+                            -- Remove old anchors
+                            local id = frame.pa[i].id
+                            if id then
+                                C_UnitAuras.RemovePrivateAuraAnchor(id)
+                                --print(GetTime(), "Removed Private Aura Anchor", id, "for", frame_name, "unitid:", unitid, "guid:", guid, "index:", i)
+                                frame.pa[i].id = nil
+                            end
+                            frame.pa[i]:SetParent(frame.indicators.bar)
                         end
-                    end
-
-                    -- Add new anchors
-                    for i = 1, 5 do
-                        local anchor = PlexusFrame:MakePAAnchor(frame.pa, unitid, i, settings)
-                        frame.privateAuraAnchors[i] = C_UnitAuras.AddPrivateAuraAnchor(anchor)
-                        --ResizePrivateAuraDuration(frame.pa, settings.PrivateAuraDurationFontSize or 5)
-                        --ResizePrivateAuraStacks(frame.pa, settings.PrivateAuraStackFontSize or 5)
+                        -- Position each frame with spacing
+                        --local spacing = 4   -- change this to whatever spacing you want
+                        local w = settings.PrivateAuraWidth
+                        --local pad = settings.PrivateAuraPadding or 2
+                        --local slot = w + pad
+                        --local offset = (i - 3) * slot
+                        frame.pa[i]:ClearAllPoints()
+                        frame.pa[i]:SetPoint("LEFT", frame.indicators.bar, "LEFT", w * i, 0)
+                        frame.pa[i]:SetSize(w, w)
+                        frame.pa[i]:EnableMouse(false)
+                        frame.pa[i]:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 10)
+                        frame.pa[i]:SetFrameStrata("HIGH")
+                        --frame.pa[i].texture = frame.pa[i].texture or frame.pa[i]:CreateTexture()
+                        --frame.pa[i].texture:SetAllPoints(frame.pa[i])
+                        --frame.pa[i].texture:SetTexture(134400)
+                        frame.pa[i]:Show()
+                        -- Add new anchors
+                        local anchor = PlexusFrame:MakePAAnchor(frame.pa[i], unitid, i, settings)
+                        frame.pa[i].id = C_UnitAuras.AddPrivateAuraAnchor(anchor)
+                        --print(GetTime(), "Added Private Aura Anchor", frame.pa[i].id, "for", frame_name, "unitid:", unitid, "guid:", guid, "index:", i)
                     end
                 elseif Plexus:IsRetailWow() and not settings.enablePrivateAura and (old_unit ~= unitid) then
                     -- Remove old anchors
-                    for i = 1, 5 do
-                        local id = frame.privateAuraAnchors[i]
-                        if id then
-                            C_UnitAuras.RemovePrivateAuraAnchor(id)
-                            frame.privateAuraAnchors[i] = nil
+                    if frame.pa then
+                        for i = 1, 5 do
+                            local id = frame.pa[i].id
+                            if id then
+                                C_UnitAuras.RemovePrivateAuraAnchor(id)
+                                --print(GetTime(), "Removed Private Aura Anchor", id, "for", frame_name, "unitid:", unitid, "guid:", guid, "index:", i)
+                                frame.pa[i].id = nil
+                            end
                         end
                     end
+                --else
+                --    print(GetTime(), "UpdateFrameUnits for", frame_name, "no guid change detected, skipping private aura update. unitid:", unitid)
                 end
             --else
             --    QueueUpdate(unitid)
@@ -1778,12 +1792,12 @@ function PlexusFrame:UpdateFrameUnits()
             --    frame.anchorID = C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
             --end
             if Plexus:IsRetailWow() and not settings.enablePrivateAura then
-                if frame and frame.privateAuraAnchors then
+                if frame and frame.pa then
                     for i = 1, 5 do
-                        local id = frame.privateAuraAnchors[i]
+                        local id = frame.pa[i].id
                         if id then
                             C_UnitAuras.RemovePrivateAuraAnchor(id)
-                            frame.privateAuraAnchors[i] = nil
+                            frame.pa[i].id = nil
                         end
                     end
                 end
@@ -1809,6 +1823,19 @@ function PlexusFrame:UpdateFrameUnits()
                     frame.unitGUID = nil
 
                     self:ClearIndicators(frame)
+                end
+            end
+        else
+            frame.unit = nil
+            frame.unitGUID = nil
+            self:ClearIndicators(frame)
+            if frame and frame.pa then
+                for i = 1, 5 do
+                    local id = frame.pa[i].id
+                    if id then
+                        C_UnitAuras.RemovePrivateAuraAnchor(id)
+                        frame.pa[i].id = nil
+                    end
                 end
             end
         end
