@@ -1721,7 +1721,7 @@ function PlexusFrame:UpdateFrameUnits()
                         --local offset = (i - 3) * slot
                         frame.pa[i]:ClearAllPoints()
                         frame.pa[i]:SetPoint("LEFT", frame.indicators.bar, "LEFT", w * i, 0)
-                        frame.pa[i]:SetSize(w, w)
+                        frame.pa[i]:SetSize(0.001, 0.001)
                         frame.pa[i]:EnableMouse(false)
                         frame.pa[i]:SetFrameLevel(frame.indicators.bar:GetFrameLevel() + 10)
                         frame.pa[i]:SetFrameStrata("HIGH")
