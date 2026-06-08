@@ -450,7 +450,7 @@ if Plexus:IsClassicWow() then
     }
     end
 
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() or Plexus:IsMistsWow() then
 tankingbuffs = {
     ["DRUID"] = {
         22812,  -- Barkskin
