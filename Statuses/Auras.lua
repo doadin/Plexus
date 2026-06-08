@@ -145,6 +145,7 @@ spell_names = {
     ["Symbiotic Bloom"] = GetSpellName(410686),
     ["Shifting Sands"] = GetSpellName(413984),
     ["Source of Magic"] = GetSpellName(1289630),
+    ["Sense Power"] = GetSpellName(361022),
 -- Monk
     ["Soothing Mist"] = GetSpellName(115175),
     ["Renewing Mist"] = GetSpellName(119611),
@@ -692,6 +693,17 @@ PlexusStatusAuras.defaultDB = {
         desc = format(L["Buff: %s"], spell_names["Source of Magic"]),
         buff = spell_names["Source of Magic"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Source of Magic"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Sense Power", true)] = {
+        -- 361022
+        desc = format(L["Buff: %s"], spell_names["Sense Power"]),
+        buff = spell_names["Sense Power"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Sense Power"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
