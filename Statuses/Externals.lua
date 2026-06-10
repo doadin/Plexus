@@ -450,7 +450,7 @@ if Plexus:IsClassicWow() then
     }
     end
 
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() or Plexus:IsMistsWow() then
+if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
 tankingbuffs = {
     ["DRUID"] = {
         22812,  -- Barkskin
@@ -468,6 +468,45 @@ tankingbuffs = {
         1022,    -- Blessing of Protection
         6940,    -- Blessing of Sacrifice
         465,     -- Devotion Aura
+        498,     -- Divine Protection
+        642,     -- Divine Shield
+    },
+    ["PRIEST"] = {
+        15286,  -- Vampiric Embrace
+    },
+    ["ROGUE"] = {
+        5277,   -- Evasion
+    },
+    ["SHAMAN"] = {
+    },
+    ["WARLOCK"] = {
+    },
+    ["WARRIOR"] = {
+        12975,  -- Last Stand
+        2565,   -- Shield Block
+        871,    -- Shield Wall
+    }
+}
+end
+
+if Plexus:IsMistWow() then
+tankingbuffs = {
+    ["DRUID"] = {
+        22812,  -- Barkskin
+        740,    -- Tranquility
+    },
+    ["HUNTER"] = {
+        19263,  -- Deterrence
+    },
+    ["MAGE"] = {
+        11426,  -- Ice Barrier
+        --168, -- Frost Armor
+    },
+    ["PALADIN"] = {
+        1044,    -- Blessing of Freedom
+        1022,    -- Blessing of Protection
+        6940,    -- Blessing of Sacrifice
+        --465,     -- Devotion Aura
         498,     -- Divine Protection
         642,     -- Divine Shield
     },
@@ -595,7 +634,7 @@ PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
 }
 end
 
-if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() then
+if Plexus:IsClassicWow() or Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() or Plexus:IsMistWow() then
 PlexusStatusExternals.defaultDB = { --luacheck: ignore 112
     debug = false,
     alert_externals = {
