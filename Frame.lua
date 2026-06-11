@@ -1825,7 +1825,7 @@ function PlexusFrame:UpdateFrameUnits()
                     self:ClearIndicators(frame)
                 end
             end
-        else
+        elseif Plexus:IsRetailWow() and settings.enablePrivateAura then
             frame.unit = nil
             frame.unitGUID = nil
             self:ClearIndicators(frame)
