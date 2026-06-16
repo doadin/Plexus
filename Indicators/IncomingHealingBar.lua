@@ -148,7 +148,7 @@ local function SetStatus(self, color, _, value, maxValue, _, _, _, start, durati
         self:SetValue(value)
 	end
 
-    if color then
+    if color and color.r and color.g and color.b and color.a then
         if PlexusFrame.db.profile.ExtraBarInvertColor then
             self:SetStatusBarColor(color.r,color.g,color.b,color.a)
             self.bg:SetVertexColor(0,0,0,0.3)
