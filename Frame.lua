@@ -1828,16 +1828,16 @@ function PlexusFrame:UpdateFrameUnits()
         elseif Plexus:IsRetailWow() and settings.enablePrivateAura then
             frame.unit = nil
             frame.unitGUID = nil
-            self:ClearIndicators(frame)
-            if frame and frame.pa then
-                for i = 1, 5 do
-                    local id = frame.pa[i].id
-                    if id then
-                        C_UnitAuras.RemovePrivateAuraAnchor(id)
-                        frame.pa[i].id = nil
-                    end
-                end
-            end
+            --self:ClearIndicators(frame)
+            --if frame and frame.pa then
+            --    for i = 1, 5 do
+            --        local id = frame.pa[i].id
+            --        if id then
+            --            C_UnitAuras.RemovePrivateAuraAnchor(id)
+            --            frame.pa[i].id = nil
+            --        end
+            --    end
+            --end
         end
     end
 end
