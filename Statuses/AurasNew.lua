@@ -12,7 +12,7 @@
 
 local version = GetBuildInfo()
 
-if version == "12.1.0" then
+if version == "12.0.7" then
     return
 end
 
@@ -35,9 +35,7 @@ PlexusStatusAuras.menuName = L["Auras"]
 local _, PLAYER_CLASS = UnitClass("player")
 local PlayerCanDispel = {}
 local spell_names
-
-local GetAuraDataByAuraInstanceID = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
-local ForEachAura = AuraUtil and AuraUtil.ForEachAura
+local spell_ids
 
 local function GetSpellName(spellid)
     local info = C_Spell.GetSpellName and C_Spell.GetSpellName(spellid) or GetSpellInfo(spellid)
@@ -52,74 +50,6 @@ if Plexus:IsRetailWow() then
         BleedSupported = true
     end
 end
-
---if Plexus:IsRetailWow() then
---spell_names = {
----- All
---    ["Ghost"] = GetSpellName(8326),
---    ["Insurance!"] = GetSpellName(1215503),
---    ["Oath-Bound"] = GetSpellName(1239997),
---    ["Boon of the Oathsworn"] = GetSpellName(1240000),
---    ["Ethereal Guard"] = GetSpellName(1223453),
---    ["Ethereal Reconstitution"] = GetSpellName(1223446),
----- Druid
---    ["Cenarion Ward"] = GetSpellName(102351),
---    ["Lifebloom"] = GetSpellName(33763),
---    ["Regrowth"] = GetSpellName(8936),
---    ["Rejuvenation"] = GetSpellName(774),
---    ["Rejuvenation (Germination)"] = GetSpellName(155777),
---    ["Wild Growth"] = GetSpellName(48438),
----- Evoker
---    ["Reversion"] = GetSpellName(366155),
---    ["Echo: Reversion"] = "Echo: Reversion",
---    ["Dream Breath"] = GetSpellName(355941),
---    ["Echo: Dream Breath"] = "Echo: Dream Breath",
---    ["Echo"] = GetSpellName(364343),
---    ["Temporal Anomaly"] = GetSpellName(373862),
---    ["Rewind"] = GetSpellName(363534),
---    ["Blistering Scales"] = GetSpellName(360827),
---    ["Ebon Might"] = GetSpellName(395152),
---    ["Prescience"] = GetSpellName(409311),
----- Monk
---    ["Enveloping Breath"] = GetSpellName(325209),
---    ["Enveloping Mist"] = GetSpellName(124682),
---    ["Life Cocoon"] = GetSpellName(116849),
---    ["Renewing Mist"] = GetSpellName(115151),
---    ["Soothing Mist"] = GetSpellName(115175),
----- Paladin
---    ["Barrier of Faith"] = GetSpellName(148039),
---    ["Beacon of Faith"] = GetSpellName(156910),
---    ["Beacon of Light"] = GetSpellName(53563),
---    ["Beacon of Virtue"] = GetSpellName(200025),
---    ["Bestow Faith"] = GetSpellName(223306),
---    ["Dawnlight"] = GetSpellName(431382),
---    ["Eternal Flame"] = GetSpellName(156322),
---    ["Forbearance"] = GetSpellName(25771),
---    ["Sacred Dawn"] = GetSpellName(243174),
---    ["Sun Sear"] = GetSpellName(431415),
---    ["Tyr's Deliverance"] = GetSpellName(200652),
---    ["Glimmer of Light"] = GetSpellName(287286),
----- Priest
---    ["Atonement"] = GetSpellName(194384),
---    ["Clarity of Will"] = GetSpellName(152118),
---    ["Divine Aegis"] = GetSpellName(47753),
---    ["Echo of Light"] = GetSpellName(77489),
---    ["Guardian Spirit"] = GetSpellName(47788),
---    ["Light of T'uure"] = GetSpellName(208065),
---    ["Power Word: Fortitude"] = GetSpellName(21562),
---    ["Power Word: Shield"] = GetSpellName(17),
---    ["Prayer of Mending"] = GetSpellName(33076),
---    ["Premonition of Solace"] = GetSpellName(428934),
---    ["Premonition of Solace Absorb"] = "Premonition of Solace Absorb",
---    ["Protective Light"] = GetSpellName(193065),
---    ["Renew"] = GetSpellName(139),
---    ["Weakened Soul"] = GetSpellName(6788),
----- Shaman
---    ["Earth Shield"] = GetSpellName(204288),
---    ["Water Shield"] = GetSpellName(52127),
---    ["Riptide"] = GetSpellName(61295),
---}
---end
 
 if Plexus:IsRetailWow() then
 spell_names = {
@@ -136,6 +66,7 @@ spell_names = {
     ["Lifebloom"] = GetSpellName(33763),
     ["Wild Growth"] = GetSpellName(48438),
     ["Germination"] = GetSpellName(155777),
+    ["Rejuvenation (Germination)"] = GetSpellName(155777),
 -- Evoker
     ["Dream Breath"] = GetSpellName(355941),
     ["Dream Flight"] = GetSpellName(363502),
@@ -176,67 +107,62 @@ spell_names = {
     ["Riptide"] = GetSpellName(61295),
     ["Earthliving Weapon"] = GetSpellName(382021),
 }
-end
-
-if Plexus:IsClassicWow() then
-spell_names = {
+spell_ids = {
 -- All
-    ["Ghost"] = GetSpellName(8326),
+    --["Ghost"] = 8326,
+    --["Insurance!"] = 1215503,
+    --["Oath-Bound"] = 1239997,
+    --["Boon of the Oathsworn"] = 1240000,
+    --["Ethereal Guard"] = 1223453,
+    --["Ethereal Reconstitution"] = 1223446,
 -- Druid
-    ["Regrowth"] = GetSpellName(8936),
-    ["Rejuvenation"] = GetSpellName(774),
-    ["Mark of the Wild"] = GetSpellName(5231) or GetSpellName(21849),
+    ["Rejuvenation"] = 774,
+    ["Regrowth"] = 8936,
+    ["Lifebloom"] = 33763,
+    ["Wild Growth"] = 48438,
+    ["Germination"] = 155777,
+    ["Rejuvenation (Germination)"] = 155777,
+-- Evoker
+    ["Dream Breath"] = 355941,
+    ["Dream Flight"] = 363502,
+    ["Echo"] = 364343,
+    ["Reversion"] = 366155,
+    ["Echo: Reversion"] = 366155,
+    ["Lifebind"] = 373267,
+    ["Echo: Dream Breath"] = 376788,
+    ["Blistering Scales"] = 360827,
+    ["Ebon Might"] = 395152,
+    ["Prescience"] = 409311,
+    ["Inferno's Blessing"] = 410263,
+    ["Symbiotic Bloom"] = 410686,
+    ["Shifting Sands"] = 413984,
+    ["Source of Magic"] = 1289630,
+    ["Sense Power"] = 361022,
+-- Monk
+    ["Soothing Mist"] = 115175,
+    ["Renewing Mist"] = 119611,
+    ["Enveloping Mist"] = 124682,
+    ["Aspect of Harmony"] = 450769,
 -- Paladin
-    ["Beacon of Light"] = GetSpellName(53563),
-    ["Forbearance"] = GetSpellName(25771),
-    ["Blessing of Kings"] = GetSpellName(20217) or GetSpellName(25898),
-    ["Blessing of Might"] = GetSpellName(19740) or GetSpellName(25782),
-    ["Blessing of Sanctuary"] = GetSpellName(20911) or GetSpellName(25899),
-    ["Blessing of Wisdom"] = GetSpellName(19742) or GetSpellName(25894),
+    ["Beacon of Light"] = 53563,
+    ["Eternal Flame"] = 156322,
+    ["Beacon of Faith"] = 156910,
+    ["Beacon of the Savior"] = 1244893,
 -- Priest
-    ["Guardian Spirit"] = GetSpellName(47788),
-    ["Power Word: Fortitude"] = GetSpellName(1243) or GetSpellName(21562),
-    ["Power Word: Shield"] = GetSpellName(17),
-    ["Prayer of Mending"] = GetSpellName(33076),
-    ["Renew"] = GetSpellName(139),
-    ["Weakened Soul"] = GetSpellName(6788),
-}
-end
-
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() or Plexus:IsMistWow() then
-    spell_names = {
--- All
-    ["Ghost"] = GetSpellName(8326),
--- Druid
-    ["Lifebloom"] = GetSpellName(33763),
-    ["Regrowth"] = GetSpellName(8936),
-    ["Rejuvenation"] = GetSpellName(774),
-    ["Mark of the Wild"] = GetSpellName(5231) or GetSpellName(21849),
--- Paladin
-    ["Beacon of Light"] = GetSpellName(53563),
-    ["Forbearance"] = GetSpellName(25771),
-    ["Blessing of Kings"] = GetSpellName(20217) or GetSpellName(25898),
-    ["Blessing of Might"] = GetSpellName(19740) or GetSpellName(25782),
-    ["Blessing of Sanctuary"] = GetSpellName(20911) or GetSpellName(25899),
-    ["Blessing of Wisdom"] = GetSpellName(19742) or GetSpellName(25894),
--- Priest
-    ["Guardian Spirit"] = GetSpellName(47788),
-    ["Power Word: Fortitude"] = GetSpellName(1243) or GetSpellName(21562),
-    ["Power Word: Shield"] = GetSpellName(17),
-    ["Prayer of Mending"] = GetSpellName(33076),
-    ["Renew"] = GetSpellName(139),
-    ["Weakened Soul"] = GetSpellName(6788),
+    ["Power Word: Shield"] = 17,
+    ["Atonement"] = 194384,
+    ["Void Shield"] = 1253593,
+    ["Renew"] = 139,
+    ["Prayer of Mending"] = 41635,
+    ["Echo of Light"] = 77489,
 -- Shaman
-    ["Earth Shield"] = GetSpellName(974),
+    ["Ancestral Vigor"] = 207400,
+    ["Earth Shield"] = 974,
+    ["Hydrobubble"] = 444490,
+    ["Riptide"] = 61295,
+    ["Earthliving Weapon"] = 382021,
 }
 end
-
-
--- data used by aura scanning
-local buff_names = {}
-local player_buff_names = {}
-local debuff_names = {}
-local player_debuff_names = {}
 
 local debuff_types = {
     ["Curse"] = "dispel_curse",
@@ -796,6 +722,7 @@ PlexusStatusAuras.defaultDB = {
         durationLow = 5,
         durationHigh = 10,
         mine = true,
+        id = spell_ids["Beacon of Faith"]
     },
     [PlexusStatusAuras:StatusForSpell("Beacon of Light", true)] = {
         -- 53563
@@ -809,6 +736,7 @@ PlexusStatusAuras.defaultDB = {
         durationLow = 5,
         durationHigh = 10,
         mine = true,
+        id = spell_ids["Beacon of Light"]
     },
     [PlexusStatusAuras:StatusForSpell("Beacon of the Savior", true)] = {
         -- 1244893
@@ -822,6 +750,7 @@ PlexusStatusAuras.defaultDB = {
         durationLow = 5,
         durationHigh = 10,
         mine = true,
+        id = spell_ids["Beacon of the Savior"]
     },
     --[PlexusStatusAuras:StatusForSpell("Beacon of Virtue", true)] = {
     --    -- 200025
@@ -877,6 +806,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
         durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
+        id = spell_ids["Eternal Flame"]
     },
     --[PlexusStatusAuras:StatusForSpell("Sacred Dawn")] = {
     --    -- 243174
@@ -1125,379 +1055,6 @@ PlexusStatusAuras.defaultDB = {
 }
 end
 
-if Plexus:IsClassicWow() then
-PlexusStatusAuras.defaultDB = {
-    advancedOptions = false,
---[[
-    ["boss_aura"] = {
-        desc = L["Boss Aura"],
-        color = { r = 1, g = 0, b = 0, a = 1 },
-        priority = 90,
-        order = 20,
-    },
-]]
-    ---------------------
-    -- Debuff Types
-    ---------------------
-    ["dispel_curse"] = {
-        desc = format(L["Debuff type: %s"], L["Curse"]),
-        text = DEBUFF_SYMBOL_CURSE,
-        color = { r = 0.6, g = 0, b = 1, a = 1 },
-        durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
-        durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
-        durationColorHigh = { r = 0.6, g = 0, b = 1, a = 1 },
-        dispellable = true,
-        order = 25,
-    },
-    ["dispel_disease"] = {
-        desc = format(L["Debuff type: %s"], L["Disease"]),
-        text = DEBUFF_SYMBOL_DISEASE,
-        color = { r = 0.6, g = 0.4, b = 0, a = 1 },
-        durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
-        durationColorHigh = { r = 0.6, g = 0.4, b = 0, a = 1 },
-        dispellable = true,
-        order = 25,
-    },
-    ["dispel_magic"] = {
-        desc = format(L["Debuff type: %s"], L["Magic"]),
-        text = DEBUFF_SYMBOL_MAGIC,
-        color = { r = 0.2, g = 0.6, b = 1, a = 1 },
-        durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
-        durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
-        durationColorHigh = { r = 0.2, g = 0.6, b = 1, a = 1 },
-        dispellable = true,
-        order = 25,
-    },
-    ["dispel_poison"] = {
-        desc = format(L["Debuff type: %s"], L["Poison"]),
-        text = DEBUFF_SYMBOL_POISON,
-        color = { r = 0, g = 0.6, b = 0, a = 1 },
-        durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
-        durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
-        durationColorHigh = { r = 0, g = 0.6, b = 0, a = 1 },
-        dispellable = true,
-        order = 25,
-    },
-
-    ---------------------
-    -- General Debuffs
-    ---------------------
-    [PlexusStatusAuras:StatusForSpell("Ghost")] = {
-        -- 8326
-        desc = format(L["Debuff: %s"], spell_names["Ghost"]),
-        debuff = spell_names["Ghost"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Ghost"]),
-        color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
-    },
-
-    ---------------------
-    -- Druid
-    ---------------------
-    [PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
-        -- 8936
-        desc = format(L["Buff: %s"], spell_names["Regrowth"]),
-        buff = spell_names["Regrowth"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Regrowth"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.7, g = 0.49, b = 0.07, a = 1 },
-        durationColorHigh = { r = 1, g = 0.7, b = 0.1, a = 1 },
-        mine = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Rejuvenation", true)] = {
-        -- 774
-        desc = format(L["Buff: %s"], spell_names["Rejuvenation"]),
-        buff = spell_names["Rejuvenation"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Rejuvenation"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
-        durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
-        mine = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Mark of the Wild", true)] = {
-        -- 5231 or 21849
-        desc = format(L["Buff: %s"], spell_names["Mark of the Wild"]),
-        buff = spell_names["Mark of the Wild"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Mark of the Wild"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
-        durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
-        mine = true,
-    },
-
-    ---------------------
-    -- Paladin
-    ---------------------
-    [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
-        -- 25771
-        desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
-        debuff = spell_names["Forbearance"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
-        color = { r = 252, g = 0, b = 0, a = 1 },
-        durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
-        durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
-        durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
-    },
-    [PlexusStatusAuras:StatusForSpell("Blessing of Kings", true)] = {
-        -- 20217 or 25898
-        desc = format(L["Buff: %s"], spell_names["Blessing of Kings"]),
-        buff = spell_names["Blessing of Kings"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Kings"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        missing = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Blessing of Might", true)] = {
-        -- 19740 or 25782
-        desc = format(L["Buff: %s"], spell_names["Blessing of Might"]),
-        buff = spell_names["Blessing of Might"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Might"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        missing = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Blessing of Sanctuary", true)] = {
-        -- 20911 or 25899
-        desc = format(L["Buff: %s"], spell_names["Blessing of Sanctuary"]),
-        buff = spell_names["Blessing of Sanctuary"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Sanctuary"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        missing = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Blessing of Wisdom", true)] = {
-        -- 19742 or 25894
-        desc = format(L["Buff: %s"], spell_names["Blessing of Wisdom"]),
-        buff = spell_names["Blessing of Wisdom"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of Wisdom"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        missing = true,
-    },
-
-    ---------------------
-    -- Priest
-    ---------------------
-    [PlexusStatusAuras:StatusForSpell("Power Word: Fortitude", true)] = {
-        -- 21562
-        desc = format(L["Buff: %s"], spell_names["Power Word: Fortitude"]),
-        buff = spell_names["Power Word: Fortitude"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Fortitude"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        missing = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Power Word: Shield", true)] = {
-        -- 17
-        desc = format(L["Buff: %s"], spell_names["Power Word: Shield"]),
-        buff = spell_names["Power Word: Shield"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Shield"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
-        durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
-    },
-    [PlexusStatusAuras:StatusForSpell("Renew", true)] = {
-        -- 139
-        desc = format(L["Buff: %s"], spell_names["Renew"]),
-        buff = spell_names["Renew"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Renew"]),
-        color = { r = 0, g = 252, b = 0, a = 1 },
-        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-        durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
-        durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
-        mine = true,
-    },
-    [PlexusStatusAuras:StatusForSpell("Weakened Soul")] = {
-        -- 6788
-        desc = format(L["Debuff: %s"], spell_names["Weakened Soul"]),
-        debuff = spell_names["Weakened Soul"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
-        color = { r = 1, g = 0, b = 0, a = 1 },
-    },
-}
-end
-
-if Plexus:IsTBCWow() or Plexus:IsWrathWow() or Plexus:IsCataWow() or Plexus:IsMistWow() then
-    PlexusStatusAuras.defaultDB = {
-        advancedOptions = false,
-    --[[
-        ["boss_aura"] = {
-            desc = L["Boss Aura"],
-            color = { r = 1, g = 0, b = 0, a = 1 },
-            priority = 90,
-            order = 20,
-        },
-    ]]
-        ---------------------
-        -- Debuff Types
-        ---------------------
-        ["dispel_curse"] = {
-            desc = format(L["Debuff type: %s"], L["Curse"]),
-            text = DEBUFF_SYMBOL_CURSE,
-            color = { r = 0.6, g = 0, b = 1, a = 1 },
-            durationColorLow = { r = 0.18, g = 0, b = 0.3, a = 1 },
-            durationColorMiddle = { r = 0.42, g = 0, b = 0.7, a = 1 },
-            durationColorHigh = { r = 0.6, g = 0, b = 1, a = 1 },
-            dispellable = true,
-            order = 25,
-        },
-        ["dispel_disease"] = {
-            desc = format(L["Debuff type: %s"], L["Disease"]),
-            text = DEBUFF_SYMBOL_DISEASE,
-            color = { r = 0.6, g = 0.4, b = 0, a = 1 },
-            durationColorLow = { r = 0.18, g = 0.12, b = 0, a = 1 },
-            durationColorMiddle = { r = 0.42, g = 0.28, b = 0, a = 1 },
-            durationColorHigh = { r = 0.6, g = 0.4, b = 0, a = 1 },
-            dispellable = true,
-            order = 25,
-        },
-        ["dispel_magic"] = {
-            desc = format(L["Debuff type: %s"], L["Magic"]),
-            text = DEBUFF_SYMBOL_MAGIC,
-            color = { r = 0.2, g = 0.6, b = 1, a = 1 },
-            durationColorLow = { r = 0.06, g = 0.18, b = 0.3, a = 1 },
-            durationColorMiddle = { r = 0.14, g = 0.42, b = 0.7, a = 1 },
-            durationColorHigh = { r = 0.2, g = 0.6, b = 1, a = 1 },
-            dispellable = true,
-            order = 25,
-        },
-        ["dispel_poison"] = {
-            desc = format(L["Debuff type: %s"], L["Poison"]),
-            text = DEBUFF_SYMBOL_POISON,
-            color = { r = 0, g = 0.6, b = 0, a = 1 },
-            durationColorLow = { r = 0, g = 0.18, b = 0, a = 1 },
-            durationColorMiddle = { r = 0, g = 0.42, b = 0, a = 1 },
-            durationColorHigh = { r = 0, g = 0.6, b = 0, a = 1 },
-            dispellable = true,
-            order = 25,
-        },
-        ---------------------
-        -- General Debuffs
-        ---------------------
-        [PlexusStatusAuras:StatusForSpell("Ghost")] = {
-            -- 8326
-            desc = format(L["Debuff: %s"], spell_names["Ghost"]),
-            debuff = spell_names["Ghost"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Ghost"]),
-            color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
-        },
-
-        ---------------------
-        -- Druid
-        ---------------------
-        [PlexusStatusAuras:StatusForSpell("Lifebloom", true)] = {
-            -- 33763
-            desc = format(L["Buff: %s"], spell_names["Lifebloom"]),
-            buff = spell_names["Lifebloom"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Lifebloom"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-            durationColorMiddle = { r = 0.21, g = 0.49, b = 0, a = 1 },
-            durationColorHigh = { r = 0.3, g = 0.7, b = 0, a = 1 },
-            countColorLow = { r = 1, g = 0, b = 0, a = 1 },
-            countColorMiddle = { r = 1, g = 1, b = 0, a = 1 },
-            countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
-            countLow = 1,
-            countHigh = 2,
-            mine = true,
-        },
-        [PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
-            -- 8936
-            desc = format(L["Buff: %s"], spell_names["Regrowth"]),
-            buff = spell_names["Regrowth"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Regrowth"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-            durationColorMiddle = { r = 0.7, g = 0.49, b = 0.07, a = 1 },
-            durationColorHigh = { r = 1, g = 0.7, b = 0.1, a = 1 },
-            mine = true,
-        },
-        [PlexusStatusAuras:StatusForSpell("Rejuvenation", true)] = {
-            -- 774
-            desc = format(L["Buff: %s"], spell_names["Rejuvenation"]),
-            buff = spell_names["Rejuvenation"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Rejuvenation"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-            durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
-            durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
-            mine = true,
-        },
-
-        ---------------------
-        -- Paladin
-        ---------------------
-        [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
-            -- 25771
-            desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
-            debuff = spell_names["Forbearance"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
-            color = { r = 252, g = 0, b = 0, a = 1 },
-            durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
-            durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
-            durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
-        },
-
-        ---------------------
-        -- Priest
-        ---------------------
-        [PlexusStatusAuras:StatusForSpell("Power Word: Fortitude", true)] = {
-            -- 21562
-            desc = format(L["Buff: %s"], spell_names["Power Word: Fortitude"]),
-            buff = spell_names["Power Word: Fortitude"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Fortitude"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            missing = true,
-        },
-        [PlexusStatusAuras:StatusForSpell("Power Word: Shield", true)] = {
-            -- 17
-            desc = format(L["Buff: %s"], spell_names["Power Word: Shield"]),
-            buff = spell_names["Power Word: Shield"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Power Word: Shield"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-            durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
-            durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
-        },
-        [PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
-            -- 33076, 41635
-            buff = spell_names["Prayer of Mending"],
-            desc = format(L["Buff: %s"], spell_names["Prayer of Mending"]),
-            text = PlexusStatusAuras:TextForSpell(spell_names["Prayer of Mending"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            mine = true,
-        },
-        [PlexusStatusAuras:StatusForSpell("Renew", true)] = {
-            -- 139
-            desc = format(L["Buff: %s"], spell_names["Renew"]),
-            buff = spell_names["Renew"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Renew"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-            durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-            durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
-            durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
-            mine = true,
-        },
-        [PlexusStatusAuras:StatusForSpell("Weakened Soul")] = {
-            -- 6788
-            desc = format(L["Debuff: %s"], spell_names["Weakened Soul"]),
-            debuff = spell_names["Weakened Soul"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
-            color = { r = 1, g = 0, b = 0, a = 1 },
-            mine = true,
-        },
-        ---------------------
-        -- Shaman
-        ---------------------
-        [PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
-            -- 204288
-            desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
-            buff = spell_names["Earth Shield"],
-            text = PlexusStatusAuras:TextForSpell(spell_names["Earth Shield"]),
-            color = { r = 0, g = 252, b = 0, a = 1 },
-        },
-    }
-end
-
 local default_auras = {}
 do
     for status, settings in pairs(PlexusStatusAuras.defaultDB) do
@@ -1513,7 +1070,7 @@ PlexusStatusAuras.extraOptions = {}
 function PlexusStatusAuras:PostInitialize()
     self:RegisterStatuses()
 
-    if not Plexus:IsRetailWow() then
+    if Plexus:IsRetailWow() then
         self.options.args["add_buff"] = {
             name = L["Add Buff"],
             desc = L["Create a new buff status."],
@@ -1565,6 +1122,7 @@ end
 function PlexusStatusAuras:PostEnable()
     self:CreateRemoveOptions()
     self:UpdateDispellable()
+    --self:UpdateAllUnitAuras()
 end
 
 function PlexusStatusAuras:PostReset()
@@ -1589,29 +1147,18 @@ end
 
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("Plexus_UnitJoined")
-    if not Plexus:IsWrathWow() then
-        self:RegisterEvent("UNIT_AURA", "UpdateUnitAuras")
-    end
-    if Plexus:IsWrathWow() then
-        self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
-    end
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
-    --self:ScheduleRepeatingTimer("UpdateAllUnitAuras", 1) --UNIT_AURA fires every 5s this is a problem for duration color
+    --self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
+    --self:UpdateAllUnitAuras()
 
-    self:DeleteDurationStatus(status)
     self:UpdateDispellable()
-    self:UpdateAuraScanList()
-    self:UpdateAllUnitAuras()
+    --print("PlexusStatusAuras:OnStatusEnable", status, self:EnabledStatusCount())
 end
 
 function PlexusStatusAuras:OnStatusDisable(status)
-    self.core:SendStatusLostAllUnits(status)
-    self:DeleteDurationStatus(status)
-    self:UpdateAuraScanList()
-
     if self:EnabledStatusCount() == 0 then
         self:UnregisterMessage("Plexus_UnitJoined")
-        self:UnregisterEvent("UNIT_AURA")
+        self:UnregisterEvent("SPELLS_CHANGED")
     end
 end
 
@@ -1688,7 +1235,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
             end,
             set = function(_, v)
                 PlexusStatusAuras.db.profile[status].text = v
-                PlexusStatusAuras:UpdateAllUnitAuras()
             end,
         },
 --[[ -- ##DELETE
@@ -1745,7 +1291,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                     end,
                     set = function(_, v)
                         self.db.profile[status].statusColor = v
-                        self:UpdateAllUnitAuras()
                     end,
                 },
                 textInfo = {
@@ -1764,7 +1309,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                     end,
                     set = function(_, v)
                         self.db.profile[status].statusText = v
-                        self:UpdateAllUnitAuras()
                     end,
                     hidden = function()
                         return not self.db.profile.advancedOptions
@@ -1781,7 +1325,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                     end,
                     set = function(_, v)
                         self.db.profile[status].durationTenths = v
-                        self:UpdateAllUnitAuras()
                     end,
                     hidden = function()
                         return not self.db.profile.advancedOptions or self.db.profile[status].statusText ~= "duration"
@@ -1813,7 +1356,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                         elseif (info.type == "range") then
                             self.db.profile[status][optionName] = r
                         end
-                        self:UpdateAllUnitAuras()
                     end,
                     hidden = function()
                         return not self.db.profile.advancedOptions or self.db.profile[status].statusColor ~= "count"
@@ -1880,7 +1422,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                         elseif (info.type == "range") then
                             self.db.profile[status][optionName] = r
                         end
-                        self:UpdateAllUnitAuras()
                     end,
                     hidden = function()
                         return not self.db.profile.advancedOptions or self.db.profile[status].statusColor ~= "duration"
@@ -1935,7 +1476,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                     end,
                     set = function(_, v)
                         self.db.profile[status].refresh = v
-                        self:UpdateAllUnitAuras()
                     end,
                     hidden = function()
                         return not self.db.profile.advancedOptions or self.db.profile[status].statusColor ~= "duration"
@@ -1958,9 +1498,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
             end,
             set = function(_, v)
                 PlexusStatusAuras.db.profile[status].mine = v
-                PlexusStatusAuras:DeleteDurationStatus(status)
-                PlexusStatusAuras:UpdateAuraScanList()
-                PlexusStatusAuras:UpdateAllUnitAuras()
             end,
         }
         auraOptions.missing = {
@@ -1974,7 +1511,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
             end,
             set = function(_, v)
                 PlexusStatusAuras.db.profile[status].missing = v
-                PlexusStatusAuras:UpdateAllUnitAuras()
             end,
         }
     end
@@ -1992,9 +1528,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
             end,
             set = function(_, v)
                 PlexusStatusAuras.db.profile[status].mine = v
-                PlexusStatusAuras:DeleteDurationStatus(status)
-                PlexusStatusAuras:UpdateAuraScanList()
-                PlexusStatusAuras:UpdateAllUnitAuras()
             end,
         }
     end
@@ -2013,7 +1546,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                 end,
                 set = function(_, v)
                     PlexusStatusAuras.db.profile[status].dispellable = v
-                    PlexusStatusAuras:UpdateAllUnitAuras()
                 end,
             }
             break
@@ -2027,7 +1559,7 @@ function PlexusStatusAuras:CreateRemoveOptions()
     for status, settings in pairs(self.db.profile) do
         if type(settings) == "table" and settings.text and not default_auras[status] then
             local debuffName = settings.desc or settings.text
-            if not Plexus:IsRetailWow() then
+            if Plexus:IsRetailWow() then
                 self.options.args.delete_aura.args[status] = {
                     name = debuffName,
                     desc = format(L["Remove %s from the menu"], debuffName),
@@ -2098,31 +1630,18 @@ function PlexusStatusAuras:DeleteAura(status)
     for _, indicatorTbl in pairs(PlexusFrame.db.profile.statusmap) do
         indicatorTbl[status] = nil
     end
-    self:DeleteDurationStatus(status)
-    self:UpdateAuraScanList()
-end
-
-function PlexusStatusAuras:UpdateAllUnitAuras()
-    if not Plexus:IsWrathWow() then
-        --guid, unitid
-        for _, unitid in PlexusRoster:IterateRoster() do
-            self:UpdateUnitAuras("UpdateAllUnitAuras", unitid, {isFullUpdate = true})
-        end
-    end
-    if Plexus:IsWrathWow() then
-        for guid, unitid in PlexusRoster:IterateRoster() do
-            self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
-        end
-    end
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    if not Plexus:IsWrathWow() then
-        self:UpdateUnitAuras(event, unitid, {isFullUpdate = true})
-    end
-    if Plexus:IsWrathWow() then
-        self:ScanUnitAuras("UpdateAllUnitAuras", unitid, guid)
-    end
+    print("PlexusStatusAuras:Plexus_UnitJoined", event, guid, unitid)
+    --self:MakeContainers(unitid)
+end
+
+function PlexusStatusAuras:UpdateAllUnitAuras()
+    --guid, unitid
+    --for _, unitid in PlexusRoster:IterateRoster() do
+    --    self:MakeContainers(unitid)
+    --end
 end
 
 function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
@@ -2309,967 +1828,170 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
     end
 end
 
--- Unit Aura Driver
---
--- Primary Requirements:
--- * Identify the presence of known buffs by name.
--- * Identify the presence of known buffs by name that are cast by the player.
--- * Identify the presence of known debuffs by name.
--- * Identify the presence of unknown debuffs by dispel type.
---
--- * The ability to filter all of the above by class.
---
--- Optional/Secondary Requirements:
--- * Identify the absence of known buffs by name.
--- * Identify the absence of known buffs by name that are cast by the player.
+local function createButton(button)
+   button:SetSize(12, 12)
+   button:SetCancelAuraButtons('RightButtonUp')
+   local Icon = button:CreateTexture(nil, 'ARTWORK')
+   Icon:SetAllPoints()
+   button:SetIcon(Icon)
+   local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+   Time:SetPoint('TOPLEFT', 1, -1)
+   Time:SetJustifyH('LEFT')
+   Time:SetSize(8,8)
+   button:SetDurationText(Time)
+end
 
--- Proposal:
--- * Iterate over known buff names and call UnitAura(unit, name, "HELPFUL") for
---   each one.  It is likely that the list of buff names is shorter than the
---   number of buffs on the unit.
--- * Iterate over known buff names that are cast by the player and call
---   UnitAura(unit, name, "HELPFUL|PLAYER") for each one.  It is likely that the
---   combined list of buff names and buff names that are cast by the player is
---   shorter than the number of buffs on the unit.
--- * Iterate over all debuffs on the unit by calling
---   UnitAura(unit, index, "HARMFUL").  It is likely that the list of debuffs is
---   longer than the number of debuffs on the unit.  While scanning the debuffs
---   keep track of each debuff type seen and information about the last debuff
---   of that type seen.
-
--- Note:
--- * As of WoW 8.0, UnitAura no longer accepts a name, only an index, so we
---   now necessarily iterate over all buffs on the unit. The above information
---   is preserved for historical interest.
--- * As of WoW 9.2 and 10.0 an event UNIT_AURA now has instance ID for each aura
---   No longer needs to scan every auras. UNIT_AURA has the parameter table that
---   contains several aura informations
-
--- durationAuras[status][guid] = { <aura properties> }
-PlexusStatusAuras.durationAuras = {}
-PlexusStatusAuras.durationTimer = {
-    timer = nil,
-    refresh = nil,
-    minRefresh = nil,
+local anchor = {
+    -- left/right up/down
+    icon = { "CENTER", 0, 0},
+    ei_icon_topleft = { "TOPLEFT", 1, -1 },
+    ei_icon_topleft2 = { "TOPLEFT", 10, -1 },
+    ei_icon_topleft3 = { "TOPLEFT", 1, -10 },
+    ei_icon_topleft4 = { "TOPLEFT", 10, -10 },
+    -- left/right up/down
+    ei_icon_topright = { "TOPRIGHT", -1, -1 },
+    ei_icon_topright2 = { "TOPRIGHT", -10, -1 },
+    ei_icon_topright3 = { "TOPRIGHT", -1, -10 },
+    ei_icon_topright4 = { "TOPRIGHT", -10, -10 },
+    -- left/right up/down
+    ei_icon_botleft = { "BOTTOMLEFT", 1, 1 },
+    ei_icon_botleft2 = { "BOTTOMLEFT", 10, 1 },
+    ei_icon_botleft3 = { "BOTTOMLEFT", 1, 10 },
+    ei_icon_botleft4 = { "BOTTOMLEFT", 10, 10 },
+    -- left/right up/down
+    ei_icon_botright = { "BOTTOMRIGHT", -1, 1 },
+    ei_icon_botright2 = { "BOTTOMRIGHT", -10, 1 },
+    ei_icon_botright3 = { "BOTTOMRIGHT", -1, 10 },
+    ei_icon_botright4 = { "BOTTOMRIGHT", -10, 10 },
+    -- left/right up/down
+    ei_icon_top = { "TOP", 0, -1 },
+    ei_icon_top2 = { "TOP", 0, -10 },
+    ei_icon_top3 = { "TOP", -10, -1 },
+    ei_icon_top4 = { "TOP", 10, -1 },
+    -- left/right up/down
+    ei_icon_bottom = { "BOTTOM", 0, 1 },
+    ei_icon_bottom2 = { "BOTTOM", 0, 10 },
+    ei_icon_bottom3 = { "BOTTOM", -10, 1 },
+    ei_icon_bottom4 = { "BOTTOM", 10, 1 },
+    -- left/right up/down
+    ei_icon_left = { "LEFT", 1, 0 },
+    ei_icon_left2 = { "LEFT", 10, 0 },
+    ei_icon_left3 = { "LEFT", 1, 10 },
+    ei_icon_left4 = { "LEFT", 1, -10 },
+    -- left/right up/down
+    ei_icon_right = { "RIGHT", -1, 0 },
+    ei_icon_right2 = { "RIGHT", -10, 0 },
+    ei_icon_right3 = { "RIGHT", -1, 10 },
+    ei_icon_right4 = { "RIGHT", -1, -10 },
 }
 
-local ICON_TEX_COORDS = { left = 0.06, right = 0.94, top = 0.06, bottom = 0.94 }
-
--- Simple resource pool implemented as a singly-linked list.
-local Pool = {
-    pool = nil,
-    new = function(self, obj) -- create new Pool object
-        obj = obj or {}
-        setmetatable(obj, self)
-        self.__index = self
-        return obj
-    end,
-    get = function(self) -- get a cleaned item from the pool
-        if not self.pool then self.pool = { nextPoolItem = self.pool } end
-        local item = self.pool
-        self.pool = self.pool.nextPoolItem
-        item.nextPoolItem = nil
-        if self.clean then
-            self:clean(item)
-        end
-        return item
-    end,
-    put = function(self, item) -- put an item back into the pool; caller shall remove references to item
-        item.nextPoolItem = self.pool
-        self.pool = item
-    end,
-    clean = nil, -- called in Pool:new() to return a "cleaned" pool item
-    empty = function(self) -- empty the pool
-        while self.pool do
-            self.pool = self.pool.nextPoolItem
-        end
-    end,
-}
-
--- durationAuraPool is a Pool of tables used by durationAuras[status][guid]
-local durationAuraPool = Pool:new(
-    {
-        clean = function(self, item) --luacheck: ignore 212
-            item.duration = nil
-            item.expirationTime = nil
-        end
-    }
-)
-
-function PlexusStatusAuras:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-    local timer = self.durationTimer
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    if settings.enable and (settings.statusText == "duration" or settings.statusColor == "duration") then
-        if not self.durationAuras[status] then
-            self.durationAuras[status] = {}
-        end
-        if not self.durationAuras[status][guid] then
-            self.durationAuras[status][guid] = durationAuraPool:get()
-        end
-        self.durationAuras[status][guid] = {
-            class = class,
-            rank = rank,
-            icon = icon,
-            count = count,
-            debuffType = debuffType,
-            duration = duration,
-            expirationTime = expirationTime,
-            caster = caster,
-            isStealable = isStealable,
-        }
-        if not timer.minRefresh or settings.refresh < timer.minRefresh then
-            timer.minRefresh = settings.refresh
-        end
-    else
-        self:UnitLostDurationStatus(status, guid, class, name)
-    end
-end
-
-function PlexusStatusAuras:UnitLostDurationStatus(status, guid)
-    local auras = self.durationAuras[status]
-    if auras and auras[guid] then
-        durationAuraPool:put(auras[guid])
-        auras[guid] = nil
-    end
-end
-
-function PlexusStatusAuras:DeleteDurationStatus(status)
-    local auras = self.durationAuras[status]
-    if not auras then return end
-    for guid in pairs(auras) do
-        durationAuraPool:put(auras[guid])
-        auras[guid] = nil
-    end
-    self.durationAuras[status] = nil
-end
-
-function PlexusStatusAuras:ResetDurationStatuses()
-    for status in pairs(self.durationAuras) do
-        self:DeleteDurationStatus(status)
-    end
-    durationAuraPool:empty()
-end
-
-function PlexusStatusAuras:HasActiveDurations()
-    for _, auras in pairs(self.durationAuras) do
-        for _ in pairs(auras) do --luacheck: ignore 512
-            return true
-        end
-    end
-    return false
-end
-
-function PlexusStatusAuras:ResetDurationTimer(hasActiveDurations)
-    local timer = self.durationTimer
-    if hasActiveDurations then
-        if timer.timer and timer.refresh and timer.minRefresh ~= timer.refresh then
-            self:Debug("ResetDurationTimer: cancel timer", timer.minRefresh, timer.refresh)
-            self:CancelTimer(timer.timer, true)
-        end
-        timer.refresh = timer.minRefresh
-        if not timer.timer then
-            self:Debug("ResetDurationTimer: set timer", timer.refresh)
-            timer.timer = self:ScheduleRepeatingTimer("RefreshActiveDurations", timer.refresh)
-        end
-    else
-        if timer.timer then
-            self:Debug("ResetDurationTimer: cancel timer")
-            self:CancelTimer(timer.timer, true)
-        end
-        timer.timer = nil
-        timer.refresh = nil
-    end
-end
-
-function PlexusStatusAuras:StatusTextColor(settings, count, timeLeft) --luacheck: ignore 212
-    local text, color
-
-    count = count or 0
-    timeLeft = timeLeft or 0
-
-    if settings.statusText == "name" then
-        text = settings.text
-    elseif settings.statusText == "count" then
-        text = tostring(count)
-    elseif settings.statusText == "duration" then
-        if settings.durationTenths then
-            text = format("%.1f", timeLeft)
-        else
-            text = format("%d", timeLeft)
-        end
-    end
-
-    if settings.missing or settings.statusColor == "present" then
-        color = settings.color
-    elseif settings.statusColor == "duration" then
-        if timeLeft <= settings.durationLow then
-            color = settings.durationColorLow
-        elseif timeLeft <= settings.durationHigh then
-            color = settings.durationColorMiddle
-        else
-            color = settings.durationColorHigh
-        end
-    elseif settings.statusColor == "count" then
-        if count <= settings.countLow then
-            color = settings.countColorLow
-        elseif count <= settings.countHigh then
-            color = settings.countColorMiddle
-        else
-            color = settings.countColorHigh
-        end
-    end
-
-    return text, color
-end
-
-function PlexusStatusAuras:RefreshActiveDurations()
-
-    self:Debug("RefreshActiveDurations", GetTime())
-
-    for status, guids in pairs(self.durationAuras) do
-        local settings = self.db.profile[status]
-        if settings and settings.enable and not settings.missing then -- and settings[class] ~= false then -- ##DELETE
-            for guid, aura in pairs(guids) do
-                local count, duration, expirationTime, icon = aura.count, aura.duration, aura.expirationTime, aura.icon
-                local start = expirationTime and (expirationTime - duration)
-                local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-                local text, color = self:StatusTextColor(settings, count, timeLeft)
-                self.core:SendStatusGained(guid,
-                    status,
-                    settings.priority,
-                    nil,
-                    color,
-                    text,
-                    count,
-                    nil,
-                    icon,
-                    start,
-                    duration,
-                    count,
-                    ICON_TEX_COORDS)
-            end
-    --	else
-    --		self.core:SendStatusLost(guid, status) -- XXX "guid" is undefined=nil here; what is the purpose?!
-        end
-    end
-end
-
-function PlexusStatusAuras:UnitGainedBuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-    self:Debug("UnitGainedBuff", guid, class, name)
-
-    local status = buff_names[name]
-    local settings = status and self.db.profile[status]
-    if not settings then return end
-
-    settings.icon = icon
-
-    if settings.enable and not settings.missing then -- and settings[class] ~= false then -- ##DELETE
-        local start = expirationTime and (expirationTime - duration)
-        local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-        local text, color = self:StatusTextColor(settings, count, timeLeft)
-        if duration and expirationTime and duration > 0 and expirationTime > 0 then
-            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-        end
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            count,
-            nil,
-            icon,
-            start,
-            duration,
-            count,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitLostBuff(guid, class, name)
-    --self:Debug("UnitLostBuff", guid, class, name)
-
-    local status = buff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    if settings.enable and settings.missing then -- and settings[class] ~= false then -- ##DELETE
-        local text, color = self:StatusTextColor(settings, 0, 0)
-        self:UnitLostDurationStatus(status, guid, class, name)
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            nil,
-            nil,
-            settings.icon,
-            nil,
-            nil,
-            nil,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitGainedPlayerBuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-    self:Debug("UnitGainedPlayerBuff", guid, name)
-
-    local status = player_buff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    settings.icon = icon
-
-    if settings.enable and not settings.missing then -- and settings[class] ~= false then -- ##DELETE
-        local start = expirationTime and (expirationTime - duration)
-        local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-        local text, color = self:StatusTextColor(settings, count, timeLeft)
-        if duration and expirationTime and duration > 0 and expirationTime > 0 then
-            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-        end
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            count,
-            nil,
-            icon,
-            start,
-            duration,
-            count,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitLostPlayerBuff(guid, class, name)
-    --self:Debug("UnitLostPlayerBuff", guid, name)
-
-    local status = player_buff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    if settings.enable and settings.missing then -- and settings[class] ~= false then -- ##DELETE
-        local text, color = self:StatusTextColor(settings, 0, 0)
-        self:UnitLostDurationStatus(status, guid, class, name)
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            nil,
-            nil,
-            settings.icon,
-            nil,
-            nil,
-            nil,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitGainedDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-    self:Debug("UnitGainedDebuff", guid, class, name)
-
-    local status = debuff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    if settings.enable then -- and settings[class] ~= false then -- ##DELETE
-        local start = expirationTime and (expirationTime - duration)
-        local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-        local text, color = self:StatusTextColor(settings, count, timeLeft)
-        if duration and expirationTime and duration > 0 and expirationTime > 0 then
-            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-        end
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            count,
-            nil,
-            icon,
-            start,
-            duration,
-            count,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitGainedPlayerDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-    self:Debug("UnitGainedPlayerDebuff", guid, class, name)
-
-    local status = player_debuff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    if settings.enable then -- and settings[class] ~= false then -- ##DELETE
-        local start = expirationTime and (expirationTime - duration)
-        local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-        local text, color = self:StatusTextColor(settings, count, timeLeft)
-        if duration and expirationTime and duration > 0 and expirationTime > 0 then
-            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-        end
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            count,
-            nil,
-            icon,
-            start,
-            duration,
-            count,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitLostDebuff(guid, class, name)
-    --self:Debug("UnitLostDebuff", guid, class, name)
-    local status = debuff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    self:UnitLostDurationStatus(status, guid, class, name)
-    self.core:SendStatusLost(guid, status)
-end
-
-function PlexusStatusAuras:UnitLostPlayerDebuff(guid, class, name)
-    --self:Debug("UnitLostPlayerDebuff", guid, class, name)
-    local status = player_debuff_names[name]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    self:UnitLostDurationStatus(status, guid, class, name)
-    self.core:SendStatusLost(guid, status)
-end
-
-function PlexusStatusAuras:UnitGainedDebuffType(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-    self:Debug("UnitGainedDebuffType", guid, class, debuffType)
-
-    local status = debuffType and debuff_types[debuffType]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    if settings.enable and (PlayerCanDispel[debuffType] or not settings.dispellable) then -- and settings[class] ~= false then -- ##DELETE
-        local start = expirationTime and (expirationTime - duration)
-        local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-        local text, color = self:StatusTextColor(settings, count, timeLeft)
-        if duration and expirationTime and duration > 0 and expirationTime > 0 then
-            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-        end
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            count,
-            nil,
-            icon,
-            start,
-            duration,
-            count,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitLostDebuffType(guid, class, debuffType)
-    --self:Debug("UnitLostDebuffType", guid, class, debuffType)
-
-    local status = debuffType and debuff_types[debuffType]
-    local settings = self.db.profile[status]
-    if not settings then return end
-
-    self:UnitLostDurationStatus(status, guid, class, debuffType)
-    self.core:SendStatusLost(guid, status)
-end
-
-function PlexusStatusAuras:UnitGainedBossDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-    local status = "boss_aura"
-    local settings = self.db.profile[status]
-    if settings.enable then
-        local start = expirationTime and (expirationTime - duration)
-        local timeLeft = expirationTime and expirationTime > GetTime() and (expirationTime - GetTime()) or 0
-        local text, color = self:StatusTextColor(settings, count, timeLeft)
-        if duration and expirationTime and duration > 0 and expirationTime > 0 then
-            self:UnitGainedDurationStatus(status, guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-        end
-        self.core:SendStatusGained(guid,
-            status,
-            settings.priority,
-            nil,
-            color,
-            text,
-            count,
-            nil,
-            icon,
-            start,
-            duration,
-            count,
-            ICON_TEX_COORDS)
-    else
-        self.core:SendStatusLost(guid, status)
-    end
-end
-
-function PlexusStatusAuras:UnitLostBossDebuff(guid, class, name)
-    --self:Debug("UnitLostBossDebuff", guid, class, name)
-    local status = "boss_aura"
-
-    self:UnitLostDurationStatus(status, guid, class, name)
-    self.core:SendStatusLost(guid, status)
-end
-
-function PlexusStatusAuras:UpdateAuraScanList()
-    self:Debug("UpdateAuraScanList")
-
-    wipe(buff_names)
-    wipe(player_buff_names)
-    wipe(debuff_names)
-    wipe(player_debuff_names)
-
-    for status, settings in pairs(self.db.profile) do
-        if type(settings) == "table" and settings.enable then
-            local name = settings.buff or settings.debuff
-            self:Debug(status, name)
-
-            if name and not debuff_types[name] then
-                local isBuff = not not settings.buff
-
-                if isBuff then
-                    if settings.mine then
-                        self:Debug("Added to player_buff_names")
-                        player_buff_names[name] = status
-                    else
-                        self:Debug("Added to buff_names")
-                        buff_names[name] = status
-                    end
-                end
-                if not isBuff then
-                    if settings.mine then
-                        self:Debug("Added to player_debuff_names")
-                        player_debuff_names[name] = status
-                    else
-                        self:Debug("Added to debuff_names")
-                        debuff_names[name] = status
-                    end
-                end
-            end
-        end
-    end
-end
-
-local unitAuras
-function PlexusStatusAuras:UpdateUnitAuras(_, unit, updatedAuras) --event, unit, updatedAuras
-    if not unit then
-        return
-    end
-    local guid = UnitGUID(unit)
-    if not guid then
-        return
-    end
-    if not unitAuras then
-        unitAuras = {}
-    end
-
-    if not PlexusRoster:IsGUIDInRaid(guid) then
-        return
-    end
-    --self:Debug("UNIT_AURA", unit, guid)
-
-    for _, auras in pairs(self.durationAuras) do
-        if auras[guid] then
-            durationAuraPool:put(auras[guid])
-            auras[guid] = nil
-        end
-    end
-
-    -- Full Update
-    if (updatedAuras and updatedAuras.isFullUpdate) then --or (not updatedAuras.isFullUpdate and (not updatedAuras.addedAuras and not updatedAuras.updatedAuraInstanceIDs and not updatedAuras.removedAuraInstanceIDs)) then
-        local unitauraInfo = {}
-        if (AuraUtil.ForEachAura) then
-            ForEachAura(unit, "HELPFUL", nil,
-                function(aura)
-                    if aura and aura.auraInstanceID then
-                        unitauraInfo[aura.auraInstanceID] = aura
-                    end
-                end,
-            true)
-            ForEachAura(unit, "HARMFUL", nil,
-                function(aura)
-                    if aura and aura.auraInstanceID then
-                        unitauraInfo[aura.auraInstanceID] = aura
-                    end
-                end,
-            true)
-        else
-            for i = 0, 40 do
-                local auraData = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
-                if auraData then
-                    unitauraInfo[auraData.auraInstanceID] = auraData
-                end
-            end
-            for i = 0, 40 do
-                local auraData = C_UnitAuras.GetAuraDataByIndex(unit, i, "HARMFUL")
-                if auraData then
-                    unitauraInfo[auraData.auraInstanceID] = auraData
-                end
-            end
-        end
-        if unitAuras[guid] then
-            for _, info in pairs(unitAuras[guid]) do
-                if not Plexus:issecretvalue(info.name) then
-                    if BleedSupported and LibDispel.BleedList[info.spellId] then
-                        info.dispelName = "Bleed"
-                    end
-                    if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
-                        PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,info.name)
-                    end
-                    if info.isHelpful and buff_names[info.name] then
-                        PlexusStatusAuras:UnitLostBuff(guid,nil,info.name)
-                    end
-                    if info.isHarmful and player_debuff_names[info.name] and info.sourceUnit == "player" then
-                        PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,info.name)
-                    end
-                    if info.isHarmful and debuff_names[info.name] then
-                        PlexusStatusAuras:UnitLostDebuff(guid,nil,info.name)
-                    end
-                    if info.isHarmful and debuff_types[info.dispelName] then
-                        PlexusStatusAuras:UnitLostDebuffType(guid,nil,info.dispelName)
-                    end
-                    unitAuras[guid][info.auraInstanceID] = nil
-                end
-            end
-        end
-        for _, v in pairs(unitauraInfo) do
-            if not Plexus:issecretvalue(v.spellId) then
-                if not unitAuras[guid] then
-                    unitAuras[guid] = {}
-                end
-                if BleedSupported and LibDispel.BleedList[v.spellId] then
-                    v.dispelName = "Bleed"
-                end
-                if v.spellId == 367364 then
-                    v.name = "Echo: Reversion"
-                end
-                if v.spellId == 376788 then
-                    v.name = "Echo: Dream Breath"
-                end
-                if v.spellId == 443526 then
-                    v.name = "Premonition of Solace Absorb"
-                end
-                if buff_names[v.name] or player_buff_names[v.name] or debuff_names[v.name] or player_debuff_names[v.name] or debuff_types[v.dispelName] then
-                    unitAuras[guid][v.auraInstanceID] = v
-                end
-            end
-        end
-    end
-
-    if updatedAuras and updatedAuras.addedAuras then
-        for _, aura in pairs(updatedAuras.addedAuras) do
-            if not Plexus:issecretvalue(aura.spellId) then
-                if BleedSupported and LibDispel.BleedList[aura.spellId] then
-                    aura.dispelName = "Bleed"
-                end
-                if aura.spellId == 367364 then
-                    aura.name = "Echo: Reversion"
-                end
-                if aura.spellId == 376788 then
-                    aura.name = "Echo: Dream Breath"
-                end
-                if aura.spellId == 443526 then
-                    aura.name = "Premonition of Solace Absorb"
-                end
-                if buff_names[aura.name] or player_buff_names[aura.name] or debuff_names[aura.name] or player_debuff_names[aura.name] or debuff_types[aura.dispelName] then
-                    if not unitAuras[guid] then
-                        unitAuras[guid] = {}
-                    end
-                    unitAuras[guid][aura.auraInstanceID] = aura
-                end
-            end
-       end
-    end
-
-    if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
-        for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
-            local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-            if auraTable and not Plexus:issecretvalue(auraTable.spellId) then
-                if auraTable and BleedSupported and LibDispel.BleedList[auraTable.spellId] then
-                    auraTable.dispelName = "Bleed"
-                end
-                if auraTable and auraTable.spellId == 367364 then
-                    auraTable.name = "Echo: Reversion"
-                end
-                if auraTable and auraTable.spellId == 376788 then
-                    auraTable.name = "Echo: Dream Breath"
-                end
-                if auraTable and auraTable.spellId == 443526 then
-                    auraTable.name = "Premonition of Solace Absorb"
-                end
-            end
-            if not auraTable then
-                local old = unitAuras[guid] and unitAuras[guid][auraInstanceID]
-                if unitAuras[guid] and unitAuras[guid][auraInstanceID] then
-                    if old.isHelpful and player_buff_names[old.name] and old.sourceUnit == "player" then
-                        PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,old.name)
-                    end
-                    if old.isHelpful and buff_names[old.name] then
-                        PlexusStatusAuras:UnitLostBuff(guid,nil,old.name)
-                    end
-                    if old.isHarmful and player_debuff_names[old.name] and old.sourceUnit == "player" then
-                        PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,old.name)
-                    end
-                    if old.isHarmful and debuff_names[old.name] then
-                        PlexusStatusAuras:UnitLostDebuff(guid,nil,old.name)
-                    end
-                    if old.isHarmful and debuff_types[old.dispelName] then
-                        PlexusStatusAuras:UnitLostDebuffType(guid,nil,old.dispelName)
-                    end
-                    unitAuras[guid][auraInstanceID] = nil
-                end
-            end
-            if auraTable and not Plexus:issecretvalue(auraTable.spellId) then
-                if auraTable then
-                    if buff_names[auraTable.name] or player_buff_names[auraTable.name] or debuff_names[auraTable.name] or player_debuff_names[auraTable.name] or debuff_types[auraTable.dispelName] then
-                        if not unitAuras[guid] then
-                            unitAuras[guid] = {}
+function PlexusStatusAuras:MakeContainers()
+    local registeredFrames = PlexusFrame.registeredFrames
+    local i = 1
+    local id
+    local filter
+    --C_Timer.After(1, function()
+    --    for frameName, frameTable in pairs(registeredFrames) do
+    --      print(frameTable.unit)
+    --    end
+    --end)
+    --C_Timer.After(10, function()
+        for frameName, frameTable in pairs(registeredFrames) do
+            if frameTable.unit then
+                --local unit = frameTable.unit
+                for name, indicator in pairs(frameTable.indicators) do
+                    if type(indicator) == "table" and indicator.GetObjectType and indicator:GetObjectType() == "Button" then
+                        if not frameTable.container then
+                            frameTable.container = {}
                         end
-                        unitAuras[guid][auraInstanceID] = auraTable
+                        if not frameTable.container[name] then
+                            --print("creating container for " .. name, "for unit " .. unit)
+                            frameTable.container[name] = CreateFrame('AuraContainer', nil, frameTable, 'CustomAuraContainerTemplate')
+                            frameTable.container[name]:SetUnit(frameTable.unit)
+                            --print(unit)
+                            --frameTable.container[name]:SetPoint('TOP', 0, 0)
+                            local point, x, y = unpack(anchor[name])
+                            frameTable.container[name]:SetPoint(point, x, y)
+                            for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
+                                if self.db.profile[status] and self.db.profile[status].enable and statusEnabled then
+                                    if self.db.profile[status] and self.db.profile[status].buff then
+                                        filter = "HELPFUL"
+                                        id = spell_ids[self.db.profile[status].buff]
+                                        --print(self.db.profile[status].buff)
+                                    else
+                                        filter = "HARMFUL"
+                                        id = spell_ids[self.db.profile[status].debuff]
+                                    end
+
+                                    if id then
+                                        if frameTable.unit then
+                                            --if unit == "player" then
+                                            --print(unit)
+                                            --end
+                                            --print(type(unit))
+                                            --frameTable.container[name]:SetUnit("player")
+                                            --else
+                                            --    frameTable.container[name]:SetUnit("player")
+                                            local candidateFilters = {
+                                                includeSpellIDs = {
+                                                --    53563,  -- Beacon of Light
+                                                },
+                                                excludeSpellIDs = {
+                                                --    53563,  -- Beacon of Light
+                                                },
+                                            }
+                                            candidateFilters.includeSpellIDs[id] = true
+                                            frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. i, filter, {
+                                                  initializeFrame = createButton,
+                                                  sortMethod = AuraContainerSortMethod.ExpirationOnly,
+                                                  sortDirection = AuraContainerSortDirection.Reverse,
+                                                  layout = {
+                                                     elementSpacing = 5,
+                                                     lineSpacing = 5,
+                                                  },
+                                                  maxFrameCount = 2,
+                                                  candidateFilters = candidateFilters
+                                                }
+                                            )
+                                            i = i + 1
+                                            frameTable.container[name]:UpdateAllAuras()
+                                        end
+                                    end
+                                end
+                            end
+                        else
+                            frameTable.container[name]:SetUnit(frameTable.unit)
+                        end
                     end
                 end
             end
         end
-    end
-
-    if updatedAuras and updatedAuras.removedAuraInstanceIDs then
-        for _, auraInstanceIDTable in ipairs(updatedAuras.removedAuraInstanceIDs) do
-            if unitAuras[guid] and unitAuras[guid][auraInstanceIDTable] then
-                local UnitAuraInfo = unitAuras[guid][auraInstanceIDTable]
-                if player_buff_names[UnitAuraInfo.name] and UnitAuraInfo.sourceUnit == "player" then
-                    PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,UnitAuraInfo.name)
-                end
-                if buff_names[UnitAuraInfo.name] then
-                    PlexusStatusAuras:UnitLostBuff(guid,nil,UnitAuraInfo.name)
-                end
-                if player_debuff_names[UnitAuraInfo.name] and UnitAuraInfo.sourceUnit == "player" then
-                    PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,UnitAuraInfo.name)
-                end
-                if debuff_names[UnitAuraInfo.name] then
-                    PlexusStatusAuras:UnitLostDebuff(guid,nil,UnitAuraInfo.name)
-                end
-                if debuff_types[UnitAuraInfo.dispelName] then
-                    PlexusStatusAuras:UnitLostDebuffType(guid,nil,UnitAuraInfo.dispelName)
-                end
-                unitAuras[guid][auraInstanceIDTable] = nil
-            end
-        end
-    end
-
-    -- Weird Second Lifebloom on Retail
-    if unitAuras[guid] then
-        for id, info in pairs(unitAuras[guid]) do
-            if info.spellId == 1227806 then
-                unitAuras[guid][id] = nil
-            end
-        end
-    end
-
-    --for unitID,auraInstanceIDTable in pairs(unitAuras) do
-    if unitAuras[guid] then
-        local numAuras = 0
-        --id, info
-        for id, info in pairs(unitAuras[guid]) do
-            local auraTable = GetAuraDataByAuraInstanceID(unit, id)
-            if not auraTable then
-                if player_buff_names[info.name] and info.sourceUnit == "player" then
-                    PlexusStatusAuras:UnitLostPlayerBuff(guid,nil,info.name)
-                end
-                if buff_names[info.name] then
-                    PlexusStatusAuras:UnitLostBuff(guid,nil,info.name)
-                end
-                if player_debuff_names[info.name] and info.sourceUnit == "player" then
-                    PlexusStatusAuras:UnitLostPlayerDebuff(guid,nil,info.name)
-                end
-                if debuff_names[info.name] then
-                    PlexusStatusAuras:UnitLostDebuff(guid,nil,info.name)
-                end
-                if debuff_types[info.dispelName] then
-                    PlexusStatusAuras:UnitLostDebuffType(guid,nil,info.dispelName)
-                end
-                unitAuras[guid][id] = nil
-            end
-            numAuras = numAuras + 1
-            if info.isHelpful and player_buff_names[info.name] and info.sourceUnit == "player" then
-                PlexusStatusAuras:UnitGainedPlayerBuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
-            end
-            if info.isHelpful and buff_names[info.name] then
-                PlexusStatusAuras:UnitGainedBuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
-            end
-            if info.isHarmful and player_debuff_names[info.name] and info.sourceUnit == "player" then
-                PlexusStatusAuras:UnitGainedPlayerDebuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
-            end
-            if info.isHarmful and debuff_names[info.name] then
-                PlexusStatusAuras:UnitGainedDebuff(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable)
-            end
-            if info.isHarmful and debuff_types[info.dispelName] then
-                PlexusStatusAuras:UnitGainedDebuffType(guid,nil,info.name,nil,info.icon,info.applications,info.dispelName,info.duration,info.expirationTime,info.sourceUnit,info.isStealable,nil,info.spellId,nil,info.isBossAura,nil)
-            end
-        end
-
-        if numAuras == 0 then
-            unitAuras[guid] = nil
-        end
-
-    end
-
-    self:ResetDurationTimer(self:HasActiveDurations())
+    --end)
 end
 
--- temp tables
-local buff_names_seen = {}
-local player_buff_names_seen = {}
-local debuff_names_seen = {}
-local player_debuff_names_seen = {}
-local debuff_types_seen = {}
-
-function PlexusStatusAuras:ScanUnitAuras(event, unit, guid) --luacheck: ignore 212
-    if not guid then guid = UnitGUID(unit) end
-    if not PlexusRoster:IsGUIDInRaid(guid) then
-        return
-    end
-
-    self:Debug("UNIT_AURA", unit, guid)
-
-    for _, auras in pairs(self.durationAuras) do
-        if auras[guid] then
-            durationAuraPool:put(auras[guid])
-            auras[guid] = nil
-        end
-    end
-
-    if UnitIsVisible(unit) then
-        for i = 1, 40 do
-            --local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
-            local name, icon, count, debuffType, duration, expirationTime, caster, isStealable
-            if not Plexus:IsClassicWow() then
-                name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
-            else
-                name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, i, "HELPFUL")
-            end
-
-            if not name then
-                break
-            end
-
-            local class
-            if type(caster) == "string" then
-                class = UnitClass(caster)
-            end
-
-            -- scan for buffs
-            if buff_names[name] then
-                buff_names_seen[name] = true
-                self:UnitGainedBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-            end
-
-            -- scan for buffs cast by the player
-            if player_buff_names[name] and caster == "player" then
-                player_buff_names_seen[name] = true
-                self:UnitGainedPlayerBuff(guid, class, name, _, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-            end
-        end
-
-        -- scan for debuffs
-        for index = 1, 40 do
-            --local name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer
-            local name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer
-            if not Plexus:IsClassicWow() then
-                name, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
-            else
-                name, icon, count, debuffType, duration, expirationTime, casterUnit, _, _, spellID, _, _  = UnitAura(unit, index, "HARMFUL")
-            end
-
-            if not name then
-                break
-            end
-
-            if debuff_names[name] then
-                debuff_names_seen[name] = true
-                self:UnitGainedDebuff(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-            elseif player_debuff_names[name] and casterUnit == "player" then
-                player_debuff_names_seen[name] = true
-                self:UnitGainedPlayerDebuff(guid, _, name, _, icon, count, debuffType, duration, expirationTime, _, _)
-            elseif debuff_types[debuffType] then
-                -- elseif so that a named debuff doesn't trigger the type status
-                debuff_types_seen[debuffType] = true
-                self:UnitGainedDebuffType(guid, _, name, _, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
-            end
-        end
-    end
-
-    -- handle lost buffs
-    for name in pairs(buff_names) do
-        if not buff_names_seen[name] then
-            self:UnitLostBuff(guid, _, name)
-        else
-            buff_names_seen[name] = nil
-        end
-    end
-
-    for name in pairs(player_buff_names) do
-        if not player_buff_names_seen[name] then
-            self:UnitLostPlayerBuff(guid, _, name)
-        else
-            player_buff_names_seen[name] = nil
-        end
-    end
-
-    -- handle lost debuffs
-    for name in pairs(debuff_names) do
-        if not debuff_names_seen[name] then
-            self:UnitLostDebuff(guid, _, name)
-        else
-            debuff_names_seen[name] = nil
-        end
-    end
-
-    for name in pairs(player_debuff_names) do
-        if not player_debuff_names_seen[name] then
-            self:UnitLostPlayerDebuff(guid, _, name)
-        else
-            player_debuff_names_seen[name] = nil
-        end
-    end
-
-    for debuffType in pairs(debuff_types) do
-        if not debuff_types_seen[debuffType] then
-            self:UnitLostDebuffType(guid, _, debuffType)
-        else
-            debuff_types_seen[debuffType] = nil
-        end
-    end
-    self:ResetDurationTimer(self:HasActiveDurations())
-end
+--frame.indicators[INDICATORNAME]
+--frame.container = {}
+--frame.container[id] = CreateFrame('AuraContainer', nil, frame, 'CustomAuraContainerTemplate')
+--frame.container[id]:SetPoint('TOP', 0, 0)
+--local function createButton(button)
+--   button:SetSize(36, 36)
+--   button:SetCancelAuraButtons('RightButtonUp')
+--   local Icon = button:CreateTexture(nil, 'ARTWORK')
+--   Icon:SetAllPoints()
+--   button:SetIcon(Icon)
+--   local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+--   Time:SetPoint('TOPLEFT', 1, -1)
+--   Time:SetJustifyH('LEFT')
+--   button:SetDurationText(Time)
+--end
+--frame.icon.container:SetUnit('target')
+--frame.icon.container:AddAuraGroup(frame.icon.container:GetDebugName(), 'HELPFUL', {
+--      initializeFrame = createButton,
+--      sortMethod = AuraContainerSortMethod.ExpirationOnly,
+--      sortDirection = AuraContainerSortDirection.Reverse,
+--      layout = {
+--         elementSpacing = 5,
+--         lineSpacing = 5,
+--      },
+--})
+--frame.icon.container:UpdateAllAuras()

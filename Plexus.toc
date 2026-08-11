@@ -1,7 +1,7 @@
-## Interface: 120007
-## Interface-Retail: 120007
-## Interface-Classic: 11508
-## Interface-BCC: 20505
+## Interface: 120100
+## Interface-Retail: 120100
+## Interface-Classic: 11509
+## Interface-BCC: 20506
 ## Interface-Wrath: 30403
 ## Interface-Cata: 40402
 ## Interface-Mists: 50504
@@ -117,10 +117,12 @@ Statuses\AltPower.lua
 
 #@non-retail@
 Statuses\Externals.lua
-#@end-non-retail@
 Statuses\Auras.lua
+#@end-non-retail@
 
 #@retail@
+Statuses\Auras.lua
+Statuses\AurasNew.lua
 Statuses\Defensives.lua
 Statuses\DispelByMe.lua
 Statuses\Factions.lua

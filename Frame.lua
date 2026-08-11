@@ -1588,8 +1588,9 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
             unitToken = unitToken,
             auraIndex = index,
             parent = parent,
-            showCountdownFrame = settings.enablePrivateAuraCountdownFrame,
+            showCooldownFrame = settings.enablePrivateAuraCountdownFrame,
             showCountdownNumbers = true,
+            showDispelIcon = true,
             iconInfo = {
                 iconAnchor = {
                     point = "CENTER",
@@ -1616,8 +1617,9 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
             unitToken = unitToken,
             auraIndex = index,
             parent = parent,
-            showCountdownFrame = settings.enablePrivateAuraCountdownFrame,
+            showCooldownFrame = settings.enablePrivateAuraCountdownFrame,
             showCountdownNumbers = false,
+            showDispelIcon = true,
             iconInfo = {
                 iconAnchor = {
                     point = "CENTER",
@@ -1818,6 +1820,8 @@ function PlexusFrame:UpdateFrameUnits()
                     if guid then
                         self:UpdateIndicators(frame)
                     end
+                    local PlexusStatusAuras = PlexusStatus:GetModule("PlexusStatusAuras")
+                    PlexusStatusAuras:MakeContainers()
                 else
                     frame.unit = nil
                     frame.unitGUID = nil
