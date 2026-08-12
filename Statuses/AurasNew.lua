@@ -148,6 +148,7 @@ spell_ids = {
     ["Beacon of Light"] = 53563,
     ["Beacon of Faith"] = 156910,
     ["Beacon of the Savior"] = 1244893,
+    ["Eternal Flame"] = 156322,
     ["Forbearance"] = 25771,
 -- Priest
     ["Power Word: Shield"] = 17,
