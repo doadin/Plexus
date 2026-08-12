@@ -1820,8 +1820,6 @@ function PlexusFrame:UpdateFrameUnits()
                     if guid then
                         self:UpdateIndicators(frame)
                     end
-                    local PlexusStatusAuras = PlexusStatus:GetModule("PlexusStatusAuras")
-                    PlexusStatusAuras:MakeContainers()
                 else
                     frame.unit = nil
                     frame.unitGUID = nil

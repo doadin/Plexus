@@ -90,9 +90,10 @@ spell_names = {
     ["Aspect of Harmony"] = GetSpellName(450769),
 -- Paladin
     ["Beacon of Light"] = GetSpellName(53563),
-    ["Eternal Flame"] = GetSpellName(156322),
     ["Beacon of Faith"] = GetSpellName(156910),
     ["Beacon of the Savior"] = GetSpellName(1244893),
+    ["Eternal Flame"] = GetSpellName(156322),
+    ["Forbearance"] = GetSpellName(25771),
 -- Priest
     ["Power Word: Shield"] = GetSpellName(17),
     ["Atonement"] = GetSpellName(194384),
@@ -145,9 +146,9 @@ spell_ids = {
     ["Aspect of Harmony"] = 450769,
 -- Paladin
     ["Beacon of Light"] = 53563,
-    ["Eternal Flame"] = 156322,
     ["Beacon of Faith"] = 156910,
     ["Beacon of the Savior"] = 1244893,
+    ["Forbearance"] = 25771,
 -- Priest
     ["Power Word: Shield"] = 17,
     ["Atonement"] = 194384,
@@ -841,16 +842,16 @@ PlexusStatusAuras.defaultDB = {
     --    durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
     --    mine = true,
     --},
-    --[PlexusStatusAuras:StatusForSpell("Forbearance")] = {
-    --    -- 25771
-    --    desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
-    --    debuff = spell_names["Forbearance"],
-    --    text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
-    --    color = { r = 252, g = 0, b = 0, a = 1 },
-    --    durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
-    --    durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
-    --    durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
-    --},
+    [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
+        -- 25771
+        desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
+        debuff = spell_names["Forbearance"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
+        color = { r = 252, g = 0, b = 0, a = 1 },
+        durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
+        durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+    },
 
     ---------------------
     -- Priest
@@ -1146,7 +1147,7 @@ function PlexusStatusAuras:EnabledStatusCount()
 end
 
 function PlexusStatusAuras:OnStatusEnable(status)
-    self:RegisterMessage("Plexus_UnitJoined")
+    self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     --self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
     --self:UpdateAllUnitAuras()
@@ -1157,7 +1158,7 @@ end
 
 function PlexusStatusAuras:OnStatusDisable(status)
     if self:EnabledStatusCount() == 0 then
-        self:UnregisterMessage("Plexus_UnitJoined")
+        self:UnRegisterMessage("UpdateFrameUnits")
         self:UnregisterEvent("SPELLS_CHANGED")
     end
 end
@@ -1912,7 +1913,9 @@ function PlexusStatusAuras:MakeContainers()
                             --frameTable.container[name]:SetPoint('TOP', 0, 0)
                             local point, x, y = unpack(anchor[name])
                             frameTable.container[name]:SetPoint(point, x, y)
-                            for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
+                        end
+                        for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
+                            if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name .. ":" .. status) then
                                 if self.db.profile[status] and self.db.profile[status].enable and statusEnabled then
                                     if self.db.profile[status] and self.db.profile[status].buff then
                                         filter = "HELPFUL"
@@ -1941,7 +1944,7 @@ function PlexusStatusAuras:MakeContainers()
                                                 },
                                             }
                                             candidateFilters.includeSpellIDs[id] = true
-                                            frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. i, filter, {
+                                            frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. status, filter, {
                                                   initializeFrame = createButton,
                                                   sortMethod = AuraContainerSortMethod.ExpirationOnly,
                                                   sortDirection = AuraContainerSortDirection.Reverse,
@@ -1949,7 +1952,7 @@ function PlexusStatusAuras:MakeContainers()
                                                      elementSpacing = 5,
                                                      lineSpacing = 5,
                                                   },
-                                                  maxFrameCount = 2,
+                                                  maxFrameCount = 1,
                                                   candidateFilters = candidateFilters
                                                 }
                                             )
@@ -1958,9 +1961,9 @@ function PlexusStatusAuras:MakeContainers()
                                         end
                                     end
                                 end
+                            else
+                                frameTable.container[name]:SetUnit(frameTable.unit)
                             end
-                        else
-                            frameTable.container[name]:SetUnit(frameTable.unit)
                         end
                     end
                 end

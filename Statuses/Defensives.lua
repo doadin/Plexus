@@ -18,9 +18,8 @@ PlexusStatusDefensives.menuName = "Defensives"  --luacheck: ignore 112
 
 -- locals
 local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
+local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local UnitGUID = UnitGUID
-
-local settings
 
 if Plexus:IsRetailWow() then
 PlexusStatusDefensives.defaultDB = { --luacheck: ignore 112
@@ -46,19 +45,16 @@ function PlexusStatusDefensives:OnInitialize() --luacheck: ignore 112
     self:RegisterStatus("alert_EXTERNAL_DEFENSIVE", "External Defensives", nil, true)
     self:RegisterStatus("alert_BIG_DEFENSIVE", "Big Defensives", nil, true)
 
-    settings = self.db.profile
 end
 
 function PlexusStatusDefensives:OnStatusEnable() --status --luacheck: ignore 112
-    self:RegisterEvent("UNIT_AURA", "ScanUnitByAuraInfo")
-    self:RegisterMessage("Plexus_UnitJoined")
-    self:UpdateAllUnits()
+    self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
+    --self:UpdateAllUnits()
 end
 
 function PlexusStatusDefensives:OnStatusDisable(status) -- status --luacheck: ignore 112
-    self:UnregisterEvent("UNIT_AURA")
-    self:UnregisterMessage("Plexus_UnitJoined")
-    self.core:SendStatusLostAllUnits(status)
+    self:UnRegisterMessage("UpdateFrameUnits")
+    --self.core:SendStatusLostAllUnits(status)
 end
 
 function PlexusStatusDefensives:Plexus_UnitJoined(_, _, unitid)-- _, guid, unitid --luacheck: ignore 112
@@ -71,61 +67,147 @@ function PlexusStatusDefensives:UpdateAllUnits() --luacheck: ignore 112
     end
 end
 
-function PlexusStatusDefensives:ScanUnitByAuraInfo(_, unit, _)
-    if not unit then return end
-    local guid = UnitGUID(unit)
-    if not guid then
-        return
-    end
-    if not PlexusRoster:IsGUIDInRaid(guid) then
-        return
-    end
-    if Plexus.IsSpecialUnit[unit] then
-        return
-    end
+local function createButton(button)
+   button:SetSize(12, 12)
+   button:SetCancelAuraButtons('RightButtonUp')
+   local Icon = button:CreateTexture(nil, 'ARTWORK')
+   Icon:SetAllPoints()
+   button:SetIcon(Icon)
+   local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+   Time:SetPoint('TOPLEFT', 1, -1)
+   Time:SetJustifyH('LEFT')
+   Time:SetSize(8,8)
+   button:SetDurationText(Time)
+end
 
-    if not Plexus:issecretvalue(unit) and not UnitIsVisible(unit) then
-        return
-    end
+local anchor = {
+    -- left/right up/down
+    icon = { "CENTER", 0, 0},
+    ei_icon_topleft = { "TOPLEFT", 1, -1 },
+    ei_icon_topleft2 = { "TOPLEFT", 10, -1 },
+    ei_icon_topleft3 = { "TOPLEFT", 1, -10 },
+    ei_icon_topleft4 = { "TOPLEFT", 10, -10 },
+    -- left/right up/down
+    ei_icon_topright = { "TOPRIGHT", -1, -1 },
+    ei_icon_topright2 = { "TOPRIGHT", -10, -1 },
+    ei_icon_topright3 = { "TOPRIGHT", -1, -10 },
+    ei_icon_topright4 = { "TOPRIGHT", -10, -10 },
+    -- left/right up/down
+    ei_icon_botleft = { "BOTTOMLEFT", 1, 1 },
+    ei_icon_botleft2 = { "BOTTOMLEFT", 10, 1 },
+    ei_icon_botleft3 = { "BOTTOMLEFT", 1, 10 },
+    ei_icon_botleft4 = { "BOTTOMLEFT", 10, 10 },
+    -- left/right up/down
+    ei_icon_botright = { "BOTTOMRIGHT", -1, 1 },
+    ei_icon_botright2 = { "BOTTOMRIGHT", -10, 1 },
+    ei_icon_botright3 = { "BOTTOMRIGHT", -1, 10 },
+    ei_icon_botright4 = { "BOTTOMRIGHT", -10, 10 },
+    -- left/right up/down
+    ei_icon_top = { "TOP", 0, -1 },
+    ei_icon_top2 = { "TOP", 0, -10 },
+    ei_icon_top3 = { "TOP", -10, -1 },
+    ei_icon_top4 = { "TOP", 10, -1 },
+    -- left/right up/down
+    ei_icon_bottom = { "BOTTOM", 0, 1 },
+    ei_icon_bottom2 = { "BOTTOM", 0, 10 },
+    ei_icon_bottom3 = { "BOTTOM", -10, 1 },
+    ei_icon_bottom4 = { "BOTTOM", 10, 1 },
+    -- left/right up/down
+    ei_icon_left = { "LEFT", 1, 0 },
+    ei_icon_left2 = { "LEFT", 10, 0 },
+    ei_icon_left3 = { "LEFT", 1, 10 },
+    ei_icon_left4 = { "LEFT", 1, -10 },
+    -- left/right up/down
+    ei_icon_right = { "RIGHT", -1, 0 },
+    ei_icon_right2 = { "RIGHT", -10, 0 },
+    ei_icon_right3 = { "RIGHT", -1, 10 },
+    ei_icon_right4 = { "RIGHT", -1, -10 },
+}
 
-    local filter
-    local result
+function PlexusStatusDefensives:MakeContainers()
+    --local settings = PlexusStatusDefensives.db.profile.dispelable_by_me
+    --if not settings.enable then
+    --    return
+    --end
+    local registeredFrames = PlexusFrame.registeredFrames
+    for frameName, frameTable in pairs(registeredFrames) do
+        if frameTable.unit then
+            --print("frameTable.unit", frameTable.unit)
+            for name, indicator in pairs(frameTable.indicators) do
+                if type(indicator) == "table" and indicator.GetObjectType and indicator:GetObjectType() == "Button" then
+                    if not frameTable.container then
+                        frameTable.container = {}
+                    end
+                    if not frameTable.container[name] then
+                        frameTable.container[name] = CreateFrame('AuraContainer', nil, frameTable, 'CustomAuraContainerTemplate')
+                        frameTable.container[name]:SetUnit(frameTable.unit)
+                        local point, x, y = unpack(anchor[name])
+                        frameTable.container[name]:SetPoint(point, x, y)
+                    end
+                    if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name .. ":" .. "alert_EXTERNAL_DEFENSIVE") then
+                        for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
+                            if status == "alert_EXTERNAL_DEFENSIVE" and statusEnabled then
+                                --local candidateFilters = {
+                                --    includeSpellIDs = {
+                                --    --    53563,  -- Beacon of Light
+                                --    },
+                                --    excludeSpellIDs = {
+                                --    --    53563,  -- Beacon of Light
+                                --    },
+                                --}
+                                --candidateFilters.includeSpellIDs[id] = true
+                                frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. "alert_EXTERNAL_DEFENSIVE", "HELPFUL|EXTERNAL_DEFENSIVE", {
+                                      initializeFrame = createButton,
+                                      sortMethod = AuraContainerSortMethod.ExpirationOnly,
+                                      sortDirection = AuraContainerSortDirection.Reverse,
+                                      layout = {
+                                         elementSpacing = 5,
+                                         lineSpacing = 5,
+                                      },
+                                      maxFrameCount = 1,
+                                      --candidateFilters = candidateFilters
+                                    }
+                                )
+                                frameTable.container[name]:UpdateAllAuras()
+                            end
+                        end
+                    else
+                        frameTable.container[name]:SetUnit(frameTable.unit)
+                    end
 
-    if settings and settings.alert_EXTERNAL_DEFENSIVE and settings.alert_EXTERNAL_DEFENSIVE.enable then
-        filter = "HELPFUL|EXTERNAL_DEFENSIVE"
-        result = C_UnitAuras.GetUnitAuras(unit, filter , 1 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
-        local dur = result and result[1] and C_UnitAuras.GetAuraDuration(unit, result[1].auraInstanceID)
-        if result and result[1] then
-            self.core:SendStatusGained(
-                guid, "alert_EXTERNAL_DEFENSIVE", settings.alert_EXTERNAL_DEFENSIVE.priority, (settings.alert_EXTERNAL_DEFENSIVE.range and 40),
-                nil, nil, nil, nil, result[1].icon, nil, dur, result[1].applications, nil, result[1].expirationTime)
-        else
-            self.core:SendStatusLost(guid, "alert_EXTERNAL_DEFENSIVE")
-        end
-    end
+                    if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name .. ":" .. "alert_BIG_DEFENSIVE") then
+                        for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
+                            if status == "alert_EXTERNAL_DEFENSIVE" and statusEnabled then
+                                --local candidateFilters = {
+                                --    includeSpellIDs = {
+                                --    --    53563,  -- Beacon of Light
+                                --    },
+                                --    excludeSpellIDs = {
+                                --    --    53563,  -- Beacon of Light
+                                --    },
+                                --}
+                                --candidateFilters.includeSpellIDs[id] = true
+                                frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. "alert_BIG_DEFENSIVE", "HELPFUL|BIG_DEFENSIVE", {
+                                      initializeFrame = createButton,
+                                      sortMethod = AuraContainerSortMethod.ExpirationOnly,
+                                      sortDirection = AuraContainerSortDirection.Reverse,
+                                      layout = {
+                                         elementSpacing = 5,
+                                         lineSpacing = 5,
+                                      },
+                                      maxFrameCount = 1,
+                                      --candidateFilters = candidateFilters
+                                    }
+                                )
+                                frameTable.container[name]:UpdateAllAuras()
+                            end
+                        end
+                    else
+                        frameTable.container[name]:SetUnit(frameTable.unit)
+                    end
 
-    if settings and settings.alert_BIG_DEFENSIVE and settings.alert_BIG_DEFENSIVE.enable then
-        local foundBigDefensive = false
-        filter = "HELPFUL|BIG_DEFENSIVE"
-        result = C_UnitAuras.GetUnitAuras(unit, filter , 40 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
-        for i = 1, #result do
-            if C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, result[i].auraInstanceID, "HELPFUL|EXTERNAL_DEFENSIVE") then
-                local dur = result and result[i] and C_UnitAuras.GetAuraDuration(unit, result[i].auraInstanceID)
-                if result and result[i] then
-                    self.core:SendStatusGained(
-                        guid, "alert_BIG_DEFENSIVE", settings.alert_BIG_DEFENSIVE.priority, (settings.alert_BIG_DEFENSIVE.range and 40),
-                        nil, nil, nil, nil, result[i].icon, nil, dur, result[i].applications, nil, result[i].expirationTime)
-                else
-                    self.core:SendStatusLost(guid, "alert_BIG_DEFENSIVE")
                 end
-                foundBigDefensive = true
-                break
             end
         end
-        if not foundBigDefensive then
-            self.core:SendStatusLost(guid, "alert_BIG_DEFENSIVE")
-        end
     end
-
-    return
 end

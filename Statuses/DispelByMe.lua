@@ -1,19 +1,16 @@
 local _, Plexus = ...
 
-local function IsRetailWow()
-    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-end
-
 local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
 
 local L = setmetatable(PlexusDeDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
 
 local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
+local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
-local PlexusStatusAuras = _G.Plexus:NewStatusModule("PlexusStatusDispelByMe", "AceTimer-3.0")
-PlexusStatusAuras.menuName = L["Dispelable By Me"]
+local PlexusStatusDispelByMe = _G.Plexus:NewStatusModule("PlexusStatusDispelByMe", "AceTimer-3.0")
+PlexusStatusDispelByMe.menuName = L["Dispelable By Me"]
 
-PlexusStatusAuras.defaultDB = {
+PlexusStatusDispelByMe.defaultDB = {
     dispelable_by_me = {
         enable = true,
         priority = 70,
@@ -22,100 +19,152 @@ PlexusStatusAuras.defaultDB = {
     },
 }
 
-function PlexusStatusAuras:PostInitialize()
+function PlexusStatusDispelByMe:PostInitialize()
     self:RegisterStatus("dispelable_by_me", L["Dispelable By Me"], nil, true)
 end
 
-function PlexusStatusAuras:OnEnable()
-    self:RegisterEvent("UNIT_AURA")
-    self:RegisterEvent("UNIT_FLAGS")
-    self:RegisterEvent("LOADING_SCREEN_DISABLED")
-    self:UpdateAllUnitsBuffs()
+function PlexusStatusDispelByMe:OnEnable()
+    --self:RegisterEvent("UNIT_AURA")
+    --self:RegisterEvent("UNIT_FLAGS")
+    --self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
+    --self:RegisterMessage("Plexus_RosterUpdated", "MakeContainers")
+    self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
+    --self:UpdateAllUnitsBuffs()
 end
 
-function PlexusStatusAuras:OnDisable()
-    self:UnregisterEvent("UNIT_AURA")
-    self:UnregisterEvent("UNIT_FLAGS")
-    self:UnregisterEvent("LOADING_SCREEN_DISABLED")
+function PlexusStatusDispelByMe:OnDisable()
+    --self:UnregisterEvent("UNIT_AURA")
+    --self:UnregisterEvent("UNIT_FLAGS")
+    --self:UnregisterEvent("LOADING_SCREEN_DISABLED")
+    self:UnRegisterMessage("UpdateFrameUnits")
 end
 
-function PlexusStatusAuras:UNIT_FLAGS(_,unit)
-    local hostile = UnitCanAttack("player", unit) or UnitIsCharmed(unitid)
-    if hostile then
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unit, {isFullUpdate = true} )
-    end
+--function PlexusStatusDispelByMe:UNIT_FLAGS(_,unit)
+--    --local hostile = UnitCanAttack("player", unit) or UnitIsCharmed(unitid)
+--    --if hostile then
+--    --    self:UNIT_AURA("UpdateAllUnitsBuffs", unit, {isFullUpdate = true} )
+--    --end
+--end
+
+--function PlexusStatusDispelByMe:LOADING_SCREEN_DISABLED()
+--    PlexusStatusDispelByMe:UpdateAllUnitsBuffs()
+--end
+
+--function PlexusStatusDispelByMe:UpdateAllUnitsBuffs()
+--    for _, unitid in PlexusRoster:IterateRoster() do
+--        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid)
+--    end
+--end
+
+local function createButton(button)
+   button:SetSize(12, 12)
+   button:SetCancelAuraButtons('RightButtonUp')
+   local Icon = button:CreateTexture(nil, 'ARTWORK')
+   Icon:SetAllPoints()
+   button:SetIcon(Icon)
+   local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+   Time:SetPoint('TOPLEFT', 1, -1)
+   Time:SetJustifyH('LEFT')
+   Time:SetSize(8,8)
+   button:SetDurationText(Time)
 end
 
-function PlexusStatusAuras:LOADING_SCREEN_DISABLED()
-    PlexusStatusAuras:UpdateAllUnitsBuffs()
-end
+local anchor = {
+    -- left/right up/down
+    icon = { "CENTER", 0, 0},
+    ei_icon_topleft = { "TOPLEFT", 1, -1 },
+    ei_icon_topleft2 = { "TOPLEFT", 10, -1 },
+    ei_icon_topleft3 = { "TOPLEFT", 1, -10 },
+    ei_icon_topleft4 = { "TOPLEFT", 10, -10 },
+    -- left/right up/down
+    ei_icon_topright = { "TOPRIGHT", -1, -1 },
+    ei_icon_topright2 = { "TOPRIGHT", -10, -1 },
+    ei_icon_topright3 = { "TOPRIGHT", -1, -10 },
+    ei_icon_topright4 = { "TOPRIGHT", -10, -10 },
+    -- left/right up/down
+    ei_icon_botleft = { "BOTTOMLEFT", 1, 1 },
+    ei_icon_botleft2 = { "BOTTOMLEFT", 10, 1 },
+    ei_icon_botleft3 = { "BOTTOMLEFT", 1, 10 },
+    ei_icon_botleft4 = { "BOTTOMLEFT", 10, 10 },
+    -- left/right up/down
+    ei_icon_botright = { "BOTTOMRIGHT", -1, 1 },
+    ei_icon_botright2 = { "BOTTOMRIGHT", -10, 1 },
+    ei_icon_botright3 = { "BOTTOMRIGHT", -1, 10 },
+    ei_icon_botright4 = { "BOTTOMRIGHT", -10, 10 },
+    -- left/right up/down
+    ei_icon_top = { "TOP", 0, -1 },
+    ei_icon_top2 = { "TOP", 0, -10 },
+    ei_icon_top3 = { "TOP", -10, -1 },
+    ei_icon_top4 = { "TOP", 10, -1 },
+    -- left/right up/down
+    ei_icon_bottom = { "BOTTOM", 0, 1 },
+    ei_icon_bottom2 = { "BOTTOM", 0, 10 },
+    ei_icon_bottom3 = { "BOTTOM", -10, 1 },
+    ei_icon_bottom4 = { "BOTTOM", 10, 1 },
+    -- left/right up/down
+    ei_icon_left = { "LEFT", 1, 0 },
+    ei_icon_left2 = { "LEFT", 10, 0 },
+    ei_icon_left3 = { "LEFT", 1, 10 },
+    ei_icon_left4 = { "LEFT", 1, -10 },
+    -- left/right up/down
+    ei_icon_right = { "RIGHT", -1, 0 },
+    ei_icon_right2 = { "RIGHT", -10, 0 },
+    ei_icon_right3 = { "RIGHT", -1, 10 },
+    ei_icon_right4 = { "RIGHT", -1, -10 },
+}
 
-local UnitAuraInstanceID
-function PlexusStatusAuras:UNIT_AURA(_, unitid, updatedAuras)
-    local settings = PlexusStatusAuras.db.profile.dispelable_by_me
-    if not unitid then return end
-    local guid = not Plexus.IsSpecialUnit[unitid] and UnitGUID(unitid) or unitid
-    if not guid then return end
-
-    if not UnitAuraInstanceID then
-        UnitAuraInstanceID = {}
-    end
-    if issecretvalue(guid) then
+function PlexusStatusDispelByMe:MakeContainers()
+    local settings = PlexusStatusDispelByMe.db.profile.dispelable_by_me
+    if not settings.enable then
         return
     end
-    if type(UnitAuraInstanceID[guid]) ~= "table" then
-        UnitAuraInstanceID[guid] = {}
-    end
-
-    if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then return end
-    local DEBUFF_DISPLAY_COLOR_INFO = {
-        [0] = DEBUFF_TYPE_NONE_COLOR,
-        [1] = DEBUFF_TYPE_MAGIC_COLOR,
-        [2] = DEBUFF_TYPE_CURSE_COLOR,
-        [3] = DEBUFF_TYPE_DISEASE_COLOR,
-        [4] = DEBUFF_TYPE_POISON_COLOR,
-        [9] = DEBUFF_TYPE_BLEED_COLOR, -- enrage
-        [11] = DEBUFF_TYPE_BLEED_COLOR,
-    }
-    local curve = C_CurveUtil.CreateColorCurve()
-    if curve then
-        curve:SetType(Enum.LuaCurveType.Step)
-        for i, c in pairs(DEBUFF_DISPLAY_COLOR_INFO) do
-            curve:AddPoint(i, c)
+    local registeredFrames = PlexusFrame.registeredFrames
+    for frameName, frameTable in pairs(registeredFrames) do
+        if frameTable.unit then
+            --print("frameTable.unit", frameTable.unit)
+            for name, indicator in pairs(frameTable.indicators) do
+                if type(indicator) == "table" and indicator.GetObjectType and indicator:GetObjectType() == "Button" then
+                    if not frameTable.container then
+                        frameTable.container = {}
+                    end
+                    if not frameTable.container[name] then
+                        frameTable.container[name] = CreateFrame('AuraContainer', nil, frameTable, 'CustomAuraContainerTemplate')
+                        frameTable.container[name]:SetUnit(frameTable.unit)
+                        local point, x, y = unpack(anchor[name])
+                        frameTable.container[name]:SetPoint(point, x, y)
+                    end
+                    if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name .. ":" .. "PlexusDispelByMe") then
+                        for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
+                            if status == "dispelable_by_me" and statusEnabled then
+                                --local candidateFilters = {
+                                --    includeSpellIDs = {
+                                --    --    53563,  -- Beacon of Light
+                                --    },
+                                --    excludeSpellIDs = {
+                                --    --    53563,  -- Beacon of Light
+                                --    },
+                                --}
+                                --candidateFilters.includeSpellIDs[id] = true
+                                frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. "PlexusDispelByMe", "HARMFUL|RAID_PLAYER_DISPELLABLE", {
+                                      initializeFrame = createButton,
+                                      sortMethod = AuraContainerSortMethod.ExpirationOnly,
+                                      sortDirection = AuraContainerSortDirection.Reverse,
+                                      layout = {
+                                         elementSpacing = 5,
+                                         lineSpacing = 5,
+                                      },
+                                      maxFrameCount = 1,
+                                      --candidateFilters = candidateFilters
+                                    }
+                                )
+                                frameTable.container[name]:UpdateAllAuras()
+                            end
+                        end
+                    else
+                        frameTable.container[name]:SetUnit(frameTable.unit)
+                    end
+                end
+            end
         end
-    end
-    local filter = "HARMFUL|RAID_PLAYER_DISPELLABLE"
-    local auradata = C_UnitAuras.GetUnitAuras(unitid, filter)
-    UnitAuraInstanceID[guid] = {}
-    for _,aura in pairs(auradata) do
-        UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
-    end
-    local ok, filtered = true, true
-    local dispelTypeColor
-    PlexusStatusAuras.core:SendStatusLost(guid, "dispelable_by_me")
-    for instanceID in pairs(UnitAuraInstanceID[guid]) do
-        ok, filtered = xpcall(function() return C_UnitAuras.IsAuraFilteredOutByInstanceID(unitid, instanceID, filter) end, geterrorhandler())
-        if ok and not filtered then
-            dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unitid, instanceID, curve)
-            PlexusStatusAuras.core:SendStatusGained(guid,
-                "dispelable_by_me",
-                settings.priority,
-                nil,
-                dispelTypeColor or settings.color,
-                "DISPEL",
-                nil,
-                nil,
-                7582803,
-                nil,
-                nil,
-                nil,
-                { left = 0.432265625, right = 0.478515625, top = 0.32421875, bottom = 0.42671875 })
-        end
-    end
-end
-
-function PlexusStatusAuras:UpdateAllUnitsBuffs()
-    for _, unitid in PlexusRoster:IterateRoster() do
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid)
     end
 end
