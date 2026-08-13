@@ -1,5 +1,3 @@
-local _, Plexus = ...
-
 local function IsRetailWow()
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
@@ -8,96 +6,82 @@ local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
 
 local MAX_BUFFS = 40
 
-local L = setmetatable(PlexusDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
+local L = setmetatable(PlexusDebuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
 
 local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
-local PlexusDeBuffIcons = _G.Plexus:NewModule("PlexusDeBuffIcons", "AceBucket-3.0")
-local PlexusDeDeBuffIcons = _G.Plexus:NewModule("PlexusDeDeBuffIcons", "AceBucket-3.0")
+local PlexusDebuffIcons = _G.Plexus:NewModule("PlexusDebuffIcons", "AceBucket-3.0")
 
-local function WithAllPlexusFrames(func)
-    for _, frame in pairs(PlexusFrame.registeredFrames) do
-        func(frame)
-    end
-end
+PlexusDebuffIcons.menuName = L["Debuff Icons"]
 
-local GetAuraDataByAuraInstanceID
-local ForEachAura
-
-if IsRetailWow() then
-    GetAuraDataByAuraInstanceID = _G.C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = _G.AuraUtil.ForEachAura
-end
-
-PlexusDeBuffIcons.menuName = L["DeBuff Icons"]
-
-PlexusDeBuffIcons.defaultDB = {
+PlexusDebuffIcons.defaultDB = {
     enabled = true,
-    hideSated = false,
+    showMine = true,
     iconsize = 9,
     offsetx = -1,
     offsety = -1,
     alpha = 0.9,
     iconnum = 4,
-    iconperrow = 2,
-    orientation = "VERTICAL",
+    --iconperrow = 2,
+    --orientation = "VERTICAL",
     anchor = "TOPRIGHT",
     color = { r = 0, g = 0.5, b = 1.0, a = 1.0 },
     ecolor = { r = 1, g = 1, b = 0, a = 1.0 },
     rcolor = { r = 1, g = 0, b = 0, a = 1.0 },
     unit_buff_icons = {
         color = { r=1, g=1, b=1, a=1 },
-        text = "DeBuffIcons",
+        text = "DebuffIcons",
         enable = true,
         priority = 30,
         range = false
     },
-    transfer = false
+    overrideFilter = "false"
 }
 
 local options = {
     type = "group",
     inline = PlexusFrame.options.args.bar.inline,
-    name = L["DeBuff Icons"],
-    desc = L["DeBuff Icons"],
+    name = L["Debuff Icons"],
+    desc = L["Debuff Icons"],
     order = 1200,
     get = function(info)
         local k = info[#info]
-        return PlexusDeBuffIcons.db.profile[k]
+        return PlexusDebuffIcons.db.profile[k]
     end,
     set = function(info, v)
         local k = info[#info]
-        PlexusDeBuffIcons.db.profile[k] = v
-        PlexusDeBuffIcons:UpdateAllUnitsBuffs()
+        PlexusDebuffIcons.db.profile[k] = v
+        PlexusDebuffIcons:UpdateAllUnitsBuffs()
     end,
     args = {
         enabled = {
             order = 40, width = "double",
             type = "toggle",
             name = L["Enable"],
-            desc = L["Enabling/disabling the module will display all buff or debuff icons."],
+            desc = L["Enabling/disabling the module will display all buff or Debuff icons."],
             get = function()
-                return PlexusDeBuffIcons.db.profile.enabled
+                return PlexusDebuffIcons.db.profile.enabled
             end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.enabled = v
-                if v and not PlexusDeBuffIcons.enabled then
-                    PlexusDeBuffIcons:OnEnable()
-                elseif not v and PlexusDeBuffIcons.enabled then
-                    PlexusDeBuffIcons:OnDisable()
+                PlexusDebuffIcons.db.profile.enabled = v
+                if v and not PlexusDebuffIcons.enabled then
+                    PlexusDebuffIcons:OnEnable()
+                elseif not v and PlexusDebuffIcons.enabled then
+                    PlexusDebuffIcons:OnDisable()
                 end
             end,
         },
-        hideSated = {
-            order = 40, width = "double",
+        showMine = {
+            order = 41, width = "double",
             type = "toggle",
-            name = L["Hide Sated/Exhaustion"],
-            desc = L["Enabling/disabling showing Sated/Exhaustion for the debuffs bar."],
+            name = L["Show Mine"],
+            desc = L["Enabling/disabling will display only buffs you casted."],
             get = function()
-                return PlexusDeBuffIcons.db.profile.hideSated
+                return PlexusDebuffIcons.db.profile.showMine
             end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.hideSated = v
+                PlexusDebuffIcons.db.profile.showMine = v
+                PlexusDebuffIcons:UpdateAllUnitsBuffs()
             end,
         },
         iconsize = {
@@ -108,10 +92,9 @@ local options = {
             max = 50,
             min = 5,
             step = 1,
-            get = function () return PlexusDeBuffIcons.db.profile.iconsize end,
+            get = function () return PlexusDebuffIcons.db.profile.iconsize end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.iconsize = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetDeBuffIconsize(f) end)
+                PlexusDebuffIcons.db.profile.iconsize = v
             end
         },
         alpha = {
@@ -122,10 +105,9 @@ local options = {
             max = 1,
             min = 0.1,
             step = 0.1,
-            get = function () return PlexusDeBuffIcons.db.profile.alpha end,
+            get = function () return PlexusDebuffIcons.db.profile.alpha end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.alpha = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconAlpha(f) end)
+                PlexusDebuffIcons.db.profile.alpha = v
             end
         },
         offsetx = {
@@ -133,13 +115,12 @@ local options = {
             type = "range",
             name = L["Offset X"],
             desc = L["X-axis offset from the selected anchor point, minus value to move inside."],
-            max = 20,
+            max = 250,
             min = -20,
             step = 1,
-            get = function () return PlexusDeBuffIcons.db.profile.offsetx end,
+            get = function () return PlexusDebuffIcons.db.profile.offsetx end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.offsetx = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDebuffIcons.db.profile.offsetx = v
             end
         },
         offsety = {
@@ -147,13 +128,12 @@ local options = {
             type = "range",
             name = L["Offset Y"],
             desc = L["Y-axis offset from the selected anchor point, minus value to move inside."],
-            max = 20,
+            max = 250,
             min = -20,
             step = 1,
-            get = function () return PlexusDeBuffIcons.db.profile.offsety end,
+            get = function () return PlexusDebuffIcons.db.profile.offsety end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.offsety = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDebuffIcons.db.profile.offsety = v
             end
         },
         iconnum = {
@@ -165,441 +145,180 @@ local options = {
             min = 1,
             step = 1,
         },
-        iconperrow = {
-            order = 76, width = "double",
-            type = "range",
-            name = L["Icons Per Row"],
-            desc = L["Sperate icons in several rows."],
-            max = MAX_BUFFS,
-            min = 0,
-            step = 1,
-            get = function()
-                return PlexusDeBuffIcons.db.profile.iconperrow
-            end,
-            set = function(_, v)
-                PlexusDeBuffIcons.db.profile.iconperrow = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
-            end,
-        },
-        orientation = {
-            order = 80,  width = "double",
-            type = "select",
-            name = L["Orientation of Icon"],
-            desc = L["Set icons list orientation."],
-            get = function ()
-                return PlexusDeBuffIcons.db.profile.orientation
-            end,
-            set = function(_, v)
-                PlexusDeBuffIcons.db.profile.orientation = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
-            end,
-            values ={["HORIZONTAL"] = L["HORIZONTAL"], ["VERTICAL"] = L["VERTICAL"]}
-        },
+        --iconperrow = {
+        --    order = 76, width = "double",
+        --    type = "range",
+        --    name = L["Icons Per Row"],
+        --    desc = L["Sperate icons in several rows."],
+        --    max = MAX_BUFFS,
+        --    min = 0,
+        --    step = 1,
+        --    get = function()
+        --        return PlexusDebuffIcons.db.profile.iconperrow
+        --    end,
+        --    set = function(_, v)
+        --        PlexusDebuffIcons.db.profile.iconperrow = v
+        --    end,
+        --},
+        --orientation = {
+        --    order = 80,  width = "double",
+        --    type = "select",
+        --    name = L["Orientation of Icon"],
+        --    desc = L["Set icons list orientation."],
+        --    get = function ()
+        --        return PlexusDebuffIcons.db.profile.orientation
+        --    end,
+        --    set = function(_, v)
+        --        PlexusDebuffIcons.db.profile.orientation = v
+        --    end,
+        --    values ={["HORIZONTAL"] = L["HORIZONTAL"], ["VERTICAL"] = L["VERTICAL"]}
+        --},
         anchor = {
             order = 90,  width = "double",
             type = "select",
             name = L["Anchor Point"],
             desc = L["Anchor point of the first icon."],
             get = function ()
-                return PlexusDeBuffIcons.db.profile.anchor
+                return PlexusDebuffIcons.db.profile.anchor
             end,
             set = function(_, v)
-                PlexusDeBuffIcons.db.profile.anchor = v
-                WithAllPlexusFrames(function (f) PlexusDeBuffIcons.ResetBuffIconPos(f) end)
+                PlexusDebuffIcons.db.profile.anchor = v
             end,
             values ={["TOPRIGHT"] = L["TOPRIGHT"], ["TOPLEFT"] = L["TOPLEFT"], ["BOTTOMLEFT"] = L["BOTTOMLEFT"], ["BOTTOMRIGHT"] = L["BOTTOMRIGHT"]}
+        },
+        overrideFilter = {
+            order = 100,  width = "double",
+            type = "select",
+            name = L["Override Aura Filter(Advanced)"],
+            desc = L["Choose an option for aura filtering. Or false to keep defaults"],
+            get = function ()
+                return PlexusDebuffIcons.db.profile.overrideFilter
+            end,
+            set = function(_, v)
+                PlexusDebuffIcons.db.profile.overrideFilter = v
+            end,
+        values = {
+            ["false"] = L["False"],
+            ["HELPFUL"] = L["HELPFUL"],
+            ["HELPFUL|PLAYER"] = L["HELPFUL PLAYER"],
+            ["HELPFUL|RAID"] = L["HELPFUL RAID"],
+            ["HELPFUL|RAID_IN_COMBAT"] = L["HELPFUL RAID IN COMBAT"],
+            ["HELPFUL|PLAYER|RAID"] = L["HELPFUL PLAYER RAID"],
+            ["HELPFUL|PLAYER|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID IN COMBAT"],
+            ["HELPFUL|RAID|RAID_IN_COMBAT"] = L["HELPFUL RAID RAID IN COMBAT"],
+            ["HELPFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID RAID IN COMBAT"],
+        }
         },
     }
 }
 
-_G.Plexus.options.args.PlexusDeBuffIcons = options
+_G.Plexus.options.args.PlexusDebuffIcons = options
 
-function PlexusDeBuffIcons.InitializeFrame(_, f) --luacheck: ignore 212
-    if not f.DeBuffIcons then
-        f.DeBuffIcons = {}
-        for i=1, MAX_BUFFS do
-            local bar = f.Bar or f.indicators.bar
-            local bg = CreateFrame("Frame", "$parentPlexusBuffIcon"..i, bar, "BackdropTemplate")
-            bg:SetBackdrop({
-                bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-                edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-                edgeSize = 8,
-                insets = { left = 4, right = 4, top = 4, bottom = 4 },
-            })
-            bg:SetFrameLevel(bar:GetFrameLevel() + 3)
-            bg.icon = bg:CreateTexture("$parentTex", "OVERLAY")
-            bg.icon:SetTexCoord(0.04, 0.96, 0.04, 0.96)
-            bg.icon:SetAllPoints(bg)
-            bg.cd = CreateFrame("Cooldown", "$parentCD", bg, "CooldownFrameTemplate")
-            --bg.cd:SetAllPoints(bg.icon)
-            bg.icon:ClearAllPoints()
-            bg.icon:SetPoint("TOPLEFT", 2, -2)
-            bg.icon:SetPoint("BOTTOMRIGHT", -2, 2)
-            bg.cd:SetReverse(true)
-            bg.cd:SetDrawBling(false)
-            bg.cd:SetDrawEdge(false)
-            bg.cd:SetSwipeColor(0, 0, 0, 0.6)  --will be overrided by omnicc
-            bg.cd:SetHideCountdownNumbers(true)  --will be overrided by omnicc
-            bg.cd:SetUseAuraDisplayTime(true)
-            bg.cdtext = bg:CreateFontString("Cdtext", "OVERLAY")
-            bg.cdtext:SetFont(STANDARD_TEXT_FONT, 10, "OUTLINE")
-            bg.cdtext:ClearAllPoints()
-            bg.cdtext:SetPoint("TOPRIGHT", bg.icon, 1, 1)
-            bg.stack = bg:CreateFontString("Stack", "OVERLAY")
-            bg.stack:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
-            bg.stack:ClearAllPoints()
-            bg.stack:SetPoint("BOTTOMRIGHT", bg.icon, 1, -1)
-            bg:SetFrameStrata("MEDIUM")
-            bg:SetFrameLevel(100)
-            f.DeBuffIcons[i] = bg
-            f.DeBuffIcons[i]:Hide()
-        end
 
-        PlexusDeBuffIcons.ResetDeBuffIconsize(f)
-        PlexusDeBuffIcons.ResetBuffIconPos(f)
-        PlexusDeBuffIcons.ResetBuffIconAlpha(f)
-    end
+function PlexusDebuffIcons:OnInitialize()
 end
 
-function PlexusDeBuffIcons.ResetDeBuffIconsize(f)
-    if(f.DeBuffIcons) then
-        for _,v in pairs(f.DeBuffIcons) do
-            v:SetWidth(PlexusDeBuffIcons.db.profile.iconsize)
-            v:SetHeight(PlexusDeBuffIcons.db.profile.iconsize)
-        end
-    end
+function PlexusDebuffIcons:OnEnable()
+    --self:RegisterEvent("UNIT_AURA")
+    --self:RegisterEvent("UNIT_FLAGS")
+    self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
+    self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
+    --self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
+    --self:UpdateAllUnitsBuffs()
 end
 
-function PlexusDeBuffIcons.ResetBuffIconPos(f)
-    local icons = f.DeBuffIcons
-    local xadjust = 1
-    local yadjust = 1
-    local p = PlexusDeBuffIcons.db.profile
-    if(string.find(p.anchor, "BOTTOM")) then yadjust = -1 end
-    if(string.find(p.anchor, "LEFT")) then xadjust = -1 end
-    if(icons) then
-        for k,v in pairs(icons) do
-            v:ClearAllPoints()
-            if(k==1) then
-                v:SetPoint(p.anchor, f, p.anchor, xadjust * p.offsetx, yadjust * p.offsety)
-            elseif(p.iconperrow and p.iconperrow>0 and (k-1)%p.iconperrow==0) then
-                if(p.orientation == "VERTICAL") then
-                    if(string.find(p.anchor, "RIGHT")) then
-                        if(p.offsetx<=0) then
-                            v:SetPoint("RIGHT", icons[k-p.iconperrow], "LEFT", -1, 0)
-                        else
-                            v:SetPoint("LEFT", icons[k-p.iconperrow], "RIGHT", 1, 0)
-                        end
-                    elseif(string.find(p.anchor, "LEFT")) then
-                        if(p.offsetx<=0) then
-                            v:SetPoint("LEFT", icons[k-p.iconperrow], "RIGHT", 1, 0)
-                        else
-                            v:SetPoint("RIGHT", icons[k-p.iconperrow], "LEFT", -1, 0)
-                        end
-                    end
-                else
-                    if(string.find(p.anchor, "TOP")) then
-                        if(p.offsety<=0) then
-                            v:SetPoint("TOP", icons[k-p.iconperrow], "BOTTOM", 0, -1)
-                        else
-                            v:SetPoint("BOTTOM", icons[k-p.iconperrow], "TOP", 0, 1)
-                        end
-                    elseif(string.find(p.anchor, "BOTTOM")) then
-                        if(p.offsety<=0) then
-                            v:SetPoint("BOTTOM", icons[k-p.iconperrow], "TOP", 0, 1)
-                        else
-                            v:SetPoint("TOP", icons[k-p.iconperrow], "BOTTOM", 0, -1)
-                        end
-                    end
-                end
-            else
-                if(p.orientation == "VERTICAL") then
-                    if(string.find(p.anchor, "BOTTOM")) then
-                        v:SetPoint("BOTTOM", icons[k-1], "TOP", 0, 1)
-                    else
-                        v:SetPoint("TOP", icons[k-1], "BOTTOM", 0, -1)
-                    end
-                else
-                    if(string.find(p.anchor, "LEFT")) then
-                        v:SetPoint("LEFT", icons[k-1], "RIGHT", 1, 0)
-                    else
-                        v:SetPoint("RIGHT", icons[k-1], "LEFT", -1, 0)
-                    end
-                end
-            end
-        end
-    end
-end
-
-function PlexusDeBuffIcons.ResetBuffIconAlpha(f)
-    if(f.DeBuffIcons) then
-        for _,v in pairs(f.DeBuffIcons) do
-            v:SetAlpha( PlexusDeBuffIcons.db.profile.alpha )
-        end
-    end
-end
-
-function PlexusDeBuffIcons:OnInitialize()
-    if PlexusDeDeBuffIcons.db.profile then
-        self:Debug("found old setings")
-        --PlexusDeBuffIcons.db.profile = PlexusDeDeBuffIcons.db.profile
-        if PlexusDeBuffIcons.db.profile.transfer == false then
-            for setting, value in pairs(PlexusDeBuffIcons.defaultDB) do
-                self:Debug(setting, value)
-                PlexusDeBuffIcons.db.profile[setting] = value
-            end
-            for setting, value in pairs(PlexusDeDeBuffIcons.db.profile) do
-                self:Debug(setting, value)
-                PlexusDeBuffIcons.db.profile[setting] = value
-            end
-            PlexusDeBuffIcons.db.profile.transfer = true
-        end
-    end
-    self.super.OnInitialize(self)
-    WithAllPlexusFrames(function(f) PlexusDeBuffIcons.InitializeFrame(nil, f) end)
-    hooksecurefunc(PlexusFrame, "InitializeFrame", self.InitializeFrame)
-end
-
-function PlexusDeBuffIcons:OnEnable()
-    if not PlexusDeBuffIcons.db.profile.enabled then
-        for _,v in pairs(PlexusFrame.registeredFrames) do
-            for i=1, MAX_BUFFS do --luacheck: ignore
-                v.DeBuffIcons[i]:Hide()
-            end
-        end
-        self.enabled = nil
-        return
-    else
-        self.enabled = true
-        self:RegisterEvent("UNIT_AURA")
-        self:RegisterEvent("UNIT_FLAGS")
-        self:RegisterEvent("LOADING_SCREEN_DISABLED")
-        self:RegisterMessage("Plexus_ExtraUnitsChanged", "ExtraUnitsChanged")
-        if(not self.bucket) then
-            self:Debug("registering bucket")
-            self.bucket = self:RegisterBucketMessage("Plexus_UpdateLayoutSize", 1, "UpdateAllUnitsBuffs")
-        end
-        self:UpdateAllUnitsBuffs()
-    end
-end
-
-function PlexusDeBuffIcons:OnDisable()
-    self.enabled = nil
-    self:UnregisterEvent("UNIT_AURA")
-    self:UnregisterEvent("UNIT_FLAGS")
+function PlexusDebuffIcons:OnDisable()
+    --self.enabled = nil
+    --self:UnregisterEvent("UNIT_AURA")
+    --self:UnregisterEvent("UNIT_FLAGS")
+    self:UnRegisterMessage("UpdateFrameUnits")
     self:UnregisterEvent("LOADING_SCREEN_DISABLED")
-    self:UnregisterMessage("Plexus_ExtraUnitsChanged")
-    if(self.bucket) then
-        self:Debug("unregistering bucket")
-        self:UnregisterBucket(self.bucket)
-        self.bucket = nil
-    end
-    for _,v in pairs(PlexusFrame.registeredFrames) do
-        if(v.DeBuffIcons) then
-            for i=1, MAX_BUFFS do v.DeBuffIcons[i]:Hide() end
-        end
-    end
+    --self:UnregisterMessage("Plexus_ExtraUnitsChanged")
 end
 
-function PlexusDeBuffIcons:Reset()
-    self.super.Reset(self)
-end
-
-function PlexusDeBuffIcons:ExtraUnitsChanged(message, unitid)
-    for _,v in pairs(PlexusFrame.registeredFrames) do
-        if (v.unit == unitid) and (v.BuffIcons) then
-            for i=1, MAX_BUFFS do v.BuffIcons[i]:Hide() end
-        end
-    end
-end
-
-local UnitAuraInstanceID
-local function showBuffIcon(v, n, setting, icon, count, unit, instanceid)
-    local DEBUFF_DISPLAY_COLOR_INFO = {
-        [0] = DEBUFF_TYPE_NONE_COLOR,
-        [1] = DEBUFF_TYPE_MAGIC_COLOR,
-        [2] = DEBUFF_TYPE_CURSE_COLOR,
-        [3] = DEBUFF_TYPE_DISEASE_COLOR,
-        [4] = DEBUFF_TYPE_POISON_COLOR,
-        [9] = DEBUFF_TYPE_BLEED_COLOR, -- enrage
-        [11] = DEBUFF_TYPE_BLEED_COLOR,
-    }
-    local curve = C_CurveUtil.CreateColorCurve()
-    if curve then
-        curve:SetType(Enum.LuaCurveType.Step)
-        for i, c in pairs(DEBUFF_DISPLAY_COLOR_INFO) do
-            curve:AddPoint(i, c)
-        end
-    end
-
-    local dur = C_UnitAuras.GetAuraDuration(unit, instanceid)
-    v.DeBuffIcons[n]:Show()
-    v.DeBuffIcons[n].icon:SetTexture(icon)
-    v.DeBuffIcons[n].auraid = instanceid
-    --count = C_StringUtil.TruncateWhenZero(count)
-    count = C_UnitAuras.GetAuraApplicationDisplayCount(unit, instanceid , 2 , 100)
-
-    v.DeBuffIcons[n].stack:SetText(count)
-    v.DeBuffIcons[n].stack:Show()
-    if dur then
-        v.DeBuffIcons[n].cd:SetCooldownFromDurationObject(dur)
-    end
-
-    local alpha = 0
-    local dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(unit, instanceid, curve)
-    local R,G,B
-    if dispelTypeColor then
-        R,G,B = dispelTypeColor:GetRGB()
-    end
-    if dispelTypeColor and R and G and B then
-        v.DeBuffIcons[n]:SetBackdropBorderColor(R,G,B,alpha)
-    end
-end
-
-local function updateFrame_df(v)
-    local n = 1
-    local setting = PlexusDeBuffIcons.db.profile
-
-    for i=n, MAX_BUFFS do --luacheck: ignore
-        v.DeBuffIcons[i]:Hide()
-    end
-
-    if v.unit and UnitAuraInstanceID[v.unitGUID] then
-        local numAuras = 0
-        for instanceID, aura in pairs(UnitAuraInstanceID[v.unitGUID]) do
-            if n > setting.iconnum then
-                break
-            end
-            if aura then
-                numAuras = numAuras + 1
-                local icon, count = aura.icon, aura.applications
-                showBuffIcon(v, n, setting, icon, count, v.unit, instanceID)
-                n=n+1
-            end
-            if numAuras == 0 then
-                UnitAuraInstanceID[v.unitGUID] = nil
-            end
-        end
-    end
-end
-
-function PlexusDeBuffIcons:UNIT_FLAGS(_,unit)
-    local hostile = UnitCanAttack("player", unit) or UnitIsCharmed(unitid)
-    if hostile then
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unit, {isFullUpdate = true} )
-    end
-end
-
-function PlexusDeBuffIcons:LOADING_SCREEN_DISABLED()
-    PlexusDeBuffIcons:UpdateAllUnitsBuffs()
-end
-
-local lustDebuffs = {
-    [57723] = true, -- Exhaustion
-    [57724] = true, -- Sated
-    [80354] = true, -- Temporal Displacement
-    [95809] = true, -- Hunter Pet Insanity
-    [160455] = true, -- Hunter Pet Fatigued
-    [264689] = true, -- Hunter Pet Fatigued
-    [390435] = true, -- Exhaustion
-}
-
-function PlexusDeBuffIcons:UNIT_AURA(_, unitid, updatedAuras)
-    if not self.enabled then return end
-    if not unitid then return end
-    local guid = not Plexus.IsSpecialUnit[unitid] and UnitGUID(unitid) or unitid
-    if not guid then return end
-    local settings = self.db.profile
-
-    if not UnitAuraInstanceID then
-        UnitAuraInstanceID = {}
-    end
-    if issecretvalue(guid) then
-        return
-    end
-    if type(UnitAuraInstanceID[guid]) ~= "table" then
-        UnitAuraInstanceID[guid] = {}
-    end
-
-    if not Plexus.IsSpecialUnit[unitid] and not PlexusRoster:IsGUIDInRaid(guid) then return end
-    local filter = "HARMFUL" --HELPFUL
-    if Plexus.IsSpecialUnit[unitid] and UnitCanAttack("player", unitid) then
-        filter = "HARMFUL|PLAYER"
-    end
-
-    -- UnitAuraInstanceID[guid] = auras = C_UnitAuras.GetUnitAuras(unit, filter [, maxCount [, sortRule [, sortDirection]]])
-
-    if IsRetailWow() then
-        --UnitAuraInstanceID[guid] = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
-        --doadintest = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusBuffIcons.db.profile.iconnum)
-        local auradata = C_UnitAuras.GetUnitAuras(unitid, filter, PlexusDeBuffIcons.db.profile.iconnum, Enum.UnitAuraSortRule.ExpirationOnly, Enum.UnitAuraSortDirection.Normal) or {}
-        UnitAuraInstanceID[guid] = {}
-        for _,aura in pairs(auradata) do
-            UnitAuraInstanceID[guid][aura.auraInstanceID] = aura
-            if settings.hideSated and not Plexus:issecretvalue(aura.spellId) and lustDebuffs[aura.spellId] then
-                UnitAuraInstanceID[guid][aura.auraInstanceID] = nil
-            end
-        end
-        for _,v in pairs(PlexusFrame.registeredFrames) do
-            if v.unitGUID == guid then updateFrame_df(v) end
-        end
-        return
-    end
-
-    if IsRetailWow() then
-        if updatedAuras and updatedAuras.isFullUpdate then
-            local unitauraInfo = {}
-            ForEachAura(unitid, filter, nil,
-                function(aura)
-                    if aura and aura.auraInstanceID then
-                        unitauraInfo[aura.auraInstanceID] = aura
-                    end
-                end,
-            true)
-            UnitAuraInstanceID[guid] = {}
-            for _, v in pairs(unitauraInfo) do
-                UnitAuraInstanceID[guid][v.auraInstanceID] = v
-            end
-        end
-        if updatedAuras and updatedAuras.addedAuras then
-            for _, addedAuraInfo in pairs(updatedAuras.addedAuras) do
-                local isFiltered = C_UnitAuras.IsAuraFilteredOutByInstanceID(unitid, addedAuraInfo.auraInstanceID, filter)
-                if not isFiltered then
-                    UnitAuraInstanceID[guid][addedAuraInfo.auraInstanceID] = addedAuraInfo
-                end
-            end
-        end
-        if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
-            for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
-                if UnitAuraInstanceID[guid][auraInstanceID] then
-                    local newAura = GetAuraDataByAuraInstanceID(unitid, auraInstanceID)
-                    local isFiltered = newAura and C_UnitAuras.IsAuraFilteredOutByInstanceID(unitid, newAura.auraInstanceID, filter) or true
-                    if not isFiltered then
-                        UnitAuraInstanceID[guid][newAura.auraInstanceID] = newAura
-                    end
-                end
-            end
-        end
-        if updatedAuras and updatedAuras.removedAuraInstanceIDs then
-            for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
-                if UnitAuraInstanceID[guid] and UnitAuraInstanceID[guid][auraInstanceID] then
-                    local aura = UnitAuraInstanceID[guid][auraInstanceID]
-                    if aura then
-                        UnitAuraInstanceID[guid][auraInstanceID] = nil
-                    end
-                end
-            end
-        end
-        for _,v in pairs(PlexusFrame.registeredFrames) do
-            if v.unitGUID == guid then updateFrame_df(v) end
-        end
-    end
-    -- end
-
-end
-
-function PlexusDeBuffIcons:UpdateAllUnitsBuffs()
+function PlexusDebuffIcons:UpdateAllUnitsBuffs()
     for _, unitid in PlexusRoster:IterateRoster() do
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid)
+        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid, {isFullUpdate = true} )
     end
+end
+
+local function createButton(button)
+   button:SetSize(PlexusDebuffIcons.db.profile.iconsize, PlexusDebuffIcons.db.profile.iconsize)
+   button:SetCancelAuraButtons('RightButtonUp')
+   local Icon = button:CreateTexture(nil, 'ARTWORK')
+   Icon:SetAllPoints()
+   button:SetIcon(Icon)
+   local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+   Time:SetPoint('TOPLEFT', 1, -1)
+   Time:SetJustifyH('LEFT')
+   Time:SetSize(PlexusDebuffIcons.db.profile.iconsize/2, PlexusDebuffIcons.db.profile.iconsize/2)
+   button:SetDurationText(Time)
+end
+
+function PlexusDebuffIcons:MakeContainers()
+    if not PlexusDebuffIcons.db.profile.enabled then
+        return
+    end
+    local registeredFrames = PlexusFrame.registeredFrames
+    local name = "PlexusDebuffIcons"
+    --C_Timer.After(1, function()
+    --    for frameName, frameTable in pairs(registeredFrames) do
+    --      print(frameTable.unit)
+    --    end
+    --end)
+    --C_Timer.After(10, function()
+        for frameName, frameTable in pairs(registeredFrames) do
+            if frameTable.unit then
+                --local unit = frameTable.unit
+                if not frameTable.container then
+                    frameTable.container = {}
+                end
+                if not frameTable.container[name] then
+                    --print("creating container for " .. name, "for unit " .. unit)
+                    frameTable.container[name] = CreateFrame('AuraContainer', nil, frameTable, 'CustomAuraContainerTemplate')
+                    frameTable.container[name]:SetUnit(frameTable.unit)
+                    --print(unit)
+                    --frameTable.container[name]:SetPoint('TOP', 0, 0)
+                    --local point, x, y = unpack(anchor[name])
+                    frameTable.container[name]:SetPoint(PlexusDebuffIcons.db.profile.anchor, PlexusDebuffIcons.db.profile.offsetx, PlexusDebuffIcons.db.profile.offsety)
+                end
+                if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name) then
+                    if frameTable.unit then
+                        --if unit == "player" then
+                        --print(unit)
+                        --end
+                        --print(type(unit))
+                        --frameTable.container[name]:SetUnit("player")
+                        --else
+                        --    frameTable.container[name]:SetUnit("player")
+                        --local candidateFilters = {
+                        --    includeSpellIDs = {
+                        --    --    53563,  -- Beacon of Light
+                        --    },
+                        --    excludeSpellIDs = {
+                        --    --    53563,  -- Beacon of Light
+                        --    },
+                        --}
+                        --candidateFilters.includeSpellIDs[id] = true
+                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (PlexusDebuffIcons.db.overrideFilter and PlexusDebuffIcons.db.overrideFilter or "HARMFUL"), {
+                              initializeFrame = createButton,
+                              sortMethod = AuraContainerSortMethod.ExpirationOnly,
+                              sortDirection = AuraContainerSortDirection.Reverse,
+                              layout = {
+                                 elementSpacing = 1,
+                                 lineSpacing = 1,
+                              },
+                              maxFrameCount = PlexusDebuffIcons.db.profile.iconnum,
+                              --candidateFilters = candidateFilters
+                            }
+                        )
+                        frameTable.container[name]:UpdateAllAuras()
+                    end
+                else
+                    frameTable.container[name]:SetUnit(frameTable.unit)
+                    frameTable.container[name]:UpdateAllAuras()
+                end
+            end
+        end
+    --end)
 end
