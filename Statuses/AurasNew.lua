@@ -1669,9 +1669,21 @@ function PlexusStatusAuras:CreateRemoveOptions()
     end
 end
 
-function PlexusStatusAuras:AddAura(name, isBuff)
-    if strlen(name) < 1 then
+function PlexusStatusAuras:AddAura(nameorid, isBuff)
+    local name
+    if strlen(nameorid) < 1 then
         return self:Debug("AddAura failed, no name entered!")
+    end
+    local id = tonumber(nameorid)
+    if not id and nameorid then
+        id = GetSpellInfo(nameorid) and GetSpellInfo(nameorid).spellID
+        name = nameorid
+    end
+    if id and nameorid then
+        name = GetSpellName(id)
+    end
+    if not id then
+        return self:Debug("AddAura failed")
     end
 
     local status = PlexusStatusAuras:StatusForSpell(name, isBuff)
@@ -1698,6 +1710,7 @@ function PlexusStatusAuras:AddAura(name, isBuff)
     else
         settings.debuff = name
     end
+    settings.id = {[id] = true}
     self:CopyDefaults(settings, self.defaultDB[status])
     self.db.profile[status] = settings
 
