@@ -92,6 +92,7 @@ spell_names = {
     ["Beacon of Light"] = GetSpellName(53563),
     ["Beacon of Faith"] = GetSpellName(156910),
     ["Beacon of the Savior"] = GetSpellName(1244893),
+    ["Beacon of Virtue"] = GetSpellName(200025),
     ["Eternal Flame"] = GetSpellName(156322),
     ["Forbearance"] = GetSpellName(25771),
 -- Priest
@@ -148,6 +149,7 @@ spell_ids = {
     ["Beacon of Light"] = 53563,
     ["Beacon of Faith"] = 156910,
     ["Beacon of the Savior"] = 1244893,
+    ["Beacon of Virtue"] = 200025,
     ["Eternal Flame"] = 156322,
     ["Forbearance"] = 25771,
 -- Priest
@@ -754,17 +756,18 @@ PlexusStatusAuras.defaultDB = {
         mine = true,
         id = spell_ids["Beacon of the Savior"]
     },
-    --[PlexusStatusAuras:StatusForSpell("Beacon of Virtue", true)] = {
-    --    -- 200025
-    --    desc = format(L["Buff: %s"], spell_names["Beacon of Virtue"]),
-    --    buff = spell_names["Beacon of Virtue"],
-    --    text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Virtue"]),
-    --    color = { r = 0, g = 252, b = 0, a = 1 },
-    --    durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
-    --    durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
-    --    durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
-    --    mine = true,
-    --},
+    [PlexusStatusAuras:StatusForSpell("Beacon of Virtue", true)] = {
+        -- 200025
+        desc = format(L["Buff: %s"], spell_names["Beacon of Virtue"]),
+        buff = spell_names["Beacon of Virtue"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Beacon of Virtue"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+        durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+        mine = true,
+        id = spell_ids["Beacon of Virtue"]
+    },
     --[PlexusStatusAuras:StatusForSpell("Bestow Faith", true)] = {
     --    -- 223306
     --    desc = format(L["Buff: %s"], spell_names["Bestow Faith"]),
