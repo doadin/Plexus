@@ -1153,7 +1153,7 @@ end
 function PlexusStatusAuras:OnStatusEnable(status)
     self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
-    --self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
+    self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
     --self:UpdateAllUnitAuras()
 
     self:UpdateDispellable()
@@ -1164,6 +1164,7 @@ function PlexusStatusAuras:OnStatusDisable(status)
     if self:EnabledStatusCount() == 0 then
         self:UnRegisterMessage("UpdateFrameUnits")
         self:UnregisterEvent("SPELLS_CHANGED")
+        self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     end
 end
 
