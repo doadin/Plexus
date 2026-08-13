@@ -67,6 +67,7 @@ spell_names = {
     ["Wild Growth"] = GetSpellName(48438),
     ["Germination"] = GetSpellName(155777),
     ["Rejuvenation (Germination)"] = GetSpellName(155777),
+    ["Symbiotic Relationship"] = GetSpellName(474754),
 -- Evoker
     ["Dream Breath"] = GetSpellName(355941),
     ["Dream Flight"] = GetSpellName(363502),
@@ -83,11 +84,13 @@ spell_names = {
     ["Shifting Sands"] = GetSpellName(413984),
     ["Source of Magic"] = GetSpellName(1289630),
     ["Sense Power"] = GetSpellName(361022),
+    ["Blessing of the Bronze"] = GetSpellName(381732),
 -- Monk
     ["Soothing Mist"] = GetSpellName(115175),
     ["Renewing Mist"] = GetSpellName(119611),
     ["Enveloping Mist"] = GetSpellName(124682),
     ["Aspect of Harmony"] = GetSpellName(450769),
+    ["Stagger"] = GetSpellName(124255),
 -- Paladin
     ["Beacon of Light"] = GetSpellName(53563),
     ["Beacon of Faith"] = GetSpellName(156910),
@@ -118,53 +121,70 @@ spell_ids = {
     --["Ethereal Guard"] = 1223453,
     --["Ethereal Reconstitution"] = 1223446,
 -- Druid
-    ["Rejuvenation"] = 774,
-    ["Regrowth"] = 8936,
-    ["Lifebloom"] = 33763,
-    ["Wild Growth"] = 48438,
-    ["Germination"] = 155777,
-    ["Rejuvenation (Germination)"] = 155777,
+    ["Rejuvenation"] = {[774] = true},
+    ["Regrowth"] = {[8936] = true},
+    ["Lifebloom"] = {[33763] = true},
+    ["Wild Growth"] = {[48438] = true},
+    ["Germination"] = {[155777] = true},
+    ["Rejuvenation (Germination)"] = {[155777] = true},
+    ["Symbiotic Relationship"] = {[474754] = true},
 -- Evoker
-    ["Dream Breath"] = 355941,
-    ["Dream Flight"] = 363502,
-    ["Echo"] = 364343,
-    ["Reversion"] = 366155,
-    ["Echo: Reversion"] = 366155,
-    ["Lifebind"] = 373267,
-    ["Echo: Dream Breath"] = 376788,
-    ["Blistering Scales"] = 360827,
-    ["Ebon Might"] = 395152,
-    ["Prescience"] = 409311,
-    ["Inferno's Blessing"] = 410263,
-    ["Symbiotic Bloom"] = 410686,
-    ["Shifting Sands"] = 413984,
-    ["Source of Magic"] = 1289630,
-    ["Sense Power"] = 361022,
+    ["Dream Breath"] = {[355941] = true},
+    ["Dream Flight"] = {[363502] = true},
+    ["Echo"] = {[364343] = true},
+    ["Reversion"] = {[366155] = true},
+    ["Echo: Reversion"] = {[367364] = true},
+    ["Lifebind"] = {[373267] = true},
+    ["Echo: Dream Breath"] = {[376788] = true},
+    ["Blistering Scales"] = {[360827] = true},
+    ["Ebon Might"] = {[395152] = true, [395296] = true},
+    ["Prescience"] = {[409311] = true},
+    ["Inferno's Blessing"] = {[410263] = true},
+    ["Symbiotic Bloom"] = {[410686] = true},
+    ["Shifting Sands"] = {[413984] = true},
+    ["Source of Magic"] = {[369459] = true},
+    ["Sense Power"] = {[361022] = true},
+    ["Blessing of the Bronze"] = {
+        [381732] = true, -- Death Knight
+		[381741] = true, -- Demon Hunter
+		[381746] = true, -- Druid
+		[381748] = true, -- Evoker
+		[381749] = true, -- Hunter
+		[381750] = true, -- Mage
+		[381751] = true, -- Monk
+		[381752] = true, -- Paladin
+		[381753] = true, -- Priest
+		[381754] = true, -- Rogue
+		[381756] = true, -- Shaman
+		[381757] = true, -- Warlock
+		[381758] = true, -- Warrior
+    },
 -- Monk
-    ["Soothing Mist"] = 115175,
-    ["Renewing Mist"] = 119611,
-    ["Enveloping Mist"] = 124682,
-    ["Aspect of Harmony"] = 450769,
+    ["Soothing Mist"] = {[115175] = true},
+    ["Renewing Mist"] = {[119611] = true},
+    ["Enveloping Mist"] = {[124682] = true},
+    ["Aspect of Harmony"] = {[450769] = true},
+    ["Stagger"] = {[124255] = true},
 -- Paladin
-    ["Beacon of Light"] = 53563,
-    ["Beacon of Faith"] = 156910,
-    ["Beacon of the Savior"] = 1244893,
-    ["Beacon of Virtue"] = 200025,
-    ["Eternal Flame"] = 156322,
-    ["Forbearance"] = 25771,
+    ["Beacon of Light"] = {[53563] = true},
+    ["Beacon of Faith"] = {[156910] = true},
+    ["Beacon of the Savior"] = {[1244893] = true},
+    ["Beacon of Virtue"] = {[200025] = true},
+    ["Eternal Flame"] = {[156322] = true},
+    ["Forbearance"] = {[25771] = true},
 -- Priest
-    ["Power Word: Shield"] = 17,
-    ["Atonement"] = 194384,
-    ["Void Shield"] = 1253593,
-    ["Renew"] = 139,
-    ["Prayer of Mending"] = 41635,
-    ["Echo of Light"] = 77489,
+    ["Power Word: Shield"] = {[17] = true},
+    ["Atonement"] = {[194384] = true},
+    ["Void Shield"] = {[1253593] = true},
+    ["Renew"] = {[139] = true},
+    ["Prayer of Mending"] = {[41635] = true},
+    ["Echo of Light"] = {[77489] = true},
 -- Shaman
-    ["Ancestral Vigor"] = 207400,
-    ["Earth Shield"] = 974,
-    ["Hydrobubble"] = 444490,
-    ["Riptide"] = 61295,
-    ["Earthliving Weapon"] = 382021,
+    ["Ancestral Vigor"] = {[207400] = true},
+    ["Earth Shield"] = {[974] = true},
+    ["Hydrobubble"] = {[444490] = true},
+    ["Riptide"] = {[61295] = true},
+    ["Earthliving Weapon"] = {[382021] = true, [382022] = true, [382024] = true},
 }
 end
 
@@ -410,6 +430,7 @@ PlexusStatusAuras.defaultDB = {
         countLow = 1,
         countHigh = 2,
         mine = true,
+        id = spell_ids["Lifebloom"],
     },
     [PlexusStatusAuras:StatusForSpell("Regrowth", true)] = {
         -- 8936
@@ -421,6 +442,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.7, g = 0.49, b = 0.07, a = 1 },
         durationColorHigh = { r = 1, g = 0.7, b = 0.1, a = 1 },
         mine = true,
+        id = spell_ids["Regrowth"],
     },
     [PlexusStatusAuras:StatusForSpell("Rejuvenation", true)] = {
         -- 774
@@ -432,6 +454,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0, g = 0.21, b = 0.49, a = 1 },
         durationColorHigh = { r = 0, g = 0.3, b = 0.7, a = 1 },
         mine = true,
+        id = spell_ids["Rejuvenation"],
     },
     [PlexusStatusAuras:StatusForSpell("Germination", true)] = {
         -- 155777
@@ -443,6 +466,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.46, g = 0.38, b = 0.7, a = 1 },
         durationColorHigh = { r = 0.33, g = 0.27, b = 0.5, a = 1 },
         mine = true,
+        id = spell_ids["Germination"],
     },
     [PlexusStatusAuras:StatusForSpell("Wild Growth", true)] = {
         -- 48438
@@ -454,6 +478,19 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.39, g = 0.55, b = 0.42, a = 1 },
         durationColorHigh = { r = 0.27, g = 0.37, b = 0.29, a = 1 },
         mine = true,
+        id = spell_ids["Wild Growth"],
+    },
+    [PlexusStatusAuras:StatusForSpell("Symbiotic Relationship", true)] = {
+        -- 48438
+        desc = format(L["Buff: %s"], spell_names["Symbiotic Relationship"]),
+        buff = spell_names["Symbiotic Relationship"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Symbiotic Relationship"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.56, g = 0.85, b = 0.62, a = 1 },
+        durationColorMiddle = { r = 0.39, g = 0.55, b = 0.42, a = 1 },
+        durationColorHigh = { r = 0.27, g = 0.37, b = 0.29, a = 1 },
+        mine = true,
+        id = spell_ids["Symbiotic Relationship"],
     },
 
     ---------------------
@@ -469,6 +506,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Reversion"],
     },
     [PlexusStatusAuras:StatusForSpell("Echo: Reversion", true)] = {
         -- 367364
@@ -480,6 +518,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Echo: Reversion"],
     },
     [PlexusStatusAuras:StatusForSpell("Dream Breath", true)] = {
         -- 367364
@@ -491,6 +530,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Dream Breath"],
     },
     [PlexusStatusAuras:StatusForSpell("Echo: Dream Breath", true)] = {
         -- 367364
@@ -502,6 +542,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Echo: Dream Breath"],
     },
     [PlexusStatusAuras:StatusForSpell("Echo", true)] = {
         -- 364343
@@ -513,6 +554,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Echo"],
     },
     --[PlexusStatusAuras:StatusForSpell("Temporal Anomaly", true)] = {
     --    -- 373862
@@ -546,6 +588,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Blistering Scales"],
     },
     [PlexusStatusAuras:StatusForSpell("Ebon Might", true)] = {
         -- 395152
@@ -557,6 +600,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Ebon Might"],
     },
     [PlexusStatusAuras:StatusForSpell("Prescience", true)] = {
         -- 409311
@@ -568,6 +612,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Prescience"],
     },
     [PlexusStatusAuras:StatusForSpell("Dream Flight", true)] = {
         -- 363502
@@ -579,6 +624,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Dream Flight"],
     },
     [PlexusStatusAuras:StatusForSpell("Lifebind", true)] = {
         -- 373267
@@ -590,6 +636,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Lifebind"],
     },
     [PlexusStatusAuras:StatusForSpell("Inferno's Blessing", true)] = {
         -- 410263
@@ -601,6 +648,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Inferno's Blessing"],
     },
     [PlexusStatusAuras:StatusForSpell("Symbiotic Bloom", true)] = {
         -- 410686
@@ -612,6 +660,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Symbiotic Bloom"],
     },
     [PlexusStatusAuras:StatusForSpell("Shifting Sands", true)] = {
         -- 413984
@@ -623,6 +672,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Shifting Sands"],
     },
     [PlexusStatusAuras:StatusForSpell("Source of Magic", true)] = {
         -- 413984
@@ -634,6 +684,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Source of Magic"],
     },
     [PlexusStatusAuras:StatusForSpell("Sense Power", true)] = {
         -- 361022
@@ -645,6 +696,19 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Sense Power"],
+    },
+    [PlexusStatusAuras:StatusForSpell("Blessing of the Bronze", true)] = {
+        -- 361022
+        desc = format(L["Buff: %s"], spell_names["Blessing of the Bronze"]),
+        buff = spell_names["Blessing of the Bronze"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Blessing of the Bronze"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+        durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
+        durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
+        mine = true,
+        id = spell_ids["Blessing of the Bronze"],
     },
 
     ---------------------
@@ -665,6 +729,7 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Enveloping Mist"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Enveloping Mist"],
     },
     --[PlexusStatusAuras:StatusForSpell("Life Cocoon", true)] = {
     --    -- 116849
@@ -680,6 +745,7 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Renewing Mist"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Renewing Mist"],
     },
     [PlexusStatusAuras:StatusForSpell("Soothing Mist", true)] = {
         -- 115175
@@ -688,6 +754,7 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Soothing Mist"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Soothing Mist"],
     },
     [PlexusStatusAuras:StatusForSpell("Aspect of Harmony", true)] = {
         -- 450769
@@ -696,6 +763,16 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Aspect of Harmony"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Aspect of Harmony"],
+    },
+    [PlexusStatusAuras:StatusForSpell("Stagger", true)] = {
+        -- 450769
+        buff = spell_names["Stagger"],
+        desc = format(L["Buff: %s"], spell_names["Stagger"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Stagger"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+        id = spell_ids["Stagger"],
     },
 
     ---------------------
@@ -726,7 +803,7 @@ PlexusStatusAuras.defaultDB = {
         durationLow = 5,
         durationHigh = 10,
         mine = true,
-        id = spell_ids["Beacon of Faith"]
+        id = spell_ids["Beacon of Faith"],
     },
     [PlexusStatusAuras:StatusForSpell("Beacon of Light", true)] = {
         -- 53563
@@ -740,7 +817,7 @@ PlexusStatusAuras.defaultDB = {
         durationLow = 5,
         durationHigh = 10,
         mine = true,
-        id = spell_ids["Beacon of Light"]
+        id = spell_ids["Beacon of Light"],
     },
     [PlexusStatusAuras:StatusForSpell("Beacon of the Savior", true)] = {
         -- 1244893
@@ -754,7 +831,7 @@ PlexusStatusAuras.defaultDB = {
         durationLow = 5,
         durationHigh = 10,
         mine = true,
-        id = spell_ids["Beacon of the Savior"]
+        id = spell_ids["Beacon of the Savior"],
     },
     [PlexusStatusAuras:StatusForSpell("Beacon of Virtue", true)] = {
         -- 200025
@@ -766,7 +843,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
         durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
-        id = spell_ids["Beacon of Virtue"]
+        id = spell_ids["Beacon of Virtue"],
     },
     --[PlexusStatusAuras:StatusForSpell("Bestow Faith", true)] = {
     --    -- 223306
@@ -811,7 +888,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
         durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
-        id = spell_ids["Eternal Flame"]
+        id = spell_ids["Eternal Flame"],
     },
     --[PlexusStatusAuras:StatusForSpell("Sacred Dawn")] = {
     --    -- 243174
@@ -855,6 +932,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
         durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
         durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+        id = spell_ids["Forbearance"],
     },
 
     ---------------------
@@ -867,6 +945,7 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Atonement"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Atonement"],
     },
     --[PlexusStatusAuras:StatusForSpell("Clarity of Will", true)] = {
     --    -- 152118
@@ -893,6 +972,7 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Echo of Light"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Echo of Light"],
     },
     --[PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
     --    -- 47788
@@ -933,6 +1013,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
         durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
         durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+        id = spell_ids["Power Word: Shield"],
     },
     [PlexusStatusAuras:StatusForSpell("Void Shield", true)] = {
         -- 1253593
@@ -943,6 +1024,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
         durationColorMiddle = { r = 0.56, g = 0.56, b = 0, a = 1 },
         durationColorHigh = { r = 0.8, g = 0.8, b = 0, a = 1 },
+        id = spell_ids["Void Shield"],
     },
     [PlexusStatusAuras:StatusForSpell("Prayer of Mending", true)] = {
         -- 33076, 41635
@@ -951,6 +1033,7 @@ PlexusStatusAuras.defaultDB = {
         text = PlexusStatusAuras:TextForSpell(spell_names["Prayer of Mending"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         mine = true,
+        id = spell_ids["Prayer of Mending"],
     },
     --[PlexusStatusAuras:StatusForSpell("Premonition of Solace", true)] = {
     --    -- 428934
@@ -986,6 +1069,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0, g = 0.49, b = 0.21, a = 1 },
         durationColorHigh = { r = 0, g = 0.7, b = 0.3, a = 1 },
         mine = true,
+        id = spell_ids["Renew"],
     },
     --[PlexusStatusAuras:StatusForSpell("Weakened Soul")] = {
     --    -- 6788
@@ -1009,6 +1093,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Ancestral Vigor"],
     },
     [PlexusStatusAuras:StatusForSpell("Earth Shield", true)] = {
         -- 204288
@@ -1016,6 +1101,7 @@ PlexusStatusAuras.defaultDB = {
         buff = spell_names["Earth Shield"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Earth Shield"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
+        id = spell_ids["Earth Shield"],
     },
     [PlexusStatusAuras:StatusForSpell("Hydrobubble", true)] = {
         -- 444490
@@ -1027,6 +1113,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Hydrobubble"],
     },
     --[PlexusStatusAuras:StatusForSpell("Water Shield", true)] = {
     --    -- 52127
@@ -1045,6 +1132,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Riptide"],
     },
     [PlexusStatusAuras:StatusForSpell("Earthliving Weapon", true)] = {
         -- 382021
@@ -1056,6 +1144,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.28, g = 0, b = 0.56, a = 1 },
         durationColorHigh = { r = 0.4, g = 0, b = 0.8, a = 1 },
         mine = true,
+        id = spell_ids["Earthliving Weapon"],
     },
 }
 end
@@ -1948,7 +2037,7 @@ function PlexusStatusAuras:MakeContainers()
                                                 --    53563,  -- Beacon of Light
                                                 },
                                             }
-                                            candidateFilters.includeSpellIDs[id] = true
+                                            candidateFilters.includeSpellIDs = id
                                             frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. status, filter, {
                                                   initializeFrame = createButton,
                                                   sortMethod = AuraContainerSortMethod.ExpirationOnly,
