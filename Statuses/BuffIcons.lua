@@ -300,7 +300,8 @@ function PlexusBuffIcons:MakeContainers()
                         --    },
                         --}
                         --candidateFilters.includeSpellIDs[id] = true
-                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (PlexusBuffIcons.db.overrideFilter and PlexusBuffIcons.db.overrideFilter or "HELPFUL"), {
+                        local filter = PlexusBuffIcons.db.showMine and "PLAYER|HARMFUL" or "HARMFUL"
+                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (PlexusBuffIcons.db.overrideFilter and PlexusBuffIcons.db.overrideFilter or filter), {
                               initializeFrame = createButton,
                               sortMethod = AuraContainerSortMethod.ExpirationOnly,
                               sortDirection = AuraContainerSortDirection.Reverse,
