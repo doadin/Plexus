@@ -49,11 +49,13 @@ end
 
 function PlexusStatusDefensives:OnStatusEnable() --status --luacheck: ignore 112
     self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
+    self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
     --self:UpdateAllUnits()
 end
 
 function PlexusStatusDefensives:OnStatusDisable(status) -- status --luacheck: ignore 112
     self:UnRegisterMessage("UpdateFrameUnits")
+    self:UnRegisterMessage("LOADING_SCREEN_DISABLED")
     --self.core:SendStatusLostAllUnits(status)
 end
 
