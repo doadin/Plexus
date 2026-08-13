@@ -1923,11 +1923,11 @@ function PlexusStatusAuras:MakeContainers()
                             if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name .. ":" .. status) then
                                 if self.db.profile[status] and self.db.profile[status].enable and statusEnabled then
                                     if self.db.profile[status] and self.db.profile[status].buff then
-                                        filter = "HELPFUL"
+                                        filter = self.db.profile[status].mine and "PLAYER|HELPFUL" or "HELPFUL"
                                         id = spell_ids[self.db.profile[status].buff]
                                         --print(self.db.profile[status].buff)
                                     else
-                                        filter = "HARMFUL"
+                                        filter = self.db.profile[status].mine and "PLAYER|HARMFUL" or "HARMFUL"
                                         id = spell_ids[self.db.profile[status].debuff]
                                     end
 
@@ -1968,6 +1968,7 @@ function PlexusStatusAuras:MakeContainers()
                                 end
                             else
                                 frameTable.container[name]:SetUnit(frameTable.unit)
+                                frameTable.container[name]:UpdateAllAuras()
                             end
                         end
                     end
