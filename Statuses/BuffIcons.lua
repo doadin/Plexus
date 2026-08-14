@@ -243,16 +243,84 @@ function PlexusBuffIcons:UpdateAllUnitsBuffs()
 end
 
 local function createButton(button)
-   button:SetSize(PlexusBuffIcons.db.profile.iconsize, PlexusBuffIcons.db.profile.iconsize)
-   button:SetCancelAuraButtons('RightButtonUp')
-   local Icon = button:CreateTexture(nil, 'ARTWORK')
-   Icon:SetAllPoints()
-   button:SetIcon(Icon)
-   local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
-   Time:SetPoint('TOPLEFT', 1, -1)
-   Time:SetJustifyH('LEFT')
-   Time:SetSize(PlexusBuffIcons.db.profile.iconsize/2, PlexusBuffIcons.db.profile.iconsize/2)
-   button:SetDurationText(Time)
+    button:SetSize(12, 12)
+    button:SetCancelAuraButtons('RightButtonUp')
+    local Icon = button:CreateTexture(nil, 'ARTWORK')
+    Icon:SetAllPoints()
+    button:SetIcon(Icon)
+    local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+    Time:SetPoint('TOPLEFT', 1, -1)
+    Time:SetJustifyH('LEFT')
+    Time:SetSize(8,8)
+    button:SetDurationText(Time)
+    local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+    cooldown:SetAllPoints()
+    cooldown:SetAlpha(1)
+    cooldown:SetHideCountdownNumbers(true)
+    cooldown:SetDrawEdge(false)
+    cooldown:SetDrawSwipe(true)
+    cooldown:SetReverse(true)
+    cooldown:Show()
+    button.cooldown = cooldown
+    button:SetDurationCooldown(cooldown)
+    --local fontSize = self.fontSize<1 and self.fontSize*iconSize or self.fontSize
+    local text = button.text
+    if not text then
+        local tframe = CreateFrame("frame", nil, button)
+        text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        button.text = text
+        text.tframe = tframe
+        tframe:SetAllPoints()
+    end
+    local level = button:GetFrameLevel()
+    text.tframe:SetFrameLevel(level+2)
+    --text:SetFont(self.font, fontSize, self.fontFlags)
+    --text:SetTextColor(UnpackColor(self.colorStack))
+    text:ClearAllPoints()
+    text:SetPoint("BOTTOMRIGHT", 0, 0)
+    text:Show()
+    button:SetApplicationCount(text, {})
+    --local borderOptions = {
+    --    showAlways = false,
+    --    showIcon = true,
+    --    showWhenHarmful = true,
+    --    showWhenHelpful = true,
+    --    showWithoutDispelType = false,
+    --    style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
+    --}
+	----local borderSize = self.borderSize
+	----if borderSize>0 then
+	--	local border = button.border
+	--	if not border then
+	--		border = button:CreateTexture(nil, "BACKGROUND")
+	--		border:ClearAllPoints()
+	--		border:SetAllPoints()
+	--		border:SetColorTexture(0,0,0,0)
+	--		button.border = border
+	--	end
+	--	--if self.useStatusColor then -- dispel border
+	--		button:SetAuraBorder(border, borderOptions)
+	--	--else -- fixed border
+	--	--	button:ClearAuraBorder()
+	--	--	border:SetColorTexture(UnpackColor(self.colorBorder))
+	--	--end
+    --    --border:SetColorTexture
+	--	border:Show()
+	----elseif button.border then
+	----	button:ClearAuraBorder(button.border)
+	----	button.border:Hide()
+    ----end
+    --local Overlay = CreateFrame("Frame", nil, button)
+    --Overlay:SetFrameLevel(button:GetFrameLevel() + 10)
+    ----Overlay:SetInside()
+    --local DispelIndicator = Overlay:CreateTexture(nil, "OVERLAY")
+    --DispelIndicator:SetSize(8, 8)
+    --DispelIndicator:SetPoint("TOPRIGHT", button, 0, 0)
+    --button:AddDispelTypeTexture(DispelIndicator, {
+    --    style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
+    --    showWhenHarmful = true,
+    --    showWhenHelpful = false,
+    --})
 end
 
 function PlexusBuffIcons:MakeContainers()
