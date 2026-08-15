@@ -2072,6 +2072,16 @@ function PlexusStatusAuras:MakeContainers()
     --    end
     --end)
     --C_Timer.After(10, function()
+    local count = 0
+    for _, frameTable  in pairs(registeredFrames) do
+        if frameTable.unit then
+            count = count + 1
+        end
+    end
+    if count == 0 then
+        C_Timer.After(1, function() PlexusStatusAuras:MakeContainers() end)
+        return
+    end
         for frameName, frameTable in pairs(registeredFrames) do
             if frameTable.unit then
                 --local unit = frameTable.unit

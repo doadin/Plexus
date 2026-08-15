@@ -200,6 +200,16 @@ function PlexusStatusDefensives:MakeContainers()
     --    return
     --end
     local registeredFrames = PlexusFrame.registeredFrames
+    local count = 0
+    for _, frameTable  in pairs(registeredFrames) do
+        if frameTable.unit then
+            count = count + 1
+        end
+    end
+    if count == 0 then
+        C_Timer.After(1, function() PlexusStatusDefensives:MakeContainers() end)
+        return
+    end
     for frameName, frameTable in pairs(registeredFrames) do
         if frameTable.unit then
             --print("frameTable.unit", frameTable.unit)

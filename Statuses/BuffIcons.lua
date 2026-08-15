@@ -328,6 +328,16 @@ function PlexusBuffIcons:MakeContainers()
         return
     end
     local registeredFrames = PlexusFrame.registeredFrames
+    local count = 0
+    for _, frameTable  in pairs(registeredFrames) do
+        if frameTable.unit then
+            count = count + 1
+        end
+    end
+    if count == 0 then
+        C_Timer.After(1, function() PlexusBuffIcons:MakeContainers() end)
+        return
+    end
     local name = "PlexusBuffIcons"
     --C_Timer.After(1, function()
     --    for frameName, frameTable in pairs(registeredFrames) do
