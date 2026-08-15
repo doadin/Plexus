@@ -204,7 +204,9 @@ end
 
 function PlexusFrame.prototype:OnAttributeChanged(name, value)
     if name == "unit" then
+        if self.unit ~= value then
         return PlexusFrame:SendMessage("UpdateFrameUnits")
+        end
     elseif self:CanChangeAttribute() then
         if name == "type1" then
             if not value or value == "" then
