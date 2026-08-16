@@ -1936,88 +1936,170 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
     end
 end
 
-local function createButton(button)
-    button:SetSize(12, 12)
-    button:SetCancelAuraButtons('RightButtonUp')
-    local Icon = button:CreateTexture(nil, 'ARTWORK')
-    Icon:SetAllPoints()
-    button:SetIcon(Icon)
-    local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
-    Time:SetPoint('TOPLEFT', 1, -1)
-    Time:SetJustifyH('LEFT')
-    Time:SetSize(8,8)
-    button:SetDurationText(Time)
-    local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
-    cooldown:SetAllPoints()
-    cooldown:SetAlpha(1)
-    cooldown:SetHideCountdownNumbers(true)
-    cooldown:SetDrawEdge(false)
-    cooldown:SetDrawSwipe(true)
-    cooldown:SetReverse(true)
-    cooldown:Show()
-    button.cooldown = cooldown
-    button:SetDurationCooldown(cooldown)
-    --local fontSize = self.fontSize<1 and self.fontSize*iconSize or self.fontSize
-    local text = button.text
-    if not text then
-        local tframe = CreateFrame("frame", nil, button)
-        text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        button.text = text
-        text.tframe = tframe
-        tframe:SetAllPoints()
+local function createButton(status, name)
+    local frameSettings = PlexusFrame.db.profile
+    return function(button)
+        if name == "icon" then
+            button:SetSize(frameSettings.centerIconSize, frameSettings.centerIconSize)
+        else
+            button:SetSize(frameSettings.iconSize, frameSettings.iconSize)
+        end
+        button:SetCancelAuraButtons('RightButtonUp')
+        local Icon = button:CreateTexture(nil, 'ARTWORK')
+        Icon:SetAllPoints()
+        button:SetIcon(Icon)
+        local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+        Time:SetPoint('TOPLEFT', 1, -1)
+        Time:SetJustifyH('LEFT')
+        Time:SetSize(8,8)
+        button:SetDurationText(Time)
+        local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+        cooldown:SetAllPoints()
+        cooldown:SetAlpha(1)
+        cooldown:SetHideCountdownNumbers(true)
+        cooldown:SetDrawEdge(false)
+        cooldown:SetDrawSwipe(true)
+        cooldown:SetReverse(true)
+        cooldown:Show()
+        button.cooldown = cooldown
+        button:SetDurationCooldown(cooldown)
+        --local fontSize = self.fontSize<1 and self.fontSize*iconSize or self.fontSize
+        local text = button.text
+        if not text then
+            local tframe = CreateFrame("frame", nil, button)
+            text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            button.text = text
+            text.tframe = tframe
+            tframe:SetAllPoints()
+        end
+        local level = button:GetFrameLevel()
+        text.tframe:SetFrameLevel(level+2)
+        --text:SetFont(self.font, fontSize, self.fontFlags)
+        --text:SetTextColor(UnpackColor(self.colorStack))
+        text:ClearAllPoints()
+        text:SetPoint("BOTTOMRIGHT", 0, 0)
+        text:Show()
+        button:SetApplicationCount(text, {})
+        --local borderOptions = {
+        --    showAlways = false,
+        --    showIcon = true,
+        --    showWhenHarmful = true,
+        --    showWhenHelpful = true,
+        --    showWithoutDispelType = false,
+        --    style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
+        --}
+	    ----local borderSize = self.borderSize
+	    ----if borderSize>0 then
+	    --	local border = button.border
+	    --	if not border then
+	    --		border = button:CreateTexture(nil, "BACKGROUND")
+	    --		border:ClearAllPoints()
+	    --		border:SetAllPoints()
+	    --		border:SetColorTexture(0,0,0,0)
+	    --		button.border = border
+	    --	end
+	    --	--if self.useStatusColor then -- dispel border
+	    --		button:SetAuraBorder(border, borderOptions)
+	    --	--else -- fixed border
+	    --	--	button:ClearAuraBorder()
+	    --	--	border:SetColorTexture(UnpackColor(self.colorBorder))
+	    --	--end
+        --    --border:SetColorTexture
+	    --	border:Show()
+	    ----elseif button.border then
+	    ----	button:ClearAuraBorder(button.border)
+	    ----	button.border:Hide()
+        ----end
+        local Overlay = CreateFrame("Frame", nil, button)
+        Overlay:SetFrameLevel(button:GetFrameLevel() + 10)
+        --Overlay:SetInside()
+        local DispelIndicator = Overlay:CreateTexture(nil, "OVERLAY")
+        DispelIndicator:SetSize(8, 8)
+        DispelIndicator:SetPoint("TOPRIGHT", button, 0, 0)
+        button:AddDispelTypeTexture(DispelIndicator, {
+            style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
+            showWhenHarmful = true,
+            showWhenHelpful = false,
+        })
     end
-    local level = button:GetFrameLevel()
-    text.tframe:SetFrameLevel(level+2)
-    --text:SetFont(self.font, fontSize, self.fontFlags)
-    --text:SetTextColor(UnpackColor(self.colorStack))
-    text:ClearAllPoints()
-    text:SetPoint("BOTTOMRIGHT", 0, 0)
-    text:Show()
-    button:SetApplicationCount(text, {})
-    --local borderOptions = {
-    --    showAlways = false,
-    --    showIcon = true,
-    --    showWhenHarmful = true,
-    --    showWhenHelpful = true,
-    --    showWithoutDispelType = false,
-    --    style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
-    --}
-	----local borderSize = self.borderSize
-	----if borderSize>0 then
-	--	local border = button.border
-	--	if not border then
-	--		border = button:CreateTexture(nil, "BACKGROUND")
-	--		border:ClearAllPoints()
-	--		border:SetAllPoints()
-	--		border:SetColorTexture(0,0,0,0)
-	--		button.border = border
-	--	end
-	--	--if self.useStatusColor then -- dispel border
-	--		button:SetAuraBorder(border, borderOptions)
-	--	--else -- fixed border
-	--	--	button:ClearAuraBorder()
-	--	--	border:SetColorTexture(UnpackColor(self.colorBorder))
-	--	--end
-    --    --border:SetColorTexture
-	--	border:Show()
-	----elseif button.border then
-	----	button:ClearAuraBorder(button.border)
-	----	button.border:Hide()
-    ----end
-    local Overlay = CreateFrame("Frame", nil, button)
-    Overlay:SetFrameLevel(button:GetFrameLevel() + 10)
-    --Overlay:SetInside()
-    local DispelIndicator = Overlay:CreateTexture(nil, "OVERLAY")
-    DispelIndicator:SetSize(8, 8)
-    DispelIndicator:SetPoint("TOPRIGHT", button, 0, 0)
-    button:AddDispelTypeTexture(DispelIndicator, {
-        style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
-        showWhenHarmful = true,
-        showWhenHelpful = false,
-    })
 end
 
+local function createFrame(status, name)
+    local frameSettings = PlexusFrame.db.profile
+    return function(button)
+        if name == "icon" then
+            button:SetSize(frameSettings.centerIconSize, frameSettings.centerIconSize)
+        else
+            button:SetSize(frameSettings.iconSize, frameSettings.iconSize)
+        end
+
+        local Icon = button.icon or button:CreateTexture(nil, "ARTWORK")
+        button.icon = Icon
+        Icon:SetAllPoints()
+        Icon:SetColorTexture(0, 0, 0, 0)
+
+        local Time = button.durationText or button:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        button.durationText = Time
+        Time:SetText("")
+        Time:Hide()
+
+        local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+        button.cooldown = cooldown
+        cooldown:SetAllPoints()
+        cooldown:Hide()
+
+        local text = button.text or button:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        button.text = text
+        text:SetText("")
+        text:Hide()
+
+        local colorTex = button.colorTex or button:CreateTexture(nil, "ARTWORK")
+        button.colorTex = colorTex
+        colorTex:SetAllPoints()
+        local color = status.color
+        colorTex:SetColorTexture(color.r, color.g, color.b, 1)
+    end
+end
+
+
 local anchor = {
+    -- left/right up/down
+    corner3 = { "TOPLEFT", -1, 1 },
+    topleft2 = { "TOPLEFT", 10, 1 },
+    topleft3 = { "TOPLEFT", -1, -10 },
+    -- left/right up/down
+    corner4 = { "TOPRIGHT", 1, 1 },
+    topright2 = { "TOPRIGHT", 1, -10 },
+    topright3 = { "TOPRIGHT", -10, 1 },
+    -- left/right up/down
+    corner1 = { "BOTTOMLEFT", -1, -1 },
+    bottomleft2 = { "BOTTOMLEFT", -1, 10 },
+    bottomleft3 = { "BOTTOMLEFT", 10, -1 },
+    -- left/right up/down
+    corner2 = { "BOTTOMRIGHT", 1, -1 },
+    bottomright2 = { "BOTTOMRIGHT", -10, -1 },
+    bottomright3 = { "BOTTOMRIGHT", 1, 10 },
+    -- left/right up/down
+    Top = { "TOP", 0, 1 },
+    Top2 = { "TOP", 10, 1 },
+    Top3 = { "TOP", 0, -10 },
+    Top4 = { "TOP", -10, 1 },
+    -- left/right up/down
+    Bottom = { "BOTTOM", 0, -1 },
+    Bottom2 = { "BOTTOM", -10, -1 },
+    Bottom3 = { "BOTTOM", 0, 10 },
+    Bottom4 = { "BOTTOM", 10, -1 },
+    -- left/right up/down
+    Left = { "LEFT", -1, 0 },
+    Left2 = { "LEFT", -1, 10 },
+    Left3 = { "LEFT", 10, 0 },
+    Left4 = { "LEFT", -1, -10 },
+    -- left/right up/down
+    Right = { "RIGHT", 1, 0 },
+    Right2 = { "RIGHT", 1, -10 },
+    Right3 = { "RIGHT", -10, 0 },
+    Right4 = { "RIGHT", 1, 10 },
+
     -- left/right up/down
     icon = { "CENTER", 0, 0},
     ei_icon_topleft = { "TOPLEFT", 1, -1 },
@@ -2086,7 +2168,7 @@ function PlexusStatusAuras:MakeContainers()
             if frameTable.unit then
                 --local unit = frameTable.unit
                 for name, indicator in pairs(frameTable.indicators) do
-                    if type(indicator) == "table" and indicator.GetObjectType and indicator:GetObjectType() == "Button" then
+                    if type(indicator) == "table" and indicator.GetObjectType and (indicator:GetObjectType() == "Button" or indicator:GetObjectType() == "Frame") then
                         if not frameTable.container then
                             frameTable.container = {}
                         end
@@ -2129,8 +2211,16 @@ function PlexusStatusAuras:MakeContainers()
                                                 },
                                             }
                                             candidateFilters.includeSpellIDs = id
+                                            local init
+                                            if indicator:GetObjectType() == "Button" then
+                                                init = createButton(self.db.profile[status], name)
+                                            elseif indicator:GetObjectType() == "Frame" then
+                                                init = createFrame(self.db.profile[status], name)
+                                            else
+                                                init = createButton(self.db.profile[status], name)
+                                            end
                                             frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. status, filter, {
-                                                  initializeFrame = createButton,
+                                                  initializeFrame = init,
                                                   sortMethod = AuraContainerSortMethod.ExpirationOnly,
                                                   sortDirection = AuraContainerSortDirection.Reverse,
                                                   layout = {
