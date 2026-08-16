@@ -199,14 +199,14 @@ local options = {
             end,
         values = {
             ["false"] = L["False"],
-            ["HELPFUL"] = L["HELPFUL"],
-            ["HELPFUL|PLAYER"] = L["HELPFUL PLAYER"],
-            ["HELPFUL|RAID"] = L["HELPFUL RAID"],
-            ["HELPFUL|RAID_IN_COMBAT"] = L["HELPFUL RAID IN COMBAT"],
-            ["HELPFUL|PLAYER|RAID"] = L["HELPFUL PLAYER RAID"],
-            ["HELPFUL|PLAYER|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID IN COMBAT"],
-            ["HELPFUL|RAID|RAID_IN_COMBAT"] = L["HELPFUL RAID RAID IN COMBAT"],
-            ["HELPFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID RAID IN COMBAT"],
+            ["HARMFUL"] = L["HARMFUL"],
+            ["HARMFUL|PLAYER"] = L["HARMFUL PLAYER"],
+            ["HARMFUL|RAID"] = L["HARMFUL RAID"],
+            ["HARMFUL|RAID_IN_COMBAT"] = L["HARMFUL RAID IN COMBAT"],
+            ["HARMFUL|PLAYER|RAID"] = L["HARMFUL PLAYER RAID"],
+            ["HARMFUL|PLAYER|RAID_IN_COMBAT"] = L["HARMFUL PLAYER RAID IN COMBAT"],
+            ["HARMFUL|RAID|RAID_IN_COMBAT"] = L["HARMFUL RAID RAID IN COMBAT"],
+            ["HARMFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HARMFUL PLAYER RAID RAID IN COMBAT"],
         }
         },
     }
