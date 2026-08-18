@@ -2057,88 +2057,6 @@ local function createFrame(status, name)
     end
 end
 
-
-local anchor = {
-    -- left/right up/down
-    corner3 = { "TOPLEFT", -1, 1 },
-    topleft2 = { "TOPLEFT", 10, 1 },
-    topleft3 = { "TOPLEFT", -1, -10 },
-    -- left/right up/down
-    corner4 = { "TOPRIGHT", 1, 1 },
-    topright2 = { "TOPRIGHT", 1, -10 },
-    topright3 = { "TOPRIGHT", -10, 1 },
-    -- left/right up/down
-    corner1 = { "BOTTOMLEFT", -1, -1 },
-    bottomleft2 = { "BOTTOMLEFT", -1, 10 },
-    bottomleft3 = { "BOTTOMLEFT", 10, -1 },
-    -- left/right up/down
-    corner2 = { "BOTTOMRIGHT", 1, -1 },
-    bottomright2 = { "BOTTOMRIGHT", -10, -1 },
-    bottomright3 = { "BOTTOMRIGHT", 1, 10 },
-    -- left/right up/down
-    Top = { "TOP", 0, 1 },
-    Top2 = { "TOP", 10, 1 },
-    Top3 = { "TOP", 0, -10 },
-    Top4 = { "TOP", -10, 1 },
-    -- left/right up/down
-    Bottom = { "BOTTOM", 0, -1 },
-    Bottom2 = { "BOTTOM", -10, -1 },
-    Bottom3 = { "BOTTOM", 0, 10 },
-    Bottom4 = { "BOTTOM", 10, -1 },
-    -- left/right up/down
-    Left = { "LEFT", -1, 0 },
-    Left2 = { "LEFT", -1, 10 },
-    Left3 = { "LEFT", 10, 0 },
-    Left4 = { "LEFT", -1, -10 },
-    -- left/right up/down
-    Right = { "RIGHT", 1, 0 },
-    Right2 = { "RIGHT", 1, -10 },
-    Right3 = { "RIGHT", -10, 0 },
-    Right4 = { "RIGHT", 1, 10 },
-
-    -- left/right up/down
-    icon = { "CENTER", 0, 0},
-    ei_icon_topleft = { "TOPLEFT", 1, -1 },
-    ei_icon_topleft2 = { "TOPLEFT", 10, -1 },
-    ei_icon_topleft3 = { "TOPLEFT", 1, -10 },
-    ei_icon_topleft4 = { "TOPLEFT", 10, -10 },
-    -- left/right up/down
-    ei_icon_topright = { "TOPRIGHT", -1, -1 },
-    ei_icon_topright2 = { "TOPRIGHT", -10, -1 },
-    ei_icon_topright3 = { "TOPRIGHT", -1, -10 },
-    ei_icon_topright4 = { "TOPRIGHT", -10, -10 },
-    -- left/right up/down
-    ei_icon_botleft = { "BOTTOMLEFT", 1, 1 },
-    ei_icon_botleft2 = { "BOTTOMLEFT", 10, 1 },
-    ei_icon_botleft3 = { "BOTTOMLEFT", 1, 10 },
-    ei_icon_botleft4 = { "BOTTOMLEFT", 10, 10 },
-    -- left/right up/down
-    ei_icon_botright = { "BOTTOMRIGHT", -1, 1 },
-    ei_icon_botright2 = { "BOTTOMRIGHT", -10, 1 },
-    ei_icon_botright3 = { "BOTTOMRIGHT", -1, 10 },
-    ei_icon_botright4 = { "BOTTOMRIGHT", -10, 10 },
-    -- left/right up/down
-    ei_icon_top = { "TOP", 0, -1 },
-    ei_icon_top2 = { "TOP", 0, -10 },
-    ei_icon_top3 = { "TOP", -10, -1 },
-    ei_icon_top4 = { "TOP", 10, -1 },
-    -- left/right up/down
-    ei_icon_bottom = { "BOTTOM", 0, 1 },
-    ei_icon_bottom2 = { "BOTTOM", 0, 10 },
-    ei_icon_bottom3 = { "BOTTOM", -10, 1 },
-    ei_icon_bottom4 = { "BOTTOM", 10, 1 },
-    -- left/right up/down
-    ei_icon_left = { "LEFT", 1, 0 },
-    ei_icon_left2 = { "LEFT", 10, 0 },
-    ei_icon_left3 = { "LEFT", 1, 10 },
-    ei_icon_left4 = { "LEFT", 1, -10 },
-    -- left/right up/down
-    ei_icon_right = { "RIGHT", -1, 0 },
-    ei_icon_right2 = { "RIGHT", -10, 0 },
-    ei_icon_right3 = { "RIGHT", -1, 10 },
-    ei_icon_right4 = { "RIGHT", -1, -10 },
-}
-
 function PlexusStatusAuras:MakeContainers()
     local registeredFrames = PlexusFrame.registeredFrames
     local i = 1
@@ -2174,7 +2092,7 @@ function PlexusStatusAuras:MakeContainers()
                             frameTable.container[name]:SetUnit(frameTable.unit)
                             --print(unit)
                             --frameTable.container[name]:SetPoint('TOP', 0, 0)
-                            local point, x, y = unpack(anchor[name])
+                            local point, x, y = unpack(Plexus.utility.Indicator.anchor[name])
                             frameTable.container[name]:SetPoint(point, x, y)
                         end
                         for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
