@@ -2027,11 +2027,7 @@ end
 local function createFrame(status, name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
-        if name == "icon" then
-            button:SetSize(frameSettings.centerIconSize, frameSettings.centerIconSize)
-        else
-            button:SetSize(frameSettings.iconSize, frameSettings.iconSize)
-        end
+        button:SetSize(frameSettings.cornerSize, frameSettings.cornerSize)
 
         local Icon = button.icon or button:CreateTexture(nil, "ARTWORK")
         button.icon = Icon
