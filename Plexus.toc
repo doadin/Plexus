@@ -144,6 +144,9 @@ Statuses\Name.lua
 Statuses\Phase.lua
 #@end-retail@
 Statuses\Player.lua
+#@retail@
+Statuses\RaidDebuff.lua
+#@end-retail@
 Statuses\RaidIcon.lua
 Statuses\Range.lua
 Statuses\ReadyCheck.lua
