@@ -2162,17 +2162,14 @@ function PlexusStatusAuras:MakeContainers()
                                             candidateFilters.includeSpellIDs = id
                                             local init
                                             if indicator:GetObjectType() == "Button" then
-                                                print(name, indicator:GetObjectType())
                                                 if name == "border" then
                                                     init = createBorder(self.db.profile[status], name, indicator)
                                                 else
                                                     init = createButton(self.db.profile[status], name)
                                                 end
                                             elseif indicator:GetObjectType() == "Frame" then
-                                                print(name, indicator:GetObjectType())
                                                 init = createFrame(self.db.profile[status], name)
                                             else
-                                                print(name, indicator:GetObjectType())
                                                 init = createButton(self.db.profile[status], name)
                                             end
                                             frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. status, filter, {
