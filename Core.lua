@@ -1043,6 +1043,8 @@ Plexus.IsSpecialUnit = {
 Plexus.utility = {}
 Plexus.utility.Indicator = {}
 Plexus.utility.Indicator.anchor = {
+    border = { "CENTER", 0, 0 },
+
     -- left/right up/down
     corner3 = { "TOPLEFT", -1, 1 },
     topleft2 = { "TOPLEFT", 10, 1 },

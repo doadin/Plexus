@@ -2057,6 +2057,38 @@ local function createFrame(status, name)
     end
 end
 
+local function createBorder(status, name, indicator)
+    local frameSettings = PlexusFrame.db.profile
+
+    return function(button)
+        button:SetSize(frameSettings.frameWidth, frameSettings.frameHeight)
+
+        -- Create border ON the button, not the unit frame
+        local child = button.childBorder or CreateFrame("Frame", nil, button)
+        button.childBorder = child
+
+        Mixin(child, BackdropTemplateMixin)
+
+        child:SetPoint("TOPLEFT")
+        child:SetPoint("BOTTOMRIGHT")
+
+        child:SetBackdrop({
+            bgFile = nil, -- no fill
+            edgeFile = "Interface\\BUTTONS\\WHITE8X8",
+            edgeSize = frameSettings.borderSize or 1,
+            insets = { left = 1, right = 1, top = 1, bottom = 1 },
+        })
+
+        -- Only show border when aura is active
+        if status.color then
+            child:SetBackdropBorderColor(status.color.r, status.color.g, status.color.b, status.color.a or 1)
+            child:Show()
+        else
+            child:Hide()
+        end
+    end
+end
+
 function PlexusStatusAuras:MakeContainers()
     local registeredFrames = PlexusFrame.registeredFrames
     local i = 1
@@ -2082,6 +2114,9 @@ function PlexusStatusAuras:MakeContainers()
             if frameTable.unit then
                 --local unit = frameTable.unit
                 for name, indicator in pairs(frameTable.indicators) do
+                    if name == "border" then
+                        indicator = indicator.__owner
+                    end
                     if type(indicator) == "table" and indicator.GetObjectType and (indicator:GetObjectType() == "Button" or indicator:GetObjectType() == "Frame") then
                         if not frameTable.container then
                             frameTable.container = {}
@@ -2127,10 +2162,17 @@ function PlexusStatusAuras:MakeContainers()
                                             candidateFilters.includeSpellIDs = id
                                             local init
                                             if indicator:GetObjectType() == "Button" then
-                                                init = createButton(self.db.profile[status], name)
+                                                print(name, indicator:GetObjectType())
+                                                if name == "border" then
+                                                    init = createBorder(self.db.profile[status], name, indicator)
+                                                else
+                                                    init = createButton(self.db.profile[status], name)
+                                                end
                                             elseif indicator:GetObjectType() == "Frame" then
+                                                print(name, indicator:GetObjectType())
                                                 init = createFrame(self.db.profile[status], name)
                                             else
+                                                print(name, indicator:GetObjectType())
                                                 init = createButton(self.db.profile[status], name)
                                             end
                                             frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name .. ":" .. status, filter, {
