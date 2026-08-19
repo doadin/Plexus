@@ -112,15 +112,6 @@ function PlexusFrame.prototype:ResetAllIndicators()
     end
 end
 
-if PingUtil then
-	function PlexusFrame.prototype:GetContextualPingType()
-		return PingUtil:GetContextualPingTypeForUnit( UnitGUID(self.unit) )
-	end
-	function PlexusFrame.prototype:GetTargetPingGUID()
-		return UnitGUID(self.unit)
-	end
-end
-
 ------------------------------------------------------------------------
 
 local initialConfigSnippet = [[
@@ -1527,13 +1518,6 @@ function PlexusFrame:RegisterFrame(frame)
     self.registeredFrameCount = (self.registeredFrameCount or 0) + 1
     self.registeredFrames[frame:GetName()] = self:InitializeFrame(frame)
     self:UpdateFrameUnits()
-    if frame:CanChangeAttribute() then
-		if PingUtil then
-			frame:SetToplevel(true)
-			frame:SetAttribute("ping-receiver", true)
-			frame.IsPingable = true
-		end
-    end
 end
 
 function PlexusFrame:WithAllFrames(func, ...)

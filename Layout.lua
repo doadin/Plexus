@@ -205,11 +205,14 @@ function PlexusLayout:CreateHeader(isPetGroup)
         header[k] = v
     end
 
+    local FRAMES_TEMPLATE = "SecureUnitButtonTemplate,BackdropTemplate,PingableUnitFrameTemplate"
+    local FRAMEC_TEMPLATE = "ClickCastUnitTemplate,SecureUnitButtonTemplate,BackdropTemplate,PingableUnitFrameTemplate"
+
     if Clique then
-        header:SetAttribute("template", "ClickCastUnitTemplate,SecureUnitButtonTemplate")
+        header:SetAttribute("template", FRAMEC_TEMPLATE)
         SecureHandlerSetFrameRef(header, "clickcast_header", Clique.header)
     else
-        header:SetAttribute("template", "SecureUnitButtonTemplate")
+        header:SetAttribute("template", FRAMES_TEMPLATE)
     end
 
     -- Fix for bug on the Blizz end when using SecureActionButtonTemplate with SecureGroupPetHeaderTemplate
