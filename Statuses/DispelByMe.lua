@@ -64,6 +64,7 @@ local function createButton(status, name)
         else
             button:SetSize(frameSettings.iconSize, frameSettings.iconSize)
         end
+        button:EnableMouse(false)
         button:SetCancelAuraButtons('RightButtonUp')
         local Icon = button:CreateTexture(nil, 'ARTWORK')
         Icon:SetAllPoints()
@@ -148,6 +149,7 @@ local function createFrame(status, name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         button:SetSize(frameSettings.cornerSize, frameSettings.cornerSize)
+        button:EnableMouse(false)
 
         local Icon = button.icon or button:CreateTexture(nil, "ARTWORK")
         button.icon = Icon
@@ -186,6 +188,7 @@ local function createBorder(status, name, indicator)
         -- Create border ON the button, not the unit frame
         local child = button.childBorder or CreateFrame("Frame", nil, button)
         button.childBorder = child
+        button:EnableMouse(false)
 
         Mixin(child, BackdropTemplateMixin)
 

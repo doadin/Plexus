@@ -245,6 +245,7 @@ end
 local function createButton(button)
     button:SetSize(12, 12)
     button:SetCancelAuraButtons('RightButtonUp')
+    button:EnableMouse(false)
     local Icon = button:CreateTexture(nil, 'ARTWORK')
     Icon:SetAllPoints()
     button:SetIcon(Icon)
