@@ -243,7 +243,7 @@ function PlexusDebuffIcons:UpdateAllUnitsBuffs()
 end
 
 local function createButton(button)
-    button:SetSize(12, 12)
+    button:SetSize(PlexusDebuffIcons.db.profile.iconsize, PlexusDebuffIcons.db.profile.iconsize)
     button:SetCancelAuraButtons('RightButtonUp')
     button:EnableMouse(false)
     local Icon = button:CreateTexture(nil, 'ARTWORK')
@@ -379,8 +379,9 @@ function PlexusDebuffIcons:MakeContainers()
                         --    },
                         --}
                         --candidateFilters.includeSpellIDs[id] = true
-                        local filter = PlexusDebuffIcons.db.showMine and "PLAYER|HARMFUL" or "HARMFUL"
-                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (PlexusDebuffIcons.db.overrideFilter and PlexusDebuffIcons.db.overrideFilter or filter), {
+                        local filter = PlexusDebuffIcons.db.profile.showMine and "PLAYER|HARMFUL" or "HARMFUL"
+                        local Override = PlexusDebuffIcons.db.profile.overrideFilter and PlexusDebuffIcons.db.profile.overrideFilter ~= "false" and PlexusDebuffIcons.db.profile.overrideFilter
+                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (Override or filter), {
                               initializeFrame = createButton,
                               sortMethod = AuraContainerSortMethod.ExpirationOnly,
                               sortDirection = AuraContainerSortDirection.Reverse,
