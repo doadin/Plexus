@@ -2138,11 +2138,11 @@ function PlexusStatusAuras:MakeContainers()
                                 if self.db.profile[status] and self.db.profile[status].enable and statusEnabled then
                                     if self.db.profile[status] and self.db.profile[status].buff then
                                         filter = self.db.profile[status].mine and "PLAYER|HELPFUL" or "HELPFUL"
-                                        id = spell_ids[self.db.profile[status].buff]
+                                        id = self.db.profile[status].id or spell_ids[self.db.profile[status].buff]
                                         --print(self.db.profile[status].buff)
                                     else
                                         filter = self.db.profile[status].mine and "PLAYER|HARMFUL" or "HARMFUL"
-                                        id = spell_ids[self.db.profile[status].debuff]
+                                        id = self.db.profile[status].id or spell_ids[self.db.profile[status].debuff]
                                     end
 
                                     if id then
