@@ -385,11 +385,6 @@ function PlexusBuffIcons:MakeContainers()
                     --frameTable.container[name]:SetPoint('TOP', 0, 0)
                     --local point, x, y = unpack(anchor[name])
                     frameTable.container[name]:SetPoint(PlexusBuffIcons.db.profile.anchor, PlexusBuffIcons.db.profile.offsetx, PlexusBuffIcons.db.profile.offsety)
-                    local horizontal, vertical = GetGrowthDirections(PlexusBuffIcons.db.profile.anchor)
-                    frameTable.container[name]:SetFlowLayoutGrowthDirection(
-                        horizontal,
-                        vertical
-                    )
                 end
                 if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name) then
                     if frameTable.unit then

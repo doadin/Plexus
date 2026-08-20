@@ -385,11 +385,6 @@ function PlexusDebuffIcons:MakeContainers()
                     --frameTable.container[name]:SetPoint('TOP', 0, 0)
                     --local point, x, y = unpack(anchor[name])
                     frameTable.container[name]:SetPoint(PlexusDebuffIcons.db.profile.anchor, PlexusDebuffIcons.db.profile.offsetx, PlexusDebuffIcons.db.profile.offsety)
-                    local horizontal, vertical = GetGrowthDirections(PlexusDebuffIcons.db.profile.anchor)
-                    frameTable.container[name]:SetFlowLayoutGrowthDirection(
-                        horizontal,
-                        vertical
-                    )
                 end
                 if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name) then
                     if frameTable.unit then
