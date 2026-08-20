@@ -324,6 +324,31 @@ local function createButton(button)
     --})
 end
 
+local function GetGrowthDirections(anchor)
+    -- Default directions
+    local horizontal = AnchorUtil.FlowDirection.Right
+    local vertical   = AnchorUtil.FlowDirection.Down
+
+    if anchor == "TOPRIGHT" then
+        horizontal = AnchorUtil.FlowDirection.Left
+        vertical   = AnchorUtil.FlowDirection.Down
+
+    elseif anchor == "TOPLEFT" then
+        horizontal = AnchorUtil.FlowDirection.Right
+        vertical   = AnchorUtil.FlowDirection.Down
+
+    elseif anchor == "BOTTOMLEFT" then
+        horizontal = AnchorUtil.FlowDirection.Right
+        vertical   = AnchorUtil.FlowDirection.Up
+
+    elseif anchor == "BOTTOMRIGHT" then
+        horizontal = AnchorUtil.FlowDirection.Left
+        vertical   = AnchorUtil.FlowDirection.Up
+    end
+
+    return horizontal, vertical
+end
+
 function PlexusBuffIcons:MakeContainers()
     if not PlexusBuffIcons.db.profile.enabled then
         return
@@ -360,6 +385,11 @@ function PlexusBuffIcons:MakeContainers()
                     --frameTable.container[name]:SetPoint('TOP', 0, 0)
                     --local point, x, y = unpack(anchor[name])
                     frameTable.container[name]:SetPoint(PlexusBuffIcons.db.profile.anchor, PlexusBuffIcons.db.profile.offsetx, PlexusBuffIcons.db.profile.offsety)
+                    local horizontal, vertical = GetGrowthDirections(PlexusBuffIcons.db.profile.anchor)
+                    frameTable.container[name]:SetFlowLayoutGrowthDirection(
+                        horizontal,
+                        vertical
+                    )
                 end
                 if not frameTable.container[name]:HasAuraGroup(frameName .. ":" .. name) then
                     if frameTable.unit then
