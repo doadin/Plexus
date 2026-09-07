@@ -96,8 +96,11 @@ spell_names = {
     ["Beacon of Faith"] = GetSpellName(156910),
     ["Beacon of the Savior"] = GetSpellName(1244893),
     ["Beacon of Virtue"] = GetSpellName(200025),
+    ["Dawnlight"] = GetSpellName(431381),
     ["Eternal Flame"] = GetSpellName(156322),
     ["Forbearance"] = GetSpellName(25771),
+    ["Seraphic Barrier"] = GetSpellName(1241717),
+    ["Tyr's Deliverance"] = GetSpellName(200654),
 -- Priest
     ["Power Word: Shield"] = GetSpellName(17),
     ["Atonement"] = GetSpellName(194384),
@@ -170,8 +173,11 @@ spell_ids = {
     ["Beacon of Faith"] = {[156910] = true},
     ["Beacon of the Savior"] = {[1244893] = true},
     ["Beacon of Virtue"] = {[200025] = true},
+    ["Dawnlight"] = {[431381] = true},
     ["Eternal Flame"] = {[156322] = true},
     ["Forbearance"] = {[25771] = true},
+    ["Seraphic Barrier"] = {[1241717] = true},
+    ["Tyr's Deliverance"] = {[200654] = true},
 -- Priest
     ["Power Word: Shield"] = {[17] = true},
     ["Atonement"] = {[194384] = true},
@@ -856,17 +862,17 @@ PlexusStatusAuras.defaultDB = {
     --    durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
     --    mine = true,
     --},
-    --[PlexusStatusAuras:StatusForSpell("Dawnlight", true)] = {
-    --    -- 431382
-    --    desc = format(L["Buff: %s"], spell_names["Dawnlight"]),
-    --    buff = spell_names["Dawnlight"],
-    --    text = PlexusStatusAuras:TextForSpell(spell_names["Dawnlight"]),
-    --    color = { r = 0, g = 252, b = 0, a = 1 },
-    --    durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
-    --    durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
-    --    durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
-    --    mine = true,
-    --},
+    [PlexusStatusAuras:StatusForSpell("Dawnlight", true)] = {
+        -- 431381
+        desc = format(L["Buff: %s"], spell_names["Dawnlight"]),
+        buff = spell_names["Dawnlight"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Dawnlight"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.47, b = 0.66, a = 1 },
+        durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
+        durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
+        mine = true,
+    },
     --[PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
     --    -- 287286
     --    desc = format(L["Buff: %s"], spell_names["Glimmer of Light"]),
@@ -912,17 +918,28 @@ PlexusStatusAuras.defaultDB = {
     --    durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
     --    mine = true,
     --},
-    --[PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
-    --    -- 200652
-    --    desc = format(L["Buff: %s"], spell_names["Tyr's Deliverance"]),
-    --    buff = spell_names["Tyr's Deliverance"],
-    --    text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
-    --    color = { r = 0, g = 252, b = 0, a = 1 },
-    --    durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
-    --    durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
-    --    durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
-    --    mine = true,
-    --},
+    [PlexusStatusAuras:StatusForSpell("Seraphic Barrier")] = {
+        -- 1241717
+        desc = format(L["Buff: %s"], spell_names["Seraphic Barrier"]),
+        buff = spell_names["Seraphic Barrier"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Seraphic Barrier"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
+        durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
+        durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
+        -- 200654
+        desc = format(L["Buff: %s"], spell_names["Tyr's Deliverance"]),
+        buff = spell_names["Tyr's Deliverance"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
+        durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
+        durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
+        mine = true,
+    },
     [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
         -- 25771
         desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
