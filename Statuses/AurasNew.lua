@@ -101,6 +101,7 @@ spell_names = {
     ["Forbearance"] = GetSpellName(25771),
     ["Seraphic Barrier"] = GetSpellName(1241717),
     ["Tyr's Deliverance"] = GetSpellName(200654),
+    ["Veneration"] = GetSpellName(414407),
 -- Priest
     ["Power Word: Shield"] = GetSpellName(17),
     ["Atonement"] = GetSpellName(194384),
@@ -178,6 +179,7 @@ spell_ids = {
     ["Forbearance"] = {[25771] = true},
     ["Seraphic Barrier"] = {[1241717] = true},
     ["Tyr's Deliverance"] = {[200654] = true},
+    ["Veneration"] = {[414407] = true},
 -- Priest
     ["Power Word: Shield"] = {[17] = true},
     ["Atonement"] = {[194384] = true},
@@ -934,6 +936,17 @@ PlexusStatusAuras.defaultDB = {
         desc = format(L["Buff: %s"], spell_names["Tyr's Deliverance"]),
         buff = spell_names["Tyr's Deliverance"],
         text = PlexusStatusAuras:TextForSpell(spell_names["Tyr's Deliverance"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
+        durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
+        durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
+        mine = true,
+    },
+    [PlexusStatusAuras:StatusForSpell("Veneration")] = {
+        -- 414407
+        desc = format(L["Buff: %s"], spell_names["Veneration"]),
+        buff = spell_names["Veneration"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Veneration"]),
         color = { r = 0, g = 252, b = 0, a = 1 },
         durationColorLow = { r = 0.95, g = 0.82, b = 0.33, a = 1 },
         durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
