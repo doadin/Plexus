@@ -187,7 +187,7 @@ spell_ids = {
     ["Echo of Light"] = {[77489] = true},
 -- Shaman
     ["Ancestral Vigor"] = {[207400] = true},
-    ["Earth Shield"] = {[974] = true},
+    ["Earth Shield"] = {[974] = true, [383648] = true},
     ["Hydrobubble"] = {[444490] = true},
     ["Riptide"] = {[61295] = true},
     ["Earthliving Weapon"] = {[382021] = true, [382022] = true, [382024] = true},
