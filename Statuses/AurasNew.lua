@@ -109,6 +109,8 @@ spell_names = {
     ["Renew"] = GetSpellName(139),
     ["Prayer of Mending"] = GetSpellName(41635),
     ["Echo of Light"] = GetSpellName(77489),
+    ["Protective Light"] = GetSpellName(193065),
+    ["Guardian Spirit"] = GetSpellName(47788),
 -- Shaman
     ["Ancestral Vigor"] = GetSpellName(207400),
     ["Earth Shield"] = GetSpellName(974),
@@ -187,6 +189,8 @@ spell_ids = {
     ["Renew"] = {[139] = true},
     ["Prayer of Mending"] = {[41635] = true},
     ["Echo of Light"] = {[77489] = true},
+    ["Protective Light"] = {[193065] = true},
+    ["Guardian Spirit"] = {[47788] = true},
 -- Shaman
     ["Ancestral Vigor"] = {[207400] = true},
     ["Earth Shield"] = {[974] = true, [383648] = true},
@@ -874,6 +878,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.7, g = 0.35, b = 0.49, a = 1 },
         durationColorHigh = { r = 0.5, g = 0.25, b = 0.35, a = 1 },
         mine = true,
+        id = spell_ids["Dawnlight"],
     },
     --[PlexusStatusAuras:StatusForSpell("Glimmer of Light", true)] = {
     --    -- 287286
@@ -930,6 +935,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
         durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
         mine = true,
+        id = spell_ids["Seraphic Barrier"],
     },
     [PlexusStatusAuras:StatusForSpell("Tyr's Deliverance")] = {
         -- 200654
@@ -941,6 +947,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
         durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
         mine = true,
+        id = spell_ids["Tyr's Deliverance"],
     },
     [PlexusStatusAuras:StatusForSpell("Veneration")] = {
         -- 414407
@@ -952,6 +959,7 @@ PlexusStatusAuras.defaultDB = {
         durationColorMiddle = { r = 0.65, g = 0.56, b = 0.23, a = 1 },
         durationColorHigh = { r = 0.45, g = 0.38, b = 0.16, a = 1 },
         mine = true,
+        id = spell_ids["Veneration"],
     },
     [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
         -- 25771
@@ -1004,17 +1012,18 @@ PlexusStatusAuras.defaultDB = {
         mine = true,
         id = spell_ids["Echo of Light"],
     },
-    --[PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
-    --    -- 47788
-    --    desc = format(L["Buff: %s"], spell_names["Guardian Spirit"]),
-    --    buff = spell_names["Guardian Spirit"],
-    --    text = PlexusStatusAuras:TextForSpell(spell_names["Guardian Spirit"]),
-    --    color = { r = 0, g = 252, b = 0, a = 1 },
-    --    durationColorLow = { r = 0.4, g = 0.73, b = 1, a = 1 },
-    --    durationColorMiddle = { r = 0.24, g = 0.54, b = 0.8, a = 1 },
-    --    durationColorHigh = { r = 0.13, g = 0.41, b = 0.65, a = 1 },
-    --    mine = true,
-    --},
+    [PlexusStatusAuras:StatusForSpell("Guardian Spirit", true)] = {
+        -- 47788
+        desc = format(L["Buff: %s"], spell_names["Guardian Spirit"]),
+        buff = spell_names["Guardian Spirit"],
+        text = PlexusStatusAuras:TextForSpell(spell_names["Guardian Spirit"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        durationColorLow = { r = 0.4, g = 0.73, b = 1, a = 1 },
+        durationColorMiddle = { r = 0.24, g = 0.54, b = 0.8, a = 1 },
+        durationColorHigh = { r = 0.13, g = 0.41, b = 0.65, a = 1 },
+        mine = true,
+        id = spell_ids["Guardian Spirit"],
+    },
     --[PlexusStatusAuras:StatusForSpell("Light of T'uure", true)] = {
     --    -- 208065
     --    desc = format(L["Buff: %s"], spell_names["Light of T'uure"]),
@@ -1081,14 +1090,15 @@ PlexusStatusAuras.defaultDB = {
     --    color = { r = 0, g = 252, b = 0, a = 1 },
     --    mine = true,
     --},
-    --[PlexusStatusAuras:StatusForSpell("Protective Light", true)] = {
-    --    -- 193065
-    --    buff = spell_names["Protective Light"],
-    --    desc = format(L["Buff: %s"], spell_names["Protective Light"]),
-    --    text = PlexusStatusAuras:TextForSpell(spell_names["Protective Light"]),
-    --    color = { r = 0, g = 252, b = 0, a = 1 },
-    --    mine = true,
-    --},
+    [PlexusStatusAuras:StatusForSpell("Protective Light", true)] = {
+        -- 193065
+        buff = spell_names["Protective Light"],
+        desc = format(L["Buff: %s"], spell_names["Protective Light"]),
+        text = PlexusStatusAuras:TextForSpell(spell_names["Protective Light"]),
+        color = { r = 0, g = 252, b = 0, a = 1 },
+        mine = true,
+        id = spell_ids["Protective Light"],
+    },
     [PlexusStatusAuras:StatusForSpell("Renew", true)] = {
         -- 139
         desc = format(L["Buff: %s"], spell_names["Renew"]),
