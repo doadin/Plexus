@@ -1971,6 +1971,10 @@ local function createButton(status, name)
     return function(button)
         if name == "icon" then
             button:SetSize(frameSettings.centerIconSize, frameSettings.centerIconSize)
+        elseif Plexus.utility.Indicator.Icons[name] then
+            button:SetSize(frameSettings.iconSize, frameSettings.iconSize)
+        elseif Plexus.utility.Indicator.Corner[name] then
+            button:SetSize(frameSettings.cornerSize, frameSettings.cornerSize)
         else
             button:SetSize(frameSettings.iconSize, frameSettings.iconSize)
         end
