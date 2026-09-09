@@ -35,7 +35,8 @@ PlexusDebuffIcons.defaultDB = {
         priority = 30,
         range = false
     },
-    overrideFilter = "false"
+    overrideFilter = "false",
+    ignoreLustDeBuff = false
 }
 
 local options = {
@@ -81,6 +82,19 @@ local options = {
             end,
             set = function(_, v)
                 PlexusDebuffIcons.db.profile.showMine = v
+                PlexusDebuffIcons:UpdateAllUnitsBuffs()
+            end,
+        },
+        ignoreLustDeBuff = {
+            order = 42, width = "double",
+            type = "toggle",
+            name = L["Ignore Lust Debuff"],
+            desc = L["Enabling/disabling will ignore the Lust debuff."],
+            get = function()
+                return PlexusDebuffIcons.db.profile.ignoreLustDeBuff
+            end,
+            set = function(_, v)
+                PlexusDebuffIcons.db.profile.ignoreLustDeBuff = v
                 PlexusDebuffIcons:UpdateAllUnitsBuffs()
             end,
         },
@@ -395,15 +409,24 @@ function PlexusDebuffIcons:MakeContainers()
                         --frameTable.container[name]:SetUnit("player")
                         --else
                         --    frameTable.container[name]:SetUnit("player")
-                        --local candidateFilters = {
-                        --    includeSpellIDs = {
-                        --    --    53563,  -- Beacon of Light
-                        --    },
-                        --    excludeSpellIDs = {
-                        --    --    53563,  -- Beacon of Light
-                        --    },
-                        --}
+                        local candidateFilters = {
+                            includeSpellIDs = {
+                            --    53563,  -- Beacon of Light
+                            },
+                            excludeSpellIDs = {
+                            --    53563,  -- Beacon of Light
+                            },
+                        }
                         --candidateFilters.includeSpellIDs[id] = true
+                        if PlexusDebuffIcons.db.profile.ignoreLustDeBuff then
+                            candidateFilters.excludeSpellIDs = {
+                                [57724]   = true, -- Bloodlust/Sated
+                                [57723]  = true, -- Heroism/Exhaustion
+                                [390435]  = true, -- Fury of the Aspects/Exhaustion
+                                [80354]  = true, -- Time Warp/Temporal Displacement
+                                [264689]  = true, -- Primal Rage/Fatigued
+                            }
+                        end
                         local filter = PlexusDebuffIcons.db.profile.showMine and "PLAYER|HARMFUL" or "HARMFUL"
                         local Override = PlexusDebuffIcons.db.profile.overrideFilter and PlexusDebuffIcons.db.profile.overrideFilter ~= "false" and PlexusDebuffIcons.db.profile.overrideFilter
                         frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (Override or filter), {
@@ -415,7 +438,7 @@ function PlexusDebuffIcons:MakeContainers()
                                  lineSpacing = 1,
                               },
                               maxFrameCount = PlexusDebuffIcons.db.profile.iconnum,
-                              --candidateFilters = candidateFilters
+                              candidateFilters = candidateFilters
                             }
                         )
                         frameTable.container[name]:UpdateAllAuras()
