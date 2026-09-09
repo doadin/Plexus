@@ -1125,3 +1125,84 @@ Plexus.utility.Indicator.anchor = {
     ei_icon_right4 = { "RIGHT", -1, -10 },
 }
 
+Plexus.utility.Indicator.Icons = {
+    ["icon"] = true,
+    ["ei_icon_topleft"] = true,
+    ["ei_icon_topleft2"] = true,
+    ["ei_icon_topleft3"] = true,
+    ["ei_icon_topleft4"] = true,
+    -- left/right up/down
+    ["ei_icon_topright"] = true,
+    ["ei_icon_topright2"] = true,
+    ["ei_icon_topright3"] = true,
+    ["ei_icon_topright4"] = true,
+    -- left/right up/down
+    ["ei_icon_botleft"] = true,
+    ["ei_icon_botleft2"] = true,
+    ["ei_icon_botleft3"] = true,
+    ["ei_icon_botleft4"] = true,
+    -- left/right up/down
+    ["ei_icon_botright"] = true,
+    ["ei_icon_botright2"] = true,
+    ["ei_icon_botright3"] = true,
+    ["ei_icon_botright4"] = true,
+    -- left/right up/down
+    ["ei_icon_top"] = true,
+    ["ei_icon_top2"] = true,
+    ["ei_icon_top3"] = true,
+    ["ei_icon_top4"] = true,
+    -- left/right up/down
+    ["ei_icon_bottom"] = true,
+    ["ei_icon_bottom2"] = true,
+    ["ei_icon_bottom3"] = true,
+    ["ei_icon_bottom4"] = true,
+    -- left/right up/down
+    ["ei_icon_left"] = true,
+    ["ei_icon_left2"] = true,
+    ["ei_icon_left3"] = true,
+    ["ei_icon_left4"] = true,
+    -- left/right up/down
+    ["ei_icon_right"] = true,
+    ["ei_icon_right2"] = true,
+    ["ei_icon_right3"] = true,
+    ["ei_icon_right4"] = true,
+}
+
+Plexus.utility.Indicator.Corner = {
+        -- left/right up/down
+    ["corner3"] = true,
+    ["topleft2"] = true,
+    ["topleft3"] = true,
+    -- left/right up/down
+    ["corner4"] = true,
+    ["topright2"] = true,
+    ["topright3"] = true,
+    -- left/right up/down
+    ["corner1"] = true,
+    ["bottomleft2"] = true,
+    ["bottomleft3"] = true,
+    -- left/right up/down
+    ["corner2"] = true,
+    ["bottomright2"] = true,
+    ["bottomright3"] = true,
+    -- left/right up/down
+    ["Top"] = true,
+    ["Top2"] = true,
+    ["Top3"] = true,
+    ["Top4"] = true,
+    -- left/right up/down
+    ["Bottom"] = true,
+    ["Bottom2"] = true,
+    ["Bottom3"] = true,
+    ["Bottom4"] = true,
+    -- left/right up/down
+    ["Left"] = true,
+    ["Left2"] = true,
+    ["Left3"] = true,
+    ["Left4"] = true,
+    -- left/right up/down
+    ["Right"] = true,
+    ["Right2"] = true,
+    ["Right3"] = true,
+    ["Right4"] = true,
+}
