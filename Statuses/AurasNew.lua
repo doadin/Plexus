@@ -264,6 +264,7 @@ end
 if Plexus:IsRetailWow() then
 PlexusStatusAuras.defaultDB = {
     advancedOptions = false,
+    font_size = 8,
 --[[
     ["boss_aura"] = {
         desc = L["Boss Aura"],
@@ -1237,6 +1238,21 @@ function PlexusStatusAuras:PostInitialize()
             dialogInline = true,
             args = {},
         }
+        self.options.args["font_size"] = {
+            name = L["Font Size"],
+            desc = L["Adjust the font size for aura text."],
+            order = -2,
+            type = "range",
+            min = 0,
+            max = 100,
+            step = 1,
+            get = function()
+                return self.db.profile.font_size
+            end,
+            set = function(_, v)
+                self.db.profile.font_size = v
+            end,
+        }
     end
     self.options.args["advancedOptions"] = {
         name = L["Show advanced options"],
@@ -1997,6 +2013,9 @@ local function createButton(status, name)
         Time:SetPoint('TOPLEFT', 1, -1)
         Time:SetJustifyH('LEFT')
         Time:SetSize(8,8)
+        local TimefontFile = Time:GetFont()
+        local TimefontSize = PlexusStatusAuras.db.profile.font_size or 8
+        Time:SetFont(TimefontFile, TimefontSize, "OUTLINE")
         button:SetDurationText(Time)
         local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
         cooldown:SetAllPoints()
@@ -2013,6 +2032,9 @@ local function createButton(status, name)
         if not text then
             local tframe = CreateFrame("frame", nil, button)
             text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            local fontFile = text:GetFont()
+            local fontSize = PlexusStatusAuras.db.profile.font_size or 8
+            text:SetFont(fontFile, fontSize, "OUTLINE")
             button.text = text
             text.tframe = tframe
             tframe:SetAllPoints()
