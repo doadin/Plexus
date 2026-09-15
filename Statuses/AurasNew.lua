@@ -98,7 +98,7 @@ spell_names = {
     ["Beacon of Virtue"] = GetSpellName(200025),
     ["Dawnlight"] = GetSpellName(431381),
     ["Eternal Flame"] = GetSpellName(156322),
-    ["Forbearance"] = GetSpellName(25771),
+    --["Forbearance"] = GetSpellName(25771),
     ["Seraphic Barrier"] = GetSpellName(1241717),
     ["Tyr's Deliverance"] = GetSpellName(200654),
     ["Veneration"] = GetSpellName(414407),
@@ -178,7 +178,7 @@ spell_ids = {
     ["Beacon of Virtue"] = {[200025] = true},
     ["Dawnlight"] = {[431381] = true},
     ["Eternal Flame"] = {[156322] = true},
-    ["Forbearance"] = {[25771] = true},
+    --["Forbearance"] = {[25771] = true},
     ["Seraphic Barrier"] = {[1241717] = true},
     ["Tyr's Deliverance"] = {[200654] = true},
     ["Veneration"] = {[414407] = true},
@@ -962,17 +962,17 @@ PlexusStatusAuras.defaultDB = {
         mine = true,
         id = spell_ids["Veneration"],
     },
-    [PlexusStatusAuras:StatusForSpell("Forbearance")] = {
-        -- 25771
-        desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
-        debuff = spell_names["Forbearance"],
-        text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
-        color = { r = 252, g = 0, b = 0, a = 1 },
-        durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
-        durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
-        durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
-        id = spell_ids["Forbearance"],
-    },
+    --[PlexusStatusAuras:StatusForSpell("Forbearance")] = {
+    --    -- 25771
+    --    desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
+    --    debuff = spell_names["Forbearance"],
+    --    text = PlexusStatusAuras:TextForSpell(spell_names["Forbearance"]),
+    --    color = { r = 252, g = 0, b = 0, a = 1 },
+    --    durationColorLow = { r = 0.15, g = 0.15, b = 0.15, a = 1 },
+    --    durationColorMiddle = { r = 0.35, g = 0.35, b = 0.35, a = 1 },
+    --    durationColorHigh = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+    --    id = spell_ids["Forbearance"],
+    --},
 
     ---------------------
     -- Priest
@@ -1218,18 +1218,18 @@ function PlexusStatusAuras:PostInitialize()
                 self:AddAura(v, true)
             end,
         }
-        self.options.args["add_debuff"] = {
-            name = L["Add Debuff"],
-            desc = L["Create a new debuff status."],
-            order = 31,
-            width = "double",
-            type = "input",
-            usage = L["<debuff name>"],
-            get = false,
-            set = function(_, v)
-                self:AddAura(v, false)
-            end,
-        }
+        --self.options.args["add_debuff"] = {
+        --    name = L["Add Debuff"],
+        --    desc = L["Create a new debuff status."],
+        --    order = 31,
+        --    width = "double",
+        --    type = "input",
+        --    usage = L["<debuff name>"],
+        --    get = false,
+        --    set = function(_, v)
+        --        self:AddAura(v, false)
+        --    end,
+        --}
         self.options.args["delete_aura"] = {
             name = L["Remove Aura"],
             desc = L["Remove an existing buff or debuff status."],
@@ -1345,7 +1345,7 @@ function PlexusStatusAuras:RegisterStatuses()
                 --[[if status == "boss_aura" then
                     self:RegisterStatus(status, settings.desc, { text = false }, false, settings.order)
 
-                else]] if settings.buff or settings.debuff or self.defaultDB[status] then
+                else]] if settings.buff or self.defaultDB[status] then -- if settings.buff or settings.debuff or self.defaultDB[status] then
                     local name = settings.text
                     local desc = settings.desc or name
                     local isBuff = not not settings.buff
