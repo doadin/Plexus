@@ -2197,6 +2197,28 @@ function PlexusStatusAuras:MakeContainers()
                             --print(unit)
                             --frameTable.container[name]:SetPoint('TOP', 0, 0)
                             local point, x, y = unpack(Plexus.utility.Indicator.anchor[name])
+                            local iconSize
+                            if name == "icon" then
+                                iconSize = PlexusFrame.db.profile.centerIconSize
+                            elseif Plexus.utility.Indicator.Icons[name] then
+                                iconSize = PlexusFrame.db.profile.iconSize
+                            elseif Plexus.utility.Indicator.Corner[name] then
+                                iconSize = PlexusFrame.db.profile.cornerSize
+                            else
+                                iconSize = PlexusFrame.db.profile.iconSize
+                            end
+                            if x == 10 then
+                                x = 0 + iconSize
+                            end
+                            if x == -10 then
+                                x = 0 - iconSize
+                            end
+                            if y == 10 then
+                                y = 0 + iconSize
+                            end
+                            if y == -10 then
+                                y = 0 - iconSize
+                            end
                             frameTable.container[name]:SetPoint(point, x, y)
                         end
                         for status, statusEnabled in pairs(PlexusFrame.db.profile.statusmap[name]) do
