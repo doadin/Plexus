@@ -36,7 +36,9 @@ PlexusDebuffIcons.defaultDB = {
         range = false
     },
     overrideFilter = "false",
-    ignoreLustDeBuff = false
+    ignoreLustDeBuff = false,
+    font_size = 8,
+    font_color = { r = 1, g = 1, b = 0, a = 1 },
 }
 
 local options = {
@@ -52,7 +54,6 @@ local options = {
     set = function(info, v)
         local k = info[#info]
         PlexusDebuffIcons.db.profile[k] = v
-        PlexusDebuffIcons:UpdateAllUnitsBuffs()
     end,
     args = {
         enabled = {
@@ -82,7 +83,6 @@ local options = {
             end,
             set = function(_, v)
                 PlexusDebuffIcons.db.profile.showMine = v
-                PlexusDebuffIcons:UpdateAllUnitsBuffs()
             end,
         },
         ignoreLustDeBuff = {
@@ -95,7 +95,6 @@ local options = {
             end,
             set = function(_, v)
                 PlexusDebuffIcons.db.profile.ignoreLustDeBuff = v
-                PlexusDebuffIcons:UpdateAllUnitsBuffs()
             end,
         },
         iconsize = {
@@ -211,18 +210,46 @@ local options = {
             set = function(_, v)
                 PlexusDebuffIcons.db.profile.overrideFilter = v
             end,
-        values = {
-            ["false"] = L["False"],
-            ["HARMFUL"] = L["HARMFUL"],
-            ["HARMFUL|PLAYER"] = L["HARMFUL PLAYER"],
-            ["HARMFUL|RAID"] = L["HARMFUL RAID"],
-            ["HARMFUL|RAID_IN_COMBAT"] = L["HARMFUL RAID IN COMBAT"],
-            ["HARMFUL|PLAYER|RAID"] = L["HARMFUL PLAYER RAID"],
-            ["HARMFUL|PLAYER|RAID_IN_COMBAT"] = L["HARMFUL PLAYER RAID IN COMBAT"],
-            ["HARMFUL|RAID|RAID_IN_COMBAT"] = L["HARMFUL RAID RAID IN COMBAT"],
-            ["HARMFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HARMFUL PLAYER RAID RAID IN COMBAT"],
-        }
+            values = {
+                ["false"] = L["False"],
+                ["HARMFUL"] = L["HARMFUL"],
+                ["HARMFUL|PLAYER"] = L["HARMFUL PLAYER"],
+                ["HARMFUL|RAID"] = L["HARMFUL RAID"],
+                ["HARMFUL|RAID_IN_COMBAT"] = L["HARMFUL RAID IN COMBAT"],
+                ["HARMFUL|PLAYER|RAID"] = L["HARMFUL PLAYER RAID"],
+                ["HARMFUL|PLAYER|RAID_IN_COMBAT"] = L["HARMFUL PLAYER RAID IN COMBAT"],
+                ["HARMFUL|RAID|RAID_IN_COMBAT"] = L["HARMFUL RAID RAID IN COMBAT"],
+                ["HARMFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HARMFUL PLAYER RAID RAID IN COMBAT"],
+            }
         },
+        font_size = {
+            name = L["Font Size"],
+            desc = L["Adjust the font size for aura text."],
+            order = -2,
+            type = "range",
+            min = 0,
+            max = 100,
+            step = 1,
+            get = function()
+                return PlexusDebuffIcons.db.profile.font_size
+            end,
+            set = function(_, v)
+                PlexusDebuffIcons.db.profile.font_size = v
+            end,
+        },
+        font_color = {
+            type = "color",
+            name = "Font Color",
+            desc = "Choose the color for the font.",
+            hasAlpha = true,
+            get = function(info)
+                local c = PlexusDebuffIcons.db.profile.font_color
+                return c.r, c.g, c.b, c.a
+            end,
+            set = function(info, r, g, b, a)
+                PlexusDebuffIcons.db.profile.font_color = { r = r, g = g, b = b, a = a }
+            end,
+        }
     }
 }
 
@@ -250,12 +277,6 @@ function PlexusDebuffIcons:OnDisable()
     --self:UnregisterMessage("Plexus_ExtraUnitsChanged")
 end
 
-function PlexusDebuffIcons:UpdateAllUnitsBuffs()
-    for _, unitid in PlexusRoster:IterateRoster() do
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid, {isFullUpdate = true} )
-    end
-end
-
 local function createButton(button)
     button:SetSize(PlexusDebuffIcons.db.profile.iconsize, PlexusDebuffIcons.db.profile.iconsize)
     button:SetCancelAuraButtons('RightButtonUp')
@@ -267,6 +288,11 @@ local function createButton(button)
     Time:SetPoint('TOPLEFT', 1, -1)
     Time:SetJustifyH('LEFT')
     Time:SetSize(8,8)
+    local TimefontFile = Time:GetFont()
+    local TimefontSize = PlexusDebuffIcons.db.profile.font_size or 8
+    local TimefontColor = PlexusDebuffIcons.db.profile.font_color
+    Time:SetTextColor(TimefontColor.r, TimefontColor.g, TimefontColor.b, TimefontColor.a)
+    Time:SetFont(TimefontFile, TimefontSize, "OUTLINE")
     button:SetDurationText(Time)
     local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
     cooldown:SetAllPoints()
@@ -283,6 +309,11 @@ local function createButton(button)
     if not text then
         local tframe = CreateFrame("frame", nil, button)
         text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        local fontFile = text:GetFont()
+        local fontSize = PlexusDebuffIcons.db.profile.font_size or 8
+        local fontColor = PlexusDebuffIcons.db.profile.font_color
+        text:SetTextColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a)
+        text:SetFont(fontFile, fontSize, "OUTLINE")
         button.text = text
         text.tframe = tframe
         tframe:SetAllPoints()

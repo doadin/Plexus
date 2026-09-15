@@ -35,7 +35,9 @@ PlexusBuffIcons.defaultDB = {
         priority = 30,
         range = false
     },
-    overrideFilter = "false"
+    overrideFilter = "false",
+    font_size = 8,
+    font_color = { r = 1, g = 1, b = 0, a = 1 },
 }
 
 local options = {
@@ -51,7 +53,6 @@ local options = {
     set = function(info, v)
         local k = info[#info]
         PlexusBuffIcons.db.profile[k] = v
-        PlexusBuffIcons:UpdateAllUnitsBuffs()
     end,
     args = {
         enabled = {
@@ -81,7 +82,6 @@ local options = {
             end,
             set = function(_, v)
                 PlexusBuffIcons.db.profile.showMine = v
-                PlexusBuffIcons:UpdateAllUnitsBuffs()
             end,
         },
         iconsize = {
@@ -197,18 +197,46 @@ local options = {
             set = function(_, v)
                 PlexusBuffIcons.db.profile.overrideFilter = v
             end,
-        values = {
-            ["false"] = L["False"],
-            ["HELPFUL"] = L["HELPFUL"],
-            ["HELPFUL|PLAYER"] = L["HELPFUL PLAYER"],
-            ["HELPFUL|RAID"] = L["HELPFUL RAID"],
-            ["HELPFUL|RAID_IN_COMBAT"] = L["HELPFUL RAID IN COMBAT"],
-            ["HELPFUL|PLAYER|RAID"] = L["HELPFUL PLAYER RAID"],
-            ["HELPFUL|PLAYER|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID IN COMBAT"],
-            ["HELPFUL|RAID|RAID_IN_COMBAT"] = L["HELPFUL RAID RAID IN COMBAT"],
-            ["HELPFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID RAID IN COMBAT"],
-        }
+            values = {
+                ["false"] = L["False"],
+                ["HELPFUL"] = L["HELPFUL"],
+                ["HELPFUL|PLAYER"] = L["HELPFUL PLAYER"],
+                ["HELPFUL|RAID"] = L["HELPFUL RAID"],
+                ["HELPFUL|RAID_IN_COMBAT"] = L["HELPFUL RAID IN COMBAT"],
+                ["HELPFUL|PLAYER|RAID"] = L["HELPFUL PLAYER RAID"],
+                ["HELPFUL|PLAYER|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID IN COMBAT"],
+                ["HELPFUL|RAID|RAID_IN_COMBAT"] = L["HELPFUL RAID RAID IN COMBAT"],
+                ["HELPFUL|PLAYER|RAID|RAID_IN_COMBAT"] = L["HELPFUL PLAYER RAID RAID IN COMBAT"],
+            }
         },
+        font_size = {
+            name = L["Font Size"],
+            desc = L["Adjust the font size for aura text."],
+            order = -2,
+            type = "range",
+            min = 0,
+            max = 100,
+            step = 1,
+            get = function()
+                return PlexusBuffIcons.db.profile.font_size
+            end,
+            set = function(_, v)
+                PlexusBuffIcons.db.profile.font_size = v
+            end,
+        },
+        font_color = {
+            type = "color",
+            name = "Font Color",
+            desc = "Choose the color for the font.",
+            hasAlpha = true,
+            get = function(info)
+                local c = PlexusBuffIcons.db.profile.font_color
+                return c.r, c.g, c.b, c.a
+            end,
+            set = function(info, r, g, b, a)
+                PlexusBuffIcons.db.profile.font_color = { r = r, g = g, b = b, a = a }
+            end,
+        }
     }
 }
 
@@ -236,12 +264,6 @@ function PlexusBuffIcons:OnDisable()
     --self:UnregisterMessage("Plexus_ExtraUnitsChanged")
 end
 
-function PlexusBuffIcons:UpdateAllUnitsBuffs()
-    for _, unitid in PlexusRoster:IterateRoster() do
-        self:UNIT_AURA("UpdateAllUnitsBuffs", unitid, {isFullUpdate = true} )
-    end
-end
-
 local function createButton(button)
     button:SetSize(PlexusBuffIcons.db.profile.iconsize, PlexusBuffIcons.db.profile.iconsize)
     button:SetCancelAuraButtons('RightButtonUp')
@@ -253,6 +275,11 @@ local function createButton(button)
     Time:SetPoint('TOPLEFT', 1, -1)
     Time:SetJustifyH('LEFT')
     Time:SetSize(8,8)
+    local TimefontFile = Time:GetFont()
+    local TimefontSize = PlexusBuffIcons.db.profile.font_size or 8
+    local TimefontColor = PlexusBuffIcons.db.profile.font_color
+    Time:SetTextColor(TimefontColor.r, TimefontColor.g, TimefontColor.b, TimefontColor.a)
+    Time:SetFont(TimefontFile, TimefontSize, "OUTLINE")
     button:SetDurationText(Time)
     local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
     cooldown:SetAllPoints()
@@ -269,6 +296,11 @@ local function createButton(button)
     if not text then
         local tframe = CreateFrame("frame", nil, button)
         text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        local fontFile = text:GetFont()
+        local fontSize = PlexusBuffIcons.db.profile.font_size or 8
+        local fontColor = PlexusBuffIcons.db.profile.font_color
+        text:SetTextColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a)
+        text:SetFont(fontFile, fontSize, "OUTLINE")
         button.text = text
         text.tframe = tframe
         tframe:SetAllPoints()
