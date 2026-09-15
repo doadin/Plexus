@@ -265,6 +265,7 @@ if Plexus:IsRetailWow() then
 PlexusStatusAuras.defaultDB = {
     advancedOptions = false,
     font_size = 8,
+    font_color = { r = 1, g = 1, b = 0, a = 1 },
 --[[
     ["boss_aura"] = {
         desc = L["Boss Aura"],
@@ -1253,6 +1254,19 @@ function PlexusStatusAuras:PostInitialize()
                 self.db.profile.font_size = v
             end,
         }
+        self.options.args["font_color"] = {
+            type = "color",
+            name = "Font Color",
+            desc = "Choose the color for the font.",
+            hasAlpha = true,
+            get = function(info)
+                local c = self.db.profile.font_color
+                return c.r, c.g, c.b, c.a
+            end,
+            set = function(info, r, g, b, a)
+                self.db.profile.font_color = { r = r, g = g, b = b, a = a }
+            end,
+        }
     end
     self.options.args["advancedOptions"] = {
         name = L["Show advanced options"],
@@ -1797,7 +1811,7 @@ function PlexusStatusAuras:DeleteAura(status)
 end
 
 function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    print("PlexusStatusAuras:Plexus_UnitJoined", event, guid, unitid)
+    --print("PlexusStatusAuras:Plexus_UnitJoined", event, guid, unitid)
     --self:MakeContainers(unitid)
 end
 
@@ -2015,6 +2029,8 @@ local function createButton(status, name)
         Time:SetSize(8,8)
         local TimefontFile = Time:GetFont()
         local TimefontSize = PlexusStatusAuras.db.profile.font_size or 8
+        local TimefontColor = PlexusStatusAuras.db.profile.font_color
+        Time:SetTextColor(TimefontColor.r, TimefontColor.g, TimefontColor.b, TimefontColor.a)
         Time:SetFont(TimefontFile, TimefontSize, "OUTLINE")
         button:SetDurationText(Time)
         local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
@@ -2034,6 +2050,8 @@ local function createButton(status, name)
             text = tframe:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             local fontFile = text:GetFont()
             local fontSize = PlexusStatusAuras.db.profile.font_size or 8
+            local fontColor = PlexusStatusAuras.db.profile.font_color
+            text:SetTextColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a)
             text:SetFont(fontFile, fontSize, "OUTLINE")
             button.text = text
             text.tframe = tframe
