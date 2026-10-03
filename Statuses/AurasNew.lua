@@ -32,7 +32,9 @@ local PlexusStatusAuras = Plexus:NewStatusModule("PlexusStatusAuras", "AceTimer-
 PlexusStatusAuras.menuName = L["Auras"]
 
 local _, PLAYER_CLASS = UnitClass("player")
-local PlayerCanDispel = {}
+-- Copied from Auras.lua along with UpdateDispellable(), but nothing here reads it
+-- yet, so the "Show only dispellable" option has no effect. Revisit before removing.
+local PlayerCanDispel = {} --luacheck: ignore 241
 local spell_names
 local spell_ids
 
