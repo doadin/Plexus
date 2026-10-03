@@ -532,7 +532,6 @@ PlexusStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 
 -- locals
 local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
-local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo or GetSpellInfo
 local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
 local GetAuraDataByAuraInstanceID
