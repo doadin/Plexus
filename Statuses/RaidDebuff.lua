@@ -1,8 +1,7 @@
 local _, Plexus = ...
 
-local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
+local pairs = _G.pairs
 
-local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
 local PlexusStatusRaidDebuff = _G.Plexus:NewStatusModule("PlexusStatusRaidDebuff", "AceTimer-3.0")

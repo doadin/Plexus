@@ -1,10 +1,9 @@
 local _, Plexus = ...
 
-local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
+local pairs = _G.pairs
 
 local L = setmetatable(PlexusDeDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
 
-local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
 local PlexusStatusDispelByMe = _G.Plexus:NewStatusModule("PlexusStatusDispelByMe", "AceTimer-3.0")

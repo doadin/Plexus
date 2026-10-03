@@ -177,7 +177,6 @@ function PlexusStatusHeals:UpdateAllUnits()
     end
 end
 
-local timer = {}
 local calculator
 function PlexusStatusHeals:UpdateUnit(event, unit)
     self:Debug("UpdateUnit Event: ", event)

@@ -20,14 +20,13 @@ local _, Plexus = ...
 local L = Plexus.L
 
 local strutf8sub = string.utf8sub --luacheck: ignore 143
-local format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
-    = format, GetTime, gmatch, gsub, pairs, strfind, strlen, strmatch, tostring, type, wipe
+local format, gmatch, gsub, pairs, strfind, strlen, strmatch, type
+    = format, gmatch, gsub, pairs, strfind, strlen, strmatch, type
 local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo or GetSpellInfo
-local IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
-    = IsPlayerSpell, IsSpellKnown, UnitAura, UnitClass, UnitGUID, UnitIsVisible
+local IsPlayerSpell, IsSpellKnown, UnitClass
+    = IsPlayerSpell, IsSpellKnown, UnitClass
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
 local PlexusStatusAuras = Plexus:NewStatusModule("PlexusStatusAuras", "AceTimer-3.0")
 PlexusStatusAuras.menuName = L["Auras"]

@@ -19,7 +19,6 @@ PlexusStatusDefensives.menuName = "Defensives"  --luacheck: ignore 112
 -- locals
 local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
-local UnitGUID = UnitGUID
 
 if Plexus:IsRetailWow() then
 PlexusStatusDefensives.defaultDB = { --luacheck: ignore 112

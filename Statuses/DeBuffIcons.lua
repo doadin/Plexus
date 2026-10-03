@@ -2,13 +2,12 @@ local function IsRetailWow()
     return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 end
 
-local UnitAura, UnitGUID, pairs = _G.UnitAura, _G.UnitGUID, _G.pairs
+local pairs = _G.pairs
 
 local MAX_BUFFS = 40
 
 local L = setmetatable(PlexusDebuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
 
-local PlexusRoster = _G.Plexus:GetModule("PlexusRoster")
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
 local PlexusDebuffIcons = _G.Plexus:NewModule("PlexusDebuffIcons", "AceBucket-3.0")
 
