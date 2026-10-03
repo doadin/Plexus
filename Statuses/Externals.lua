@@ -104,7 +104,6 @@ do
         end
 
         UpdateSpells(self)
-        local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
         PlexusStatusExternals:UpdateAllUnits()
     end
 
@@ -124,7 +123,6 @@ do
             end
 
             UpdateSpells(self)
-            local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
             PlexusStatusExternals:UpdateAllUnits()
         end
     end
@@ -145,7 +143,6 @@ do
             end
 
             UpdateSpells(self)
-            local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
             PlexusStatusExternals:UpdateAllUnits()
         end
     end
@@ -196,7 +193,6 @@ do
         }
 
         -- Create spell containers
-        local PlexusStatusExternals = Plexus:GetModule("PlexusStatus"):GetModule("PlexusStatusExternals")
         local spells = PlexusStatusExternals.tankingbuffs
 
         local spell_count = 0

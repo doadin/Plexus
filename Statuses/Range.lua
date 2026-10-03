@@ -91,7 +91,6 @@ end
 local resSpell
 local _, class = UnitClass("player")
 do
-    local _, class = UnitClass("player")
     if class == "DEATHKNIGHT" then
         resSpell = GetSpellName(61999)  -- Raise Ally
     elseif class == "DRUID" then
