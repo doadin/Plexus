@@ -535,6 +535,14 @@ end
 
 ------------------------------------------------------------------------
 
+-- Secret values can't be compared, so they always count as changed.
+local function SameValue(a, b)
+    if Plexus:issecretvalue(a) or Plexus:issecretvalue(b) then
+        return false
+    end
+    return a == b
+end
+
 function PlexusStatus:SendStatusGained(guid, status, priority, range, color, text, value, maxValue, texture, start, duration, count, texCoords, expirationTime)
     self:Debug("PlexusStatus", "SendStatusGained", guid, status, text, value, maxValue)
     if not guid then return end
@@ -574,20 +582,19 @@ function PlexusStatus:SendStatusGained(guid, status, priority, range, color, tex
         cached = cache[guid][status]
 
         -- if no changes were made, return rather than triggering an event
-        if not Plexus:IsRetailWow() and (cached
-            and cached.priority == priority
-            and cached.range == range
-            and cached.color == color
-            and cached.text == text
-            and cached.value == value
-            and cached.maxValue == maxValue
-            and cached.texture == texture
-            and cached.start == start
-            and cached.duration == duration
-            and cached.count == count
-            and cached.texCoords == texCoords
-            and cached.expirationTime == expirationTime
-        )
+        if cached
+            and SameValue(cached.priority, priority)
+            and SameValue(cached.range, range)
+            and SameValue(cached.color, color)
+            and SameValue(cached.text, text)
+            and SameValue(cached.value, value)
+            and SameValue(cached.maxValue, maxValue)
+            and SameValue(cached.texture, texture)
+            and SameValue(cached.start, start)
+            and SameValue(cached.duration, duration)
+            and SameValue(cached.count, count)
+            and SameValue(cached.texCoords, texCoords)
+            and SameValue(cached.expirationTime, expirationTime)
         then
             return
         end
