@@ -804,7 +804,7 @@ function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
 end
 
 local unitAuras
-function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
+function PlexusStatusExternals:ScanUnitByAuraInfo(_event, unit, _updatedAuras)
     if not unit then return end
     local guid = UnitGUID(unit)
     if not guid then

@@ -1259,11 +1259,11 @@ function PlexusStatusAuras:PostInitialize()
             name = "Font Color",
             desc = "Choose the color for the font.",
             hasAlpha = true,
-            get = function(info)
+            get = function(_info)
                 local c = self.db.profile.font_color
                 return c.r, c.g, c.b, c.a
             end,
-            set = function(info, r, g, b, a)
+            set = function(_info, r, g, b, a)
                 self.db.profile.font_color = { r = r, g = g, b = b, a = a }
             end,
         }
@@ -1320,7 +1320,7 @@ function PlexusStatusAuras:EnabledStatusCount()
     return enable_count
 end
 
-function PlexusStatusAuras:OnStatusEnable(status)
+function PlexusStatusAuras:OnStatusEnable(_status)
     self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
     self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
@@ -1330,7 +1330,7 @@ function PlexusStatusAuras:OnStatusEnable(status)
     --print("PlexusStatusAuras:OnStatusEnable", status, self:EnabledStatusCount())
 end
 
-function PlexusStatusAuras:OnStatusDisable(status)
+function PlexusStatusAuras:OnStatusDisable(_status)
     if self:EnabledStatusCount() == 0 then
         self:UnregisterMessage("UpdateFrameUnits")
         self:UnregisterEvent("SPELLS_CHANGED")
@@ -1821,7 +1821,7 @@ function PlexusStatusAuras:DeleteAura(status)
     end
 end
 
-function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
+function PlexusStatusAuras:Plexus_UnitJoined(_event, _guid, _unitid)
     --print("PlexusStatusAuras:Plexus_UnitJoined", event, guid, unitid)
     --self:MakeContainers(unitid)
 end
@@ -2017,7 +2017,7 @@ function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
     end
 end
 
-local function createButton(status, name)
+local function createButton(_status, name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         if name == "icon" then
@@ -2122,7 +2122,7 @@ local function createButton(status, name)
     end
 end
 
-local function createFrame(status, name)
+local function createFrame(status, _name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         button:SetSize(frameSettings.cornerSize, frameSettings.cornerSize)
@@ -2156,7 +2156,7 @@ local function createFrame(status, name)
     end
 end
 
-local function createBorder(status, name, indicator)
+local function createBorder(status, _name, _indicator)
     local frameSettings = PlexusFrame.db.profile
 
     return function(button)

@@ -226,11 +226,11 @@ local options = {
             name = "Font Color",
             desc = "Choose the color for the font.",
             hasAlpha = true,
-            get = function(info)
+            get = function(_info)
                 local c = PlexusBuffIcons.db.profile.font_color
                 return c.r, c.g, c.b, c.a
             end,
-            set = function(info, r, g, b, a)
+            set = function(_info, r, g, b, a)
                 PlexusBuffIcons.db.profile.font_color = { r = r, g = g, b = b, a = a }
             end,
         },
