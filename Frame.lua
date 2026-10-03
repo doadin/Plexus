@@ -1622,28 +1622,6 @@ function PlexusFrame:MakePAAnchor(parent, unitToken, index, settings)
     end
 end
 
-local function ResizePrivateAuraDuration(parent, size)
-    -- Blizzard creates a Cooldown frame inside your parent
-    local cd = parent:GetChildren()
-    if cd and cd.SetHideCountdownNumbers then
-        -- Duration text is the cooldown's text region
-        local regions = { cd:GetRegions() }
-        for _, r in ipairs(regions) do
-            if r:GetObjectType() == "FontString" then
-                r:SetFont(r:GetFont(), size)
-            end
-        end
-    end
-end
-
-local function ResizePrivateAuraStacks(parent, size)
-    for _, child in ipairs({ parent:GetChildren() }) do
-        if child.count and child.count.SetFont then
-            child.count:SetFont(child.count:GetFont(), size)
-        end
-    end
-end
-
 --local QueueUpdate -- delay updates if we are in combat
 --do
 --	local queue, frame = {}, CreateFrame("Frame")

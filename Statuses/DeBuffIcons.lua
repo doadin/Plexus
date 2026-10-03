@@ -1,7 +1,3 @@
-local function IsRetailWow()
-    return WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-end
-
 local pairs = _G.pairs
 
 local MAX_BUFFS = 40
@@ -381,31 +377,6 @@ local function createButton(button)
         showWhenHarmful = true,
         showWhenHelpful = false,
     })
-end
-
-local function GetGrowthDirections(anchor)
-    -- Default directions
-    local horizontal = AnchorUtil.FlowDirection.Right
-    local vertical   = AnchorUtil.FlowDirection.Down
-
-    if anchor == "TOPRIGHT" then
-        horizontal = AnchorUtil.FlowDirection.Left
-        vertical   = AnchorUtil.FlowDirection.Down
-
-    elseif anchor == "TOPLEFT" then
-        horizontal = AnchorUtil.FlowDirection.Right
-        vertical   = AnchorUtil.FlowDirection.Down
-
-    elseif anchor == "BOTTOMLEFT" then
-        horizontal = AnchorUtil.FlowDirection.Right
-        vertical   = AnchorUtil.FlowDirection.Up
-
-    elseif anchor == "BOTTOMRIGHT" then
-        horizontal = AnchorUtil.FlowDirection.Left
-        vertical   = AnchorUtil.FlowDirection.Up
-    end
-
-    return horizontal, vertical
 end
 
 function PlexusDebuffIcons:MakeContainers()
