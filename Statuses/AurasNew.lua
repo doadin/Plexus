@@ -44,7 +44,9 @@ local function GetSpellName(spellid)
 end
 
 local LibDispel
-local BleedSupported
+-- Copied from Auras.lua, where it gates bleed detection via LibDispel.BleedList.
+-- Nothing here reads it yet. Revisit before removing.
+local BleedSupported --luacheck: ignore 231
 if Plexus:IsRetailWow() then
     LibDispel = LibStub("LibDispel-1.0", true)
     if LibDispel and LibDispel.BleedList then

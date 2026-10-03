@@ -530,12 +530,6 @@ PlexusStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
-local GetAuraDataByAuraInstanceID
-local ForEachAura
-if Plexus:IsRetailWow() then
-    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = AuraUtil.ForEachAura
-end
 
 local settings
 local spellnames = {} --luacheck: ignore 241

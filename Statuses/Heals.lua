@@ -200,7 +200,8 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
-        local incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped = 0
+        -- All four are kept to match calculator:GetIncomingHeals() return positions
+        local incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped = 0 --luacheck: ignore 231
         if not Plexus:IsRetailWow() then
             if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
                 incoming = UnitGetIncomingHeals(unit) or 0

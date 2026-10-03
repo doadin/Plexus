@@ -110,7 +110,9 @@ do
     end
 end
 
-local getHostile, getFriendly
+-- getHostile is set per class but not used yet: Plexus only range-checks friendly
+-- units (see getFriendly). Kept for possible hostile range checks later.
+local getHostile, getFriendly --luacheck: ignore 231/getHostile
 local function IVS(spellID)	return IsPlayerSpell(spellID) and spellID end
 if Plexus:IsRetailWow() then -- retail
 	if class == 'DRUID' then
