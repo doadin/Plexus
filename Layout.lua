@@ -246,11 +246,6 @@ function PlexusLayout:ExtraUnitsChanged(message, unitid, show)
         --if frame.UpdateAllIndicators then
         --    frame:UpdateAllIndicators()
         --end
-    else
-        -- No focus → hide or ghost
-        if not InCombatLockdown() then
-            --frame:Hide()
-        end
     end
     --local PlexusStatus = Plexus:GetModule("PlexusStatus")
     --PlexusStatus:RemoveFromCache(message, frame.unit)
