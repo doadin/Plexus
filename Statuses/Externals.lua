@@ -205,7 +205,9 @@ do
         local frame = CreateFrame("Frame")
         frame:SetWidth(200)
         frame:SetHeight(spell_count * SPELL_HEIGHT)
-        frame.obj = self
+        -- There is no self in Constructor(), so this sets nil. Probably meant to be
+        -- widget (AceGUI convention); left as-is to not change behaviour.
+        frame.obj = self --luacheck: ignore 113
 
         local spell_containers = { }
 
@@ -787,7 +789,7 @@ end
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if Plexus:IsRetailWow() then
-            self:ScanUnitByAuraInfo(_, unitid, {isFullUpdate = true})
+            self:ScanUnitByAuraInfo("UpdateAllUnits", unitid, {isFullUpdate = true})
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
         end
@@ -820,7 +822,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(_event, unit, _updatedAuras)
     if result and result[1] then
         self.core:SendStatusGained(
             guid, "alert_externals", settings.priority, (settings.range and 40),
-            nil, nil, nil, nil, result[1].icon, nil, dur, result[1].applications, nil, result[1].expirationTime)
+            nil, nil, nil, nil, result[1].icon, nil, nil, result[1].applications, nil, result[1].expirationTime)
     else
         self.core:SendStatusLost(guid, "alert_externals")
     end
