@@ -2,7 +2,8 @@ local pairs = _G.pairs
 
 local MAX_BUFFS = 40
 
-local L = setmetatable(PlexusDebuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
+-- No PlexusDebuffIconsLocale table is defined anywhere yet; falls back to English keys
+local L = setmetatable(PlexusDebuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end}) --luacheck: ignore 113
 
 local PlexusFrame = _G.Plexus:GetModule("PlexusFrame")
 local PlexusDebuffIcons = _G.Plexus:NewModule("PlexusDebuffIcons", "AceBucket-3.0")

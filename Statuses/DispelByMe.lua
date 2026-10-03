@@ -2,7 +2,9 @@ local _, Plexus = ...
 
 local pairs = _G.pairs
 
-local L = setmetatable(PlexusDeDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end})
+-- No PlexusDeDeBuffIconsLocale table is defined anywhere yet; falls back to English keys.
+-- "DeDe" is likely a typo from when this was split off DeBuffIcons.lua.
+local L = setmetatable(PlexusDeDeBuffIconsLocale or {}, {__index = function(t, k) t[k] = k return k end}) --luacheck: ignore 113
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
