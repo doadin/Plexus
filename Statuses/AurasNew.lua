@@ -1176,6 +1176,14 @@ PlexusStatusAuras.defaultDB = {
         id = spell_ids["Earthliving Weapon"],
     },
 }
+elseif Plexus:IsForeverWow() then
+-- The presets above are retail spells, so Forever only gets the general settings.
+PlexusStatusAuras.defaultDB = {
+    advancedOptions = false,
+    font_size = 8,
+    font_color = { r = 1, g = 1, b = 0, a = 1 },
+    enableDurationText = false,
+}
 end
 
 local default_auras = {}
@@ -1193,7 +1201,7 @@ PlexusStatusAuras.extraOptions = {}
 function PlexusStatusAuras:PostInitialize()
     self:RegisterStatuses()
 
-    if Plexus:IsRetailWow() then
+    if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
         self.options.args["add_buff"] = {
             name = L["Add Buff"],
             desc = L["Create a new buff status."],
@@ -1714,7 +1722,7 @@ function PlexusStatusAuras:CreateRemoveOptions()
     for status, settings in pairs(self.db.profile) do
         if type(settings) == "table" and settings.text and not default_auras[status] then
             local debuffName = settings.desc or settings.text
-            if Plexus:IsRetailWow() then
+            if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
                 self.options.args.delete_aura.args[status] = {
                     name = debuffName,
                     desc = format(L["Remove %s from the menu"], debuffName),
