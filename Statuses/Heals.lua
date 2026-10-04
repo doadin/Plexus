@@ -22,20 +22,6 @@ local UnitHealth = UnitHealth
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitIsVisible = UnitIsVisible
 
--- AbbreviateNumbers returns values below its smallest breakpoint unrounded (e.g. "51.777"),
--- and the amount may be secret, so it can't be rounded here. The breakpoint at 1 makes
--- AbbreviateNumbers round it down instead. Custom breakpoints replace the game's defaults,
--- so the usual K/M steps are listed as well.
-local abbreviateOptions = {
-    breakpointData = {
-        { breakpoint = 10000000, abbreviation = SECOND_NUMBER_CAP_NO_SPACE, abbreviationIsGlobal = false, significandDivisor = 1000000, fractionDivisor = 1 },
-        { breakpoint = 1000000,  abbreviation = SECOND_NUMBER_CAP_NO_SPACE, abbreviationIsGlobal = false, significandDivisor = 100000,  fractionDivisor = 10 },
-        { breakpoint = 10000,    abbreviation = FIRST_NUMBER_CAP_NO_SPACE,  abbreviationIsGlobal = false, significandDivisor = 1000,    fractionDivisor = 1 },
-        { breakpoint = 1000,     abbreviation = FIRST_NUMBER_CAP_NO_SPACE,  abbreviationIsGlobal = false, significandDivisor = 100,     fractionDivisor = 10 },
-        { breakpoint = 1,        abbreviation = "",                         abbreviationIsGlobal = false, significandDivisor = 1,       fractionDivisor = 1 },
-    },
-}
-
 local settings
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -287,7 +273,7 @@ function PlexusStatusHeals:SendIncomingHealsStatus(guid, incoming, estimatedHeal
             incomingText = format("%.0f", incoming)
         end
     else
-        incomingText = AbbreviateNumbers(incomingText, abbreviateOptions)
+        incomingText = Plexus:AbbreviateNumber(incomingText)
     end
     self.core:SendStatusGained(guid, "alert_heals",
         settings.priority,

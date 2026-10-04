@@ -79,6 +79,25 @@ function Plexus:canaccessvalue(value) --luacheck: ignore 212
     return canaccessvalue and canaccessvalue(value) or true
 end
 
+-- AbbreviateNumbers returns values below its smallest breakpoint unrounded (e.g. "51.777"),
+-- and secret values can't be rounded by addon code. The breakpoint at 1 makes
+-- AbbreviateNumbers round them down instead. Custom breakpoints replace the game's defaults,
+-- so the usual K/M steps are listed as well.
+local abbreviateOptions = {
+    breakpointData = {
+        { breakpoint = 10000000, abbreviation = SECOND_NUMBER_CAP_NO_SPACE, abbreviationIsGlobal = false, significandDivisor = 1000000, fractionDivisor = 1 },
+        { breakpoint = 1000000,  abbreviation = SECOND_NUMBER_CAP_NO_SPACE, abbreviationIsGlobal = false, significandDivisor = 100000,  fractionDivisor = 10 },
+        { breakpoint = 10000,    abbreviation = FIRST_NUMBER_CAP_NO_SPACE,  abbreviationIsGlobal = false, significandDivisor = 1000,    fractionDivisor = 1 },
+        { breakpoint = 1000,     abbreviation = FIRST_NUMBER_CAP_NO_SPACE,  abbreviationIsGlobal = false, significandDivisor = 100,     fractionDivisor = 10 },
+        { breakpoint = 1,        abbreviation = "",                         abbreviationIsGlobal = false, significandDivisor = 1,       fractionDivisor = 1 },
+    },
+}
+
+-- Abbreviates a number, which may be secret, as e.g. "52", "1.2K" or "12M".
+function Plexus:AbbreviateNumber(value) --luacheck: ignore 212
+    return AbbreviateNumbers(value, abbreviateOptions)
+end
+
 _G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
 if NickTag then
     LibStub("NickTag-1.0"):Embed(Plexus)
