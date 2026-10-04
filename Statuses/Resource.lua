@@ -454,15 +454,14 @@ function PlexusStatusResource:UpdateUnitResource(unitid)
     end
 
     local text = current
-    if type(current) == "number" then
-        if Plexus:IsRetailWow() then
-            text = AbbreviateNumbers(current)
-        else
-            if current > 9999 then
-                text = format("%.0fk", current / 1000)
-            elseif current > 999 then
-                text = format("%.1fk", current / 1000)
-            end
+    if Plexus:issecretvalue(current) then
+        -- secret values can't be compared, so let the game abbreviate them
+        text = Plexus:AbbreviateNumber(current)
+    elseif type(current) == "number" then
+        if current > 9999 then
+            text = format("%.0fk", current / 1000)
+        elseif current > 999 then
+            text = format("%.1fk", current / 1000)
         end
     end
 
