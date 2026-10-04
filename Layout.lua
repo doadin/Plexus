@@ -987,6 +987,8 @@ end
 
 function PlexusLayout:StartMoveFrame()
     --self:Debug("StartMoveFrame")
+    -- the frame holds secure unit buttons, so it can't be moved in combat
+    if InCombatLockdown() then return end
     if self.config_mode or not self.db.profile.lock then
         self.frame:StartMoving()
         self.frame.isMoving = true
