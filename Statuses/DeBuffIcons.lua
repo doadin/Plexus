@@ -285,9 +285,9 @@ local function createButton(button)
     Icon:SetAllPoints()
     button:SetIcon(Icon)
     local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
-    Time:SetPoint('TOPLEFT', 1, -1)
+    Time:SetPoint('BOTTOMLEFT', 1, -1)
     Time:SetJustifyH('LEFT')
-    Time:SetSize(8,8)
+    Time:SetSize(PlexusDebuffIcons.db.profile.font_size or 8, PlexusDebuffIcons.db.profile.font_size or 8)
     local TimefontFile = Time:GetFont()
     local TimefontSize = PlexusDebuffIcons.db.profile.font_size or 8
     local TimefontColor = PlexusDebuffIcons.db.profile.font_color
@@ -323,7 +323,7 @@ local function createButton(button)
     --text:SetFont(self.font, fontSize, self.fontFlags)
     --text:SetTextColor(UnpackColor(self.colorStack))
     text:ClearAllPoints()
-    text:SetPoint("BOTTOMRIGHT", 0, 0)
+    text:SetPoint("BOTTOMLEFT", 0, 0)
     text:Show()
     button:SetApplicationCount(text, {})
     --local borderOptions = {
@@ -360,8 +360,8 @@ local function createButton(button)
     Overlay:SetFrameLevel(button:GetFrameLevel() + 10)
     --Overlay:SetInside()
     local DispelIndicator = Overlay:CreateTexture(nil, "OVERLAY")
-    DispelIndicator:SetSize(8, 8)
-    DispelIndicator:SetPoint("TOPRIGHT", button, 0, 0)
+    DispelIndicator:SetSize(PlexusDebuffIcons.db.profile.iconsize/2, PlexusDebuffIcons.db.profile.iconsize/2)
+    DispelIndicator:SetPoint("TOPRIGHT", button, 4, 4)
     button:AddDispelTypeTexture(DispelIndicator, {
         style = Enum.CustomAuraButtonDispelTypeTextureStyle.Icon,
         showWhenHarmful = true,
@@ -460,7 +460,8 @@ function PlexusDebuffIcons:MakeContainers()
                         end
                         local filter = PlexusDebuffIcons.db.profile.showMine and "PLAYER|HARMFUL" or "HARMFUL"
                         local Override = PlexusDebuffIcons.db.profile.overrideFilter and PlexusDebuffIcons.db.profile.overrideFilter ~= "false" and PlexusDebuffIcons.db.profile.overrideFilter
-                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, (Override or filter), {
+                        filter = Override or filter
+                        frameTable.container[name]:AddAuraGroup(frameName .. ":" .. name, filter, {
                               initializeFrame = createButton,
                               sortMethod = AuraContainerSortMethod.ExpirationOnly,
                               sortDirection = AuraContainerSortDirection.Reverse,
