@@ -2026,7 +2026,7 @@ local function createButton(status, name)
         local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
         Time:SetPoint('BOTTOMLEFT', 1, -1)
         Time:SetJustifyH('LEFT')
-        Time:SetSize(8,8)
+        --Time:SetSize(8,8)
         local TimefontFile = Time:GetFont()
         local TimefontSize = PlexusStatusAuras.db.profile.font_size or 8
         local TimefontColor = PlexusStatusAuras.db.profile.font_color

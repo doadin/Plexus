@@ -287,7 +287,7 @@ local function createButton(button)
     local Time = button:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
     Time:SetPoint('BOTTOMLEFT', 1, -1)
     Time:SetJustifyH('LEFT')
-    Time:SetSize(PlexusDebuffIcons.db.profile.font_size or 8, PlexusDebuffIcons.db.profile.font_size or 8)
+    --Time:SetSize(PlexusDebuffIcons.db.profile.font_size or 8, PlexusDebuffIcons.db.profile.font_size or 8)
     local TimefontFile = Time:GetFont()
     local TimefontSize = PlexusDebuffIcons.db.profile.font_size or 8
     local TimefontColor = PlexusDebuffIcons.db.profile.font_color
