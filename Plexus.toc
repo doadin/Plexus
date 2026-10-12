@@ -101,7 +101,7 @@ Statuses\DispelByMe.lua [AllowLoadGameType standard]
 Statuses\Externals.lua [AllowLoadGameType classic]
 Statuses\Factions.lua [AllowLoadGameType standard]
 Statuses\Group.lua
-Statuses\GroupBuffs.lua [AllowLoadGameType classic, forever]
+Statuses\GroupBuffs.lua [AllowLoadGameType classic]
 Statuses\GroupNumber.lua
 Statuses\HealAbsorbs.lua [AllowLoadGameType standard]
 Statuses\Heals.lua
