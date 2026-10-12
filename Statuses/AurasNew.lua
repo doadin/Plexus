@@ -266,6 +266,7 @@ PlexusStatusAuras.defaultDB = {
     advancedOptions = false,
     font_size = 8,
     font_color = { r = 1, g = 1, b = 0, a = 1 },
+    enableDurationText = false,
 --[[
     ["boss_aura"] = {
         desc = L["Boss Aura"],
@@ -1267,6 +1268,17 @@ function PlexusStatusAuras:PostInitialize()
                 self.db.profile.font_color = { r = r, g = g, b = b, a = a }
             end,
         }
+        self.options.args["enableDurationText"] = {
+            type = "toggle",
+            name = L["Enable Duration Text"],
+            desc = L["Enable or disable the duration text for aura durations."],
+            get = function()
+                return self.db.profile.enableDurationText
+            end,
+            set = function(_, v)
+                self.db.profile.enableDurationText = v
+            end,
+        }
     end
     self.options.args["advancedOptions"] = {
         name = L["Show advanced options"],
@@ -2032,7 +2044,9 @@ local function createButton(status, name)
         local TimefontColor = PlexusStatusAuras.db.profile.font_color
         Time:SetTextColor(TimefontColor.r, TimefontColor.g, TimefontColor.b, TimefontColor.a)
         Time:SetFont(TimefontFile, TimefontSize, "OUTLINE")
-        button:SetDurationText(Time)
+        if PlexusStatusAuras.db.profile.enableDurationText then
+            button:SetDurationText(Time)
+        end
         local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
         cooldown:SetAllPoints()
         cooldown:SetAlpha(1)
