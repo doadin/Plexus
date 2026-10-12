@@ -143,6 +143,7 @@ Statuses\Mouseover.lua
 Statuses\Name.lua
 #@retail@
 Statuses\Phase.lua
+Statuses\Ping.lua
 #@end-retail@
 Statuses\Player.lua
 #@retail@
