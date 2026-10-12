@@ -166,19 +166,19 @@ function PlexusStatusResurrect:OnStatusDisable(status)
     self:Debug("OnStatusDisable", status)
 
     if not Plexus:IsClassicWow() then
-        self:UnRegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        self:UnRegisterEvent("UNIT_SPELLCAST_STOP")
-        self:UnRegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-        self:UnRegisterEvent("UNIT_SPELLCAST_START")
-        --self:UnRegisterEvent("UNIT_AURA", "HasRessPending")
-        self:UnRegisterEvent("INCOMING_RESURRECT_CHANGED")
+        self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        self:UnregisterEvent("UNIT_SPELLCAST_STOP")
+        self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+        self:UnregisterEvent("UNIT_SPELLCAST_START")
+        --self:UnregisterEvent("UNIT_AURA", "HasRessPending")
+        self:UnregisterEvent("INCOMING_RESURRECT_CHANGED")
     end
     if Plexus:IsClassicWow() then
-        self:UnRegisterEvent("UNIT_SPELLCAST_START")
-        self:UnRegisterEvent("INCOMING_RESURRECT_CHANGED")
+        self:UnregisterEvent("UNIT_SPELLCAST_START")
+        self:UnregisterEvent("INCOMING_RESURRECT_CHANGED")
     end
 
-    --self:UnRegisterMessage("Plexus_RosterUpdated")
+    --self:UnregisterMessage("Plexus_RosterUpdated")
     self.core:SendStatusLostAllUnits("alert_resurrect")
 end
 

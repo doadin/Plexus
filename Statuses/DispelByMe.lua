@@ -37,7 +37,7 @@ function PlexusStatusDispelByMe:OnDisable()
     --self:UnregisterEvent("UNIT_AURA")
     --self:UnregisterEvent("UNIT_FLAGS")
     --self:UnregisterEvent("LOADING_SCREEN_DISABLED")
-    self:UnRegisterMessage("UpdateFrameUnits")
+    self:UnregisterMessage("UpdateFrameUnits")
 end
 
 --function PlexusStatusDispelByMe:UNIT_FLAGS(_,unit)

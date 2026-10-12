@@ -268,7 +268,7 @@ function PlexusBuffIcons:OnDisable()
     --self.enabled = nil
     --self:UnregisterEvent("UNIT_AURA")
     --self:UnregisterEvent("UNIT_FLAGS")
-    self:UnRegisterMessage("UpdateFrameUnits")
+    self:UnregisterMessage("UpdateFrameUnits")
     self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     --self:UnregisterMessage("Plexus_ExtraUnitsChanged")
 end

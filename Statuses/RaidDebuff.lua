@@ -33,7 +33,7 @@ function PlexusStatusRaidDebuff:OnDisable()
     --self:UnregisterEvent("UNIT_AURA")
     --self:UnregisterEvent("UNIT_FLAGS")
     --self:UnregisterEvent("LOADING_SCREEN_DISABLED")
-    self:UnRegisterMessage("UpdateFrameUnits")
+    self:UnregisterMessage("UpdateFrameUnits")
 end
 
 --function PlexusStatusRaidDebuff:UNIT_FLAGS(_,unit)

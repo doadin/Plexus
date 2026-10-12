@@ -53,8 +53,8 @@ function PlexusStatusDefensives:OnStatusEnable() --status --luacheck: ignore 112
 end
 
 function PlexusStatusDefensives:OnStatusDisable(status) -- status --luacheck: ignore 112
-    self:UnRegisterMessage("UpdateFrameUnits")
-    self:UnRegisterMessage("LOADING_SCREEN_DISABLED")
+    self:UnregisterMessage("UpdateFrameUnits")
+    self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     --self.core:SendStatusLostAllUnits(status)
 end
 
