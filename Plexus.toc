@@ -52,21 +52,8 @@ Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 Libs\LibDeflate\LibDeflate.lua
 Libs\NickTag-1.0\NickTag-1.0.lua
-#@retail@
-Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
-#@end-retail@
-#@version-wrath@
-Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
-#@end-version-wrath@
-#@version-cata@
-Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
-#@end-version-cata@
-#@version-mists@
-Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
-#@end-version-mists@
-#@retail@
-Libs\LibDispel\LibDispel.lua
-#@end-retail@
+Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua [AllowLoadGameType wrath, cata, mists, standard]
+Libs\LibDispel\LibDispel.lua [AllowLoadGameType standard]
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua
@@ -101,68 +88,40 @@ Indicators\HealingBar.lua
 Indicators\Icon.lua
 Indicators\Text.lua
 
-Statuses\Health.lua
-#@retail@
-Statuses\Absorbs.lua
-Statuses\BuffIcons.lua
-Statuses\DeBuffIcons.lua
-#@end-retail@
-#@version-cata@
-Statuses\Absorbs.lua
-#@end-version-cata@
-Statuses\Aggro.lua
+Statuses\Absorbs.lua [AllowLoadGameType cata, standard]
 Statuses\AFK.lua
-#@retail@
-Statuses\AltPower.lua
-#@end-retail@
-
-#@non-retail@
-Statuses\Externals.lua
-Statuses\Auras.lua
-#@end-non-retail@
-
-#@retail@
-Statuses\Auras.lua
-Statuses\AurasNew.lua
-Statuses\Defensives.lua
-Statuses\DispelByMe.lua
-Statuses\Factions.lua
-#@end-retail@
+Statuses\Aggro.lua
+Statuses\AltPower.lua [AllowLoadGameType standard]
+Statuses\Auras.lua [AllowLoadGameType classic]
+Statuses\AurasNew.lua [AllowLoadGameType standard, forever]
+Statuses\BuffIcons.lua [AllowLoadGameType standard]
+Statuses\DeBuffIcons.lua [AllowLoadGameType standard]
+Statuses\Defensives.lua [AllowLoadGameType standard]
+Statuses\DispelByMe.lua [AllowLoadGameType standard]
+Statuses\Externals.lua [AllowLoadGameType classic]
+Statuses\Factions.lua [AllowLoadGameType standard]
 Statuses\Group.lua
-#@non-retail@
-Statuses\GroupBuffs.lua
-#@end-non-retail@
+Statuses\GroupBuffs.lua [AllowLoadGameType classic, forever]
 Statuses\GroupNumber.lua
-#@retail@
-Statuses\HealAbsorbs.lua
-#@end-retail@
+Statuses\HealAbsorbs.lua [AllowLoadGameType standard]
 Statuses\Heals.lua
+Statuses\Health.lua
 Statuses\HostileUnit.lua
 Statuses\Mana.lua
 Statuses\Mouseover.lua
 Statuses\Name.lua
-#@retail@
-Statuses\Phase.lua
-Statuses\Ping.lua
-#@end-retail@
+Statuses\Phase.lua [AllowLoadGameType standard]
+Statuses\Ping.lua [AllowLoadGameType standard]
 Statuses\Player.lua
-#@retail@
-Statuses\RaidDebuff.lua
-#@end-retail@
+Statuses\RaidDebuff.lua [AllowLoadGameType standard]
 Statuses\RaidIcon.lua
 Statuses\Range.lua
 Statuses\ReadyCheck.lua
 Statuses\Resource.lua
 Statuses\Resurrect.lua
-#@retail@
-Statuses\Role.lua
-#@end-retail@
-#@version-mists@
-Statuses\Stagger.lua
-#@end-version-mists@
-#@retail@
-Statuses\Summon.lua
-#@end-retail@
+Statuses\Role.lua [AllowLoadGameType standard]
+Statuses\Stagger.lua [AllowLoadGameType mists]
+Statuses\Summon.lua [AllowLoadGameType standard]
 Statuses\Target.lua
 Statuses\Vehicle.lua
 Statuses\VoiceComm.lua
