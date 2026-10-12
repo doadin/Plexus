@@ -107,7 +107,7 @@ Statuses\HealAbsorbs.lua [AllowLoadGameType standard]
 Statuses\Heals.lua
 Statuses\Health.lua
 Statuses\HostileUnit.lua
-Statuses\Mana.lua [AllowLoadGameType classic, camelot]
+Statuses\Mana.lua [AllowLoadGameType classic]
 Statuses\Mouseover.lua
 Statuses\Name.lua
 Statuses\Phase.lua [AllowLoadGameType standard]
