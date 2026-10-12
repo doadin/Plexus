@@ -25,6 +25,7 @@ local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetad
 local InCombatLockdown = InCombatLockdown
 local IsAddOnLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 local issecretvalue = issecretvalue
+local canaccessvalue = canaccessvalue
 local StaticPopup_Show = StaticPopup_Show
 local tostringall = tostringall
 local WOW_PROJECT_ID = WOW_PROJECT_ID
@@ -72,6 +73,10 @@ end
 
 function Plexus:issecretvalue(value) --luacheck: ignore 212
     return issecretvalue and issecretvalue(value) or false
+end
+
+function Plexus:canaccessvalue(value) --luacheck: ignore 212
+    return canaccessvalue and canaccessvalue(value) or true
 end
 
 _G.Plexus = LibStub:GetLibrary("AceAddon-3.0"):NewAddon(Plexus, PLEXUS, "AceConsole-3.0", "AceEvent-3.0")
@@ -949,6 +954,10 @@ do
                     CompactRaidFrameManager_SetSetting('IsShown', '0')
                 end
             end
+		    pcall(function()
+                CompactRaidFrameContainer:RegisterEvent("PLAYER_ENTERING_WORLD")
+                CompactRaidFrameContainer:RegisterEvent("GROUP_ROSTER_UPDATE")
+		    end)
         end
         hiddenFrame = hiddenFrame or CreateFrame('Frame')
         hiddenFrame:Hide()
