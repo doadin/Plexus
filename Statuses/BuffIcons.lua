@@ -38,6 +38,7 @@ PlexusBuffIcons.defaultDB = {
     overrideFilter = "false",
     font_size = 8,
     font_color = { r = 1, g = 1, b = 0, a = 1 },
+    enableDurationText = false,
 }
 
 local options = {
@@ -236,7 +237,19 @@ local options = {
             set = function(info, r, g, b, a)
                 PlexusBuffIcons.db.profile.font_color = { r = r, g = g, b = b, a = a }
             end,
-        }
+        },
+        enableDurationText = {
+            order = 41, width = "double",
+            type = "toggle",
+            name = L["Enable Duration Text"],
+            desc = L["Enabling/disabling will show the duration text on buff icons."],
+            get = function()
+                return PlexusBuffIcons.db.profile.enableDurationText
+            end,
+            set = function(_, v)
+                PlexusBuffIcons.db.profile.enableDurationText = v
+            end,
+        },
     }
 }
 
@@ -280,7 +293,9 @@ local function createButton(button)
     local TimefontColor = PlexusBuffIcons.db.profile.font_color
     Time:SetTextColor(TimefontColor.r, TimefontColor.g, TimefontColor.b, TimefontColor.a)
     Time:SetFont(TimefontFile, TimefontSize, "OUTLINE")
-    button:SetDurationText(Time)
+    if PlexusBuffIcons.db.profile.enableDurationText then
+        button:SetDurationText(Time)
+    end
     local cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
     cooldown:SetAllPoints()
     cooldown:SetAlpha(1)
