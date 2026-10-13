@@ -290,6 +290,7 @@ globals = {
     "C_WowEntitlementInfo",
     "C_WowTokenUI",
     "C_ZoneAbility",
+    "canaccessvalue",
     "ChatEdit_InsertLink",
     "ChatFontNormal",
     "ChatFrame_ImportAllListsToHash",
