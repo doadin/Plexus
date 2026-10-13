@@ -392,6 +392,7 @@ PlexusFrame.defaultDB = {
         icon = {
             raid_icon = true,
             ready_check = true,
+            alert_RaidDebuff = true,
         },
         ei_bar_barone = {
             unit_resource = true,
