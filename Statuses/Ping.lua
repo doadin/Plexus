@@ -13,8 +13,6 @@
 local _, Plexus = ...
 local L = Plexus.L
 
-local Roster = Plexus:GetModule("PlexusRoster")
-
 local PlexusStatusPing = Plexus:NewStatusModule("PlexusStatusPing")
 PlexusStatusPing.menuName = L["Ping"]
 PlexusStatusPing.options = false
@@ -30,7 +28,6 @@ PlexusStatusPing.defaultDB = {
 }
 
 local Ping_Enabled = false
-local cache = {}
 local textures = {}
 
 do
@@ -47,7 +44,6 @@ local function ShowPingEvent(icon, msg)
 		local parent = icon:GetParent()
 		local unit = parent and parent.unit
 		if unit and Plexus:canaccessvalue(unit) then
-			cache[unit] = textures[msg]
 			PlexusStatusPing:UpdateUnit(unit, textures[msg], true)
 		end
 	end
@@ -58,7 +54,6 @@ local function ClearPingEvent(icon)
 		local parent = icon:GetParent()
 		local unit = parent and parent.unit
 		if unit and Plexus:canaccessvalue(unit) then
-			cache[unit] = nil
 			PlexusStatusPing:UpdateUnit(unit, nil, false)
 		end
 	end
