@@ -1,5 +1,7 @@
 -- local zone = "The Dawnbreaker"
 local zoneid = 2359
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 451115, 1, 5, 5, true) -- Terrifying Slam

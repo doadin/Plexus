@@ -200,7 +200,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
     if not PlexusRoster:IsGUIDInRaid(guid) then return end
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
-        local incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped = 0
+        local incoming, incomingHealsFromOthers, _ = 0
         if not Plexus:IsRetailWow() then
             if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
                 incoming = UnitGetIncomingHeals(unit) or 0
@@ -216,9 +216,6 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
                 if HealComm and not settings.ignore_heal_comm and (not Plexus:IsRetailWow()) then
                     incoming = HealComm:GetOthersHealAmount(guid, HealComm.ALL_HEALS) or 0
                 end
-                --if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
-                --    incoming = incoming - (UnitGetIncomingHeals(unit, "player") or 0)
-                --end
             end
         end
 
@@ -228,20 +225,13 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             else
                 calculator:Reset()
             end
-            --UnitHealPredictionCalculator:SetHealAbsorbMode(settings.reduced_heal_absorb and 0 or 1)
             local role = UnitGroupRolesAssigned(unit)
             local healer = role == "HEALER" and unit or nil
             UnitGetDetailedHealPrediction(unit, healer, calculator)  -- 'calculator' is updated with new data after this call.
-            incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped = calculator:GetIncomingHeals()
+            incoming, _, incomingHealsFromOthers, _ = calculator:GetIncomingHeals()
             if settings.ignore_self then
                 incoming = incomingHealsFromOthers or 0
             end
-            --myStatusBar:SetValue(incomingHealsFromHealer);
-            --DevTools_Dump(incoming, incomingHealsFromHealer, incomingHealsFromOthers, incomingHealsClamped)
-            --DevTools_Dump(calculator:GetHealAbsorbs())
-            --DevTools_Dump(calculator:GetPredictedValues())
-            --local values = calculator:GetPredictedValues()
-            --local healthMax = values and values.healthMax or Plexus:CalcMaxHP(unit)
         end
 
         local maxHealth = Plexus:CalcMaxHP(unit)
@@ -255,12 +245,6 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             end
         else
             self:SendIncomingHealsStatus(guid, incoming, incoming, maxHealth)
-            --if timer and timer[guid] and not timer[guid]:IsCancelled() then
-            --    timer[guid]:Cancel()
-            --end
-            --timer[guid] = C_Timer.After(1.5, function()
-            --    self.core:SendStatusLost(guid, "alert_heals")
-            --end)
         end
     end
 end

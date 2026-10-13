@@ -1,5 +1,7 @@
 -- local zone = "The Azure Vault"
 local zoneid = 2073
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake

@@ -167,7 +167,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 134124, 86, 5, 5) --Yellow Beam
 PlexusStatusRaidDebuff:DebuffId(zoneid, 133795, 87, 6, 6) --Life Drain
 PlexusStatusRaidDebuff:DebuffId(zoneid, 133597, 88, 6, 6) --Dark Parasite
 PlexusStatusRaidDebuff:DebuffId(zoneid, 133732, 89, 3, 3, true, true) --Infrared Light (the stacking red debuff)
-PlexusStatusRaidDebuff:DebuffId(zoneid, 133677, 90, 3, 3, true, true) --Blue Rays (the stacking blue debuff)  
+PlexusStatusRaidDebuff:DebuffId(zoneid, 133677, 90, 3, 3, true, true) --Blue Rays (the stacking blue debuff)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 133738, 91, 3, 3, true, true) --Bright Light (the stacking yellow debuff)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 133737, 92, 4, 4) --Bright Light (The one that says you are actually in a beam)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 133675, 93, 4, 4) --Blue Rays (The one that says you are actually in a beam)
@@ -206,7 +206,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 135145, 135, 6, 6) --Freeze
 PlexusStatusRaidDebuff:DebuffId(zoneid, 136520, 136, 5, 5, true, true) --Frozen Blood
 PlexusStatusRaidDebuff:DebuffId(zoneid, 137669, 137, 3, 3) --Storm Cloud
 PlexusStatusRaidDebuff:DebuffId(zoneid, 137668, 138, 5, 5, true, true) --Burning Cinders
-PlexusStatusRaidDebuff:DebuffId(zoneid, 137654, 139, 5, 5) --Rushing Winds 
+PlexusStatusRaidDebuff:DebuffId(zoneid, 137654, 139, 5, 5) --Rushing Winds
 PlexusStatusRaidDebuff:DebuffId(zoneid, 136577, 140, 4, 4) --Wind Storm
 PlexusStatusRaidDebuff:DebuffId(zoneid, 136192, 141, 4, 4) --Lightning Storm
 PlexusStatusRaidDebuff:DebuffId(zoneid, 136615, 142, 6, 6) --Electrified

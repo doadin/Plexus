@@ -40,13 +40,13 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 298514, 1, 5, 5, true) --Aqiri Mind Toxi
 PlexusStatusRaidDebuff:DebuffId(zoneid, 307020, 1, 5, 5, true) --Twilight Breath
 PlexusStatusRaidDebuff:DebuffId(zoneid, 306981, 1, 5, 5, true) --Gift of the Void
 PlexusStatusRaidDebuff:DebuffId(zoneid, 315311, 1, 5, 5, true) --Ravage
-PlexusStatusRaidDebuff:DebuffId(zoneid, 314347, 1, 5, 5, true) --Noxious Choke   
-PlexusStatusRaidDebuff:DebuffId(zoneid, 314188, 1, 5, 5, true) --Mind Flay      
-PlexusStatusRaidDebuff:DebuffId(zoneid, 313672, 1, 5, 5, true) --Acid Pool       
-PlexusStatusRaidDebuff:DebuffId(zoneid, 307053, 1, 5, 5, true) --Lava Pools     
-PlexusStatusRaidDebuff:DebuffId(zoneid, 314451, 1, 5, 5, true) --Leeching Bite   
-PlexusStatusRaidDebuff:DebuffId(zoneid, 313460, 1, 5, 5, true) --Nullification    
-PlexusStatusRaidDebuff:DebuffId(zoneid, 311362, 1, 5, 5, true) --Rising Heat     
+PlexusStatusRaidDebuff:DebuffId(zoneid, 314347, 1, 5, 5, true) --Noxious Choke
+PlexusStatusRaidDebuff:DebuffId(zoneid, 314188, 1, 5, 5, true) --Mind Flay
+PlexusStatusRaidDebuff:DebuffId(zoneid, 313672, 1, 5, 5, true) --Acid Pool
+PlexusStatusRaidDebuff:DebuffId(zoneid, 307053, 1, 5, 5, true) --Lava Pools
+PlexusStatusRaidDebuff:DebuffId(zoneid, 314451, 1, 5, 5, true) --Leeching Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 313460, 1, 5, 5, true) --Nullification
+PlexusStatusRaidDebuff:DebuffId(zoneid, 311362, 1, 5, 5, true) --Rising Heat
 PlexusStatusRaidDebuff:DebuffId(zoneid, 314593, 1, 5, 5, true) --Mind-Numbing Toxin
 
 -- Wrathion

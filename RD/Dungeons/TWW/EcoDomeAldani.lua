@@ -1,5 +1,7 @@
 -- local zone = "Ara-Kara, City of Echoes"
 local zoneid = 2449
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --Trash
 

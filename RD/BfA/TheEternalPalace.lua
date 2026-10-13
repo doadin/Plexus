@@ -51,14 +51,14 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 294847, 15, 5, 5, true) --Unstable Mixtu
 PlexusStatusRaidDebuff:DebuffId(zoneid, 295348, 16, 5, 5, true) --Overflowing Chill
 PlexusStatusRaidDebuff:DebuffId(zoneid, 295421, 17, 5, 5, true) --Overflowing Venom
 PlexusStatusRaidDebuff:DebuffId(zoneid, 300961, 18, 5, 5, true) --Frozen Ground
-PlexusStatusRaidDebuff:DebuffId(zoneid, 300962, 19, 5, 5, true) --Septic Ground	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 300962, 19, 5, 5, true) --Septic Ground
 PlexusStatusRaidDebuff:DebuffId(zoneid, 300883, 20, 5, 5, true) --Inversion Sickness
 PlexusStatusRaidDebuff:DebuffId(zoneid, 300882, 21, 5, 5, true) --Inversion Sickness
 PlexusStatusRaidDebuff:DebuffId(zoneid, 295705, 22, 5, 5, true) --Toxic Bolt
 PlexusStatusRaidDebuff:DebuffId(zoneid, 295704, 23, 5, 5, true) --Frost Bolt
 
 -- Radiance of Azshara
-PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Radiance of Azshara")	
+PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Radiance of Azshara")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 296566, 31, 5, 5, true) --Tide Fist
 PlexusStatusRaidDebuff:DebuffId(zoneid, 296737, 32, 5, 5, true) --Arcane Bomb
 PlexusStatusRaidDebuff:DebuffId(zoneid, 295920, 33, 5, 5, true) --Ancient Tempest

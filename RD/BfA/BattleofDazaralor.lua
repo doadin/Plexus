@@ -91,7 +91,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 287648, 83, 5, 5, true) --Volatile Charg
 PlexusStatusRaidDebuff:DebuffId(zoneid, 283610, 84, 5, 5, true) --Crush
 PlexusStatusRaidDebuff:DebuffId(zoneid, 284424, 85, 5, 5, true) --Scorching Ground
 PlexusStatusRaidDebuff:DebuffId(zoneid, 284470, 86, 5, 5, true) --Hex of Lethargy
-PlexusStatusRaidDebuff:DebuffId(zoneid, 284472, 87, 5, 5, true) --Deadly Hex	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 284472, 87, 5, 5, true) --Deadly Hex
 PlexusStatusRaidDebuff:DebuffId(zoneid, 286501, 88, 5, 5, true) --Creeping Blaze
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285479, 89, 5, 5, true) --Flame Jet
 PlexusStatusRaidDebuff:DebuffId(zoneid, 287074, 90, 5, 5, true) --Molten Gold
@@ -126,7 +126,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 286779, 131, 5, 5, true) --Focused Demis
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285213, 132, 5, 5, true) --Caress of Death
 PlexusStatusRaidDebuff:DebuffId(zoneid, 284376, 133, 5, 5, true) --Death's Presence
 PlexusStatusRaidDebuff:DebuffId(zoneid, 290450, 134, 5, 5, true) --Seal of Purification
-PlexusStatusRaidDebuff:DebuffId(zoneid, 285178, 135, 5, 5, true) --Serpent's Breath	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 285178, 135, 5, 5, true) --Serpent's Breath
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285010, 136, 5, 5, true) --Poison Toad Slime
 PlexusStatusRaidDebuff:DebuffId(zoneid, 284781, 127, 5, 5, true) --Grievous Axe
 PlexusStatusRaidDebuff:DebuffId(zoneid, 290448, 138, 5, 5, true) --Seal of Purification
@@ -160,7 +160,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 286680, 181, 5, 5, true) --Roiling Tides
 PlexusStatusRaidDebuff:BossNameId(zoneid, 190, "Lady Jaina Proudmoore")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 287993, 191, 5, 5, true) --Chilling Touch
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285253, 192, 5, 5, true) --Ice Shard
-PlexusStatusRaidDebuff:DebuffId(zoneid, 288169, 193, 5, 5, true) --Howling Winds	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 288169, 193, 5, 5, true) --Howling Winds
 PlexusStatusRaidDebuff:DebuffId(zoneid, 287490, 194, 5, 5, true) --Frozen Solid
 PlexusStatusRaidDebuff:DebuffId(zoneid, 288297, 195, 5, 5, true) --Arctic Ground
 PlexusStatusRaidDebuff:DebuffId(zoneid, 287365, 196, 5, 5, true) --Searing Pitch

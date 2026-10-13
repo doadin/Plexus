@@ -115,7 +115,7 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 90, "Kor'kron Dark Shaman")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 144089, 91, 6, 6) --Toxic Mist
 PlexusStatusRaidDebuff:DebuffId(zoneid, 144215, 92, 2, 2) --Froststorm Strike (Tank only)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143990, 93, 2, 2) --Foul Geyser (Tank only)
-PlexusStatusRaidDebuff:DebuffId(zoneid, 144304, 94, 2, 2) --Rend 
+PlexusStatusRaidDebuff:DebuffId(zoneid, 144304, 94, 2, 2) --Rend
 PlexusStatusRaidDebuff:DebuffId(zoneid, 144330, 95, 6, 6) --Iron Prison (Heroic)
 
 -- General Nazgrim
@@ -123,7 +123,7 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "General Nazgrim")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143638, 101, 6, 6) --Bonecracker
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143480, 102, 5, 5) --Assassin's Mark
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143431, 103, 6, 6) --Magistrike (Dispell)
-PlexusStatusRaidDebuff:DebuffId(zoneid, 143494, 104, 2, 2, true, true) --Sundering Blow (Tanks) 
+PlexusStatusRaidDebuff:DebuffId(zoneid, 143494, 104, 2, 2, true, true) --Sundering Blow (Tanks)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143882, 105, 5, 5) --Hunter's Mark
 
 -- Malkorok
@@ -203,7 +203,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 143979, 193, 2, 2, true, true) --Vicious
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143607, 194, 5, 5, true, true) --Blue Sword
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143614, 195, 5, 5, true, true) --Yellow Drum
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143612, 196, 5, 5, true, true) --Blue Drum
-PlexusStatusRaidDebuff:DebuffId(zoneid, 142533, 197, 6, 6) --Toxin: Red 
+PlexusStatusRaidDebuff:DebuffId(zoneid, 142533, 197, 6, 6) --Toxin: Red
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143615, 198, 5, 5, true, true) --Red Bomb
 PlexusStatusRaidDebuff:DebuffId(zoneid, 143974, 199, 2, 2) --Shield Bash (tanks)
 

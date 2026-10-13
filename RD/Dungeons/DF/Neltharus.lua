@@ -1,5 +1,7 @@
 -- local zone = "Neltharus"
 local zoneid = 2080
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -13,12 +15,12 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 408556, 1, 6, 6, true) --Entangled
 PlexusStatusRaidDebuff:DebuffId(zoneid, 440313, 1, 6, 6, true) --Devouring Rift
 
 --Trash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 372971, 1, 6, 6, true) --Reverberating Slam
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 373540, 1, 6, 6, true) --Binding Spear
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 372570, 1, 6, 6, true) --Bold Ambush
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 378818, 1, 6, 6, true) --Magma Conflagration
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 372461, 1, 6, 6, true) --Imbued Magma
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 384161, 1, 6, 6, true) --Mote of Combustion
+PlexusStatusRaidDebuff:DebuffId(zoneid, 372971, 1, 6, 6, true) --Reverberating Slam
+PlexusStatusRaidDebuff:DebuffId(zoneid, 373540, 1, 6, 6, true) --Binding Spear
+PlexusStatusRaidDebuff:DebuffId(zoneid, 372570, 1, 6, 6, true) --Bold Ambush
+PlexusStatusRaidDebuff:DebuffId(zoneid, 378818, 1, 6, 6, true) --Magma Conflagration
+PlexusStatusRaidDebuff:DebuffId(zoneid, 372461, 1, 6, 6, true) --Imbued Magma
+PlexusStatusRaidDebuff:DebuffId(zoneid, 384161, 1, 6, 6, true) --Mote of Combustion
 
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Chargath, Bane of Scales")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 374471, 101, 5, 5, true) --erupted-ground

@@ -52,7 +52,7 @@ function PlexusStatusDefensives:OnStatusEnable() --status --luacheck: ignore 112
     --self:UpdateAllUnits()
 end
 
-function PlexusStatusDefensives:OnStatusDisable(status) -- status --luacheck: ignore 112
+function PlexusStatusDefensives:OnStatusDisable(_status) -- status --luacheck: ignore 112
     self:UnregisterMessage("UpdateFrameUnits")
     self:UnregisterEvent("LOADING_SCREEN_DISABLED")
     --self.core:SendStatusLostAllUnits(status)
@@ -68,7 +68,7 @@ function PlexusStatusDefensives:UpdateAllUnits() --luacheck: ignore 112
     end
 end
 
-local function createButton(status, name)
+local function createButton(_status, name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         if name == "icon" then
@@ -157,7 +157,7 @@ local function createButton(status, name)
     end
 end
 
-local function createFrame(status, name)
+local function createFrame(status, _name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         button:SetSize(frameSettings.cornerSize, frameSettings.cornerSize)
@@ -191,7 +191,7 @@ local function createFrame(status, name)
     end
 end
 
-local function createBorder(status, name, indicator)
+local function createBorder(status, _name, _indicator)
     local frameSettings = PlexusFrame.db.profile
 
     return function(button)

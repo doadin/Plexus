@@ -95,7 +95,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 78617, 55, 6, 6) --Fixate
 PlexusStatusRaidDebuff:DebuffId(zoneid, 77760, 56, 6, 6) --Biting Chill
 PlexusStatusRaidDebuff:DebuffId(zoneid, 77699, 57, 6, 6) --Flash Freeze 10-normal
 -- Heroic
-PlexusStatusRaidDebuff:DebuffId(zoneid, 92987, 58, 5, 5) --Dark Sludge 
+PlexusStatusRaidDebuff:DebuffId(zoneid, 92987, 58, 5, 5) --Dark Sludge
 PlexusStatusRaidDebuff:DebuffId(zoneid, 92982, 59, 7, 7) --Engulfing Darkness
 
 --Nefarian

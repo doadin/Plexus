@@ -1,5 +1,7 @@
 -- local zone = "Cinderbrew Meadery"
 local zoneid = 2335
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 
 -- Trash

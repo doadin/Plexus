@@ -16,7 +16,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 125092, 1, 6, 6, true, true) --Petrifica
 PlexusStatusRaidDebuff:DebuffId(zoneid, 116970, 1, 1, 1, true, true) --Sundering Bite
 
 -- The Repository
--- Feng trash 
+-- Feng trash
 -- Cursed Mogu Sculpture
 PlexusStatusRaidDebuff:DebuffId(zoneid, 121087, 2, 1, 1) --Ground Slam
 PlexusStatusRaidDebuff:DebuffId(zoneid, 121245, 2, 1, 1) --Curse of Vitality (Curse)

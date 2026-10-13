@@ -1,5 +1,7 @@
 -- local zone = "The Rookery"
 local zoneid = 2316
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 467907, 1, 5, 5, true)  --Festering Void

@@ -117,7 +117,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 155900, 14, 2, 2, true) -- Rolling Fury 
 -- Retched Blackrock
 PlexusStatusRaidDebuff:DebuffId(zoneid, 156203, 15, 5, 5) -- Retched Blackrock (standing in pool?)
 
--- Hans'gar and Franzok 
+-- Hans'gar and Franzok
 PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Hans'gar and Franzok")
 -- both have these abilities
 PlexusStatusRaidDebuff:DebuffId(zoneid, 157853, 21, 2, 2, true) -- Aftershock (dot)
@@ -176,7 +176,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 155049, 67, 4, 4, true, true) -- Singe (
 -- PlexusStatusRaidDebuff:DebuffId(zoneid, 155493, 68, 5, 5) --FIRESTORM -- not a debuff
 -- PlexusStatusRaidDebuff:DebuffId(zoneid, 163633, 68, 5, 5) --MAGMAMONSOON -- not a debuff
 
--- Operator Thogar 
+-- Operator Thogar
 PlexusStatusRaidDebuff:BossNameId(zoneid, 70, "Operator Thogar")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 155921, 71, 3, 3, true, true) -- Enkindle (stacking tank dot)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 165195, 72, 6, 6) -- Prototype Pulse Grenade (standing in)

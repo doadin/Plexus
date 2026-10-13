@@ -6,25 +6,25 @@ local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
 --Trash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 39042, 1, 5, 5) --Rampent Infection
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 39044, 2, 5, 5, true) --Serpentshrine Parasite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 39042, 1, 5, 5) --Rampent Infection
+PlexusStatusRaidDebuff:DebuffId(zoneid, 39044, 2, 5, 5, true) --Serpentshrine Parasite
 
 --Hydross
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Hydross the Unstable")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 38235, 11, 5, 5, true) --Water Tomb
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 38246, 12, 5, 5) --Vile Sludge
+PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Hydross the Unstable")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 38235, 11, 5, 5, true) --Water Tomb
+PlexusStatusRaidDebuff:DebuffId(zoneid, 38246, 12, 5, 5) --Vile Sludge
 
 --Morogrim
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Morogrim Tidewalker")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 37850, 21, 5, 5, true) --Watery Grave
+PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Morogrim Tidewalker")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 37850, 21, 5, 5, true) --Watery Grave
 
 --Leotheras
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Leotheras the Blind")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 37676, 31, 5, 5) --insidious whisper
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 37641, 32, 5, 5, true) --Whirl wind
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 37749, 33, 5, 5) --Madness
+PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Leotheras the Blind")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 37676, 31, 5, 5) --insidious whisper
+PlexusStatusRaidDebuff:DebuffId(zoneid, 37641, 32, 5, 5, true) --Whirl wind
+PlexusStatusRaidDebuff:DebuffId(zoneid, 37749, 33, 5, 5) --Madness
 
 --Vashj
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Lady Vashj")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 38280, 34, 5, 5, true) --Static Charge
+PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Lady Vashj")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 38280, 34, 5, 5, true) --Static Charge
 

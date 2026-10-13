@@ -1,5 +1,7 @@
 -- local zone = "The Stonevault"
 local zoneid = 2341
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 449455, 1, 5, 5, true) -- Howling Fear
@@ -12,7 +14,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 428887, 1, 5, 5, true) -- Smashed
 PlexusStatusRaidDebuff:DebuffId(zoneid, 449154, 1, 5, 5, true) -- Molten Mortar
 PlexusStatusRaidDebuff:DebuffId(zoneid, 445207, 1, 5, 5, true) -- Piercing Wail
 PlexusStatusRaidDebuff:DebuffId(zoneid, 464879, 1, 5, 5, true) -- Concussive Smash
-PlexusStatusRaidDebuff:DebuffId(zoneid, 425974, 1, 5, 5, true) -- Ground Pound	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 425974, 1, 5, 5, true) -- Ground Pound
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake

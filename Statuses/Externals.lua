@@ -205,7 +205,7 @@ do
         local frame = CreateFrame("Frame")
         frame:SetWidth(200)
         frame:SetHeight(spell_count * SPELL_HEIGHT)
-        frame.obj = self
+        --frame.obj = self
 
         local spell_containers = { }
 
@@ -530,12 +530,6 @@ PlexusStatusExternals.tankingbuffs = tankingbuffs --luacheck: ignore 112
 local PlexusRoster = Plexus:GetModule("PlexusRoster") --luacheck: ignore 211
 local UnitBuff = UnitBuff
 local UnitGUID = UnitGUID
-local GetAuraDataByAuraInstanceID
-local ForEachAura
-if Plexus:IsRetailWow() then
-    GetAuraDataByAuraInstanceID = C_UnitAuras.GetAuraDataByAuraInstanceID
-    ForEachAura = AuraUtil.ForEachAura
-end
 
 local settings
 local spellnames = {} --luacheck: ignore 241
@@ -793,7 +787,7 @@ end
 function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
     for guid, unitid in PlexusRoster:IterateRoster() do
         if Plexus:IsRetailWow() then
-            self:ScanUnitByAuraInfo(_, unitid, {isFullUpdate = true})
+            self:ScanUnitByAuraInfo(nil, unitid, {isFullUpdate = true})
         else
             self:ScanUnit("UpdateAllUnits", unitid, guid)
         end
@@ -804,7 +798,7 @@ function PlexusStatusExternals:UpdateAllUnits() --luacheck: ignore 112
 end
 
 local unitAuras
-function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
+function PlexusStatusExternals:ScanUnitByAuraInfo(_event, unit, _updatedAuras)
     if not unit then return end
     local guid = UnitGUID(unit)
     if not guid then
@@ -822,7 +816,7 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
 
     local filter = "HELPFUL|EXTERNAL_DEFENSIVE"
     local result = C_UnitAuras.GetUnitAuras(unit, filter , 1 , Enum.UnitAuraSortRule.ExpirationOnly , Enum.UnitAuraSortDirection.Normal)
-    --local dur = result and result[1] and C_UnitAuras.GetAuraDurationRemainingByAuraInstanceID(unit, result[1].auraInstanceID)
+    local dur = nil-- result and result[1] and C_UnitAuras.GetAuraDurationRemainingByAuraInstanceID(unit, result[1].auraInstanceID)
     if result and result[1] then
         self.core:SendStatusGained(
             guid, "alert_externals", settings.priority, (settings.range and 40),
@@ -831,102 +825,6 @@ function PlexusStatusExternals:ScanUnitByAuraInfo(event, unit, updatedAuras)
         self.core:SendStatusLost(guid, "alert_externals")
     end
     return
-
-    ---- Full Update
-    --if updatedAuras and updatedAuras.isFullUpdate then
-    --    local unitauraInfo = {}
-    --    ForEachAura(unit, "HELPFUL", nil,
-    --        function(aura)
-    --            if aura and aura.auraInstanceID then
-    --                unitauraInfo[aura.auraInstanceID] = aura
-    --            end
-    --        end,
-    --    true)
---
-    --    if unitAuras[guid] then
-    --        unitAuras[guid] = nil
-    --        self.core:SendStatusLost(guid, "alert_externals")
-    --    end
---
-    --    for _, v in pairs(unitauraInfo) do
-    --        if not unitAuras[guid] then
-    --            unitAuras[guid] = {}
-    --        end
-    --        if v.spellId and spellid_list[v.spellId] then
-    --            unitAuras[guid][v.auraInstanceID] = v
-    --        end
-    --    end
-    --end
---
-    --if updatedAuras and updatedAuras.addedAuras then
-    --    for _, aura in pairs(updatedAuras.addedAuras) do
-    --        if aura.spellId and spellid_list[aura.spellId] then
-    --            if not unitAuras[guid] then
-    --                unitAuras[guid] = {}
-    --            end
-    --            unitAuras[guid][aura.auraInstanceID] = aura
-    --        end
-    --    end
-    --end
---
-    --if updatedAuras and updatedAuras.updatedAuraInstanceIDs then
-    --    for _, auraInstanceID in ipairs(updatedAuras.updatedAuraInstanceIDs) do
-    --        local auraTable = GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-    --        if unitAuras[guid] and unitAuras[guid][auraInstanceID] and not auraTable then
-    --            self.core:SendStatusLost(guid, "alert_externals")
-    --            unitAuras[guid][auraInstanceID] = nil
-    --        end
-    --        if auraTable and auraTable.spellId and spellid_list[auraTable.spellId] then
-    --            if not unitAuras[guid] then
-    --                unitAuras[guid] = {}
-    --            end
-    --            unitAuras[guid][auraInstanceID] = auraTable
-    --        end
-    --    end
-    --end
---
-    --if updatedAuras and updatedAuras.removedAuraInstanceIDs then
-    --    for _, auraInstanceID in ipairs(updatedAuras.removedAuraInstanceIDs) do
-    --        if unitAuras[guid] and unitAuras[guid][auraInstanceID] then
-    --            unitAuras[guid][auraInstanceID] = nil
-    --            self.core:SendStatusLost(guid, "alert_externals")
-    --        end
-    --    end
-    --end
---
-    --if unitAuras[guid] then
-    --    local numAuras = 0
-    --    for instanceID, info in pairs(unitAuras[guid]) do
-    --        if unitAuras[guid][instanceID] then
-    --            numAuras = numAuras + 1
-    --            local name, uicon, count, duration, expirationTime, caster = info.name, info.icon, info.applications, info.duration, info.expirationTime, info.sourceUnit
-    --            local text
-    --            if settings.showtextas == "caster" and caster then
-    --                text = UnitName(caster)
-    --            else
-    --                text = name
-    --            end
-    --            self.core:SendStatusGained(guid,
-    --                "alert_externals",
-    --                settings.priority,
-    --                (settings.range and 40),
-    --                settings.color,
-    --                text,
-    --                0,							-- value
-    --                nil,						-- maxValue
-    --                uicon,						-- icon
-    --                expirationTime - duration,	-- start
-    --                duration,					-- duration
-    --                count                       -- stack
-    --            )
-    --        end
-    --    end
---
-    --    if numAuras == 0 then
-    --        unitAuras[guid] = nil
-    --        self.core:SendStatusLost(guid, "alert_externals")
-    --    end
-    --end
 end
 
 function PlexusStatusExternals:ScanUnit(_, unitid, unitguid) --luacheck: ignore 112

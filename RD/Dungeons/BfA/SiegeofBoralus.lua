@@ -1,5 +1,7 @@
 --local zone = "Siege of Boralus"
 local zoneid = 1162
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272588, 1, 6, 6, true)  --Rotting Wounds
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257168, 1, 6, 6, true)  --Cursed Slash

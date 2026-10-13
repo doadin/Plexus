@@ -1,6 +1,9 @@
 --local zone = "The Necrotic Wake"
 local zoneid = 1666
 
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
 

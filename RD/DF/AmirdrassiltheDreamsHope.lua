@@ -45,10 +45,10 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Gnarlroot")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 421971, 101, 5, 5, true) --Controlled Burn
 PlexusStatusRaidDebuff:DebuffId(zoneid, 422023, 102, 5, 5, true) --Shadow-Scorched Earth
 PlexusStatusRaidDebuff:DebuffId(zoneid, 422026, 103, 5, 5, true) --Tortured Scream
-PlexusStatusRaidDebuff:DebuffId(zoneid, 421038, 104, 5, 5, true) --Ember-Charred		
+PlexusStatusRaidDebuff:DebuffId(zoneid, 421038, 104, 5, 5, true) --Ember-Charred
 PlexusStatusRaidDebuff:DebuffId(zoneid, 426548, 105, 5, 5, true) --Searing Bramble
 PlexusStatusRaidDebuff:DebuffId(zoneid, 421840, 106, 5, 5, true) --Uprooted Agony
-PlexusStatusRaidDebuff:DebuffId(zoneid, 422053, 107, 5, 5, true) --Shadow Spines* 
+PlexusStatusRaidDebuff:DebuffId(zoneid, 422053, 107, 5, 5, true) --Shadow Spines*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 425816, 108, 5, 5, true) --Blazing Pollen*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 425819, 109, 5, 5, true) --Flaming Sap*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 424352, 110, 5, 5, true) --Dreadfire Barrage*
@@ -57,7 +57,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 424970, 111, 5, 5, true) --Toxic Loam
 PlexusStatusRaidDebuff:BossNameId(zoneid, 200, "Igira the Cruel")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 414340, 201, 5, 5, true) --Drenched Blades
 PlexusStatusRaidDebuff:DebuffId(zoneid, 414770, 202, 5, 5, true) --Blistering Torment
-PlexusStatusRaidDebuff:DebuffId(zoneid, 414367, 203, 5, 5, true) --Gathering Torment	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 414367, 203, 5, 5, true) --Gathering Torment
 PlexusStatusRaidDebuff:DebuffId(zoneid, 419462, 204, 5, 5, true) --Flesh Mortification
 PlexusStatusRaidDebuff:DebuffId(zoneid, 423715, 205, 5, 5, true) --Searing Sparks
 PlexusStatusRaidDebuff:DebuffId(zoneid, 416056, 206, 5, 5, true) --Umbral Destruction
@@ -124,7 +124,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 428479, 610, 5, 5, true) --Lucid Vulnera
 PlexusStatusRaidDebuff:DebuffId(zoneid, 423842, 611, 5, 5, true) --Verdant Rend
 PlexusStatusRaidDebuff:DebuffId(zoneid, 418423, 612, 5, 5, true) --Verdant Matrix*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 420846, 613, 5, 5, true) --Continuum*
-PlexusStatusRaidDebuff:DebuffId(zoneid, 428012, 614, 5, 5, true) --Lucid Miasma*	
+PlexusStatusRaidDebuff:DebuffId(zoneid, 428012, 614, 5, 5, true) --Lucid Miasma*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 427721, 615, 5, 5, true) --Weaver's Burden
 
 PlexusStatusRaidDebuff:BossNameId(zoneid, 700, "Smolderon")
@@ -136,8 +136,8 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 421858, 705, 5, 5, true) --Ignited Essen
 PlexusStatusRaidDebuff:DebuffId(zoneid, 421455, 706, 5, 5, true) --Overheated*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 422577, 707, 5, 5, true) --Searing Aftermath*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 426018, 708, 5, 5, true) --Seeking Inferno*
-PlexusStatusRaidDebuff:DebuffId(zoneid, 420950, 709, 5, 5, true) --Blistering Heat*		
-PlexusStatusRaidDebuff:DebuffId(zoneid, 425574, 710, 5, 5, true) --Lingering Burn*		
+PlexusStatusRaidDebuff:DebuffId(zoneid, 420950, 709, 5, 5, true) --Blistering Heat*
+PlexusStatusRaidDebuff:DebuffId(zoneid, 425574, 710, 5, 5, true) --Lingering Burn*
 
 PlexusStatusRaidDebuff:BossNameId(zoneid, 800, "Tindral Sageswift, Seer of the Flame")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 424495, 801, 5, 5, true) --Mass Entanglement

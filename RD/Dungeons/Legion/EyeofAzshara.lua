@@ -1,6 +1,9 @@
 --local zone = "Eye of Azshara"
 local zoneid = 713
 
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
 
@@ -16,25 +19,25 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 408556, 1, 6, 6, true) --Entangled
 PlexusStatusRaidDebuff:DebuffId(zoneid, 440313, 1, 6, 6, true) --Devouring Rift
 
 --Trash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 196064, 1, 6, 6, true) --Tearing Bite
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 195105, 1, 6, 6, true) --Crunching Bite
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 196111, 1, 6, 6, true) --Jagged Claws
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 196058, 1, 6, 6, true) --Lethargic Toxin
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 196060, 1, 6, 6, true) --Numbing Toxin
+PlexusStatusRaidDebuff:DebuffId(zoneid, 196064, 1, 6, 6, true) --Tearing Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 195105, 1, 6, 6, true) --Crunching Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 196111, 1, 6, 6, true) --Jagged Claws
+PlexusStatusRaidDebuff:DebuffId(zoneid, 196058, 1, 6, 6, true) --Lethargic Toxin
+PlexusStatusRaidDebuff:DebuffId(zoneid, 196060, 1, 6, 6, true) --Numbing Toxin
 
 --Lady Hatecoil
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Warlord Parjesh")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 192131, 11, 6, 6, true) --Throw Spear
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 192094, 12, 6, 6, true) --Impaling Spear
+PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Warlord Parjesh")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 192131, 11, 6, 6, true) --Throw Spear
+PlexusStatusRaidDebuff:DebuffId(zoneid, 192094, 12, 6, 6, true) --Impaling Spear
 --Hatecoil Warrior
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 195094, 13, 6, 6, true) --Coral Slash
+PlexusStatusRaidDebuff:DebuffId(zoneid, 195094, 13, 6, 6, true) --Coral Slash
 
 
 --Lady Hatecoil
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Lady Hatecoil")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 193698, 21, 6, 6, true) --Curse of the Witch
+PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Lady Hatecoil")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 193698, 21, 6, 6, true) --Curse of the Witch
 
 
 --Serpentrix
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Serpentrix")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 191855, 31, 6, 6, true) --toxic-wound
+PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Serpentrix")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 191855, 31, 6, 6, true) --toxic-wound

@@ -44,7 +44,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 159188, 28, 5, 5) --GRAPPLE
 PlexusStatusRaidDebuff:DebuffId(zoneid, 162497, 29, 4, 4) --ON THE HUNT
 PlexusStatusRaidDebuff:DebuffId(zoneid, 159202, 30, 5, 5) --FLAME JET
 
---Twin Ogron 
+--Twin Ogron
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Twin Ogron")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 158026, 41, 6, 6) --ENFEEBLING ROAR
 PlexusStatusRaidDebuff:DebuffId(zoneid, 158241, 42, 5, 5, true, true) --BLAZE
@@ -80,7 +80,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 159220, 74, 6, 6) --NECROTIC BREATH
 PlexusStatusRaidDebuff:DebuffId(zoneid, 160179, 75, 6, 6) --MIND FUNGUS
 PlexusStatusRaidDebuff:DebuffId(zoneid, 159972, 76, 6, 6, true, true) --FLESHEATER
 
---Imperator Mar'gok 
+--Imperator Mar'gok
 PlexusStatusRaidDebuff:BossNameId(zoneid, 80, "Imperator Mar'gok")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 156238, 81, 4, 4) --BRANDED  156238 163990 163989 163988
 PlexusStatusRaidDebuff:DebuffId(zoneid, 156467, 82, 5, 5) --DESTRUCTIVE RESONANCE  156467 164075 164076 164077

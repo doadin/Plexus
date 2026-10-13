@@ -110,82 +110,82 @@ do
     end
 end
 
-local getHostile, getFriendly
+local getFriendly
 local function IVS(spellID)	return IsPlayerSpell(spellID) and spellID end
 if Plexus:IsRetailWow() then -- retail
 	if class == 'DRUID' then
-		getHostile  = function() return 8921 end -- Moonfire
+		--getHostile  = function() return 8921 end -- Moonfire
 		getFriendly = function() return 8936 end -- Regrowth
 	elseif class == 'PRIEST' then
-		getHostile  = function() return 585  end  -- Smite
+		--getHostile  = function() return 585  end  -- Smite
 		getFriendly = function() return 2061 end  -- Flash Heal
 	elseif class == 'SHAMAN' then
-		getHostile  = function() return 188196  end -- Lightning Bolt
+		--getHostile  = function() return 188196  end -- Lightning Bolt
 		getFriendly = function() return 8004 end    -- Healing Surge
 	elseif class == 'PALADIN' then
-		getHostile  = function() return 62124 end -- Hand of Reckoning
+		--getHostile  = function() return 62124 end -- Hand of Reckoning
 		getFriendly = function() return 19750 end -- Flash of light
 	elseif class == 'MONK' then
-		getHostile  = function() return 115546 end -- Provoke
+		--getHostile  = function() return 115546 end -- Provoke
 		getFriendly = function() return 116670 end -- Vivify
 	elseif class == 'EVOKER' then
-		getHostile  = function() return 361469 end -- Living flame
+		--getHostile  = function() return 361469 end -- Living flame
 		getFriendly = function() return 355913 end -- Emerald Blossom
 	elseif class == 'WARLOCK' then
-		getHostile  = function() return 686 end   -- Shadow Bolt
+		--getHostile  = function() return 686 end   -- Shadow Bolt
 		getFriendly = function() return 20707 end -- Soulstone
 	elseif class == 'WARRIOR' then
-		getHostile  = function() return 355 end  -- Taunt
+		--getHostile  = function() return 355 end  -- Taunt
 		getFriendly = function() return nil end  -- no avail
 	elseif class == 'DEMONHUNTER' then
-		getHostile  = function() return 185123 end -- Throw Glaive
+		--getHostile  = function() return 185123 end -- Throw Glaive
 		getFriendly = function() return nil    end -- no avail
 	elseif class == 'HUNTER' then
-		getHostile  = function() return IVS(193455) or IVS(19434) or IVS(132031) end -- Cobra Shot, Aimed Short, Steady shot
+		--getHostile  = function() return IVS(193455) or IVS(19434) or IVS(132031) end -- Cobra Shot, Aimed Short, Steady shot
 		getFriendly = function() return nil end -- no avail
 	elseif class == 'ROGUE' then
-		getHostile  = function() return IVS(36554) or IVS(6770) end -- Shadowstep, Sap
+		--getHostile  = function() return IVS(36554) or IVS(6770) end -- Shadowstep, Sap
 		getFriendly = function() return IVS(36554) end -- Shadowstep
 	elseif class == 'DEATHKNIGHT' then
-		getHostile  = function() return IVS(47541) or IVS(49576) end -- Death Coil, Death Grip
+		--getHostile  = function() return IVS(47541) or IVS(49576) end -- Death Coil, Death Grip
 		getFriendly = function() return IVS(47541) end -- Death Coil
 	elseif class == 'MAGE' then
-		getHostile  = function() return IVS(116) or IVS(30451) or IVS(133) end -- Frostbolt, Arcane Blast, Fireball
+		--getHostile  = function() return IVS(116) or IVS(30451) or IVS(133) end -- Frostbolt, Arcane Blast, Fireball
 		getFriendly = function() return 1459 end -- Arcane intellect
 	end
 else -- classic
 	if class == 'DRUID' then
-		getHostile  = function() return 5176 end -- Wrath
+		--getHostile  = function() return 5176 end -- Wrath
 		getFriendly = function() return 5185 end -- Healing Touchaw
 	elseif class == 'PRIEST' then
-		getHostile  = function() return 585  end -- Smite
+		--getHostile  = function() return 585  end -- Smite
 		getFriendly = function() return 2050 end -- Lesser Heal
 	elseif class == 'SHAMAN' then
-		getHostile  = function() return 403  end -- Lightning Bolt
+		--getHostile  = function() return 403  end -- Lightning Bolt
 		getFriendly = function() return 331  end -- Healing Wave
 	elseif class == 'PALADIN' then
-		getHostile  = function() return IVS(20271) end -- Judgement
+		--getHostile  = function() return IVS(20271) end -- Judgement
 		getFriendly = function() return 635 end -- Holy Light
 	elseif class == 'WARLOCK' then
-		getHostile  = function() return 686 end -- Shadow Bolt
+		--getHostile  = function() return 686 end -- Shadow Bolt
 		getFriendly = function() return IVS(20707) end -- Soulstone
 	elseif class == 'WARRIOR' then
-		getHostile  = function() return IVS(355) or IVS(772) end  -- Taunt, Rend
+		--getHostile  = function() return IVS(355) or IVS(772) end  -- Taunt, Rend
 		getFriendly = function() return nil end  -- no avail
 	elseif class == 'HUNTER' then
-		getHostile  = function() return IVS(3044) or IVS(1978) end -- Arcane Shot, Serpent Sting
+		--getHostile  = function() return IVS(3044) or IVS(1978) end -- Arcane Shot, Serpent Sting
 		getFriendly = function() return nil end -- no avail
 	elseif class == 'ROGUE' then
-		getHostile  = function() return IVS(1752) end -- Sinister Strike
+		--getHostile  = function() return IVS(1752) end -- Sinister Strike
 		getFriendly = function() return nil end -- no avail
 	elseif class == 'MAGE' then
-		getHostile  = function() return IVS(116) or IVS(133)  end -- Frostbolt, Fireball
+		--getHostile  = function() return IVS(116) or IVS(133)  end -- Frostbolt, Fireball
 		getFriendly = function() return IVS(1459) end -- Arcane intellect
 	elseif class == 'DEATHKNIGHT' then
-		getHostile  = function() return IVS(47541) or IVS(49576) end -- Death Coil, Death Grip
+		--getHostile  = function() return IVS(47541) or IVS(49576) end -- Death Coil, Death Grip
 		getFriendly = function() return IVS(47541) end -- Death Coil
 	elseif class == 'MONK' then
-		getHostile  = function() return 115546 end -- Provoke
+		--getHostile  = function() return 115546 end -- Provoke
 		getFriendly = function() return 116670 end -- Vivify
 	end
 end

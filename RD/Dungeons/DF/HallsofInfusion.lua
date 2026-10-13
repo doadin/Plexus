@@ -1,5 +1,7 @@
 -- local zone = "Halls of Infusion"
 local zoneid = 2082
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake

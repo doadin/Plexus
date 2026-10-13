@@ -1,5 +1,7 @@
 -- local zone = "Dawn of the Infinite"
 local zoneid = 2198
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -13,50 +15,50 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 408556, 1, 6, 6, true) --Entangled
 PlexusStatusRaidDebuff:DebuffId(zoneid, 440313, 1, 6, 6, true) --Devouring Rift
 
 --Trash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412044, 1, 6, 6, true, true) -- Temposlice
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 411994, 1, 6, 6, true, true) -- Chronomelt
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 415436, 1, 6, 6, true, true) -- Tainted Sands
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 415554, 1, 6, 6, true, true) -- Chronoburst
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 415437, 1, 6, 6, true, true) -- Enervate
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413547, 1, 6, 6, true, true) -- Bloom
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413529, 1, 6, 6, true, true) -- Untwist
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412810, 1, 6, 6, true, true) -- Blight Spew
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412285, 1, 6, 6, true, true) -- Stonebolt
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412505, 1, 6, 6, true, true) -- Rending Cleave 
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413606, 1, 6, 6, true, true) -- Corroding Volley
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 414922, 1, 6, 6, true, true) -- Shrouding Sandstorm
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412922, 1, 6, 6, true, true) -- Binding Grasp
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412131, 1, 6, 6, true, true) -- Orb of Contemplation
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413027, 1, 6, 6, true, true) -- Titanic Bulwark
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413618, 1, 6, 6, true, true) -- Timeless Curse
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 419351, 1, 6, 6, true, true) -- Bronze Exhalation
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 418092, 1, 6, 6, true, true) -- Twisted Timeways
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 418200, 1, 6, 6, true, true) -- Infinite Burn
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413427, 1, 6, 6, true, true) -- Time Beam
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 419511, 1, 6, 6, true, true) -- Temporal Link
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 419517, 1, 6, 6, true, true) -- Chronal Eruption
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407125, 1, 6, 6, true, true) -- Sundering Slam
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407651, 1, 6, 6, true, true) -- Sapper’s Perogative
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407715, 1, 6, 6, true, true) -- Kaboom!
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407906, 1, 6, 6, true, true) -- Earthquake
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407123, 1, 6, 6, true, true) -- Rain of Fire
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 411700, 1, 6, 6, true, true) -- Slobbering Bite
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 411644, 1, 6, 6, true, true) -- Soggy Bonk
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412262, 1, 6, 6, true, true) -- Staticky Punch
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 408084, 1, 6, 6, true, true) -- Necrofrost
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 413332, 1, 6, 6, true, true) -- Sand Zone
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 414496, 1, 6, 6, true, true) -- Timeline Acceleration
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 414333, 1, 6, 6, true, true) -- Timeline Protection
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 408177, 1, 6, 6, true, true) -- Incinerating Blightbreath
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 414178, 1, 6, 6, true, true) -- Timeline Transcendence
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 417030, 1, 6, 6, true, true) --Fireball
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407315, 1, 6, 6, true, true) --Embers
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 412378, 1, 6, 6, true, true) --Dizzying Sands
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407205, 1, 6, 6, true, true) --Volatile Mortar
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 417002, 1, 6, 6, true, true) --Consecration
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 407313, 1, 6, 6, true, true) --Shrapnel
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 418009, 1, 6, 6, true, true) --Serrated Arrows
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 417026, 1, 6, 6, true, true) --Blizzard
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412044, 1, 6, 6, true, true) -- Temposlice
+PlexusStatusRaidDebuff:DebuffId(zoneid, 411994, 1, 6, 6, true, true) -- Chronomelt
+PlexusStatusRaidDebuff:DebuffId(zoneid, 415436, 1, 6, 6, true, true) -- Tainted Sands
+PlexusStatusRaidDebuff:DebuffId(zoneid, 415554, 1, 6, 6, true, true) -- Chronoburst
+PlexusStatusRaidDebuff:DebuffId(zoneid, 415437, 1, 6, 6, true, true) -- Enervate
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413547, 1, 6, 6, true, true) -- Bloom
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413529, 1, 6, 6, true, true) -- Untwist
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412810, 1, 6, 6, true, true) -- Blight Spew
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412285, 1, 6, 6, true, true) -- Stonebolt
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412505, 1, 6, 6, true, true) -- Rending Cleave
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413606, 1, 6, 6, true, true) -- Corroding Volley
+PlexusStatusRaidDebuff:DebuffId(zoneid, 414922, 1, 6, 6, true, true) -- Shrouding Sandstorm
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412922, 1, 6, 6, true, true) -- Binding Grasp
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412131, 1, 6, 6, true, true) -- Orb of Contemplation
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413027, 1, 6, 6, true, true) -- Titanic Bulwark
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413618, 1, 6, 6, true, true) -- Timeless Curse
+PlexusStatusRaidDebuff:DebuffId(zoneid, 419351, 1, 6, 6, true, true) -- Bronze Exhalation
+PlexusStatusRaidDebuff:DebuffId(zoneid, 418092, 1, 6, 6, true, true) -- Twisted Timeways
+PlexusStatusRaidDebuff:DebuffId(zoneid, 418200, 1, 6, 6, true, true) -- Infinite Burn
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413427, 1, 6, 6, true, true) -- Time Beam
+PlexusStatusRaidDebuff:DebuffId(zoneid, 419511, 1, 6, 6, true, true) -- Temporal Link
+PlexusStatusRaidDebuff:DebuffId(zoneid, 419517, 1, 6, 6, true, true) -- Chronal Eruption
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407125, 1, 6, 6, true, true) -- Sundering Slam
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407651, 1, 6, 6, true, true) -- Sapper’s Perogative
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407715, 1, 6, 6, true, true) -- Kaboom!
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407906, 1, 6, 6, true, true) -- Earthquake
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407123, 1, 6, 6, true, true) -- Rain of Fire
+PlexusStatusRaidDebuff:DebuffId(zoneid, 411700, 1, 6, 6, true, true) -- Slobbering Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 411644, 1, 6, 6, true, true) -- Soggy Bonk
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412262, 1, 6, 6, true, true) -- Staticky Punch
+PlexusStatusRaidDebuff:DebuffId(zoneid, 408084, 1, 6, 6, true, true) -- Necrofrost
+PlexusStatusRaidDebuff:DebuffId(zoneid, 413332, 1, 6, 6, true, true) -- Sand Zone
+PlexusStatusRaidDebuff:DebuffId(zoneid, 414496, 1, 6, 6, true, true) -- Timeline Acceleration
+PlexusStatusRaidDebuff:DebuffId(zoneid, 414333, 1, 6, 6, true, true) -- Timeline Protection
+PlexusStatusRaidDebuff:DebuffId(zoneid, 408177, 1, 6, 6, true, true) -- Incinerating Blightbreath
+PlexusStatusRaidDebuff:DebuffId(zoneid, 414178, 1, 6, 6, true, true) -- Timeline Transcendence
+PlexusStatusRaidDebuff:DebuffId(zoneid, 417030, 1, 6, 6, true, true) --Fireball
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407315, 1, 6, 6, true, true) --Embers
+PlexusStatusRaidDebuff:DebuffId(zoneid, 412378, 1, 6, 6, true, true) --Dizzying Sands
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407205, 1, 6, 6, true, true) --Volatile Mortar
+PlexusStatusRaidDebuff:DebuffId(zoneid, 417002, 1, 6, 6, true, true) --Consecration
+PlexusStatusRaidDebuff:DebuffId(zoneid, 407313, 1, 6, 6, true, true) --Shrapnel
+PlexusStatusRaidDebuff:DebuffId(zoneid, 418009, 1, 6, 6, true, true) --Serrated Arrows
+PlexusStatusRaidDebuff:DebuffId(zoneid, 417026, 1, 6, 6, true, true) --Blizzard
 
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Chronikar")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 413142, 101, 5, 5, true) --Eon Shatter

@@ -1,6 +1,9 @@
 --local zone = "Mists of Tirna Scithe"
 local zoneid = 1669
 
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
 

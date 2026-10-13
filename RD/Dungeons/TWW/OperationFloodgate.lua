@@ -1,5 +1,7 @@
 -- local zone = "Operation: Floodgate"
 local zoneid = 2387
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 465120, 1, 5, 5, true) --Wind Up

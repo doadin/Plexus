@@ -1,5 +1,7 @@
 -- local zone = "Darkflame Cleft"
 local zoneid = 2303
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1216858, 1, 5, 5, true) --Void Pulsar

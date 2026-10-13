@@ -6,63 +6,63 @@ local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
 --Trash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 55314, 1, 5, 5) --Strangulate
+PlexusStatusRaidDebuff:DebuffId(zoneid, 55314, 1, 5, 5) --Strangulate
 
 --Anub'Rekhan
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Anub'Rekhan")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28786, 11, 5, 5, true, true) --Locust Swarm
+PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Anub'Rekhan")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28786, 11, 5, 5, true, true) --Locust Swarm
 
 
 --Grand Widow Faerlina
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Grand Widow Faerlina")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28796, 21, 5, 5, false, true) --Poison Bolt Volley
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28794, 22, 5, 5) --Rain of Fire
+PlexusStatusRaidDebuff:BossNameId(zoneid, 20, "Grand Widow Faerlina")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28796, 21, 5, 5, false, true) --Poison Bolt Volley
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28794, 22, 5, 5) --Rain of Fire
 
 
 --Maexxna
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 25, "Maexxna")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28622, 26, 5, 5) --Web Wrap
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 54121, 27, 5, 5) --Necrotic Poison
+PlexusStatusRaidDebuff:BossNameId(zoneid, 25, "Maexxna")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28622, 26, 5, 5) --Web Wrap
+PlexusStatusRaidDebuff:DebuffId(zoneid, 54121, 27, 5, 5) --Necrotic Poison
 
 
 --Noth the Plaguebringer
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Noth the Plaguebringer")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 29213, 31, 5, 5, true) --Curse of the Plaguebringer
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 29214, 32, 5, 5, true) --Wrath of the Plaguebringer
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 29212, 33, 5, 5) --Cripple
+PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Noth the Plaguebringer")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 29213, 31, 5, 5, true) --Curse of the Plaguebringer
+PlexusStatusRaidDebuff:DebuffId(zoneid, 29214, 32, 5, 5, true) --Wrath of the Plaguebringer
+PlexusStatusRaidDebuff:DebuffId(zoneid, 29212, 33, 5, 5) --Cripple
 
 --Heigan the Unclean
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Heigan the Unclean")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 29998, 41, 5, 5) --Decrepit Fever
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 29310, 42, 5, 5, false, false, nil, true) --Spell Disruption
+PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Heigan the Unclean")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 29998, 41, 5, 5) --Decrepit Fever
+PlexusStatusRaidDebuff:DebuffId(zoneid, 29310, 42, 5, 5, false, false, nil, true) --Spell Disruption
 
 --Grobbulus
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 50, "Grobbulus")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28169, 51, 5, 5, true) --Mutating Injection
+PlexusStatusRaidDebuff:BossNameId(zoneid, 50, "Grobbulus")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28169, 51, 5, 5, true) --Mutating Injection
 
 --Gluth
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 60, "Gluth")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 54378, 61, 5, 5, true) --Mortal Wound
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 29306, 62, 5, 5) --Infected Wound
+PlexusStatusRaidDebuff:BossNameId(zoneid, 60, "Gluth")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 54378, 61, 5, 5, true) --Mortal Wound
+PlexusStatusRaidDebuff:DebuffId(zoneid, 29306, 62, 5, 5) --Infected Wound
 
 --Thaddius
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 65, "Thaddius")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28084, 66, 5, 5, false, false, {r = 1, g = 0, b = 0}, true) --Negative Charge
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28059, 67, 5, 5, false, false, {r = 0, g = 0, b = 1}, true) --Positive Charge
+PlexusStatusRaidDebuff:BossNameId(zoneid, 65, "Thaddius")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28084, 66, 5, 5, false, false, {r = 1, g = 0, b = 0}, true) --Negative Charge
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28059, 67, 5, 5, false, false, {r = 0, g = 0, b = 1}, true) --Positive Charge
 
 
 --Instructor Razuvious
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 70, "Instructor Razuvious")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 55550, 71, 5, 5, true) --Jagged Knife
+PlexusStatusRaidDebuff:BossNameId(zoneid, 70, "Instructor Razuvious")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 55550, 71, 5, 5, true) --Jagged Knife
 
 --Sapphiron
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 80, "Sapphiron")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28522, 81, 5, 5) --Icebolt
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28542, 82, 5, 5) --Life Drain
+PlexusStatusRaidDebuff:BossNameId(zoneid, 80, "Sapphiron")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28522, 81, 5, 5) --Icebolt
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28542, 82, 5, 5) --Life Drain
 
 --Kel'Thuzad
-_G.PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Kel'Thuzad")
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 28410, 101, 5, 5, true) --Chains of Kel'Thuzad
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 27819, 102, 5, 5) --Detonate Mana
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 27808, 103, 5, 5) --Frost Blast
+PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Kel'Thuzad")
+PlexusStatusRaidDebuff:DebuffId(zoneid, 28410, 101, 5, 5, true) --Chains of Kel'Thuzad
+PlexusStatusRaidDebuff:DebuffId(zoneid, 27819, 102, 5, 5) --Detonate Mana
+PlexusStatusRaidDebuff:DebuffId(zoneid, 27808, 103, 5, 5) --Frost Blast
 

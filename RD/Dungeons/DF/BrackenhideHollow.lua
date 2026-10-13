@@ -1,5 +1,7 @@
 -- local zone = "Brackenhide Hollow"
 local zoneid = 2096
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -13,21 +15,21 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 408556, 1, 6, 6, true) --Entangled
 PlexusStatusRaidDebuff:DebuffId(zoneid, 440313, 1, 6, 6, true) --Devouring Rift
 
 --Trash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 367521, 1, 6, 6, true) --Bone Bolt
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 368091, 1, 6, 6, true) --Infected Bite
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 373899, 1, 6, 6, true) --Decaying Roots
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 383087, 1, 6, 6, true) --Withering Contagion
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 382723, 1, 6, 6, true) --Crushing Smash
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 372711, 1, 6, 6, true) --Infuse Corruption
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 373943, 1, 6, 6, true) --Stomp
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 384575, 1, 6, 6, true) --Crippling Bite
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 382787, 1, 6, 6, true) --Decay Claws
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 368299, 1, 6, 6, true) --Toxic Trap
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 376149, 1, 6, 6, true) --Choking Rotcloud
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 367481, 1, 6, 6, true) --Bloody Bite
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 381835, 1, 6, 6, true) --Bladestorm
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 375416, 1, 6, 6, true) --Bleeding
-_G.PlexusStatusRaidDebuff:DebuffId(zoneid, 385185, 1, 6, 6, true) --Disoriented
+PlexusStatusRaidDebuff:DebuffId(zoneid, 367521, 1, 6, 6, true) --Bone Bolt
+PlexusStatusRaidDebuff:DebuffId(zoneid, 368091, 1, 6, 6, true) --Infected Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 373899, 1, 6, 6, true) --Decaying Roots
+PlexusStatusRaidDebuff:DebuffId(zoneid, 383087, 1, 6, 6, true) --Withering Contagion
+PlexusStatusRaidDebuff:DebuffId(zoneid, 382723, 1, 6, 6, true) --Crushing Smash
+PlexusStatusRaidDebuff:DebuffId(zoneid, 372711, 1, 6, 6, true) --Infuse Corruption
+PlexusStatusRaidDebuff:DebuffId(zoneid, 373943, 1, 6, 6, true) --Stomp
+PlexusStatusRaidDebuff:DebuffId(zoneid, 384575, 1, 6, 6, true) --Crippling Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 382787, 1, 6, 6, true) --Decay Claws
+PlexusStatusRaidDebuff:DebuffId(zoneid, 368299, 1, 6, 6, true) --Toxic Trap
+PlexusStatusRaidDebuff:DebuffId(zoneid, 376149, 1, 6, 6, true) --Choking Rotcloud
+PlexusStatusRaidDebuff:DebuffId(zoneid, 367481, 1, 6, 6, true) --Bloody Bite
+PlexusStatusRaidDebuff:DebuffId(zoneid, 381835, 1, 6, 6, true) --Bladestorm
+PlexusStatusRaidDebuff:DebuffId(zoneid, 375416, 1, 6, 6, true) --Bleeding
+PlexusStatusRaidDebuff:DebuffId(zoneid, 385185, 1, 6, 6, true) --Disoriented
 
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Hackclaw's War-Band")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 378020, 101, 5, 5, true) --gash-frenzy

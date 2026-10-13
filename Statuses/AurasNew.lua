@@ -23,31 +23,18 @@ local strutf8sub = string.utf8sub --luacheck: ignore 143
 local format, gmatch, gsub, pairs, strfind, strlen, strmatch, type
     = format, gmatch, gsub, pairs, strfind, strlen, strmatch, type
 local GetSpellInfo = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo or GetSpellInfo
-local IsPlayerSpell, IsSpellKnown, UnitClass
-    = IsPlayerSpell, IsSpellKnown, UnitClass
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 
 local PlexusStatusAuras = Plexus:NewStatusModule("PlexusStatusAuras", "AceTimer-3.0")
 PlexusStatusAuras.menuName = L["Auras"]
 
-local _, PLAYER_CLASS = UnitClass("player")
-local PlayerCanDispel = {}
 local spell_names
 local spell_ids
 
 local function GetSpellName(spellid)
     local info = C_Spell.GetSpellName and C_Spell.GetSpellName(spellid) or GetSpellInfo(spellid)
     return info
-end
-
-local LibDispel
-local BleedSupported
-if Plexus:IsRetailWow() then
-    LibDispel = LibStub("LibDispel-1.0", true)
-    if LibDispel and LibDispel.BleedList then
-        BleedSupported = true
-    end
 end
 
 if Plexus:IsRetailWow() then
@@ -1259,11 +1246,11 @@ function PlexusStatusAuras:PostInitialize()
             name = "Font Color",
             desc = "Choose the color for the font.",
             hasAlpha = true,
-            get = function(info)
+            get = function(_info)
                 local c = self.db.profile.font_color
                 return c.r, c.g, c.b, c.a
             end,
-            set = function(info, r, g, b, a)
+            set = function(_info, r, g, b, a)
                 self.db.profile.font_color = { r = r, g = g, b = b, a = a }
             end,
         }
@@ -1296,8 +1283,6 @@ end
 
 function PlexusStatusAuras:PostEnable()
     self:CreateRemoveOptions()
-    self:UpdateDispellable()
-    --self:UpdateAllUnitAuras()
 end
 
 function PlexusStatusAuras:PostReset()
@@ -1320,17 +1305,12 @@ function PlexusStatusAuras:EnabledStatusCount()
     return enable_count
 end
 
-function PlexusStatusAuras:OnStatusEnable(status)
+function PlexusStatusAuras:OnStatusEnable(_status)
     self:RegisterMessage("UpdateFrameUnits", "MakeContainers")
-    self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
     self:RegisterEvent("LOADING_SCREEN_DISABLED", "MakeContainers")
-    --self:UpdateAllUnitAuras()
-
-    self:UpdateDispellable()
-    --print("PlexusStatusAuras:OnStatusEnable", status, self:EnabledStatusCount())
 end
 
-function PlexusStatusAuras:OnStatusDisable(status)
+function PlexusStatusAuras:OnStatusDisable(_status)
     if self:EnabledStatusCount() == 0 then
         self:UnregisterMessage("UpdateFrameUnits")
         self:UnregisterEvent("SPELLS_CHANGED")
@@ -1435,7 +1415,6 @@ function PlexusStatusAuras:OptionsForStatus(status, isBuff)
                     end,
                     set = function(_, v)
                         PlexusStatusAuras.db.profile[status].pet = v
-                        PlexusStatusAuras:UpdateAllUnitAuras()
                     end,
                 },
             },
@@ -1821,203 +1800,7 @@ function PlexusStatusAuras:DeleteAura(status)
     end
 end
 
-function PlexusStatusAuras:Plexus_UnitJoined(event, guid, unitid)
-    --print("PlexusStatusAuras:Plexus_UnitJoined", event, guid, unitid)
-    --self:MakeContainers(unitid)
-end
-
-function PlexusStatusAuras:UpdateAllUnitAuras()
-    --guid, unitid
-    --for _, unitid in PlexusRoster:IterateRoster() do
-    --    self:MakeContainers(unitid)
-    --end
-end
-
-function PlexusStatusAuras:UpdateDispellable() --luacheck: ignore 212
-    if Plexus:IsRetailWow() then
-        if PLAYER_CLASS == "DRUID" then
-            --  88423   Nature's Cure                Restoration                Magic
-            --  392378  Improved Nature's Cure       Restoration                Curse, Poison, Magic
-            --  2782    Remove Corruption            Balance, Feral, Guardian   Curse, Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(392378) or IsPlayerSpell(2782)
-            PlayerCanDispel.Magic   = IsPlayerSpell(88423)
-            PlayerCanDispel.Poison  = IsPlayerSpell(392378) or IsPlayerSpell(2782)
-
-        elseif PLAYER_CLASS == "MONK" then
-            -- 115450   Detox             Mistweaver                  Magic
-            -- 388874   Improved Detox    Mistweaver                  Disease, Poison, Magic
-            -- 218164   Detox             Brewmaster, Windwalker      Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(388874) or IsPlayerSpell(218164)
-            PlayerCanDispel.Magic   = IsPlayerSpell(115450)
-            PlayerCanDispel.Poison  = IsPlayerSpell(388874) or IsPlayerSpell(218164)
-
-        elseif PLAYER_CLASS == "PALADIN" then
-            --   4987     Cleanse           Holy                        Magic
-            --   393024   Improved Cleanse  Holy                        Disease, Poison, Magic
-            --   213644   Cleanse Toxins    Protection, Retribution     Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(393024) or IsPlayerSpell(213644)
-            PlayerCanDispel.Magic   = IsPlayerSpell(4987)
-            PlayerCanDispel.Poison  = IsPlayerSpell(393024) or IsPlayerSpell(213644)
-
-        elseif PLAYER_CLASS == "PRIEST" then
-            -- 527       Purify            Discipline, Holy            Magic
-            -- 390632    Improved Purify   Discipline, Holy            Disease, Magic
-            -- 213634    Purify Disease    Shadow                      Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(390632) or IsPlayerSpell(213634)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527)
-
-        elseif PLAYER_CLASS == "SHAMAN" then
-            --  77130   Purify Spirit           Restoration                            Magic
-            --  383016  Improved Purify Spirit  Restoration                            Curse, Magic
-            --  51886   Cleanse Spirit          Elemental, Enhancement                 Curse
-            --  383013  Poison Cleansing Totem  Restoration, Elemental, Enhancement    Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(383016) or IsPlayerSpell(51886)
-            PlayerCanDispel.Magic   = IsPlayerSpell(77130)
-            PlayerCanDispel.Poison  = IsPlayerSpell(383013)
-
-        elseif PLAYER_CLASS == "WARLOCK" then
-            -- 115276   Sear Magic (Fel Imp)
-            --  89808   Singe Magic (Imp)
-            PlayerCanDispel.Magic   = IsSpellKnown(115276, true) or IsSpellKnown(89808, true)
-
-        elseif PLAYER_CLASS == "MAGE" then
-            -- 475   Remove Curse       Fire, Arcane, Frost        Curse
-            PlayerCanDispel.Curse   = IsPlayerSpell(475)
-
-        elseif PLAYER_CLASS == "EVOKER" then
-            --	360823	Maturalize			Preservation					Poison, Magic
-            --	365585	Expunge				Devastation						Poison
-            --	374251	Cauterizing Flame	Devastation, Preservation		Curse, Disease, Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(374251)
-            PlayerCanDispel.Disease = IsPlayerSpell(374251)
-            PlayerCanDispel.Magic   = IsPlayerSpell(360823) or IsPlayerSpell(378438)
-            PlayerCanDispel.Poison  = IsPlayerSpell(360823) or IsPlayerSpell(365585) or IsPlayerSpell(374251)
-            PlayerCanDispel.Bleed   = IsPlayerSpell(374251)
-        end
-    end
-    if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
-        if PLAYER_CLASS == "DRUID" then
-            --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
-            --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
-            --  8946    Cure Poison         Balance, Feral, Guardian, Restoration    Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(2782)
-            PlayerCanDispel.Poison  = IsPlayerSpell(2893) or IsPlayerSpell(8946)
-
-        elseif PLAYER_CLASS == "PALADIN" then
-            --   4987   Cleanse           Holy                        Disease, Poison, Magic
-            --   1152   Purify            Protection, Retribution     Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(4987) or IsPlayerSpell(1152)
-            PlayerCanDispel.Magic   = IsPlayerSpell(4987)
-            PlayerCanDispel.Poison  = IsPlayerSpell(4987) or IsPlayerSpell(1152)
-
-        elseif PLAYER_CLASS == "PRIEST" then
-            --    552   Abolish Disease   Shadow                      Disease
-            --    528   Cure Disease      Shadow                      Disease
-            --    527   Dispel Magic      Shadow                      Magic
-            PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527)
-
-        elseif PLAYER_CLASS == "SHAMAN" then
-            --  8166    Poison Cleansing Totem      Restoration                 Poison
-            --  8170    Disease Cleansing Totem     Restoration                 Disease
-            --  526     Cure Poison                 Restoration                 Poison
-            --  2870    Cure Disease                Restoration                 Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(2870)
-            PlayerCanDispel.Poison  = IsPlayerSpell(526)
-
-        elseif PLAYER_CLASS == "WARLOCK" then
-            --  19505   Devour Magic (Felhunter)
-            PlayerCanDispel.Magic   = IsSpellKnown(19505, true)
-
-        elseif PLAYER_CLASS == "MAGE" then
-            -- 475   Remove Curse       Fire, Arcane, Frost        Curse
-            PlayerCanDispel.Curse   = IsPlayerSpell(475)
-        end
-    end
-    if Plexus:IsWrathWow() then
-        if PLAYER_CLASS == "DRUID" then
-            --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
-            --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
-            --  8946    Cure Poison         Balance, Feral, Guardian, Restoration    Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(2782)
-            PlayerCanDispel.Poison  = IsPlayerSpell(2893) or IsPlayerSpell(8946)
-
-        elseif PLAYER_CLASS == "PALADIN" then
-            --   4987   Cleanse           Holy                        Disease, Poison, Magic
-            --   1152   Purify            Protection, Retribution     Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(4987) or IsPlayerSpell(1152)
-            PlayerCanDispel.Magic   = IsPlayerSpell(4987)
-            PlayerCanDispel.Poison  = IsPlayerSpell(4987) or IsPlayerSpell(1152)
-
-        elseif PLAYER_CLASS == "PRIEST" then
-            --    552   Abolish Disease   Shadow                      Disease
-            --    528   Cure Disease      Shadow                      Disease
-            --    527   Dispel Magic      Shadow                      Magic
-            PlayerCanDispel.Disease = IsPlayerSpell(552) or IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527)
-
-        elseif PLAYER_CLASS == "SHAMAN" then
-            --  8166    Poison Cleansing Totem      Restoration                 Poison
-            --  8170    Disease Cleansing Totem     Restoration                 Disease
-            --  526     Cure Poison                 Restoration                 Poison
-            --  2870    Cure Disease                Restoration                 Disease
-            PlayerCanDispel.Disease = IsPlayerSpell(2870) or IsPlayerSpell(526) or IsPlayerSpell(51886)
-            PlayerCanDispel.Poison  = IsPlayerSpell(526) or IsPlayerSpell(51886)
-            PlayerCanDispel.Curse   = IsPlayerSpell(51886)
-
-        elseif PLAYER_CLASS == "WARLOCK" then
-            --  19505   Devour Magic (Felhunter)
-            PlayerCanDispel.Magic   = IsSpellKnown(19505, true)
-
-        elseif PLAYER_CLASS == "MAGE" then
-            -- 475   Remove Curse       Fire, Arcane, Frost        Curse
-            PlayerCanDispel.Curse   = IsPlayerSpell(475)
-        end
-    end
-    if Plexus:IsCataWow() or Plexus:IsMistWow() then
-        if PLAYER_CLASS == "DRUID" then
-            --  2782    Remove Curse        Balance, Feral, Guardian, Restoration    Curse
-            --  2893    Abolish Poison      Balance, Feral, Guardian, Restoration    Poison
-            --  8946    Cure Poison         Balance, Feral, Guardian, Restoration    Poison
-            PlayerCanDispel.Curse   = IsPlayerSpell(2782)
-            PlayerCanDispel.Magic   = IsPlayerSpell(88423)
-            PlayerCanDispel.Poison  = IsPlayerSpell(2782)
-
-        elseif PLAYER_CLASS == "PALADIN" then
-            --   4987   Cleanse           Holy                        Disease, Poison, Magic
-            --   1152   Purify            Protection, Retribution     Disease, Poison
-            PlayerCanDispel.Disease = IsPlayerSpell(4987)
-            PlayerCanDispel.Magic   = IsPlayerSpell(53551)
-            PlayerCanDispel.Poison  = IsPlayerSpell(4987)
-
-        elseif PLAYER_CLASS == "PRIEST" then
-            --    552   Abolish Disease   Shadow                      Disease
-            --    528   Cure Disease      Shadow                      Disease
-            --    527   Dispel Magic      Shadow                      Magic
-            PlayerCanDispel.Disease = IsPlayerSpell(528)
-            PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(33167)
-
-        elseif PLAYER_CLASS == "SHAMAN" then
-            --  8166    Poison Cleansing Totem      Restoration                 Poison
-            --  8170    Disease Cleansing Totem     Restoration                 Disease
-            --  526     Cure Poison                 Restoration                 Poison
-            --  2870    Cure Disease                Restoration                 Disease
-            --  51886   Cleanse Spirit                                          Poison, Disease, Curse
-            PlayerCanDispel.Curse   = IsPlayerSpell(51886)
-            PlayerCanDispel.Magic   = IsPlayerSpell(77130)
-
-        elseif PLAYER_CLASS == "WARLOCK" then
-            --  19505   Devour Magic (Felhunter)
-            PlayerCanDispel.Magic   = IsSpellKnown(19505, true)
-
-        elseif PLAYER_CLASS == "MAGE" then
-            -- 475   Remove Curse       Fire, Arcane, Frost        Curse
-            PlayerCanDispel.Curse   = IsPlayerSpell(475)
-        end
-    end
-end
-
-local function createButton(status, name)
+local function createButton(_status, name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         if name == "icon" then
@@ -2122,7 +1905,7 @@ local function createButton(status, name)
     end
 end
 
-local function createFrame(status, name)
+local function createFrame(status, _name)
     local frameSettings = PlexusFrame.db.profile
     return function(button)
         button:SetSize(frameSettings.cornerSize, frameSettings.cornerSize)
@@ -2156,7 +1939,7 @@ local function createFrame(status, name)
     end
 end
 
-local function createBorder(status, name, indicator)
+local function createBorder(status, _name, _indicator)
     local frameSettings = PlexusFrame.db.profile
 
     return function(button)

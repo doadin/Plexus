@@ -1,5 +1,7 @@
 -- local zone = "Priory of the Sacred Flame"
 local zoneid = 2308
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 426964, 1, 5, 5, true) --Mortal Strike

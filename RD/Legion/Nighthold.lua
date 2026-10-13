@@ -38,7 +38,7 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 212587, 42, 7, 7, true, false) -- Mark o
 PlexusStatusRaidDebuff:DebuffId(zoneid, 212647, 43, 6, 6, false, true) -- Frostbitten (non-dispellable, Stacks)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 212736, 44, 5, 5) -- Pool of Frost (Ground AOE)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 213083, 45, 5, 5, true, false) -- Frozen Tempest (non-dispellable) (DoT)
--- Master of Fire 
+-- Master of Fire
 PlexusStatusRaidDebuff:DebuffId(zoneid, 213166, 46, 7, 7, true, true) -- Searing Brand (non-dispellable, Stacks)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 213278, 47, 5, 5) -- Burning Ground (Ground AOE)
 -- Master of the Arcane

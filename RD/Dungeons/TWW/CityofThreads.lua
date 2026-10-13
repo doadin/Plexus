@@ -1,5 +1,7 @@
 -- local zone = "City of Threads"
 local zoneid = 2343
+local Plexus = _G.Plexus
+local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 443401, 1, 5, 5, true) -- Venom Strike
