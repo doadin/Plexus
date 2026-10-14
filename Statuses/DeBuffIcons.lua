@@ -427,9 +427,9 @@ function PlexusDebuffIcons:MakeContainers()
                         --else
                         --    frameTable.container[name]:SetUnit("player")
                         local candidateFilters = {
-                            includeSpellIDs = {
-                            --    53563,  -- Beacon of Light
-                            },
+                            --includeSpellIDs = {
+                            ----    53563,  -- Beacon of Light
+                            --},
                             excludeSpellIDs = {
                             --    53563,  -- Beacon of Light
                             },
