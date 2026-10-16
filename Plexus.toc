@@ -97,7 +97,7 @@ Statuses\AurasNew.lua [AllowLoadGameType standard, forever]
 Statuses\BuffIcons.lua [AllowLoadGameType standard]
 Statuses\DeBuffIcons.lua [AllowLoadGameType standard]
 Statuses\Defensives.lua [AllowLoadGameType standard]
-Statuses\DispelByMe.lua [AllowLoadGameType standard]
+Statuses\DispelByMe.lua [AllowLoadGameType standard, forever]
 Statuses\Externals.lua [AllowLoadGameType classic]
 Statuses\Factions.lua [AllowLoadGameType standard]
 Statuses\Group.lua
