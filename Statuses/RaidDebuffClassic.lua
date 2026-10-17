@@ -1,8 +1,3 @@
-
-local LibStub = _G.LibStub
-
---local L = LibStub("AceLocale-3.0"):GetLocale("PlexusStatusRaidDebuff")
-
 local Plexus = _G.Plexus
 if Plexus:IsRetailWow() then
     return
@@ -122,6 +117,7 @@ PlexusStatusRaidDebuff.defaultDB = {
 function PlexusStatusRaidDebuff:PostInitialize()
     self:RegisterStatus("raid_debuff", "Raid Debuff")
     self:CreateMainMenu()
+    db = self.db.profile.debuff_options
 end
 
 function PlexusStatusRaidDebuff:OnEnable()
