@@ -330,65 +330,30 @@ PlexusStatus.options = {
 ------------------------------------------------------------------------
 
 local creatureTypes = { L["Beast"], L["Demon"], L["Humanoid"], L["Undead"], L["Dragonkin"], L["Elemental"], L["Not specified"] }
-local PlexusClasses
-if Plexus:IsRetailWow() then
-    PlexusClasses = {
-        ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
-        ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
-        ["MAGE"] = {["r"] = 0.41,["g"] = 0.8,["b"] = 0.94,},
-        ["DRUID"] = {["r"] = 1,["g"] = 0.49,["b"] = 0.04,},
-        ["MONK"] = {["r"] = 0,["g"] = 1,["b"] = 0.59,},
-        ["DEATHKNIGHT"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23,},
-        ["PRIEST"] = {["r"] = 1,["g"] = 1,["b"] = 1,},
-        ["WARLOCK"] = {["r"] = 0.58,["g"] = 0.51,["b"] = 0.79,},
-        ["DEMONHUNTER"] = {["r"] = 0.64,["g"] = 0.19,["b"] = 0.79,},
-        ["WARRIOR"] = {["r"] = 0.78,["g"] = 0.61,["b"] = 0.43,},
-        ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
-        ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41},
-        ["EVOKER"] = {["r"] = 0.20,["g"] = 0.58,["b"] = 0.50,},
-    }
-end
-if Plexus:IsClassicWow() or Plexus:IsTBCWow() then
-    PlexusClasses = {
-        ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
-        ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
-        ["MAGE"] = {["r"] = 0.41,["g"] = 0.8,["b"] = 0.94,},
-        ["DRUID"] = {["r"] = 1,["g"] = 0.49,["b"] = 0.04,},
-        ["PRIEST"] = {["r"] = 1,["g"] = 1,["b"] = 1,},
-        ["WARLOCK"] = {["r"] = 0.58,["g"] = 0.51,["b"] = 0.79,},
-        ["WARRIOR"] = {["r"] = 0.78,["g"] = 0.61,["b"] = 0.43,},
-        ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
-        ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41}}
-end
-if Plexus:IsWrathWow() or Plexus:IsCataWow() then
-    PlexusClasses = {
-        ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
-        ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
-        ["MAGE"] = {["r"] = 0.41,["g"] = 0.8,["b"] = 0.94,},
-        ["DRUID"] = {["r"] = 1,["g"] = 0.49,["b"] = 0.04,},
-        ["DEATHKNIGHT"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23,},
-        ["PRIEST"] = {["r"] = 1,["g"] = 1,["b"] = 1,},
-        ["WARLOCK"] = {["r"] = 0.58,["g"] = 0.51,["b"] = 0.79,},
-        ["WARRIOR"] = {["r"] = 0.78,["g"] = 0.61,["b"] = 0.43,},
-        ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
-        ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41}}
-end
-if Plexus:IsMistWow() then
-    PlexusClasses = {
-        ["HUNTER"] = {["r"] = 0.67,["g"] = 0.83,["b"] = 0.45,},
-        ["PALADIN"] = {["r"] = 0.96,["g"] = 0.55,["b"] = 0.73,},
-        ["MAGE"] = {["r"] = 0.41,["g"] = 0.8,["b"] = 0.94,},
-        ["DRUID"] = {["r"] = 1,["g"] = 0.49,["b"] = 0.04,},
-        ["MONK"] = {["r"] = 0,["g"] = 1,["b"] = 0.59,},
-        ["DEATHKNIGHT"] = {["r"] = 0.77,["g"] = 0.12,["b"] = 0.23,},
-        ["PRIEST"] = {["r"] = 1,["g"] = 1,["b"] = 1,},
-        ["WARLOCK"] = {["r"] = 0.58,["g"] = 0.51,["b"] = 0.79,},
-        ["WARRIOR"] = {["r"] = 0.78,["g"] = 0.61,["b"] = 0.43,},
-        ["SHAMAN"] = {["r"] = 0,["g"] = 0.44,["b"] = 0.87,},
-        ["ROGUE"] = {["r"] = 1,["g"] = 0.96,["b"] = 0.41},
-    }
+-- Highest class ID to check. Retail goes up to 13 (Evoker); the margin covers future classes.
+local MAX_CLASS_ID = 20
+
+-- The classes this client has, as class files ("WARRIOR", "DRUID", ...).
+-- Class IDs have gaps (Classic has no Death Knight at 6 but Druid at 11),
+-- so every ID is checked instead of counting up to GetNumClasses().
+-- For classes a client doesn't have, GetClassInfo may return nil or another
+-- class's info depending on the client version, so duplicates are skipped.
+local function GetClientClasses()
+    local classes, seen = {}, {}
+    for classID = 1, MAX_CLASS_ID do
+        local _, classFile = GetClassInfo(classID)
+        if classFile and not seen[classFile] then
+            seen[classFile] = true
+            classes[#classes + 1] = classFile
+        end
+    end
+    return classes
 end
 
+local function GetDefaultClassColor(class)
+    local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+    return color.r, color.g, color.b
+end
 
 function PlexusStatus:FillColorOptions(options)
     local classEnglishToLocal
@@ -400,16 +365,11 @@ function PlexusStatus:FillColorOptions(options)
         classEnglishToLocal = LocalizedClassList(false)
     end
 
-    local classcolor = {}
-    for class, color in pairs(PlexusClasses) do
-        --if (class == "MONK") then table.remove(RAID_CLASS_COLORS, MONK) end
-        classcolor[class] = { r = color.r, g = color.g, b = color.b }
-    end
-
     local colors = self.db.profile.colors
-    for class in pairs(classcolor) do
+    for _, class in ipairs(GetClientClasses()) do
         if not colors[class] then
-            colors[class] = classcolor[class]
+            local r, g, b = GetDefaultClassColor(class)
+            colors[class] = { r = r, g = g, b = b }
         end
         local classLocal = classEnglishToLocal[class]
         options.args.class.args[class] = {
@@ -447,9 +407,9 @@ end
 
 function PlexusStatus:ResetClassColors()
     local colors = self.db.profile.colors
-    for class, class_color in pairs(CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS) do
+    for _, class in ipairs(GetClientClasses()) do
         local c = colors[class]
-        c.r, c.g, c.b = class_color.r, class_color.g, class_color.b
+        c.r, c.g, c.b = GetDefaultClassColor(class)
     end
     PlexusStatus:SendMessage("Plexus_ColorsChanged")
 end
