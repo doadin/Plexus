@@ -18,6 +18,10 @@ local GetRaidTargetIndex = GetRaidTargetIndex
 
 local Roster = Plexus:GetModule("PlexusRoster")
 
+-- Indicators replace a missing color with opaque white, which icons draw as their
+-- background; "ignore" keeps background and border transparent, like the marker colors do.
+local NO_BACKGROUND = { r = 1, g = 1, b = 1, a = 1, ignore = true }
+
 local PlexusStatusRaidIcon = Plexus:NewStatusModule("PlexusStatusRaidIcon")
 PlexusStatusRaidIcon.menuName = L["Raid Icon"]
 PlexusStatusRaidIcon.options = false
@@ -120,11 +124,12 @@ function PlexusStatusRaidIcon:UpdateAllUnits(event, ...)
     for guid, unit in Roster:IterateRoster() do
         local i = GetRaidTargetIndex(unit)
         --self:Debug(unit, i, i and settings.text[i], i and settings.icon[i])
-        if Plexus:IsRetailWow() then
+        if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
             icon = "Interface\\TargetingFrame\\UI-RaidTargetingIcons"
+            color = NO_BACKGROUND
         end
         if i then
-            if not Plexus:IsRetailWow() then
+            if not (Plexus:IsRetailWow() or Plexus:IsForeverWow()) then
                 color = settings.color[i]
                 text = settings.text[i]
                 icon = settings.icon[i]
