@@ -141,7 +141,7 @@ end
 function PlexusStatusResurrect:OnStatusEnable(status)
     self:Debug("OnStatusEnable", status)
 
-    if not Plexus:IsClassicWow() and not Plexus:IsRetailWow() then
+    if not Plexus:IsClassicWow() and not Plexus:IsRetailWow() and not Plexus:IsForeverWow() then
       self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
       self:RegisterEvent("UNIT_SPELLCAST_STOP")
       self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
@@ -153,7 +153,7 @@ function PlexusStatusResurrect:OnStatusEnable(status)
         self:RegisterEvent("UNIT_SPELLCAST_START")
         self:RegisterEvent("INCOMING_RESURRECT_CHANGED")
     end
-    if Plexus:IsRetailWow() then
+    if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
         self:RegisterEvent("INCOMING_RESURRECT_CHANGED")
     end
 
