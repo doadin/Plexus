@@ -1,6 +1,7 @@
 -- local zone = "Karazhan"
 local zoneid = 350
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 

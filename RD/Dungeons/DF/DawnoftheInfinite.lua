@@ -1,6 +1,7 @@
 -- local zone = "Dawn of the Infinite"
 local zoneid = 2198
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake

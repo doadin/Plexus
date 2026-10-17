@@ -1,6 +1,7 @@
 --local zone = "The MOTHERLODE!!"
 local zoneid = 1010
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 262515, 1, 6, 6, true) --Azerite Heartseeker
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267357, 1, 6, 6, true) --Hail of Flechettes

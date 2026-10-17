@@ -1,6 +1,7 @@
 --local zone = "The Nighthold"
 local zoneid = 764
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 -- Skorpyron
 PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Skorpyron")

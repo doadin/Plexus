@@ -1,6 +1,7 @@
 --local zone = "Tol Dagor"
 local zoneid = 974
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 --trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 258313, 1, 6, 6, true)  --Handcuff

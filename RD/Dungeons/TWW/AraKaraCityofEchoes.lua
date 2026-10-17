@@ -1,6 +1,7 @@
 -- local zone = "Ara-Kara, City of Echoes"
 local zoneid = 2357
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 433843, 1, 5, 5, true) -- Erupting Webs

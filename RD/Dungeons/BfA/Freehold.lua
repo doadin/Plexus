@@ -1,6 +1,7 @@
 --local zone = "Freehold"
 local zoneid = 936
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257460, 1, 6, 6, true) --Fiery Debris
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272374, 1, 6, 6, true) --Whirlpool of Blades

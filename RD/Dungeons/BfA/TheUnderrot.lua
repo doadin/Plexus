@@ -1,6 +1,7 @@
 --local zone = "The Underrot"
 local zoneid = 1041
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272457, 1, 6, 6, true) --Shockwave
 PlexusStatusRaidDebuff:DebuffId(zoneid, 260312, 1, 6, 6, true) --Charge

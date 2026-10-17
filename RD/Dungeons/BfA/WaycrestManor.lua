@@ -1,6 +1,7 @@
 --local zone = "Waycrest Manor"
 local zoneid = 1015
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 264105, 1, 6, 6, true)  --Runic Mark
 PlexusStatusRaidDebuff:DebuffId(zoneid, 271174, 1, 6, 6, true)  --Retch

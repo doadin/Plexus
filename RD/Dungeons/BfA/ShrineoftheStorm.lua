@@ -1,6 +1,7 @@
 --local zone = "Shrine of the Storm"
 local zoneid = 1039
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268317, 1, 6, 6, true) --Rip Mind
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268322, 1, 6, 6, true) --Touch of the Drowned

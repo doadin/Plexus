@@ -1,6 +1,7 @@
 --local zone = "Temple of Sethraliss"
 local zoneid = 1038
 local Plexus = _G.Plexus
+local PlexusStatus = Plexus:GetModule("PlexusStatus")
 local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
 local function WhenRaidDebuffReady(callback)
     if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
@@ -13,7 +14,7 @@ local function WhenRaidDebuffReady(callback)
         end
     end)
 end
-WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
+WhenRaidDebuffReady(function()
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272657, 1, 6, 6, true) --Noxious Breath
 PlexusStatusRaidDebuff:DebuffId(zoneid, 273274, 1, 6, 6, true) --Polarized Field
