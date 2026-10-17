@@ -73,7 +73,7 @@ local healsOptions = {
             PlexusStatusHeals.db.profile.alert_heals.ignore_heal_comm = v
             PlexusStatusHeals:UpdateAllUnits()
         end,
-        hidden = Plexus:IsRetailWow(),
+        hidden = Plexus:IsRetailWow() or Plexus:IsForeverWow(),
     },
     reduced_heal_absorb = {
         type = "toggle", width = "double",
@@ -99,7 +99,7 @@ local healsOptions = {
         set = function(_, v)
             PlexusStatusHeals.db.profile.alert_heals.minimumValue = v
         end,
-        hidden = Plexus:IsRetailWow(),
+        hidden = Plexus:IsRetailWow() or Plexus:IsForeverWow(),
     },
     deficit = {
         type = "toggle", width = "double",
@@ -112,7 +112,7 @@ local healsOptions = {
             PlexusStatusHeals.db.profile.alert_heals.deficit = v
             PlexusStatusHeals:UpdateAllUnits()
         end,
-        hidden = Plexus:IsRetailWow(),
+        hidden = Plexus:IsRetailWow() or Plexus:IsForeverWow(),
     },
 }
 
@@ -126,7 +126,7 @@ function PlexusStatusHeals:OnStatusEnable(status)
         self:RegisterEvent("UNIT_HEALTH", "UpdateUnit")
         self:RegisterEvent("UNIT_MAXHEALTH", "UpdateUnit")
         self:RegisterEvent("UNIT_HEAL_PREDICTION", "UpdateUnit")
-        if not Plexus:IsRetailWow() then
+        if not (Plexus:IsRetailWow() or Plexus:IsForeverWow()) then
             HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             if HealComm then
                 local function HealComm_Heal_Update()
@@ -152,7 +152,7 @@ function PlexusStatusHeals:OnStatusDisable(status)
         self:UnregisterEvent("UNIT_HEALTH")
         self:UnregisterEvent("UNIT_MAXHEALTH")
         self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-        if not Plexus:IsRetailWow() then
+        if not (Plexus:IsRetailWow() or Plexus:IsForeverWow()) then
             HealComm = LibStub:GetLibrary("LibHealComm-4.0", true) --luacheck: ignore 111
             if HealComm then
                 HealComm.UnregisterCallback(self, 'HealComm_HealStarted')
@@ -187,7 +187,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
 
     if UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit) then
         local incoming, incomingHealsFromOthers, _ = 0
-        if not Plexus:IsRetailWow() then
+        if not (Plexus:IsRetailWow() or Plexus:IsForeverWow()) then
             if Plexus:IsRetailWow() or (not HealComm and not Plexus:IsRetailWow()) or settings.ignore_heal_comm then
                 incoming = UnitGetIncomingHeals(unit) or 0
             end
@@ -205,7 +205,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
             end
         end
 
-        if Plexus:IsRetailWow() then
+        if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
             if not calculator then
                 calculator = CreateUnitHealPredictionCalculator()
             else
@@ -221,7 +221,7 @@ function PlexusStatusHeals:UpdateUnit(event, unit)
         end
 
         local maxHealth = Plexus:CalcMaxHP(unit)
-        if not Plexus:IsRetailWow() then
+        if not (Plexus:IsRetailWow() or Plexus:IsForeverWow()) then
             if incoming > 0 then
                 if (incoming / maxHealth) > (settings and settings.minimumValue or 0.1) then
                     return self:SendIncomingHealsStatus(guid, incoming, UnitHealth(unit) + incoming, maxHealth)

@@ -407,7 +407,7 @@ PlexusFrame.defaultDB = {
     PrivateAuraOffsetY = 0,
 }
 
-if Plexus:IsRetailWow() then
+if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
     PlexusFrame.defaultDB.statusmap.healingBar = {
         alert_heals = false,
         alert_absorbs = false,
