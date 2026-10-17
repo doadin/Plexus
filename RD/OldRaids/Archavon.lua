@@ -1,7 +1,19 @@
 -- local zone = "Vault of Archavon"
 local zoneid = 156
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 -- Note: updated spell ids as of WoD 6.1 3/7/2015
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
@@ -31,4 +43,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 71993, 41, 5, 5, true, true) --Frozen Ma
 PlexusStatusRaidDebuff:DebuffId(zoneid, 72004, 42, 5, 5, true, true) --Frostbite
 PlexusStatusRaidDebuff:DebuffId(zoneid, 72090, 43, 5, 5) --Freezing Ground
 PlexusStatusRaidDebuff:DebuffId(zoneid, 72090, 44, 1, 1) --Whiteout
-
+end)

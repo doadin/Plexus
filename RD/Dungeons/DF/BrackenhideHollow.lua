@@ -1,7 +1,19 @@
 -- local zone = "Brackenhide Hollow"
 local zoneid = 2096
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -50,3 +62,4 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 400, "Decatriarch Wratheye")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 373896, 401, 5, 5, true) --withering-rot
 PlexusStatusRaidDebuff:DebuffId(zoneid, 385361, 402, 5, 5, true) --Rotting Sickness
 PlexusStatusRaidDebuff:DebuffId(zoneid, 373917, 403, 5, 5, true) --Decaystrike
+end)

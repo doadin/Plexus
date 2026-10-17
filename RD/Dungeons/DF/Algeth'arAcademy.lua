@@ -1,7 +1,19 @@
 -- local zone = "Algeth'ar Academy"
 local zoneid = 2097
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -43,3 +55,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 376997, 303, 5, 5, true) -- Savage Peck
 PlexusStatusRaidDebuff:BossNameId(zoneid, 400, "Echo of Doragosa")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 374350, 401, 5, 5, true) -- Energy Bomb
 PlexusStatusRaidDebuff:DebuffId(zoneid, 389011, 402, 6, 6, true, true) -- Overwhelming Power
+end)

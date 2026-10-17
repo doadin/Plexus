@@ -1,7 +1,19 @@
 -- local zone = "Ruby Life Pools"
 local zoneid = 2095
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -47,3 +59,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 381862, 302, 5, 5, true) -- Infernocore
 PlexusStatusRaidDebuff:DebuffId(zoneid, 381515, 303, 5, 5, true) -- Stormslam
 PlexusStatusRaidDebuff:DebuffId(zoneid, 381518, 304, 5, 5, true) -- Winds of Change
 PlexusStatusRaidDebuff:DebuffId(zoneid, 384773, 305, 5, 5, true) -- Flaming Embers
+end)

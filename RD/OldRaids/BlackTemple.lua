@@ -1,7 +1,19 @@
 -- local zone = "Black Temple"
 local zoneid = 340
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 -- Note: updated spell ids as of WoD 6.1 3/8/2015
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
@@ -121,4 +133,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 41032, 73, 4, 4) --Shear
 PlexusStatusRaidDebuff:DebuffId(zoneid, 40932, 74, 5, 5, true) --Agonizing Flames
 PlexusStatusRaidDebuff:DebuffId(zoneid, 41142, 75, 1, 1, true) --Aura of Dread
 PlexusStatusRaidDebuff:DebuffId(zoneid, 40647, 76, 6, 6, true) --Shadow Prison
-
+end)

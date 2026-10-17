@@ -1,7 +1,19 @@
 -- local zone = "Battle of Dazar'alor"
 local zoneid = 1358
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 289384, 1, 5, 5, true) --Savage Swipe
 PlexusStatusRaidDebuff:DebuffId(zoneid, 287437, 1, 5, 5, true) --Frozen Beam
@@ -173,3 +185,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 288374, 202, 5, 5, true) --Siegebreaker 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 288038, 203, 5, 5, true) --Marked Target
 PlexusStatusRaidDebuff:DebuffId(zoneid, 288434, 204, 5, 5, true) --Hand of Frost
 PlexusStatusRaidDebuff:DebuffId(zoneid, 287199, 205, 5, 5, true) --Ring of Ice
+end)

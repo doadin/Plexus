@@ -1,7 +1,19 @@
 -- local zone = "Firelands"
 local zoneid = 367
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --en_zone, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -135,4 +147,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 98981, 77, 5, 5) --Lava Bolt
 PlexusStatusRaidDebuff:DebuffId(zoneid, 100249, 78, 5, 5, true, true) --Combustion
 --Molten Wyrms
 PlexusStatusRaidDebuff:DebuffId(zoneid, 99613, 79, 6, 6, true, true) --Molten Blast
-
+end)

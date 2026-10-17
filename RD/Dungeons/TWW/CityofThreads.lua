@@ -1,7 +1,19 @@
 -- local zone = "City of Threads"
 local zoneid = 2343
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 443401, 1, 5, 5, true) -- Venom Strike
@@ -72,4 +84,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 450047, 405, 5, 5, true) --Gorged
 PlexusStatusRaidDebuff:DebuffId(zoneid, 450055, 406, 5, 5, true) --Gutburst
 PlexusStatusRaidDebuff:DebuffId(zoneid, 438860, 407, 5, 5, true) --Umbral Weave
 PlexusStatusRaidDebuff:DebuffId(zoneid, 439646, 408, 5, 5, true) --Process of Elimination
-
+end)

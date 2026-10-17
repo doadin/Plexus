@@ -1,7 +1,19 @@
 -- local zone = "Uldir"
 local zoneid = 1148
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 
@@ -65,4 +77,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 270447, 84, 5, 5, true, true) -- Growing
 PlexusStatusRaidDebuff:DebuffId(zoneid, 263236, 85, 5, 5, true) -- Blood Feast
 PlexusStatusRaidDebuff:DebuffId(zoneid, 263334, 86, 5, 5, true, true) -- Putrid Blood
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267700, 87, 5, 5, true) -- Gaze of G'huun
-
+end)

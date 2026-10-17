@@ -1,7 +1,19 @@
 --local zone = "Siege of Orgrimmar"
 local zoneid = 557
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -215,4 +227,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 145183, 213, 2, 2, true, true) --Grippin
 PlexusStatusRaidDebuff:DebuffId(zoneid, 144762, 214, 4, 4) --Desecrated
 PlexusStatusRaidDebuff:DebuffId(zoneid, 145071, 215, 5, 5) --Touch of Y'Sharrj
 PlexusStatusRaidDebuff:DebuffId(zoneid, 148718, 216, 4, 4) --Fire Pit
-
+end)

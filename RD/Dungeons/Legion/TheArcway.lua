@@ -2,7 +2,19 @@
 local zoneid = 749
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -58,3 +70,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 200040, 42, 6, 6, true) --Nether Venom
 PlexusStatusRaidDebuff:BossNameId(zoneid, 50, "Advisor Vandros")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 203914, 51, 6, 6, true) --Banished In Time
 PlexusStatusRaidDebuff:DebuffId(zoneid, 203139, 52, 6, 6, true) --Force Nova
+end)

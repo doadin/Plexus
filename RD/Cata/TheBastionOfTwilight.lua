@@ -1,7 +1,19 @@
 -- local zone = "The Bastion of Twilight"
 local zoneid = 294
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --en_zone, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -122,4 +134,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 89299, 51, 4, 4, true, true) --Twilight 
 -- Wrack is dispellable
 -- GridStatusSinestra handles this better
 -- PlexusStatusRaidDebuff:DebuffId(zoneid, 92955, 51, 4, 4) --Wrack
-
+end)

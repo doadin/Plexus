@@ -1,7 +1,19 @@
 -- local zone = "Nerub-ar Palace"
 local zoneid = 2292
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- "Ulgrax the Devourer"
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Ulgrax the Devourer")
@@ -239,3 +251,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 443336, 867, 5, 5, true) --Gorge
 PlexusStatusRaidDebuff:DebuffId(zoneid, 443396, 868, 5, 5, true) --Gloom Splatter
 PlexusStatusRaidDebuff:DebuffId(zoneid, 445268, 869, 5, 5, true) --Dreadful Presence
 PlexusStatusRaidDebuff:DebuffId(zoneid, 451832, 870, 5, 5, true) --Cataclysmic Evolution
+end)

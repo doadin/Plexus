@@ -1,7 +1,19 @@
 -- local zone = "Terrace of Endless Spring"
 local zoneid = 456
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -54,4 +66,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 120394, 47, 6, 6) --Eternal Darkness
 PlexusStatusRaidDebuff:DebuffId(zoneid, 129189, 48, 3, 4) --Sha Globe
 PlexusStatusRaidDebuff:DebuffId(zoneid, 119086, 49, 4, 4) --Penetrating Bolt
 PlexusStatusRaidDebuff:DebuffId(zoneid, 119775, 50, 6, 6) --Reaching Attack
-
+end)

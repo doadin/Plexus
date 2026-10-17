@@ -1,7 +1,19 @@
 --local zone = "Mogu'shan Vaults"
 local zoneid = 471
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -102,4 +114,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 117485, 75, 1, 1) --Impeding Thrust (slo
 PlexusStatusRaidDebuff:DebuffId(zoneid, 116550, 76, 4, 4) --Energizing Smash (knock down)
 -- Titan Spark (Heroic)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 116829, 77, 3, 3) --Focused Energy (fixate)
-
+end)

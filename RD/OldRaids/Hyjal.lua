@@ -1,7 +1,19 @@
 -- local zone = "Hyjal Summit"
 local zoneid = 329
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -24,4 +36,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 31344, 33, 5, 5, true) --Howl of Azgalor
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Archimonde")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 31944, 41, 5, 5, true) --Doomfire
 PlexusStatusRaidDebuff:DebuffId(zoneid, 31972, 42, 5, 5) --Grip
-
+end)

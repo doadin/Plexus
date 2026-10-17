@@ -1,7 +1,19 @@
 -- local zone = "Tomb of Sargeras"
 local zoneid = 850
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 
@@ -74,4 +86,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 234295, 93, 6, 6, true, true) -- Armaged
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240908, 94, 6, 6, true) -- Armageddon Blast
 PlexusStatusRaidDebuff:DebuffId(zoneid, 239932, 95, 6, 6, true, true) -- Felclaws
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240911, 96, 6, 6, true, true) -- Armageddon Hail
-
+end)

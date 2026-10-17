@@ -1,7 +1,19 @@
 -- local zone = "The Azure Vault"
 local zoneid = 2073
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -50,3 +62,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 388777, 401, 5, 5, true) -- Oppressive M
 PlexusStatusRaidDebuff:DebuffId(zoneid, 384978, 402, 5, 5, true) -- Dragon Strike
 PlexusStatusRaidDebuff:DebuffId(zoneid, 385331, 403, 5, 5, true) -- Fracture
 PlexusStatusRaidDebuff:DebuffId(zoneid, 385267, 404, 5, 5, true) -- Crackling Vortex
+end)

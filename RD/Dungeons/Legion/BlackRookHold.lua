@@ -2,7 +2,19 @@
 local zoneid = 751
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -70,3 +82,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 202019, 47, 6, 6, true) -- Shadow Bolt V
 --Latosius
 PlexusStatusRaidDebuff:BossNameId(zoneid, 50, "Latosius")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 201733, 51, 6, 6, true) --Stinging Swarm
+end)

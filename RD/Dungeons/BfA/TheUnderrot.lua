@@ -1,7 +1,19 @@
 --local zone = "The Underrot"
 local zoneid = 1041
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272457, 1, 6, 6, true) --Shockwave
 PlexusStatusRaidDebuff:DebuffId(zoneid, 260312, 1, 6, 6, true) --Charge
@@ -70,3 +82,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 259718, 32, 6, 6, true) --Upheaval
 --Unbound Abomination
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Saboteur Kip'tilak")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 269301, 41, 6, 6, true) --Putrid Blood
+end)

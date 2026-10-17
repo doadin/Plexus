@@ -2,7 +2,19 @@
 local zoneid = 133
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -20,3 +32,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 42723, 1, 6, 6, true) --Dark Smash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 15572, 1, 6, 6, true) --Sunder Armor
 PlexusStatusRaidDebuff:DebuffId(zoneid, 43757, 1, 6, 6, true) --Burning Brand
 PlexusStatusRaidDebuff:DebuffId(zoneid, 22427, 1, 6, 6, true) --Concussion Blow
+end)

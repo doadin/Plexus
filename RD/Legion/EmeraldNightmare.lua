@@ -1,7 +1,19 @@
 -- local zone = "The Emerald Nightmare"
 local zoneid = 777
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 -- Nythendra
@@ -202,4 +214,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 208385, 101, 4, 4) -- Tainted Discharge 
 -- Nightmare Tentacle
 -- The Infinite Dark? (dot, standing in environment?)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 211634, 102, 4, 4) -- The Infinite Dark (standing in?)
-
+end)

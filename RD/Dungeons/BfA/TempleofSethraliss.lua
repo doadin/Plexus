@@ -1,7 +1,19 @@
 --local zone = "Temple of Sethraliss"
 local zoneid = 1038
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272657, 1, 6, 6, true) --Noxious Breath
 PlexusStatusRaidDebuff:DebuffId(zoneid, 273274, 1, 6, 6, true) --Polarized Field
@@ -74,3 +86,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 266512, 33, 6, 6, true)  --Consume Charg
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Avatar of Sethraliss")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 269686, 41, 6, 6, true)  --Plague
 PlexusStatusRaidDebuff:DebuffId(zoneid, 273677, 42, 6, 6, true)  --Taint
+end)

@@ -1,7 +1,19 @@
 -- local zone = "Ara-Kara, City of Echoes"
 local zoneid = 2449
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 
@@ -49,4 +61,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 1225218, 305, 5, 5, true) --Dread of the
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1226444, 306, 5, 5, true) --Wounded Fate
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1225162, 307, 5, 5, true) --Ceremonial Dagger
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1242000, 308, 5, 5, true) --Echoes of Fate
-
+end)

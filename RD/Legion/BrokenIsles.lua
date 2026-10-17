@@ -1,7 +1,19 @@
 -- local zone = "Broken Isles"
 local zoneid = 619
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- for i=1,1500,1 do
 --    zone = GetMapNameByID(i)
@@ -72,4 +84,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 213665, 93, 5, 5, false, true) -- Maraud
 
 -- Withered J'im
 PlexusStatusRaidDebuff:BossNameId(zoneid, 110, "Withered J'im")
-
+end)

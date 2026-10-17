@@ -1,7 +1,19 @@
 -- local zone = "Operation: Floodgate"
 local zoneid = 2387
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 465120, 1, 5, 5, true) --Wind Up
@@ -74,3 +86,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 468606, 406, 5, 5, true) --Dam Rubble
 PlexusStatusRaidDebuff:DebuffId(zoneid, 468846, 407, 5, 5, true) --Leaping Sparks
 PlexusStatusRaidDebuff:DebuffId(zoneid, 468812, 408, 5, 5, true) --Gigazap
 PlexusStatusRaidDebuff:DebuffId(zoneid, 466197, 409, 5, 5, true) --Thunder Punch
+end)

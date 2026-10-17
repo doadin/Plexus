@@ -1,7 +1,19 @@
 -- local zone = "Halls of Infusion"
 local zoneid = 2082
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -41,3 +53,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 386741, 302, 5, 5, true) -- polar-winds
 PlexusStatusRaidDebuff:BossNameId(zoneid, 400, "Primal Tsunami")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 387359, 401, 5, 5, true) -- waterlogged
 PlexusStatusRaidDebuff:DebuffId(zoneid, 387571, 402, 5, 5, true) -- focused-deluge
+end)

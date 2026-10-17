@@ -1,7 +1,19 @@
 -- local zone = "Liberation of Undermine"
 local zoneid = 2406
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 
 -- "Vexie and the Geargrinders"
@@ -263,3 +275,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 1218992, 847, 5, 5, true) --Discharged G
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1220784, 848, 5, 5, true) --Auto-Locking Cuff Bomb
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1219039, 849, 5, 5, true) --Ionization
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1219041, 850, 5, 5, true) --Static Zap
+end)

@@ -1,7 +1,19 @@
 -- local zone = "Naxxramas"
 local zoneid = 163
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -65,4 +77,4 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Kel'Thuzad")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 28410, 101, 5, 5, true) --Chains of Kel'Thuzad
 PlexusStatusRaidDebuff:DebuffId(zoneid, 27819, 102, 5, 5) --Detonate Mana
 PlexusStatusRaidDebuff:DebuffId(zoneid, 27808, 103, 5, 5) --Frost Blast
-
+end)

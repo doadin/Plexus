@@ -1,7 +1,19 @@
 -- local zone = "Ara-Kara, City of Echoes"
 local zoneid = 2357
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 433843, 1, 5, 5, true) -- Erupting Webs
@@ -51,4 +63,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 432119, 303, 5, 5, true) --Faded
 PlexusStatusRaidDebuff:DebuffId(zoneid, 461487, 304, 5, 5, true) --Cultivated Poisons
 PlexusStatusRaidDebuff:DebuffId(zoneid, 432227, 305, 5, 5, true) --Venom Volley
 PlexusStatusRaidDebuff:DebuffId(zoneid, 432130, 306, 5, 5, true) --Erupting Webs
-
+end)

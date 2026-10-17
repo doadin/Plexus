@@ -1,7 +1,19 @@
 --local zone = "Operation: Mechagon"
 local zoneid = 1490
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 295170, 1, 6, 6, true)  --Capacitor Discharge
@@ -96,5 +108,5 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 285443, 72, 5, 5, true)  --\"Hidden\" Fl
 PlexusStatusRaidDebuff:BossNameId(zoneid, 80, "King Mechagon")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 291928, 81, 5, 5, true)  --Giga-Zap
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1226680, 82, 5, 5, true) --Cutting Beam
-
+end)
 

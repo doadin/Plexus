@@ -2,7 +2,19 @@
 local zoneid = 136
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -34,3 +46,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 59334, 1, 6, 6, true) --Poisoned Spear
 PlexusStatusRaidDebuff:DebuffId(zoneid, 49106, 1, 6, 6, true) --Terrify
 PlexusStatusRaidDebuff:DebuffId(zoneid, 61549, 1, 6, 6, true) --Shred
 PlexusStatusRaidDebuff:DebuffId(zoneid, 59304, 1, 6, 6, true) --Spirit Strike
+end)

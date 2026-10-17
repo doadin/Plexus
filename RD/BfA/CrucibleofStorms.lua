@@ -1,7 +1,19 @@
 -- local zone = "Cruicible of Storms"
 local zoneid = 1345
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 294009, 1, 5, 5, true) --Mind Sear
@@ -29,3 +41,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 285685, 23, 5, 5, true) --Gift of N'Zoth
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285367, 24, 5, 5, true) --Piercing Gaze of N'Zoth
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285345, 25, 5, 5, true) --Maddening Eyes of N'Zoth
 PlexusStatusRaidDebuff:DebuffId(zoneid, 285477, 26, 5, 5, true) --Obscurity
+end)

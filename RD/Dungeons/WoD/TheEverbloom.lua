@@ -2,7 +2,19 @@
 local zoneid = 620
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -108,3 +120,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 169251, 89, 6, 6, true)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 170132, 90, 6, 6, true)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 169879, 91, 6, 6, true)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 428834, 92, 6, 6, true)
+end)

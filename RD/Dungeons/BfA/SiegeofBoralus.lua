@@ -1,7 +1,19 @@
 --local zone = "Siege of Boralus"
 local zoneid = 1162
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272588, 1, 6, 6, true)  --Rotting Wounds
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257168, 1, 6, 6, true)  --Cursed Slash
@@ -61,3 +73,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 276068, 32, 6, 6, true)  --Tidal Surge
 --Viq'Goth
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Viq'Goth")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 274991, 41, 6, 6, true)  --Putrid Waters
+end)

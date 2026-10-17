@@ -1,7 +1,19 @@
 -- local zone = "Amirdrassil, the Dream's Hope"
 local zoneid = 2232
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 418720, 1, 5, 5, true) --Polymorph Bomb"
@@ -184,3 +196,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 422524, 919, 5, 5, true) --Shadowflame D
 PlexusStatusRaidDebuff:DebuffId(zoneid, 430051, 920, 5, 5, true) --Searing Screams*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 422837, 921, 5, 5, true) --Apocalypse Roar*
 PlexusStatusRaidDebuff:DebuffId(zoneid, 425492, 922, 5, 5, true) --Infernal Maw*
+end)

@@ -1,7 +1,7 @@
 
 local LibStub = _G.LibStub
 
-local L = LibStub("AceLocale-3.0"):GetLocale("PlexusStatusRaidDebuff")
+--local L = LibStub("AceLocale-3.0"):GetLocale("PlexusStatusRaidDebuff")
 
 local Plexus = _G.Plexus
 if Plexus:IsRetailWow() then
@@ -91,7 +91,8 @@ local ignore_ids = {
 ---------------------------------------------------------
 
 local PlexusStatusRaidDebuff = Plexus:NewStatusModule("PlexusStatusRaidDebuff")
-PlexusStatusRaidDebuff.menuName = L["Raid Debuff"]
+PlexusStatusRaidDebuff.menuName = "Raid Debuff"
+--PlexusStatusRaidDebuff.options = false
 
 local PlexusFrame = Plexus:GetModule("PlexusFrame")
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
@@ -102,8 +103,8 @@ local fmt = string.format
 PlexusStatusRaidDebuff.defaultDB = {
 
     ["raid_debuff"] = {
-        text = L["Raid Debuff"],
-        desc = L["Raid Debuff"],
+        text = "Raid Debuff",
+        desc = "Raid Debuff",
         enable = true,
         color = { r = .0, g = .0, b = .0, a=1.0 },
         priority = 98,
@@ -118,10 +119,9 @@ PlexusStatusRaidDebuff.defaultDB = {
     ["detected_debuff"] = {},
 }
 
-function PlexusStatusRaidDebuff:OnInitialize()
-    self.super.OnInitialize(self)
-    self:RegisterStatuses()
-    db = self.db.profile.debuff_options
+function PlexusStatusRaidDebuff:PostInitialize()
+    self:RegisterStatus("raid_debuff", "Raid Debuff")
+    self:CreateMainMenu()
 end
 
 function PlexusStatusRaidDebuff:OnEnable()
@@ -219,11 +219,6 @@ function PlexusStatusRaidDebuff:ZoneCheck()
             refreshEventScheduled = false
         end
     end
-end
-
-function PlexusStatusRaidDebuff:RegisterStatuses()
-    self:RegisterStatus("raid_debuff", L["Raid Debuff"])
-    self:CreateMainMenu()
 end
 
 function PlexusStatusRaidDebuff:UnregisterStatuses()
@@ -701,6 +696,17 @@ function PlexusStatusRaidDebuff:DebuffLocale(zone, first, second, icon_priority,
     end
 end
 
+function PlexusStatusRaidDebuff:DebuffId(zoneid, first, second, icon_priority, color_priority, timer, stackable, color, default_disable, noicon)
+    local info = zoneid and C_Map.GetMapInfo(zoneid)
+    local zone = info and info.name
+
+    if (zone) then
+        self:DebuffLocale(zone, first, second, icon_priority, color_priority, timer, stackable, color, default_disable, noicon)
+    else
+        self:Debug(("GetMapNameByID %d not found"):format(zoneid))
+    end
+end
+
 function PlexusStatusRaidDebuff:BossNameLocale(zone, order, en_boss)
     local boss = en_boss or order
 
@@ -715,11 +721,22 @@ function PlexusStatusRaidDebuff:BossNameLocale(zone, order, en_boss)
     args[zone].args[boss] = {
             type = "group",
             name = fmt("%s%s%s","   [ ", boss," ]"),
-                        desc = L["Option for %s"]:format(boss),
+                        desc = "Option for %s:"..format(boss),
             order = ord,
             guiHidden = true,
             args = {}
     }
+end
+
+function PlexusStatusRaidDebuff:BossNameId(zoneid, order, en_boss)
+    local info = zoneid and C_Map.GetMapInfo(zoneid)
+    local zone = info and info.name
+
+    if (zone) then
+        self:BossNameLocale(zone, order, en_boss)
+    else
+        self:Debug(("GetMapNameByID %d not found"):format(zoneid))
+    end
 end
 
 function PlexusStatusRaidDebuff:LoadZoneMenu(zone)
@@ -763,7 +780,7 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
     end
 
     if not args[name] and k then
-        description = L["Enable %s"]:format(name)
+        description = "Enable %s"..format(name)
 
         tip:SetHyperlink("spell:"..k.debuffId)
         if tip:NumLines() > 1 then
@@ -780,8 +797,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
             args = {
                 ["enable"] = {
                     type = "toggle",
-                    name = L["Enable"],
-                    desc = L["Enable %s"]:format(name),
+                    name = "Enable",
+                    desc = "Enable %s"..format(name),
                     order = 1,
                     get = function()
                                 return not k.disable
@@ -794,8 +811,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["icon priority"] = {
                     type = "range",
-                    name = L["Icon Priority"],
-                    desc = L["Option for %s"]:format(L["Icon Priority"]),
+                    name = "Icon Priority",
+                    desc = "Option for %s"..format("Icon Priority"),
                     order = 2,
                     min = 1,
                     max = 10,
@@ -811,8 +828,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["color priority"] = {
                     type = "range",
-                    name = L["Color Priority"],
-                    desc = L["Option for %s"]:format(L["Color Priority"]),
+                    name = "Color Priority",
+                    desc = "Option for %s"..format("Color Priority"),
                     order = 3,
                     min = 1,
                     max = 10,
@@ -828,8 +845,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["Remained time"] = {
                     type = "toggle",
-                    name = L["Remained time"],
-                    desc = L["Enable %s"]:format(L["Remained time"]),
+                    name = "Remained time",
+                    desc = "Enable %s"..format("Remained time"),
                     order = 4,
                     get = function()
                                 return k.timer
@@ -842,8 +859,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["Stackable debuff"] = {
                     type = "toggle",
-                    name = L["Stackable debuff"],
-                    desc = L["Enable %s"]:format(L["Stackable debuff"]),
+                    name = "Stackable debuff",
+                    desc = "Enable %s"..format("Stackable debuff"),
                     order = 5,
                     get = function()
                                 return k.stackable
@@ -856,8 +873,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["only color"] = {
                     type = "toggle",
-                    name = L["Only color"],
-                    desc = L["Only color"],
+                    name = "Only color",
+                    desc = "Only color",
                     order = 7,
                     get = function()
                                 return k.noicon
@@ -870,8 +887,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["custom color"] = {
                     type = "toggle",
-                    name = L["Custom Color"],
-                    desc = L["Enable %s"]:format(L["Custom Color"]),
+                    name = "Custom Color",
+                    desc = "Enable %s"..format("Custom Color"),
                     order = 7,
                     get = function()
                                 return k.custom_color
@@ -888,8 +905,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["color"] = {
                     type = "color",
-                    name = L["Color"],
-                    desc = L["Option for %s"]:format(L["Color"]),
+                    name = "Color",
+                    desc = "Option for %s"..format("Color"),
                     order = 8,
                     disabled = function()
                                     return not k.custom_color
@@ -908,8 +925,8 @@ function PlexusStatusRaidDebuff:LoadZoneDebuff(zone, name)
                 },
                 ["remove"] = {
                     type = "execute",
-                    name = L["Remove"],
-                    desc = L["Remove"],
+                    name = "Remove",
+                    desc = "Remove",
                     order = 9,
                     disabled = not k.detected,
                     func = function()
@@ -939,6 +956,7 @@ end
 
 function PlexusStatusRaidDebuff:CreateZoneMenu(zone)
     local args
+
     if not debuff_list[zone] then
         debuff_list[zone] = {}
 
@@ -947,12 +965,12 @@ function PlexusStatusRaidDebuff:CreateZoneMenu(zone)
         args[zone] = {
             type = "group",
             name = zone,
-            desc = L["Option for %s"]:format(zone),
+            desc = "Option for %s"..format(zone),
             args = {
                 ["load zone"] = {
                     type = "execute",
-                    name = L["Load"],
-                    desc = L["Load"],
+                    name = "Load",
+                    desc = "Load",
                     func = function()
                         self:LoadZoneMenu(zone)
                         if not args[zone].args["load zone"].disabled then args[zone].args["load zone"].disabled = true end
@@ -960,8 +978,8 @@ function PlexusStatusRaidDebuff:CreateZoneMenu(zone)
                 },
                 ["remove all"] = {
                     type = "execute",
-                    name = L["Remove detected debuff"],
-                    desc = L["Remove detected debuff"],
+                    name = "Remove detected debuff",
+                    desc = "Remove detected debuff",
                     func = function()
                                     if self.db.profile.detected_debuff[zone] then
                                         for name,_ in pairs(self.db.profile.detected_debuff[zone]) do
@@ -975,8 +993,8 @@ function PlexusStatusRaidDebuff:CreateZoneMenu(zone)
                 },
                 ["import debuff"] = {
                     type = "input",
-                    name = L["Import Debuff"],
-                    desc = L["Import Debuff Desc"],
+                    name = "Import Debuff",
+                    desc = "Import Debuff Desc",
                     get = false,
                     usage = "SpellID",
                     set = function(_, v)
@@ -1017,8 +1035,8 @@ function PlexusStatusRaidDebuff:CreateMainMenu()
 
     args["Border"] = {
             type = "toggle",
-            name = L["Border"],
-            desc = L["Enable %s"]:format(L["Border"]),
+            name = "Border",
+            desc = "Enable %s"..format("Border"),
             order = 98,
             disabled = InCombatLockdown,
             get = function() return PlexusFrame.db.profile.statusmap["border"].raid_debuff end,
@@ -1029,8 +1047,8 @@ function PlexusStatusRaidDebuff:CreateMainMenu()
     }
     args["Icon"] = {
             type = "toggle",
-            name = L["Center Icon"],
-            desc = L["Enable %s"]:format(L["Center Icon"]),
+            name = "Center Icon",
+            desc = "Enable %s"..format("Center Icon"),
             order = 99,
             disabled = InCombatLockdown,
             get = function() return PlexusFrame.db.profile.statusmap["icon"].raid_debuff end,
@@ -1041,8 +1059,8 @@ function PlexusStatusRaidDebuff:CreateMainMenu()
     }
     args["Ignore dispellable"] = {
         type = "toggle",
-        name = L["Ignore dispellable debuff"],
-        desc = L["Ignore dispellable debuff"],
+        name = "Ignore dispellable debuff",
+        desc = "Ignore dispellable debuff",
         order = 100,
         get = function() return self.db.profile.ignDis end,
         set = function(_, v)
@@ -1053,8 +1071,8 @@ function PlexusStatusRaidDebuff:CreateMainMenu()
     }
     args["Ignore undispellable"] = {
         type = "toggle",
-        name = L["Ignore undispellable debuff"],
-        desc = L["Ignore undispellable debuff"],
+        name = "Ignore undispellable debuff",
+        desc = "Ignore undispellable debuff",
         order = 101,
         get = function() return self.db.profile.ignUndis end,
         set = function(_, v)
@@ -1064,25 +1082,25 @@ function PlexusStatusRaidDebuff:CreateMainMenu()
     }
     args["Detect"] = {
         type = "toggle",
-        name = L["detector"],
-        desc = L["Enable %s"]:format(L["detector"]),
+        name = "detector",
+        desc = "Enable %s"..format("detector"),
         order = 103,
         get = function() return self.db.profile.detect end,
         set = function()
                         self.db.profile.detect = not self.db.profile.detect
                 local detectEnable = self.db.profile.detect
                         if detectEnable then
-                            ChatFrame1:AddMessage(L.msgAct)
+                            ChatFrame1:AddMessage("Detector enabled")
                         else
-                            ChatFrame1:AddMessage(L.msgDeact)
+                            ChatFrame1:AddMessage("Detector disabled")
                         end
                         self:ZoneCheck()
                     end,
     }
     args["Clear Detect"] = {
         type = "execute",
-        name = L["Remove all auto detected debuffs"],
-        desc = L["Remove all auto detected debuffs"],
+        name = "Remove all auto detected debuffs",
+        desc = "Remove all auto detected debuffs",
         order = 104,
         func = function()
             self.db.profile.detected_debuff = nil
@@ -1092,7 +1110,7 @@ end
 
 function PlexusStatusRaidDebuff:RegisterCustomDebuff()
     for zone,j in pairs(self.db.profile.detected_debuff) do
-        self:BossNameLocale(zone, L["Detected debuff"])
+        self:BossNameLocale(zone, "Detected debuff")
 
         for name,k in pairs(j) do
             self:DebuffLocale(zone, name, k, 5, 5, true, true)

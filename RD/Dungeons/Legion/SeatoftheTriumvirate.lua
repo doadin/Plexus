@@ -2,7 +2,19 @@
 local zoneid = 903
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -38,3 +50,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 246324, 33, 6, 6, true) --Entropic Force
 --L'ura
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "L'ura")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 245289, 41, 6, 6, true) --Void Blast
+end)

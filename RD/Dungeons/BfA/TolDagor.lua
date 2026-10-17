@@ -1,7 +1,19 @@
 --local zone = "Tol Dagor"
 local zoneid = 974
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 258313, 1, 6, 6, true)  --Handcuff
@@ -70,3 +82,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 256201, 41, 6, 6, true, true)  --Incendi
 PlexusStatusRaidDebuff:DebuffId(zoneid, 256044, 42, 6, 6, true)  --Deadeye
 PlexusStatusRaidDebuff:DebuffId(zoneid, 263345, 43, 6, 6, true)  --Massive Blast
 PlexusStatusRaidDebuff:DebuffId(zoneid, 256083, 44, 6, 6, true)  --Cross Ignition
+end)

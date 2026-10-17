@@ -1,7 +1,19 @@
 --local zone = "Atal'Dazar"
 local zoneid = 934
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 254959, 1, 6, 6, true) --Soulburn
 PlexusStatusRaidDebuff:DebuffId(zoneid, 250372, 1, 6, 6, true) --Lingering Nausea
@@ -80,3 +92,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 257483, 36, 6, 6, true) --Pile of Bones
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Yazma")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 250050, 41, 6, 6, true) --Echoes of Shadra
 PlexusStatusRaidDebuff:DebuffId(zoneid, 249924, 42, 6, 6, true) --Soulrend
+end)

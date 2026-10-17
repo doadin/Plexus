@@ -1,7 +1,19 @@
 -- local zone = "The Stonevault"
 local zoneid = 2341
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 449455, 1, 5, 5, true) -- Howling Fear
@@ -66,4 +78,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 427329, 402, 5, 5, true) --Void Corrupti
 PlexusStatusRaidDebuff:DebuffId(zoneid, 427854, 403, 5, 5, true) --Entropic Reckoning
 PlexusStatusRaidDebuff:DebuffId(zoneid, 457465, 404, 5, 5, true) --Entropy
 PlexusStatusRaidDebuff:DebuffId(zoneid, 427869, 405, 5, 5, true) --Unbridled Void
-
+end)

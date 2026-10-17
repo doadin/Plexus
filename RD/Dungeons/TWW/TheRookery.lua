@@ -1,7 +1,19 @@
 -- local zone = "The Rookery"
 local zoneid = 2316
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 467907, 1, 5, 5, true)  --Festering Void
@@ -54,4 +66,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 445457, 310, 5, 5, true) --Oblivion Wave
 PlexusStatusRaidDebuff:DebuffId(zoneid, 423393, 311, 5, 5, true) --Entropy
 PlexusStatusRaidDebuff:DebuffId(zoneid, 455220, 312, 5, 5, true) --Tainted Waters
 PlexusStatusRaidDebuff:DebuffId(zoneid, 429493, 313, 5, 5, true) --Unstable Corruption
-
+end)

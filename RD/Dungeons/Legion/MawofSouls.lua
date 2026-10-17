@@ -2,7 +2,19 @@
 local zoneid = 706
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -47,3 +59,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 194235, 22, 6, 6, true) --Nether Rip
 --Helya
 PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Helya")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 197262, 31, 6, 6, true) --Taint of the Sea
+end)

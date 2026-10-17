@@ -1,7 +1,19 @@
 -- local zone = "Blackwing Descent"
 local zoneid = 285
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --en_zone, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -105,4 +117,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 77827, 82, 5, 5) --Tail Lash 10-normal
 -- Heroic
 PlexusStatusRaidDebuff:DebuffId(zoneid, 79339, 83, 6, 6) --Explosive Cinders
 PlexusStatusRaidDebuff:DebuffId(zoneid, 79318, 84, 6, 6) --Dominion
-
+end)

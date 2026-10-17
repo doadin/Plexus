@@ -1,7 +1,19 @@
 --local zone = "The Nighthold"
 local zoneid = 764
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Skorpyron
 PlexusStatusRaidDebuff:BossNameId(zoneid, 10, "Skorpyron")
@@ -106,4 +118,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 208672, 105, 5, 5) -- Carrion Wave (non-
 -- Gul'dan
 PlexusStatusRaidDebuff:DebuffId(zoneid, 208903, 106, 5, 5) -- Burning Claws (non-dispellable) (ground AoE)
 PlexusStatusRaidDebuff:DebuffId(zoneid, 208802, 107, 5, 5, false, true) -- Soul Corrosion (non-dispellable) (DMG + DoT)
-
+end)

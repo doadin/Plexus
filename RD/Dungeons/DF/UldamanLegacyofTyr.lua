@@ -1,7 +1,19 @@
 -- local zone = "Uldaman: Legacy of Tyr"
 local zoneid = 2071
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -48,3 +60,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 368996, 404, 5, 5, true) --Purging Flame
 PlexusStatusRaidDebuff:BossNameId(zoneid, 500, "Chrono-Lord Deios")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 376325, 501, 5, 5, true) --eternity-zone
 PlexusStatusRaidDebuff:DebuffId(zoneid, 377405, 502, 5, 5, true) --time-sink
+end)

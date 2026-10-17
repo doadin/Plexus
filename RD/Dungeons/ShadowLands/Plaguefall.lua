@@ -2,7 +2,19 @@
 local zoneid = 1674
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -42,3 +54,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 332397, 304, 5, 5) --Shroudweb
 PlexusStatusRaidDebuff:BossNameId(zoneid, 400, "Stradama Margrave")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 331399, 401, 5, 5, nil, true) --Infectios Rain
 PlexusStatusRaidDebuff:DebuffId(zoneid, 330135, 402, 5, 5) --Fount of Pestilence
+end)

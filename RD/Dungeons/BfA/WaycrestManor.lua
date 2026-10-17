@@ -1,7 +1,19 @@
 --local zone = "Waycrest Manor"
 local zoneid = 1015
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 264105, 1, 6, 6, true)  --Runic Mark
 PlexusStatusRaidDebuff:DebuffId(zoneid, 271174, 1, 6, 6, true)  --Retch
@@ -111,3 +123,4 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 50, "Gorak Tul")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 266225, 51, 6, 6, true)  --Darkened Lightning
 PlexusStatusRaidDebuff:DebuffId(zoneid, 266198, 52, 6, 6, true)  --Alchemical Fire
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268202, 53, 6, 6, true)  --Death Lens
+end)

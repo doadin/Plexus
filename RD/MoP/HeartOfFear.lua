@@ -1,7 +1,19 @@
 --local zone = "Heart of Fear"
 local zoneid = 474
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -92,4 +104,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 124862, 71, 5, 5) --Visions of Demise: T
 PlexusStatusRaidDebuff:DebuffId(zoneid, 123845, 72, 5, 5) --Heart of Fear: Chosen
 PlexusStatusRaidDebuff:DebuffId(zoneid, 123846, 73, 5, 5) --Heart of Fear: Lure
 PlexusStatusRaidDebuff:DebuffId(zoneid, 125283, 74, 1, 1) --Sha Corruption
-
+end)

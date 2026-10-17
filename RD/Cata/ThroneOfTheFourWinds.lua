@@ -1,7 +1,19 @@
 -- local zone = "Throne of the Four Winds"
 local zoneid = 328
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --en_zone, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -25,4 +37,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 88427, 23, 6, 6) --Electrocute
 PlexusStatusRaidDebuff:DebuffId(zoneid, 89666, 24, 6, 6) --Lightning Rod
 PlexusStatusRaidDebuff:DebuffId(zoneid, 89668, 25, 6, 6) --Lightning Rod
 PlexusStatusRaidDebuff:DebuffId(zoneid, 87856, 25, 6, 6) --Squall Line
-
+end)

@@ -1,7 +1,19 @@
 --local zone = "Highmaul"
 local zoneid = 612
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --zoneid, debuffID, order, icon_priority, colorpriority, timer, stackable, color, defaultdisable, noicon
 --, true, true is for stackable
@@ -99,3 +111,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 157763, 94, 4, 4) --FIXATE
 PlexusStatusRaidDebuff:DebuffId(zoneid, 158553, 95, 6, 6, true, true) --CRUSH ARMOR
 PlexusStatusRaidDebuff:DebuffId(zoneid, 165102, 96, 7, 7) --Infinite Darkness
 PlexusStatusRaidDebuff:DebuffId(zoneid, 157801, 97, 7, 7) --Slow
+end)

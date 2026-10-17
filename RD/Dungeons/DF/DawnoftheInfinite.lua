@@ -1,7 +1,19 @@
 -- local zone = "Dawn of the Infinite"
 local zoneid = 2198
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -160,3 +172,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 410908, 808, 5, 5, true) --Infinity Nova
 PlexusStatusRaidDebuff:DebuffId(zoneid, 416139, 809, 5, 5, true) --Temporal Breath
 PlexusStatusRaidDebuff:DebuffId(zoneid, 416264, 810, 5, 5, true) --Infinite Corruption
 PlexusStatusRaidDebuff:DebuffId(zoneid, 417413, 811, 5, 5, true) --Temporal Scar
+end)

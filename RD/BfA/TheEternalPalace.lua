@@ -1,7 +1,19 @@
 -- local zone = "The Eternal Palace"
 local zoneid = 1512
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 299705, 1, 5, 5, true) --Dark Passage
 PlexusStatusRaidDebuff:DebuffId(zoneid, 303550, 1, 5, 5, true) --Frost Bolt Volley
@@ -140,3 +152,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 298018, 136, 5, 5, true) --Frozen
 PlexusStatusRaidDebuff:DebuffId(zoneid, 300492, 137, 5, 5, true) --Static Shock
 PlexusStatusRaidDebuff:DebuffId(zoneid, 298014, 138, 5, 5, true) --Cold Blast
 PlexusStatusRaidDebuff:DebuffId(zoneid, 303825, 139, 5, 5, true) --Crushing Depths
+end)

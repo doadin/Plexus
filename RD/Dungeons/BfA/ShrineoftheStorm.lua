@@ -1,7 +1,19 @@
 --local zone = "Shrine of the Storm"
 local zoneid = 1039
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268317, 1, 6, 6, true) --Rip Mind
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268322, 1, 6, 6, true) --Touch of the Drowned
@@ -83,3 +95,4 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Vol'zith the Whisperer")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267548, 41, 6, 6, true) --Leviathan's Wake
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267360, 42, 6, 6, true) --Grasp of the Sunken City
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267034, 43, 6, 6, true) --Whispers of Power
+end)

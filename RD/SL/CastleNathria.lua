@@ -1,7 +1,19 @@
 -- local zone = "Castle Nathria"
 local zoneid = 1735
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 
@@ -112,3 +124,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 327842, 1011, 6, 6) -- Touch of the Nigh
 PlexusStatusRaidDebuff:DebuffId(zoneid, 326851, 1012, 6, 6, true) -- Blood Price
 PlexusStatusRaidDebuff:DebuffId(zoneid, 328276, 1013, 5, 5) -- March of the Penitent
 PlexusStatusRaidDebuff:DebuffId(zoneid, 327992, 1014, 6, 6) -- Desolation
+end)

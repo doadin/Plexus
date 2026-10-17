@@ -1,7 +1,19 @@
 -- local zone = "Vault of the Incarnates"
 local zoneid = 2119
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- "Eranog"
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Eranog")
@@ -127,3 +139,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 377612, 816, 5, 5, true) -- Hurricane Wi
 PlexusStatusRaidDebuff:DebuffId(zoneid, 381442, 817, 5, 5, true) -- Lightning Strike
 PlexusStatusRaidDebuff:DebuffId(zoneid, 390763, 818, 7, 7, true) -- Thunderous Energy
 PlexusStatusRaidDebuff:DebuffId(zoneid, 380573, 819, 5, 5, true) -- Ball Lightning
+end)

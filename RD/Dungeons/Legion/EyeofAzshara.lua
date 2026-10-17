@@ -2,7 +2,19 @@
 local zoneid = 713
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -41,3 +53,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 193698, 21, 6, 6, true) --Curse of the W
 --Serpentrix
 PlexusStatusRaidDebuff:BossNameId(zoneid, 30, "Serpentrix")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 191855, 31, 6, 6, true) --toxic-wound
+end)

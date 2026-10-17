@@ -1,7 +1,19 @@
 -- local zone = "Antorus, the Burning Throne"
 local zoneid = 909
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 
@@ -180,3 +192,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 257930, 195, 6, 6) -- Crushing
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257931, 196, 6, 6) -- Sargeras Fear
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257869, 197, 6, 6) -- Unleashed
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257911, 198, 6, 6) -- Sargeras Rage
+end)

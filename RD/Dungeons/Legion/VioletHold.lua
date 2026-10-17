@@ -2,7 +2,19 @@
 local zoneid = 732
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -64,3 +76,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 210505, 73, 6, 6, true) --Toxic Blood
 PlexusStatusRaidDebuff:BossNameId(zoneid, 80, "Fel Lord Betrug")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 202361, 81, 6, 6, true) --Execution
 PlexusStatusRaidDebuff:DebuffId(zoneid, 210879, 82, 6, 6, true) --Seed of Destruction
+end)

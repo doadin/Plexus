@@ -1,7 +1,19 @@
 --local zone = "Freehold"
 local zoneid = 936
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257460, 1, 6, 6, true) --Fiery Debris
 PlexusStatusRaidDebuff:DebuffId(zoneid, 272374, 1, 6, 6, true) --Whirlpool of Blades
@@ -83,3 +95,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 256552, 32, 6, 6, true) --Flailing Shark
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Harlan Sweete")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 257305, 41, 6, 6, true) --Cannon Barrage
 PlexusStatusRaidDebuff:DebuffId(zoneid, 413131, 42, 6, 6, true) --Whirling Dagger
+end)

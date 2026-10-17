@@ -2,7 +2,19 @@
 local zoneid = 1666
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -47,3 +59,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 320784, 403, 4, 4) --Comet Storm
 PlexusStatusRaidDebuff:DebuffId(zoneid, 320788, 404, 5, 5) --Frozen Binds
 PlexusStatusRaidDebuff:DebuffId(zoneid, 322274, 405, 5, 5) --Enfeeble
 PlexusStatusRaidDebuff:DebuffId(zoneid, 328212, 406, 5, 5) --Razorshard Ice
+end)

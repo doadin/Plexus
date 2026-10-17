@@ -1,7 +1,19 @@
 -- local zone = "Manaforge Omega"
 local zoneid = 2460
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- "Plexus Sentinel"
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Plexus Sentinel")
@@ -257,3 +269,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 1234054, 857, 5, 5, true) --Shadowquake
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1234263, 858, 5, 5, true) --Cosmic Collapse
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1234266, 859, 5, 5, true) --Cosmic Fragility
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1250055, 860, 5, 5, true) --Voidgrasp
+end)

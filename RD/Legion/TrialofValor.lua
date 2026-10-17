@@ -1,7 +1,19 @@
 --local zone = "Trial of Valor"
 local zoneid = 807
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 232450, 1, 5, 5) -- Corrupted Axion
@@ -37,3 +49,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 227959, 31, 5, 5) -- Storm of Justice
 PlexusStatusRaidDebuff:DebuffId(zoneid, 227475, 32, 5, 5) -- Cleansing Flame
 PlexusStatusRaidDebuff:DebuffId(zoneid, 192044, 33, 5, 5) -- Expel Light
 PlexusStatusRaidDebuff:DebuffId(zoneid, 227781, 34, 5, 5) -- Glowing Fragment
+end)

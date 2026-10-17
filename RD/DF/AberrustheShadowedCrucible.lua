@@ -1,7 +1,19 @@
 -- local zone = "Aberrus, the Shadowed Crucible"
 local zoneid = 2166
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- "Kazzara, the Hellforged"
 PlexusStatusRaidDebuff:BossNameId(zoneid, 100, "Kazzara, the Hellforged")
@@ -96,3 +108,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 404269, 920, 5, 5, true) --ebon-might
 PlexusStatusRaidDebuff:DebuffId(zoneid, 403497, 921, 5, 5, true) --astral-formation
 PlexusStatusRaidDebuff:DebuffId(zoneid, 413106, 922, 5, 5, true) --void-might
 PlexusStatusRaidDebuff:DebuffId(zoneid, 408431, 923, 6, 6, true) --void-slash
+end)

@@ -1,7 +1,19 @@
 -- local zone = "Serpentshrine Cavern"
 local zoneid = 332
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 
@@ -27,4 +39,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 37749, 33, 5, 5) --Madness
 --Vashj
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Lady Vashj")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 38280, 34, 5, 5, true) --Static Charge
-
+end)

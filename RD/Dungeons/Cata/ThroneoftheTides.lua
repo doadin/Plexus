@@ -2,7 +2,19 @@
 local zoneid = 323
 
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- zoneid, debuffID, order, icon_priority, color_priority, timer, stackable, color, default_disable, noicon
 --true, true is for stackable
@@ -63,3 +75,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 428404, 42, 6, 6, true) -- Blotting Dark
 PlexusStatusRaidDebuff:DebuffId(zoneid, 428868, 43, 6, 6, true) -- Putrid Roar
 PlexusStatusRaidDebuff:DebuffId(zoneid, 428407, 44, 6, 6, true) -- Blotting Barrage
 PlexusStatusRaidDebuff:DebuffId(zoneid, 83672, 45, 5, 5, true) -- Blight of Ozumat
+end)

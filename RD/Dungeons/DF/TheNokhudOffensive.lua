@@ -1,7 +1,19 @@
 -- local zone = "The Nokhud Offensive"
 local zoneid = 2093
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -48,3 +60,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 376827, 305, 5, 5, true) -- Conductive S
 PlexusStatusRaidDebuff:DebuffId(zoneid, 376864, 306, 5, 5, true) -- Static Spear
 PlexusStatusRaidDebuff:DebuffId(zoneid, 376894, 307, 5, 5, true) -- Crackling Upheaval
 PlexusStatusRaidDebuff:DebuffId(zoneid, 376899, 308, 5, 5, true) -- Crackling Cloud
+end)

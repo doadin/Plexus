@@ -1,7 +1,19 @@
 --local zone = "Kings Rest"
 local zoneid = 1004
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 270931, 1, 6, 6, true) --Darkshot
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267874, 1, 6, 6, true) --Burning Ground
@@ -77,3 +89,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 267257, 33, 6, 6, true)  --Thundering Cr
 PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Dazar, The First King")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268586, 41, 6, 6, true)  --Blade Combo
 PlexusStatusRaidDebuff:DebuffId(zoneid, 268932, 42, 6, 6, true)  --Quaking Leap
+end)

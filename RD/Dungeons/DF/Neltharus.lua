@@ -1,7 +1,19 @@
 -- local zone = "Neltharus"
 local zoneid = 2080
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --M+
 PlexusStatusRaidDebuff:DebuffId(zoneid, 240447, 1, 6, 6, true) --Quake
@@ -45,3 +57,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 376784, 402, 5, 5, true) --flame-vulnera
 PlexusStatusRaidDebuff:DebuffId(zoneid, 377018, 403, 5, 5, true) --molten-gold
 PlexusStatusRaidDebuff:DebuffId(zoneid, 377022, 404, 5, 5, true) --hardened-gold
 PlexusStatusRaidDebuff:DebuffId(zoneid, 377542, 405, 5, 5, true) --burning-ground
+end)

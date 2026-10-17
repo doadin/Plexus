@@ -1,7 +1,19 @@
 -- local zone = "Priory of the Sacred Flame"
 local zoneid = 2308
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 --Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 426964, 1, 5, 5, true) --Mortal Strike
@@ -62,4 +74,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 451606, 305, 5, 5, true) --Holy Flame
 PlexusStatusRaidDebuff:DebuffId(zoneid, 423536, 306, 5, 5, true) --Holy Smite
 PlexusStatusRaidDebuff:DebuffId(zoneid, 425556, 307, 5, 5, true) --Sanctified Ground
 PlexusStatusRaidDebuff:DebuffId(zoneid, 428170, 308, 5, 5, true) --Blinding Light
-
+end)

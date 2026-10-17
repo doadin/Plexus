@@ -1,7 +1,19 @@
 -- local zone = "Ny'alotha"
 local zoneid = 1581
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 315161, 1, 5, 5, true) --Eye of Corruption
@@ -176,4 +188,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 302565, 151, 5, 5, true) --Conductive In
 PlexusStatusRaidDebuff:DebuffId(zoneid, 310073, 152, 5, 5, true) --Mindgrasp
 PlexusStatusRaidDebuff:DebuffId(zoneid, 313793, 153, 5, 5, true) --Flames of Insanity
 PlexusStatusRaidDebuff:DebuffId(zoneid, 313663, 153, 5, 5, true) --Psyche Shredder
-
+end)

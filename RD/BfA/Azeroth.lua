@@ -1,7 +1,19 @@
 -- local zone = "Azeroth"
 local zoneid = 947
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 -- Trash
 
 -- T'zane
@@ -34,4 +46,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 274842, 63, 5, 5) -- Void Nova
 
 -- Dunegorger Kraulok
 PlexusStatusRaidDebuff:BossNameId(zoneid, 70, "Dunegorger Kraulok")
-
+end)

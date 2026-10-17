@@ -1,7 +1,19 @@
 -- local zone = "Darkflame Cleft"
 local zoneid = 2303
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 -- Trash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 1216858, 1, 5, 5, true) --Void Pulsar
@@ -66,4 +78,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 427176, 407, 5, 5, true) --Drain Light
 PlexusStatusRaidDebuff:DebuffId(zoneid, 427100, 408, 5, 5, true) --Umbral Slash
 PlexusStatusRaidDebuff:DebuffId(zoneid, 427011, 409, 5, 5, true) --Shadowblast
 PlexusStatusRaidDebuff:DebuffId(zoneid, 427180, 410, 5, 5, true) --Fear of the Gloom
-
+end)

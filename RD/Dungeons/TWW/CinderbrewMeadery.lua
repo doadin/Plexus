@@ -1,7 +1,19 @@
 -- local zone = "Cinderbrew Meadery"
 local zoneid = 2335
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 
 -- Trash
@@ -63,4 +75,4 @@ PlexusStatusRaidDebuff:DebuffId(zoneid, 435789, 403, 5, 5, true) --Cindering Wou
 PlexusStatusRaidDebuff:DebuffId(zoneid, 435622, 404, 5, 5, true) --Let It Hail!
 PlexusStatusRaidDebuff:DebuffId(zoneid, 436640, 405, 5, 5, true) --Burning Ricochet
 PlexusStatusRaidDebuff:DebuffId(zoneid, 436592, 406, 5, 5, true) --Cash Cannon
-
+end)

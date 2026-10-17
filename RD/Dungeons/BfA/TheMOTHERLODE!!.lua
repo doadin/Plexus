@@ -1,7 +1,19 @@
 --local zone = "The MOTHERLODE!!"
 local zoneid = 1010
 local Plexus = _G.Plexus
-local PlexusStatusRaidDebuff = Plexus:GetModule("PlexusStatusRaidDebuff")
+local PlexusStatusRaidDebuff = PlexusStatus:GetModule("PlexusStatusRaidDebuff", true)
+local function WhenRaidDebuffReady(callback)
+    if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+        callback(PlexusStatusRaidDebuff)
+        return
+    end
+    C_Timer.After(1, function()
+        if PlexusStatusRaidDebuff and PlexusStatusRaidDebuff.options then
+            callback(PlexusStatusRaidDebuff)
+        end
+    end)
+end
+WhenRaidDebuffReady(function(PlexusStatusRaidDebuff)
 
 PlexusStatusRaidDebuff:DebuffId(zoneid, 262515, 1, 6, 6, true) --Azerite Heartseeker
 PlexusStatusRaidDebuff:DebuffId(zoneid, 267357, 1, 6, 6, true) --Hail of Flechettes
@@ -98,3 +110,4 @@ PlexusStatusRaidDebuff:BossNameId(zoneid, 40, "Mogul Razdunk")
 PlexusStatusRaidDebuff:DebuffId(zoneid, 260838, 41, 6, 6, true)  --Homing Missle
 PlexusStatusRaidDebuff:DebuffId(zoneid, 270277, 42, 6, 6, true)  --Big Red Rocket
 PlexusStatusRaidDebuff:DebuffId(zoneid, 260202, 43, 6, 6, true)  --Drill Smash
+end)
