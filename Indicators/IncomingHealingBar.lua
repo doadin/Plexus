@@ -43,6 +43,9 @@ local function Reset(self) -- luacheck: ignore 432
             self:SetHeight(healthBar:GetHeight())
             self:SetWidth(healthBar:GetWidth())
         end
+        -- grow away from the end of the health fill
+        self:SetOrientation(profile.orientation)
+        self:SetReverseFill(false)
     else
         -- OLD
         local offset = PlexusFrame.db.profile.ExtraBarBorderSize + 1
