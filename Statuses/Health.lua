@@ -398,7 +398,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         end
     elseif Plexus:IsRetailWow() or Plexus:IsForeverWow() then
         healthText = AbbreviateNumbers(cur)
-        deficitText = AbbreviateNumbers(UnitHealthMissing(unitid))
+        deficitText = format("-%s", AbbreviateNumbers(UnitHealthMissing(unitid)))
     else
         healthPriority = 1
         deficitPriority = 1
