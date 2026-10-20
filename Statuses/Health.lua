@@ -25,6 +25,17 @@ local UnitIsFeignDeath = UnitIsFeignDeath
 
 local PlexusRoster = Plexus:GetModule("PlexusRoster")
 
+-- Secret health can't be compared to tell full health apart, but the game can evaluate a curve
+-- on the secret health percentage (0 to 1) and hand back a secret result that colors accept as
+-- alpha: visible below full health, invisible at full health.
+local hiddenAtFullHealth
+if Plexus:IsRetailWow() or Plexus:IsForeverWow() then
+    hiddenAtFullHealth = C_CurveUtil.CreateCurve()
+    hiddenAtFullHealth:AddPoint(0, 1)
+    hiddenAtFullHealth:AddPoint(0.999, 1)
+    hiddenAtFullHealth:AddPoint(1, 0)
+end
+
 local PlexusStatusHealth = Plexus:NewStatusModule("PlexusStatusHealth", "AceTimer-3.0")
 PlexusStatusHealth.menuName = L["Health"]
 
@@ -387,7 +398,7 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
         end
     elseif Plexus:IsRetailWow() or Plexus:IsForeverWow() then
         healthText = AbbreviateNumbers(cur)
-        deficitText = AbbreviateNumbers(UnitHealthMissing(unitid))
+        deficitText = format("-%s", AbbreviateNumbers(UnitHealthMissing(unitid)))
     else
         healthPriority = 1
         deficitPriority = 1
@@ -403,10 +414,12 @@ function PlexusStatusHealth:UpdateUnit(event, unitid, ignoreRange)
             max,
             deficitSettings.icon)
     elseif Plexus:IsRetailWow() or Plexus:IsForeverWow() then
+        -- a copy, as the color is shared (status setting or class color)
+        local color = deficitSettings.useClassColors and self.core:UnitColor(guid) or deficitSettings.color
         self.core:SendStatusGained(guid, "unit_healthDeficit",
             deficitPriority,
             deficitSettings.range,
-            (deficitSettings.useClassColors and self.core:UnitColor(guid) or deficitSettings.color),
+            { r = color.r, g = color.g, b = color.b, a = UnitHealthPercent(unitid, true, hiddenAtFullHealth) },
             deficitText,
             cur,
             max,
