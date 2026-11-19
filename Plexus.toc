@@ -113,7 +113,7 @@ Statuses\Name.lua
 Statuses\Phase.lua [AllowLoadGameType standard]
 Statuses\Ping.lua [AllowLoadGameType standard]
 Statuses\Player.lua
-Statuses\RaidDebuff.lua [AllowLoadGameType standard]
+Statuses\RaidDebuff.lua [AllowLoadGameType standard, forever]
 Statuses\RaidIcon.lua
 Statuses\Range.lua
 Statuses\ReadyCheck.lua
